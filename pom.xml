@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.neo4j.client</groupId>
-  <artifactId>neo4j-browser</artifactId>
-  <version>4.0.2</version>
-  <name>Neo4j - Browser</name>
+  <groupId>org.graphfoundation.ongdb.client</groupId>
+  <artifactId>ongdb-browser</artifactId>
+  <version>4.0.3</version>
+  <name>ONgDB - Browser</name>
   <description>Graph database client.</description>
-  <url>https://github.com/neo4j/neo4j</url>
+  <url>https://github.com/graphfoundation/ongdb</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.repository.snapshots>https://oss.sonatype.org/content/repositories/snapshots</maven.repository.snapshots>
+    <maven.repository.releases>https://oss.sonatype.org/service/local/staging/deploy/maven2</maven.repository.releases>
     <license-text.header>GPL-3-header.txt</license-text.header>
     <licensing.prepend.text>notice-gpl-prefix.txt</licensing.prepend.text>
     <attach-javadoc-phase>none</attach-javadoc-phase>
@@ -25,28 +27,27 @@
       <organization>Neo4j, Inc</organization>
       <organizationUrl>http://www.neotechnology.com/</organizationUrl>
     </developer>
+    <developer>
+      <id>neo4j</id>
+      <name>The ONgDB Team</name>
+      <url>http://graphfoundation.org/</url>
+      <organization>GraphFoundation, Inc</organization>
+      <organizationUrl>http://graphfoundation.org</organizationUrl>
+    </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/neo4j/neo4j.git</connection>
-    <developerConnection>scm:git:git@github.com:neo4j/neo4j.git</developerConnection>
-    <url>https://github.com/neo4j/neo4j</url>
+    <connection>scm:git:git://github.com/graphfoundation/ongdb-browser.git</connection>
+    <developerConnection>scm:git:git@github.com:graphfoundation/ongdb-browser.git</developerConnection>
+    <url>https://github.com/graphfoundation/ongdb-browser</url>
   </scm>
   <licenses>
     <license>
       <name>GNU General Public License, Version 3</name>
       <url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
-      <comments>The software ("Software") developed and owned by Neo4j Sweden AB
-        (referred to in this notice as "Neo4j,") is
-        licensed under the GNU GENERAL PUBLIC LICENSE Version 3 to all third
-        parties and that license is included below.
+      <comments>
+		  100% GNU GPL V3 Open Source License.
 
-        However, if you have executed an End User Software License and Services
-        Agreement or an OEM Software License and Support Services Agreement, or
-        another commercial license agreement with Neo4j, Inc or one of its
-        affiliates (each, a "Commercial Agreement"), the terms of the license in
-        such Commercial Agreement will supersede the GNU GENERAL PUBLIC LICENSE
-        Version 3 and you may use the Software solely pursuant to the terms of
-        the relevant Commercial Agreement.
+
       </comments>
     </license>
   </licenses>
@@ -92,7 +93,7 @@
           <archive>
             <index>true</index>
             <manifest>
-              <packageName>org/neo4j/client</packageName>
+              <packageName>org/graphfoundation/ongdb/client</packageName>
             </manifest>
           </archive>
         </configuration>
@@ -141,14 +142,58 @@
         </executions>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.kuali.maven.wagons</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>1.2.1</version>
+      </extension>
+    </extensions>
   </build>
+  <profiles>
+    <profile>
+      <id>release-public</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>graphfoundation-releases</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   <distributionManagement>
+    <snapshotRepository>
+      <id>graphfoundation-snapshots</id>
+      <name>Graph Foundation Snapshot Repository</name>
+      <url>${maven.repository.snapshots}</url>
+    </snapshotRepository>
     <repository>
-      <id>releases@repo.neo4j.org</id>
-      <uniqueVersion>true</uniqueVersion>
-      <name>Neo4j Releases</name>
-      <url>http://m2.neo4j.org/content/repositories/releases/</url>
-      <layout>default</layout>
+      <id>graphfoundation-releases</id>
+      <name>Graph Foundation Release Repository</name>
+      <url>${maven.repository.releases}</url>
     </repository>
   </distributionManagement>
 </project>
