@@ -1,6 +1,6 @@
 {
   "name": "ongdb-browser",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "ONgDB Browser is a fork of Neo4j Browser which is the general purpose user interface for working with Neo4j. Query, visualize, administrate and monitor the database.",
   "neo4jDesktop": {
     "apiVersion": "^1.2.0"
