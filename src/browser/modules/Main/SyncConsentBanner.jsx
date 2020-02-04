@@ -49,19 +49,21 @@ const SyncReminderBanner = React.memo(function SyncReminderBanner({
   const dbConnected = dbConnectionState === CONNECTED_STATE
   const syncConsentGiven = syncConsent && syncConsent.consented === true
 
-  const visible =
+  /*  const visible =
     dbConnected &&
     !syncConsentGiven &&
     authStatus !== SIGNED_IN &&
     !syncConsent.optedOut
+    */
+  const visible = false
 
   return (
     <Render if={visible}>
       <SyncDisconnectedBanner height="100px">
         <StyledSyncReminderSpan>
-          To enjoy the full Neo4j Browser experience, we advise you to use
+          To enjoy the full ONgDB Browser experience, we advise you to use
           <SyncSignInBarButton onClick={onGetstartedClicked}>
-            Neo4j Browser Sync
+            ONgDB Browser Sync
           </SyncSignInBarButton>
         </StyledSyncReminderSpan>
         <StyledSyncReminderButtonContainer>
@@ -91,4 +93,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SyncReminderBanner)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SyncReminderBanner)

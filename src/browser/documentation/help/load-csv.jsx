@@ -63,7 +63,7 @@ const content = (
     <section className="example">
       <figure className="runnable">
         <pre>
-          {`LOAD CSV FROM "http://data.neo4j.com/examples/person.csv" AS line
+          {`LOAD CSV FROM "http://cdn.graphfoundation.org/data/examples/person.csv" AS line
 MERGE (n:Person {id: toInteger(line[0])})
 SET n.name = line[1]
 RETURN n`}
