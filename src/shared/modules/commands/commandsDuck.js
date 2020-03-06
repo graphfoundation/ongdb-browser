@@ -91,27 +91,22 @@ export default function reducer(state = initialState, action) {
 
 // Action creators
 
-export const executeCommand = (
-  cmd,
-  { id, requestId, parentId, useDb } = {}
-) => {
+export const executeCommand = (cmd, id, requestId, parentId) => {
   return {
     type: COMMAND_QUEUED,
     cmd,
     id,
     requestId,
-    parentId,
-    useDb
+    parentId
   }
 }
 
-export const executeSingleCommand = (cmd, { id, requestId, useDb } = {}) => {
+export const executeSingleCommand = (cmd, id, requestId) => {
   return {
     type: SINGLE_COMMAND_QUEUED,
     cmd,
     id,
-    requestId,
-    useDb
+    requestId
   }
 }
 
@@ -167,11 +162,7 @@ export const handleCommandEpic = (action$, store) =>
       if (statements.length === 1) {
         // Single command
         return store.dispatch(
-          executeSingleCommand(statements[0], {
-            id: action.id,
-            requestId: action.requestId,
-            useDb: action.useDb
-          })
+          executeSingleCommand(statements[0], action.id, action.requestId)
         )
       }
       const parentId = action.parentId || v4()

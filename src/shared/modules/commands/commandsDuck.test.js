@@ -91,10 +91,7 @@ describe('commandsDuck', () => {
       const cmd = 'RETURN 1'
       const id = 2
       const requestId = 'xxx'
-      const action = commands.executeSingleCommand(cmd, {
-        id,
-        requestId
-      })
+      const action = commands.executeSingleCommand(cmd, id, requestId)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -141,9 +138,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'param'
       const cmdString = cmd + ' x: 2'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
 
       bus.take('NOOP', currentAction => {
         // Then
@@ -177,9 +172,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'param'
       const cmdString = cmd + ' x => 2'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bolt.routedWriteTransaction = jest.fn(() =>
         Promise.resolve({
           records: [{ get: () => 2 }]
@@ -212,9 +205,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'params'
       const cmdString = cmd + ' {x: 2, y: 3}'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -241,9 +232,7 @@ describe('commandsDuck', () => {
       // Given
       const cmdString = store.getState().settings.cmdchar + 'params'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -265,9 +254,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'config'
       const cmdString = cmd + ' "x": 2'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -294,9 +281,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'config'
       const cmdString = cmd + ' {"x": 2, "y":3}'
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -324,9 +309,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'config'
       const cmdString = cmd
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -353,9 +336,7 @@ describe('commandsDuck', () => {
       const cmd = store.getState().settings.cmdchar + 'style'
       const cmdString = cmd
       const id = 1
-      const action = commands.executeSingleCommand(cmdString, {
-        id
-      })
+      const action = commands.executeSingleCommand(cmdString, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -380,7 +361,7 @@ describe('commandsDuck', () => {
     test('does the right thing for list queries', done => {
       const cmd = store.getState().settings.cmdchar + 'queries'
       const id = 1
-      const action = commands.executeSingleCommand(cmd, { id })
+      const action = commands.executeSingleCommand(cmd, id)
 
       bus.take('NOOP', currentAction => {
         expect(store.getActions()).toEqual([
@@ -404,10 +385,7 @@ describe('commandsDuck', () => {
       const cmd = comment + '\n' + actualCommand
       const id = 2
       const requestId = 'xxx'
-      const action = commands.executeSingleCommand(cmd, {
-        id,
-        requestId
-      })
+      const action = commands.executeSingleCommand(cmd, id, requestId)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([
@@ -435,7 +413,7 @@ describe('commandsDuck', () => {
       const cmdString = 'history'
       const cmd = comment + '\n' + store.getState().settings.cmdchar + cmdString
       const id = 1
-      const action = commands.executeSingleCommand(cmd, { id })
+      const action = commands.executeSingleCommand(cmd, id)
       const cmdChar = store.getState().settings.cmdchar
 
       bus.take('NOOP', currentAction => {
@@ -463,7 +441,7 @@ describe('commandsDuck', () => {
       const serverCmd = 'disconnect'
       const cmd = store.getState().settings.cmdchar + 'server ' + serverCmd
       const id = 3
-      const action = commands.executeSingleCommand(cmd, { id })
+      const action = commands.executeSingleCommand(cmd, id)
       bus.take('NOOP', currentAction => {
         // Then
         expect(store.getActions()).toEqual([

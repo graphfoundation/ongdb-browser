@@ -63,7 +63,7 @@ export const buildCommandObject = (action, interpret, cmdchar) => {
     cmdchar,
     action.ignore
   )
-  return { action, interpreted, cmdchar, useDb: action.useDb }
+  return { action, interpreted, cmdchar }
 }
 
 export const getInterpreter = (interpret, cmd, cmdchar, ignore = false) => {

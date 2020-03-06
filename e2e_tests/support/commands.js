@@ -1,11 +1,8 @@
 const SubmitQueryButton = '[data-testid="submitQuery"]'
 const ClearEditorButton = '[data-testid="clearEditorContent"]'
 const Editor = '.ReactCodeMirror textarea'
-const VisibleEditor = '[data-testid="editor-wrapper"]'
 
 /* global Cypress, cy */
-
-Cypress.Commands.add('getEditor', () => cy.get(VisibleEditor))
 
 Cypress.Commands.add(
   'setInitialPassword',
@@ -20,8 +17,8 @@ Cypress.Commands.add(
       // We assume pw already set on local
       return
     }
-    cy.title().should('include', 'Neo4j Browser')
-    cy.wait(3000)
+    cy.title().should('include', 'ONgDB Browser')
+    cy.wait(5000)
 
     cy.get('input[data-testid="boltaddress"]')
       .clear()

@@ -76,10 +76,7 @@ describe('tx metadata with cypher', () => {
     const bus = createBus()
     bus.applyReduxMiddleware(createEpicMiddleware(handleSingleCommandEpic))
     const $$responseChannel = 'test-channel'
-    const action = executeSingleCommand('RETURN 1', {
-      id: 'id',
-      requestId: 'rqid'
-    })
+    const action = executeSingleCommand('RETURN 1', 'id', 'rqid')
     action.$$responseChannel = $$responseChannel
 
     bus.send(action.type, action)

@@ -289,13 +289,14 @@ export function cancelTransaction(id, cb) {
   }
 }
 
-export function directTransaction(input, parameters, opts = {}) {
-  const {
-    requestId = null,
-    cancelable = false,
-    txMetadata = undefined,
-    useDb = undefined
-  } = opts
+export function directTransaction(
+  input,
+  parameters,
+  requestId = null,
+  cancelable = false,
+  txMetadata = undefined,
+  useDb = undefined
+) {
   const session = _drivers
     ? _drivers
         .getDirectDriver()
@@ -305,13 +306,14 @@ export function directTransaction(input, parameters, opts = {}) {
   return _trackedTransaction(input, parameters, session, requestId, txMetadata)
 }
 
-export function routedReadTransaction(input, parameters, opts = {}) {
-  const {
-    requestId = null,
-    cancelable = false,
-    txMetadata = undefined,
-    useDb = undefined
-  } = opts
+export function routedReadTransaction(
+  input,
+  parameters,
+  requestId = null,
+  cancelable = false,
+  txMetadata = undefined,
+  useDb = undefined
+) {
   const session = _drivers
     ? _drivers
         .getRoutedDriver()
@@ -321,14 +323,15 @@ export function routedReadTransaction(input, parameters, opts = {}) {
   return _trackedTransaction(input, parameters, session, requestId, txMetadata)
 }
 
-export function routedWriteTransaction(input, parameters, opts = {}) {
-  const {
-    requestId = null,
-    cancelable = false,
-    txMetadata = undefined,
-    useDb = undefined,
-    autoCommit = false
-  } = opts
+export function routedWriteTransaction(
+  input,
+  parameters,
+  requestId = null,
+  cancelable = false,
+  txMetadata = undefined,
+  useDb = undefined,
+  autoCommit = false
+) {
   const session = _drivers
     ? _drivers
         .getRoutedDriver()

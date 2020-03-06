@@ -74,13 +74,8 @@ export const populateEditorFromUrlEpic = (some$, store) => {
 
       const commandType = cmdParam[0]
       const cmdchar = getSettings(store.getState()).cmdchar
-      // Credits to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
-      // for the "decodeURIComponent cannot be used directly to parse query parameters"
       const cmdArgs =
-        getUrlParamValue(
-          'arg',
-          decodeURIComponent(action.url.replace(/\+/g, ' '))
-        ) || []
+        getUrlParamValue('arg', decodeURIComponent(action.url)) || []
       const fullCommand = validCommandTypes[commandType](cmdchar, cmdArgs)
 
       return Rx.Observable.of({ type: SET_CONTENT, ...setContent(fullCommand) })
