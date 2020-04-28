@@ -1,6 +1,6 @@
 # ONgDB Browser (AKA Neo4j Browser)
 
-Neo4j Browser is the general purpose user interface for working with Neo4j. Query, visualize, administrate and monitor the database
+ONgDB Browser is a fork of Neo4j Browser and is the general purpose user interface for working with ONgDB. Query, visualize, administrate and monitor the database
 with modern and easy-to-use tools.
 
 ![neo4j browser screenshot](./.github/neo4j-browser-screenshot.png)
@@ -69,5 +69,3 @@ yarn
 yarn jar
 yarn prepare-jar
 mvn -o -Duser.name=teamcity install # Don't clean install.
-
-Note: You may have problems with node-gym on node 10+.  You can use nvm and install node 8.15.0 to work with this browser if you have any issues.
