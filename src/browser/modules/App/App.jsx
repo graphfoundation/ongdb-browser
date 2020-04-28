@@ -32,7 +32,10 @@ import {
 import { FOCUS, EXPAND } from 'shared/modules/editor/editorDuck'
 import { useBrowserSync } from 'shared/modules/features/featuresDuck'
 import { getErrorMessage } from 'shared/modules/commands/commandsDuck'
-import { allowOutgoingConnections } from 'shared/modules/dbMeta/dbMetaDuck'
+import {
+  allowOutgoingConnections,
+  getDatabases
+} from 'shared/modules/dbMeta/dbMetaDuck'
 import {
   getActiveConnection,
   getConnectionState,
@@ -40,9 +43,11 @@ import {
   getActiveConnectionData,
   isConnected,
   getConnectionData,
+  INITIAL_SWITCH_CONNECTION_FAILED,
   SWITCH_CONNECTION_FAILED,
   SWITCH_CONNECTION,
-  SILENT_DISCONNECT
+  SILENT_DISCONNECT,
+  getUseDb
 } from 'shared/modules/connections/connectionsDuck'
 import { toggle } from 'shared/modules/sidebar/sidebarDuck'
 import {
@@ -67,7 +72,7 @@ import { getMetadata, getUserAuthStatus } from 'shared/modules/sync/syncDuck'
 import ErrorBoundary from 'browser-components/ErrorBoundary'
 import { getExperimentalFeatures } from 'shared/modules/experimentalFeatures/experimentalFeaturesDuck'
 import FeatureToggleProvider from '../FeatureToggle/FeatureToggleProvider'
-import { inWebEnv } from 'shared/modules/app/appDuck'
+import { inWebEnv, URL_ARGUMENTS_CHANGE } from 'shared/modules/app/appDuck'
 import useDerivedTheme from 'browser-hooks/useDerivedTheme'
 import FileDrop from 'browser-components/FileDrop/FileDrop'
 import DesktopApi from 'browser-components/desktop-api/desktop-api'
@@ -120,7 +125,9 @@ export function App(props) {
     experimentalFeatures,
     store,
     codeFontLigatures,
-    defaultConnectionData
+    defaultConnectionData,
+    useDb,
+    databases
   } = props
 
   const wrapperClassNames = []
@@ -134,7 +141,7 @@ export function App(props) {
         onMount={(...args) => {
           buildConnectionCreds(...args, { defaultConnectionData })
             .then(creds => props.bus.send(INJECTED_DISCOVERY, creds))
-            .catch(() => props.bus.send(SWITCH_CONNECTION_FAILED))
+            .catch(() => props.bus.send(INITIAL_SWITCH_CONNECTION_FAILED))
           getDesktopTheme(...args)
             .then(theme => setEnvironmentTheme(theme))
             .catch(setEnvironmentTheme(null))
@@ -149,6 +156,9 @@ export function App(props) {
           getDesktopTheme(...args)
             .then(theme => setEnvironmentTheme(theme))
             .catch(setEnvironmentTheme(null))
+        }
+        onArgumentsChange={argsString =>
+          props.bus.send(URL_ARGUMENTS_CHANGE, { url: `?${argsString}` })
         }
       />
       <ThemeProvider theme={themeData}>
@@ -180,6 +190,8 @@ export function App(props) {
                       lastConnectionUpdate={lastConnectionUpdate}
                       errorMessage={errorMessage}
                       useBrowserSync={loadSync}
+                      useDb={useDb}
+                      databases={databases}
                     />
                   </StyledMainWrapper>
                 </StyledBody>
@@ -213,7 +225,9 @@ const mapStateToProps = state => {
     browserSyncConfig: getBrowserSyncConfig(state),
     browserSyncAuthStatus: getUserAuthStatus(state),
     loadSync: useBrowserSync(state),
-    isWebEnv: inWebEnv(state)
+    isWebEnv: inWebEnv(state),
+    useDb: getUseDb(state),
+    databases: getDatabases(state)
   }
 }
 
@@ -225,9 +239,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withBus(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-)
+export default withBus(connect(mapStateToProps, mapDispatchToProps)(App))

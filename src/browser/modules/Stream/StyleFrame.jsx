@@ -83,7 +83,9 @@ const StyleStatusbar = ({ resetStyleAction, rerunAction, onResetClick }) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     resetStyleAction: executeSystemCommand(`${getCmdChar(state)}style reset`),
-    rerunAction: executeCommand(ownProps.frame.cmd, ownProps.frame.id)
+    rerunAction: executeCommand(ownProps.frame.cmd, {
+      id: ownProps.frame.id
+    })
   }
 }
 const mapDispatchToProps = dispatch => ({

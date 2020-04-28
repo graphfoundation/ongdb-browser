@@ -20,8 +20,12 @@
 
 import Rx from 'rxjs/Rx'
 import { getUrlParamValue } from 'services/utils'
-import { getSettings } from 'shared/modules/settings/settingsDuck'
+import {
+  getSettings,
+  DISABLE_IMPLICIT_INIT_COMMANDS
+} from 'shared/modules/settings/settingsDuck'
 import { APP_START, URL_ARGUMENTS_CHANGE } from 'shared/modules/app/appDuck'
+import { executeCommand } from 'shared/modules/commands/commandsDuck'
 
 const NAME = 'editor'
 export const SET_CONTENT = NAME + '/SET_CONTENT'
@@ -74,9 +78,23 @@ export const populateEditorFromUrlEpic = (some$, store) => {
 
       const commandType = cmdParam[0]
       const cmdchar = getSettings(store.getState()).cmdchar
+      // Credits to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
+      // for the "decodeURIComponent cannot be used directly to parse query parameters"
       const cmdArgs =
-        getUrlParamValue('arg', decodeURIComponent(action.url)) || []
+        getUrlParamValue(
+          'arg',
+          decodeURIComponent(action.url.replace(/\+/g, ' '))
+        ) || []
       const fullCommand = validCommandTypes[commandType](cmdchar, cmdArgs)
+
+      // Play command is considered safe and can run automatically
+      // When running the explicit command, also set flag to skip any implicit init commands
+      if (commandType === 'play') {
+        return [
+          executeCommand(fullCommand),
+          { type: DISABLE_IMPLICIT_INIT_COMMANDS }
+        ]
+      }
 
       return Rx.Observable.of({ type: SET_CONTENT, ...setContent(fullCommand) })
     })
