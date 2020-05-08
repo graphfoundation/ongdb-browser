@@ -39,11 +39,13 @@ import {
   switchConnectionEpic,
   switchConnectionSuccessEpic,
   switchConnectionFailEpic,
+  initialSwitchConnectionFailEpic,
   silentDisconnectEpic,
   useDbEpic
 } from './modules/connections/connectionsDuck'
 import {
   dbMetaEpic,
+  serverConfigEpic,
   serverInfoEpic,
   clearMetaOnDisconnectEpic
 } from './modules/dbMeta/dbMetaDuck'
@@ -60,7 +62,10 @@ import {
   clusterCypherRequestEpic,
   handleForcePasswordChangeEpic
 } from './modules/cypher/cypherDuck'
-import { featuresDiscoveryEpic } from './modules/features/featuresDuck'
+import {
+  featuresDiscoveryEpic,
+  clearOnDisconnectEpic
+} from './modules/features/featuresDuck'
 import {
   syncItemsEpic,
   clearSyncEpic,
@@ -95,6 +100,7 @@ export default combineEpics(
   switchConnectionEpic,
   switchConnectionSuccessEpic,
   switchConnectionFailEpic,
+  initialSwitchConnectionFailEpic,
   retainCredentialsSettingsEpic,
   connectEpic,
   disconnectEpic,
@@ -107,6 +113,7 @@ export default combineEpics(
   startupConnectionFailEpic,
   detectActiveConnectionChangeEpic,
   dbMetaEpic,
+  serverConfigEpic,
   serverInfoEpic,
   clearMetaOnDisconnectEpic,
   cancelRequestEpic,
@@ -119,6 +126,7 @@ export default combineEpics(
   clearLocalstorageEpic,
   handleForcePasswordChangeEpic,
   featuresDiscoveryEpic,
+  clearOnDisconnectEpic,
   syncFavoritesEpic,
   loadFavoritesFromSyncEpic,
   loadGrassFromSyncEpic,
