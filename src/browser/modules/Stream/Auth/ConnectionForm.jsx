@@ -27,9 +27,13 @@ import {
   setActiveConnection,
   updateConnection,
   CONNECT,
-  VERIFY_CREDENTIALS
+  VERIFY_CREDENTIALS,
+  isConnected
 } from 'shared/modules/connections/connectionsDuck'
-import { getInitCmd } from 'shared/modules/settings/settingsDuck'
+import {
+  getInitCmd,
+  getPlayImplicitInitCommands
+} from 'shared/modules/settings/settingsDuck'
 import { executeSystemCommand } from 'shared/modules/commands/commandsDuck'
 import { shouldRetainConnectionCredentials } from 'shared/modules/dbMeta/dbMetaDuck'
 import { FORCE_CHANGE_PASSWORD } from 'shared/modules/cypher/cypherDuck'
@@ -45,19 +49,17 @@ export class ConnectionForm extends Component {
     super(props)
     const connection =
       this.props.activeConnectionData || this.props.frame.connectionData
-    const isConnected = !!props.activeConnection
     const authenticationMethod =
       (connection && connection.authenticationMethod) || NATIVE
 
     this.state = {
       ...connection,
       authenticationMethod,
-      isConnected: isConnected,
       isLoading: false,
       passwordChangeNeeded: props.passwordChangeNeeded || false,
       forcePasswordChange: props.forcePasswordChange || false,
       successCallback: props.onSuccess || (() => {}),
-      used: isConnected
+      used: props.isConnected
     }
   }
 
@@ -196,7 +198,9 @@ export class ConnectionForm extends Component {
     this.state.successCallback()
     this.saveCredentials()
     this.props.setActiveConnection(this.state.id)
-    this.props.executeInitCmd()
+    if (this.props.playImplicitInitCommands) {
+      this.props.executeInitCmd()
+    }
   }
 
   saveCredentials() {
@@ -209,22 +213,11 @@ export class ConnectionForm extends Component {
     })
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.activeConnection && props.activeConnectionData) {
-      if (!state.isConnected) {
-        return { isConnected: true }
-      }
-    } else if (state.isConnected) {
-      return { isConnected: false }
-    }
-    return null
-  }
-
   render() {
     let view
     if (
       this.state.forcePasswordChange ||
-      (!this.state.isConnected && this.state.passwordChangeNeeded)
+      (!this.props.isConnected && this.state.passwordChangeNeeded)
     ) {
       view = (
         <ChangePasswordForm
@@ -241,7 +234,7 @@ export class ConnectionForm extends Component {
           {this.props.children}
         </ChangePasswordForm>
       )
-    } else if (this.state.isConnected) {
+    } else if (this.props.isConnected) {
       view = (
         <ConnectedView
           host={this.state.host}
@@ -250,7 +243,7 @@ export class ConnectionForm extends Component {
           hideStoreCredentials={this.state.authenticationMethod === NO_AUTH}
         />
       )
-    } else if (!this.state.isConnected && !this.state.passwordChangeNeeded) {
+    } else if (!this.props.isConnected && !this.state.passwordChangeNeeded) {
       view = (
         <ConnectForm
           onConnectClick={this.connect.bind(this)}
@@ -277,7 +270,9 @@ const mapStateToProps = state => {
     initCmd: getInitCmd(state),
     activeConnection: getActiveConnection(state),
     activeConnectionData: getActiveConnectionData(state),
-    storeCredentials: shouldRetainConnectionCredentials(state)
+    playImplicitInitCommands: getPlayImplicitInitCommands(state),
+    storeCredentials: shouldRetainConnectionCredentials(state),
+    isConnected: isConnected(state)
   }
 }
 
@@ -293,9 +288,11 @@ const mapDispatchToProps = dispatch => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
+    playImplicitInitCommands: stateProps.playImplicitInitCommands,
     activeConnection: stateProps.activeConnection,
     activeConnectionData: stateProps.activeConnectionData,
     storeCredentials: stateProps.storeCredentials,
+    isConnected: stateProps.isConnected,
     ...ownProps,
     ...dispatchProps,
     executeInitCmd: () => {
@@ -305,9 +302,5 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 
 export default withBus(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    mergeProps
-  )(ConnectionForm)
+  connect(mapStateToProps, mapDispatchToProps, mergeProps)(ConnectionForm)
 )

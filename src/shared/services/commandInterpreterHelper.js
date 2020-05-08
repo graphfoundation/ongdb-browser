@@ -35,6 +35,7 @@ import {
   getUseDb
 } from 'shared/modules/connections/connectionsDuck'
 import { getParams } from 'shared/modules/params/paramsDuck'
+import { getUserCapabilities } from 'shared/modules/features/featuresDuck'
 import {
   updateGraphStyleData,
   getGraphStyleData
@@ -42,7 +43,8 @@ import {
 import {
   getRemoteContentHostnameWhitelist,
   getDatabases,
-  fetchMetaData
+  fetchMetaData,
+  getAvailableSettings
 } from 'shared/modules/dbMeta/dbMetaDuck'
 import { canSendTxMetadata } from 'shared/modules/features/versionedFeatures'
 import { fetchRemoteGuide } from 'shared/modules/commands/helpers/play'
@@ -83,7 +85,8 @@ import { fetchRemoteGrass } from 'shared/modules/commands/helpers/grass'
 import { parseGrass } from 'shared/services/grassUtils'
 import {
   shouldUseCypherThread,
-  getCmdChar
+  getCmdChar,
+  getSettings
 } from 'shared/modules/settings/settingsDuck'
 import {
   getUserDirectTxMetadata,
@@ -94,6 +97,9 @@ import {
   tryGetRemoteInitialSlideFromUrl
 } from './commandUtils'
 import { unescapeCypherIdentifier } from './utils'
+import { getLatestFromFrameStack } from 'browser/modules/Stream/stream.utils'
+
+const PLAY_FRAME_TYPES = ['play', 'play-remote']
 
 const availableCommands = [
   {
@@ -209,20 +215,31 @@ const availableCommands = [
             'No multi db support detected.'
           )
         }
-        const databaseNames = getDatabases(store.getState()).map(db =>
-          db.name.toLowerCase()
-        )
 
         const normalizedName = dbName.toLowerCase()
         const cleanDbName = unescapeCypherIdentifier(normalizedName)
 
+        const dbMeta = getDatabases(store.getState()).find(
+          db => db.name.toLowerCase() === cleanDbName
+        )
+
+        function UseDbError({ code, message }) {
+          this.code = code
+          this.message = message
+        }
+
         // Do we have a db with that name?
-        if (!databaseNames.includes(cleanDbName)) {
-          const error = new Error(
-            `A database with the "${dbName}" name could not be found.`
-          )
-          error.code = 'NotFound'
-          throw error
+        if (!dbMeta) {
+          throw new UseDbError({
+            code: 'NotFound',
+            message: `A database with the "${dbName}" name could not be found.`
+          })
+        }
+        if (dbMeta.status !== 'online') {
+          throw new UseDbError({
+            code: 'DatabaseUnavailable',
+            message: `Database "${dbName}" is unavailable, its status is "${dbMeta.status}."`
+          })
         }
         put(useDb(cleanDbName))
         put(
@@ -322,6 +339,25 @@ const availableCommands = [
           ...action,
           type: 'schema',
           schemaRequestId: v4()
+        })
+      )
+    }
+  },
+  {
+    name: 'client-debug',
+    match: cmd => /^debug$/.test(cmd),
+    exec: function(action, cmdchar, put, store) {
+      const out = {
+        userCapabilities: getUserCapabilities(store.getState()),
+        serverConfig: getAvailableSettings(store.getState()),
+        browserSettings: getSettings(store.getState())
+      }
+      put(
+        frames.add({
+          useDb: getUseDb(store.getState()),
+          ...action,
+          type: 'pre',
+          contents: JSON.stringify(out, null, 2)
         })
       )
     }
@@ -437,6 +473,22 @@ const availableCommands = [
     name: 'play-remote',
     match: cmd => /^play(\s|$)https?/.test(cmd),
     exec: function(action, cmdchar, put, store) {
+      let id
+      // We have a frame that generated this command
+      if (action.id) {
+        const originFrame = frames.getFrame(store.getState(), action.id)
+        // Only replace when the origin is a help frame
+        if (originFrame) {
+          const latest = getLatestFromFrameStack(originFrame)
+          if (latest && PLAY_FRAME_TYPES.includes(latest.type)) {
+            id = action.id
+          }
+        } else {
+          // New id === new frame
+          id = v4()
+        }
+      }
+
       const url = action.cmd.substr(cmdchar.length + 'play '.length)
       const whitelist = getRemoteContentHostnameWhitelist(store.getState())
       fetchRemoteGuide(url, whitelist)
@@ -445,6 +497,7 @@ const availableCommands = [
             frames.add({
               useDb: getUseDb(store.getState()),
               ...action,
+              id,
               type: 'play-remote',
               initialSlide: tryGetRemoteInitialSlideFromUrl(url),
               result: r
@@ -456,6 +509,7 @@ const availableCommands = [
             frames.add({
               useDb: getUseDb(store.getState()),
               ...action,
+              id,
               type: 'play-remote',
               response: e.response || null,
               initialSlide: tryGetRemoteInitialSlideFromUrl(url),
@@ -471,10 +525,27 @@ const availableCommands = [
     name: 'play',
     match: cmd => /^play(\s|$)/.test(cmd),
     exec: function(action, cmdchar, put, store) {
+      let id
+      // We have a frame that generated this command
+      if (action.id) {
+        const originFrame = frames.getFrame(store.getState(), action.id)
+        // Only replace when the origin is a help frame
+        if (originFrame) {
+          const latest = getLatestFromFrameStack(originFrame)
+          if (latest && PLAY_FRAME_TYPES.includes(latest.type)) {
+            id = action.id
+          }
+        } else {
+          // New id === new frame
+          id = v4()
+        }
+      }
+
       put(
         frames.add({
           useDb: getUseDb(store.getState()),
           ...action,
+          id,
           type: 'play'
         })
       )
@@ -529,10 +600,28 @@ const availableCommands = [
     name: 'help',
     match: cmd => /^(help|\?)(\s|$)/.test(cmd),
     exec: function(action, cmdchar, put, store) {
+      const HELP_FRAME_TYPE = 'help'
+      let id
+
+      // We have a frame that generated this command
+      if (action.id) {
+        const originFrame = frames.getFrame(store.getState(), action.id)
+        // Only replace when the origin is a help frame
+        if (originFrame) {
+          const latest = getLatestFromFrameStack(originFrame)
+          if (latest && latest.type === HELP_FRAME_TYPE) {
+            id = action.id
+          }
+        } else {
+          // New id === new frame
+          id = v4()
+        }
+      }
       put(
         frames.add({
           useDb: getUseDb(store.getState()),
           ...action,
+          id,
           type: 'help'
         })
       )

@@ -21,14 +21,20 @@
 import Rx from 'rxjs/Rx'
 import bolt from 'services/bolt/bolt'
 import { APP_START, DESKTOP, CLOUD } from 'shared/modules/app/appDuck'
-import { CONNECTION_SUCCESS } from 'shared/modules/connections/connectionsDuck'
+import {
+  CONNECTION_SUCCESS,
+  DISCONNECTION_SUCCESS
+} from 'shared/modules/connections/connectionsDuck'
 import { shouldUseCypherThread } from 'shared/modules/settings/settingsDuck'
 import { getBackgroundTxMetadata } from 'shared/services/bolt/txMetadata'
 import { canSendTxMetadata } from '../features/versionedFeatures'
+import { SYSTEM_DB } from '../dbMeta/dbMetaDuck'
 
 export const NAME = 'features'
-export const RESET = 'features/RESET'
+const CLEAR = 'features/CLEAR'
 export const UPDATE_ALL_FEATURES = 'features/UPDATE_ALL_FEATURES'
+export const UPDATE_USER_CAPABILITIES = 'features/UPDATE_USER_CAPABILITIES'
+export const FEATURE_DETECTION_DONE = 'features/FEATURE_DETECTION_DONE'
 
 export const getAvailableProcedures = state => state[NAME].availableProcedures
 export const isACausalCluster = state =>
@@ -37,11 +43,23 @@ export const isMultiDatabase = state =>
   getAvailableProcedures(state).includes('dbms.databases.overview')
 export const canAssignRolesToUser = state =>
   getAvailableProcedures(state).includes('dbms.security.addRoleToUser')
+export const hasClientConfig = state =>
+  getAvailableProcedures(state).includes('dbms.clientConfig')
 export const useBrowserSync = state => !!state[NAME].browserSync
+export const getUserCapabilities = state => state[NAME].userCapabilities
+
+export const USER_CAPABILITIES = {
+  serverConfigReadable: 'serverConfigReadable',
+  proceduresReadable: 'proceduresReadable'
+}
 
 const initialState = {
   availableProcedures: [],
-  browserSync: true
+  browserSync: true,
+  userCapabilities: {
+    [USER_CAPABILITIES.serverConfigReadable]: false,
+    [USER_CAPABILITIES.proceduresReadable]: false
+  }
 }
 
 export default function(state = initialState, action) {
@@ -56,7 +74,15 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case UPDATE_ALL_FEATURES:
       return { ...state, availableProcedures: [...action.availableProcedures] }
-    case RESET:
+    case UPDATE_USER_CAPABILITIES:
+      return {
+        ...state,
+        userCapabilities: {
+          ...state.userCapabilities,
+          [action.capabilityName]: action.capabilityValue
+        }
+      }
+    case CLEAR:
       return initialState
     default:
       return state
@@ -76,30 +102,53 @@ export const updateFeatures = availableProcedures => {
   }
 }
 
+export const updateUserCapability = (capabilityName, capabilityValue) => {
+  return {
+    type: UPDATE_USER_CAPABILITIES,
+    capabilityName,
+    capabilityValue
+  }
+}
+
 export const featuresDiscoveryEpic = (action$, store) => {
   return action$
     .ofType(CONNECTION_SUCCESS)
     .mergeMap(() => {
-      return bolt
-        .routedReadTransaction(
-          'CALL dbms.procedures YIELD name',
-          {},
-          {
-            useCypherThread: shouldUseCypherThread(store.getState()),
-            ...getBackgroundTxMetadata({
-              hasServerSupport: canSendTxMetadata(store.getState())
-            })
-          }
-        )
+      return new Promise(async (resolve, reject) => {
+        const supportsMultiDb = await bolt.hasMultiDbSupport()
+        bolt
+          .routedReadTransaction(
+            'CALL dbms.procedures YIELD name',
+            {},
+            {
+              useDb: supportsMultiDb ? SYSTEM_DB : '',
+              useCypherThread: shouldUseCypherThread(store.getState()),
+              ...getBackgroundTxMetadata({
+                hasServerSupport: canSendTxMetadata(store.getState())
+              })
+            }
+          )
+          .then(resolve)
+          .catch(reject)
+      })
         .then(res => {
           store.dispatch(
             updateFeatures(res.records.map(record => record.get('name')))
           )
+          store.dispatch(
+            updateUserCapability(USER_CAPABILITIES.proceduresReadable, true)
+          )
           return Rx.Observable.of(null)
         })
         .catch(e => {
+          store.dispatch(
+            updateUserCapability(USER_CAPABILITIES.proceduresReadable, false)
+          )
           return Rx.Observable.of(null)
         })
     })
-    .mapTo({ type: 'NOOP' })
+    .mapTo({ type: FEATURE_DETECTION_DONE })
 }
+
+export const clearOnDisconnectEpic = some$ =>
+  some$.ofType(DISCONNECTION_SUCCESS).mapTo({ type: CLEAR })

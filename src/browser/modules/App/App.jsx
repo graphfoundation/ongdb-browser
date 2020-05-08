@@ -32,7 +32,10 @@ import {
 import { FOCUS, EXPAND } from 'shared/modules/editor/editorDuck'
 import { useBrowserSync } from 'shared/modules/features/featuresDuck'
 import { getErrorMessage } from 'shared/modules/commands/commandsDuck'
-import { allowOutgoingConnections } from 'shared/modules/dbMeta/dbMetaDuck'
+import {
+  allowOutgoingConnections,
+  getDatabases
+} from 'shared/modules/dbMeta/dbMetaDuck'
 import {
   getActiveConnection,
   getConnectionState,
@@ -40,9 +43,11 @@ import {
   getActiveConnectionData,
   isConnected,
   getConnectionData,
+  INITIAL_SWITCH_CONNECTION_FAILED,
   SWITCH_CONNECTION_FAILED,
   SWITCH_CONNECTION,
-  SILENT_DISCONNECT
+  SILENT_DISCONNECT,
+  getUseDb
 } from 'shared/modules/connections/connectionsDuck'
 import { toggle } from 'shared/modules/sidebar/sidebarDuck'
 import {
@@ -120,7 +125,9 @@ export function App(props) {
     experimentalFeatures,
     store,
     codeFontLigatures,
-    defaultConnectionData
+    defaultConnectionData,
+    useDb,
+    databases
   } = props
 
   const wrapperClassNames = []
@@ -134,7 +141,7 @@ export function App(props) {
         onMount={(...args) => {
           buildConnectionCreds(...args, { defaultConnectionData })
             .then(creds => props.bus.send(INJECTED_DISCOVERY, creds))
-            .catch(() => props.bus.send(SWITCH_CONNECTION_FAILED))
+            .catch(() => props.bus.send(INITIAL_SWITCH_CONNECTION_FAILED))
           getDesktopTheme(...args)
             .then(theme => setEnvironmentTheme(theme))
             .catch(setEnvironmentTheme(null))
@@ -180,6 +187,8 @@ export function App(props) {
                       lastConnectionUpdate={lastConnectionUpdate}
                       errorMessage={errorMessage}
                       useBrowserSync={loadSync}
+                      useDb={useDb}
+                      databases={databases}
                     />
                   </StyledMainWrapper>
                 </StyledBody>
@@ -213,7 +222,9 @@ const mapStateToProps = state => {
     browserSyncConfig: getBrowserSyncConfig(state),
     browserSyncAuthStatus: getUserAuthStatus(state),
     loadSync: useBrowserSync(state),
-    isWebEnv: inWebEnv(state)
+    isWebEnv: inWebEnv(state),
+    useDb: getUseDb(state),
+    databases: getDatabases(state)
   }
 }
 
