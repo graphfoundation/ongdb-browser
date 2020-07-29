@@ -29,8 +29,7 @@ Cypress.Commands.add(
       // We assume pw already set on local
       return
     }
-
-    cy.title().should('include', 'Neo4j Browser')
+    cy.title().should('include', 'ONgDB Browser')
     cy.wait(3000)
 
     cy.get('input[data-testid="boltaddress"]')

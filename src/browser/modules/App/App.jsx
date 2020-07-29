@@ -239,9 +239,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withBus(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-)
+export default withBus(connect(mapStateToProps, mapDispatchToProps)(App))

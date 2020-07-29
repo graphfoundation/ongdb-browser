@@ -34,13 +34,18 @@ import { getVersion, getEdition } from 'shared/modules/dbMeta/dbMetaDuck'
 
 const About = ({ serverVersion, serverEdition }) => (
   <Drawer id="db-about">
-    <DrawerHeader>About Neo4j</DrawerHeader>
+    <DrawerHeader>About ONgDB</DrawerHeader>
     <DrawerBody>
       <DrawerSection>
         <DrawerSubHeader>
-          Made by{' '}
+          Originally created by{' '}
           <a target="_blank" href="http://neo4j.com/">
             Neo4j, Inc
+          </a>
+          <br />
+          ensured to stay free and open source by the{' '}
+          <a target="_blank" href="http://graphfoundation.org/">
+            Graph Foundation
           </a>
         </DrawerSubHeader>
       </DrawerSection>
@@ -53,7 +58,7 @@ const About = ({ serverVersion, serverEdition }) => (
           <p>
             Neo4j Browser version:{' '}
             <a
-              href={`https://github.com/neo4j/neo4j-browser/releases/tag/${version}`}
+              href={`https://github.com/graphfoundation/ongdb-browser/releases/tag/${version}`}
               target="_blank"
             >
               {version}
@@ -61,7 +66,7 @@ const About = ({ serverVersion, serverEdition }) => (
           </p>
           <Render if={serverVersion && serverEdition}>
             <p>
-              Neo4j Server version:{' '}
+              ONgDB Server version:{' '}
               <a target="_blank" href={asChangeLogUrl(serverVersion)}>
                 {serverVersion}
               </a>{' '}
@@ -70,7 +75,7 @@ const About = ({ serverVersion, serverEdition }) => (
           </Render>
           <p>
             <a
-              href="https://github.com/neo4j/neo4j-browser/wiki/changelog"
+              href="https://github.com/graphfoundation/ongdb-browser/wiki/changelog"
               target="_blank"
             >
               Neo4j Browser Changelog
@@ -88,11 +93,7 @@ const About = ({ serverVersion, serverEdition }) => (
           <a target="_blank" href="http://www.gnu.org/licenses/agpl-3.0.html">
             AGPL
           </a>{' '}
-          for Open Source, and{' '}
-          <a target="_blank" href="https://neo4j.com/licensing/">
-            NTCL
-          </a>{' '}
-          Commercial.
+          for Open Source
         </DrawerSectionBody>
       </DrawerSection>
       <DrawerSection>
@@ -120,13 +121,24 @@ const About = ({ serverVersion, serverEdition }) => (
           <a target="_blank" href="http://github.com/neo4j">
             Neo4j
           </a>{' '}
+          |{' '}
+          <a target="_blank" href="http://github.com/graphfoundation">
+            ONgDB
+          </a>{' '}
           or{' '}
           <a target="_blank" href="http://github.com/neo4j/neo4j-browser">
             Neo4j Browser
+          </a>{' '}
+          |{' '}
+          <a
+            target="_blank"
+            href="http://github.com/graphfoundation/ongdb-browser"
+          >
+            ONgDB Browser
           </a>
           <br />
           Send us your Browser feedback via{' '}
-          <a href="mailto:browser@neotechnology.com?subject=Neo4j Browser feedback">
+          <a href="mailto:ongdb-browser@graphfoundation.org?subject=ONgDB+Browser+feedback">
             email
           </a>
         </DrawerSectionBody>
@@ -134,9 +146,14 @@ const About = ({ serverVersion, serverEdition }) => (
       <DrawerSection>
         <DrawerSubHeader>Thanks</DrawerSubHeader>
         <DrawerSectionBody>
-          Neo4j wouldn't be possible without a fantastic community. Thanks for
-          all the feedback, discussions and contributions.
+          Neo4j and ONgDB wouldn't be possible without a fantastic community.
+          Thanks for all the feedback, discussions and contributions.
         </DrawerSectionBody>
+        <DrawerFooter>
+          <DrawerSectionBody>
+            With &#9829; from the community.
+          </DrawerSectionBody>
+        </DrawerFooter>
       </DrawerSection>
     </DrawerBody>
     <DrawerFooter>With &#9829; from Sweden.</DrawerFooter>

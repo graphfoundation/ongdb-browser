@@ -40,7 +40,6 @@ import {
   DatabaseIcon,
   FavoritesIcon,
   DocumentsIcon,
-  CloudSyncIcon,
   SettingsIcon,
   AboutIcon
 } from 'browser-components/icons/Icons'
@@ -93,20 +92,6 @@ function Sidebar(props) {
   ]
   const bottomNavItemsList = [
     {
-      name: 'Sync',
-      title: 'Cloud Services',
-      icon: function syncIcon(isOpen) {
-        return (
-          <CloudSyncIcon
-            isOpen={isOpen}
-            connected={props.syncConnected}
-            title="Cloud Services"
-          />
-        )
-      },
-      content: BrowserSync
-    },
-    {
       name: 'Settings',
       title: 'Browser Settings',
       icon: function settingIcon(isOpen) {
@@ -116,9 +101,9 @@ function Sidebar(props) {
     },
     {
       name: 'About',
-      title: 'About Neo4j',
+      title: 'About ONgDB',
       icon: function aboutIcon(isOpen) {
-        return <AboutIcon isOpen={isOpen} title="About Neo4j" />
+        return <AboutIcon isOpen={isOpen} title="About ONgDB" />
       },
       content: AboutDrawer
     }
@@ -161,7 +146,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Sidebar)
+export default connect(mapStateToProps, null)(Sidebar)
