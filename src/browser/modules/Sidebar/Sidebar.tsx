@@ -28,7 +28,7 @@ import Favorites from './favorites'
 import StaticScripts from './static-scripts'
 import TabNavigation from 'browser-components/TabNavigation/Navigation'
 import { DrawerHeader } from 'browser-components/drawer'
-import BrowserSync from '../Sync/BrowserSync'
+// import BrowserSync from '../Sync/BrowserSync'
 import { isUserSignedIn } from 'shared/modules/sync/syncDuck'
 import { useBrowserSync } from 'shared/modules/features/featuresDuck'
 import {
@@ -41,7 +41,6 @@ import {
   DatabaseIcon,
   FavoritesIcon,
   DocumentsIcon,
-  CloudSyncIcon,
   SettingsIcon,
   AboutIcon
 } from 'browser-components/icons/Icons'
@@ -60,7 +59,7 @@ const Sidebar = ({
   onNavClick,
   showStaticScripts,
   neo4jConnectionState,
-  syncConnected,
+  // syncConnected,
   loadSync
 }: SidebarProps) => {
   const topNavItemsList = [
@@ -106,20 +105,6 @@ const Sidebar = ({
 
   const bottomNavItemsList = [
     {
-      name: 'Sync',
-      title: 'Browser Sync',
-      icon: function syncIcon(isOpen: boolean): ReactElement {
-        return (
-          <CloudSyncIcon
-            isOpen={isOpen}
-            connected={syncConnected}
-            title="Browser Sync"
-          />
-        )
-      },
-      content: BrowserSync
-    },
-    {
       name: 'Settings',
       title: 'Settings',
       icon: function settingIcon(isOpen: boolean): ReactElement {
@@ -129,9 +114,9 @@ const Sidebar = ({
     },
     {
       name: 'About',
-      title: 'About Neo4j',
+      title: 'About ONgDB',
       icon: function aboutIcon(isOpen: boolean): ReactElement {
-        return <AboutIcon isOpen={isOpen} title="About Neo4j" />
+        return <AboutIcon isOpen={isOpen} title="About ONgDB" />
       },
       content: AboutDrawer
     }

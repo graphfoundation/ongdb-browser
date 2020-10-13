@@ -28,7 +28,7 @@ const SubmitQueryButton = '[data-testid="editor-Run"]'
 const ClearEditorButton =
   '[data-testid="activeEditor"] [data-testid="editor-discard"]'
 
-describe('Neo4j Browser', () => {
+describe('ONgDB Browser', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
