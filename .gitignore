@@ -19,4 +19,4 @@ release-notes.md
 /stats.json
 signature.pem
 HEAD
-neo4j-enterprise-*/
+*.iml

@@ -136,9 +136,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default withBus(
-  connect(
-    null,
-    mapDispatchToProps
-  )(Directives)
-)
+export default withBus(connect(null, mapDispatchToProps)(Directives))
