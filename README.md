@@ -68,6 +68,6 @@ npm install -g yarn
 yarn
 yarn jar
 yarn prepare-jar
-mvn -o -Duser.name=teamcity install # Don't clean install.
+mvn -o -Duser.name=graphfoundation install # Don't clean install.
 
 Note: You may have problems with node-gym on node 10+.  You can use nvm and install node 8.15.0 to work with this browser if you have any issues.
