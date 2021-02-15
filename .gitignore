@@ -5,6 +5,7 @@ coverage/
 .vscode
 /yarn-error.log
 .idea/
+*.iml
 /build
 /bundle-report.html
 /target
