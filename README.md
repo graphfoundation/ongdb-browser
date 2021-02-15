@@ -1,9 +1,9 @@
-# Neo4j Browser
+# ONgDB Browser
 
-Neo4j Browser is the general purpose user interface for working with Neo4j. Query, visualize, administrate and monitor the database
+ONgDB Browser is the general purpose user interface for working with ONgDB to query, visualize, administrate and monitor the database
 with modern and easy-to-use tools.
 
-![neo4j browser screenshot](./.github/neo4j-browser-screenshot.png)
+![ongdb browser screenshot](./.github/ongdb-browser-screenshot.png)
 
 ## Development setup
 
@@ -23,21 +23,22 @@ with modern and easy-to-use tools.
 
 #### E2E Suite
 
-`yarn e2e` to run the cypress js test suite (requires a fresh installation of neo4j to run against, expects neo4j 3.5 by default).
-`yarn e2e --env server=3.3` to only run cypress js tests valid for neo4j server version 3.3.
+`yarn e2e` to run the cypress js test suite (requires a **fresh** installation of ongdb to run against, expects ongdb 1.0 by default).
+`yarn e2e --env server=1.0` to only run cypress js tests valid for ongdb server version 1.0.
 
 To run on an existing server (with a password already set), you can use any of these (the default password is set to "newpassword", pass in `--env browser-password=your-password`):  
-`yarn e2e-local --env server=3.4`  
-`yarn e2e-local-open --env server=3.4`  
+`yarn e2e-local --env server=1.0`  
+`yarn e2e-local-open --env server=1.0`  
 The latter just opens Cypress runner so you can see the tests being executed and run only some of them. Very useful when writing tests.
 
-There are also e2e tests that covers import from CSV files. To run thise, copy the `e2e_tests/files/import.csv` to the `import/` directory of the database you want to run the tests on and then start the e2e tests with the `--env include-import-tests=true` flag.
-Example: `yarn e2e-local-open --env server=3.4,include-import-tests=true`
+There are also e2e tests that cover import from CSV files. To run these, copy the `e2e_tests/files/import.csv` to the `import/` directory of the database you want to run the tests on and then start the e2e tests with the `--env include-import-tests=true` flag.
+Example: `yarn e2e-local-open --env server=1.0,include-import-tests=true`
 
 Here are the available options / env variables:
 
 ```
-server=3.2|3.3|3.4|3.5 (default 3.4)
+server=1.0
+edition=enterprise|community (default enterprise)
 browser-password=<your-pw> (default 'newpassword')
 include-import-tests=true|false (default false)
 bolt-url=<bolt url excluding the protocol> (default localhost:7687)
@@ -51,11 +52,22 @@ CYPRESS_E2E_TEST_ENV=local|null (if the initial set of pw should run or not) (de
 CYPRESS_BASE_URL=<url to reach the browser to test> (default http://localhost:8080)
 ```
 
-Example: `CYPRESS_E2E_TEST_ENV="local" CYPRESS_BASE_URL=http://localhost:8081 cypress open --env server=3.4`
+Example: `CYPRESS_E2E_TEST_ENV="local" CYPRESS_BASE_URL=http://localhost:8081 cypress open --env server=1.0`
 
 ## Devtools
 
-Download these two chrome extensions:
+Redux and React have useful devtools, the chrome versions are linked below: 
 
 - [Redux devtools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
 - [React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+
+
+## Building
+Install yarn globally (not homebrew if using osx)
+npm install -g yarn
+yarn
+yarn jar
+yarn prepare-jar
+mvn -o -Duser.name=teamcity install # Don't clean install.
+
+Note: You may have problems with node-gym on node 10+.  You can use nvm and install node 8.15.0 to work with this browser if you have any issues.
