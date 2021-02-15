@@ -31,8 +31,8 @@ class FrameAside extends Component {
     if (title === 'Neo4j') {
       title = (
         <img
-          src='./assets/images/neo4j-world.png'
-          alt='Neo4j'
+          src='./assets/images/ongdb-world.png'
+          alt='ONgDB'
           className='frame-title-logo'
         />
       )
