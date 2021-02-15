@@ -1,7 +1,7 @@
 {
-  "name": "neo4j-browser",
-  "version": "3.2.25",
-  "description": "Neo4j Browser is the general purpose user interface for working with Neo4j. Query, visualize, administrate and monitor the database.",
+  "name": "ongdb-browser",
+  "version": "1.0.0",
+  "description": "ONgDB Browser is the general purpose user interface for working with ONgDB to query, visualize, administrate and monitor the database.",
   "neo4jDesktop": {
     "apiVersion": "^1.2.0"
   },
@@ -12,12 +12,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/neo4j/neo4j-browser.git"
+    "url": "https://github.com/graphfoundation/ongdb-browser.git"
   },
   "keywords": [],
-  "author": "Neo4j Inc.",
+  "author": "Graph Foundation, Inc.",
   "license": "GPL-3.0",
-  "homepage": "https://neo4j.com/developer/guide-neo4j-browser/",
+  "homepage": "https://graphfoundation.org/ongdb",
   "main": "dist/index.html",
   "scripts": {
     "build": "NODE_ENV=\"production\" webpack --config ./build_scripts/webpack.config.js --progress",
