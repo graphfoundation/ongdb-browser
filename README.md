@@ -63,11 +63,29 @@ Redux and React have useful devtools, the chrome versions are linked below:
 
 
 ## Building
+
+### Install tools
+
 Install yarn globally (not homebrew if using osx)
+
+```
 npm install -g yarn
+```
+
+### Installing
+
+Yarn will build the distribution and package into a jar. That jar will then be bundled by Maven into the full artifact that many be used by ongdb.
+
+It's important to not use the `clean` goal when running `mvn` as it will remove the jar created in the prior steps.
+
+```
 yarn
 yarn jar
 yarn prepare-jar
-mvn -o -Duser.name=graphfoundation install # Don't clean install.
+mvn -o -Duser.name=graphfoundation install
+```
 
-Note: You may have problems with node-gym on node 10+.  You can use nvm and install node 8.15.0 to work with this browser if you have any issues.
+### Known issues
+
+You may have problems with node-gym on node 10+. 
+You can use nvm and install node 8.15.0 to work with this browser if you have any issues.
