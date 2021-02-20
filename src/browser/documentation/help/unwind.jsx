@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,51 +19,48 @@
  */
 
 import React from 'react'
+import ManualLink from 'browser-components/ManualLink'
 const title = 'UNWIND'
 const subtitle = 'Unwind a collection into a sequence of rows'
 const category = 'cypherHelp'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The <code>UNWIND</code> expands a collection in to a sequence of rows. Any
       existing identifiers are still available after <code>UNWIND</code>.
     </p>
-    <div className='links'>
-      <div className='link'>
-        <p className='title'>Reference</p>
-        <p className='content'>
-          <code>
-            <a
-              target='_blank'
-              href='https://neo4j.com/docs/developer-manual/3.2/cypher/clauses/unwind/'
-            >
-              UNWIND
-            </a>{' '}
-            manual page
-          </code>
+    <div className="links">
+      <div className="link">
+        <p className="title">Reference</p>
+        <p className="content">
+          <ManualLink chapter="cypher-manual" page="/clauses/unwind/">
+            UNWIND
+          </ManualLink>{' '}
+          manual page
         </p>
       </div>
-      <div className='link'>
-        <p className='title'>Related</p>
-        <p className='content'>
-          <a help-topic='match'>:help MATCH</a>
-          <a help-topic='cypher'>:help Cypher</a>
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="match">:help MATCH</a>
+          <a help-topic="cypher">:help Cypher</a>
         </p>
       </div>
     </div>
-    <section className='example'>
-      <figure className='runnable'>
-        <pre
-        >{`MATCH p = shortestPath( (lucy:Person {name:"Lucy Liu"})-[:ACTED_IN*]-(bacon:Person {name:"Kevin Bacon"}) )
+    <section className="example">
+      <figure className="runnable">
+        <pre>
+          {`MATCH p = shortestPath( (lucy:Person {name:"Lucy Liu"})-[:ACTED_IN*]-(bacon:Person {name:"Kevin Bacon"}) )
 UNWIND nodes(p) as n
-RETURN n.name`}</pre>
+RETURN n.name`}
+        </pre>
         <figcaption>
           Return a set of actors that form the shortest acquaintance links
           between Lucy Liu and Kevin Bacon.
         </figcaption>
       </figure>
     </section>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

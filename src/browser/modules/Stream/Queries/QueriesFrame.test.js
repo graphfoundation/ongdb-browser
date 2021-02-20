@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,10 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global jest, describe, test, expect */
-
-/* eslint-disable standard/no-callback-literal */
-
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { createBus } from 'suber'
@@ -31,6 +27,7 @@ import {
   CONNECTED_STATE
 } from 'shared/modules/connections/connectionsDuck'
 
+// eslint-disable-next-line
 jest.mock('../../Frame/FrameTemplate', () => ({ contents, statusbar }) => (
   <div>
     {contents}
@@ -80,13 +77,14 @@ it('can list and kill queries', () => {
   const props = {
     availableProcedures: ['dbms.listQueries'],
     connectionState: CONNECTED_STATE,
-    bus
+    bus,
+    neo4jVersion: '4.0.0'
   }
 
   const { getByText, getByTestId } = render(<QueriesFrame {...props} />)
 
   // Check that it's listed
-  expect(getByText('bolt://testhost.test')).not.toBeNull()
+  expect(getByText('neo4j://testhost.test')).not.toBeNull()
   expect(getByText('TEST RETURN')).not.toBeNull()
 
   // When

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -17,15 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import { includes, last, split, startsWith } from 'lodash-es'
 import { extractStatements } from 'cypher-codemirror'
 
-export function cleanCommand (cmd) {
+export function cleanCommand(cmd) {
   const noComments = stripCommandComments(cmd)
   const noEmptyLines = stripEmptyCommandLines(noComments)
   return noEmptyLines
 }
 
-export function stripEmptyCommandLines (str) {
+export function stripEmptyCommandLines(str) {
   const skipEmptyLines = e => !/^\s*$/.test(e)
   return str
     .split('\n')
@@ -33,16 +34,16 @@ export function stripEmptyCommandLines (str) {
     .join('\n')
 }
 
-export function stripCommandComments (str) {
+export function stripCommandComments(str) {
   return str.replace(/((^|\n)\/\/[^\n$]+\n?)/g, '')
 }
 
-export function splitStringOnFirst (str, delimiter) {
+export function splitStringOnFirst(str, delimiter) {
   const parts = str.split(delimiter)
   return [].concat(parts[0], parts.slice(1).join(delimiter))
 }
 
-export function splitStringOnLast (str, delimiter) {
+export function splitStringOnLast(str, delimiter) {
   const parts = str.split(delimiter)
   return [].concat(
     parts.slice(0, parts.length - 1).join(delimiter),
@@ -62,7 +63,7 @@ export const buildCommandObject = (action, interpret, cmdchar) => {
     cmdchar,
     action.ignore
   )
-  return { action, interpreted, cmdchar }
+  return { action, interpreted, cmdchar, useDb: action.useDb }
 }
 
 export const getInterpreter = (interpret, cmd, cmdchar, ignore = false) => {
@@ -89,6 +90,7 @@ export const extractPostConnectCommandsFromServerConfig = str => {
 }
 
 const getHelpTopic = str => splitStringOnFirst(str, ' ')[1] || 'help' // Map empty input to :help help
+const stripPound = str => splitStringOnFirst(str, '#')[0]
 const lowerCase = str => str.toLowerCase()
 const trim = str => str.trim()
 const replaceSpaceWithDash = str => str.replace(/\s/g, '-')
@@ -96,14 +98,16 @@ const snakeToCamel = str =>
   str.replace(/(-\w)/g, match => match[1].toUpperCase())
 const camelToSnake = (name, separator) => {
   return name
-    .replace(/([a-z]|(?:[A-Z0-9]+))([A-Z0-9]|$)/g, function (_, $1, $2) {
-      return $1 + ($2 && (separator || '_') + $2)
-    })
+    .replace(
+      /([a-z]|(?:[A-Z0-9]+))([A-Z0-9]|$)/g,
+      (_, $1, $2) => $1 + ($2 && (separator || '_') + $2)
+    )
     .toLowerCase()
 }
 
 export const transformCommandToHelpTopic = inputStr =>
   [inputStr || '']
+    .map(stripPound)
     .map(getHelpTopic)
     .map(lowerCase)
     .map(trim)
@@ -123,10 +127,10 @@ const arrowFunctionRegex = /^.*=>\s*([^$]*)$/
 export const mapParamToCypherStatement = (key, param) => {
   const quotedKey = key.match(quotedRegex)
   const cleanKey = quotedKey
-    ? '`' + quotedKey[1] + '`'
+    ? `\`${quotedKey[1]}\``
     : typeof key !== 'string'
-      ? '`' + key + '`'
-      : key
+    ? `\`${key}\``
+    : key
   const returnAs = value => `RETURN ${value} as ${cleanKey}`
 
   const matchParamFunction = param.toString().match(arrowFunctionRegex)
@@ -143,4 +147,22 @@ export const extractStatementsFromString = str => {
     .raw()
     .map(stmt => stmt.getText().trim())
     .filter(_ => _)
+}
+
+export const getCommandAndParam = str => {
+  const [serverCmd, props] = splitStringOnFirst(
+    splitStringOnFirst(str, ' ')[1],
+    ' '
+  )
+  return [serverCmd, props]
+}
+
+export function tryGetRemoteInitialSlideFromUrl(url) {
+  const hashBang = includes(url, '#') ? last(split(url, '#')) : ''
+
+  if (!startsWith(hashBang, 'slide-')) return 0
+
+  const slideIndex = Number(last(split(hashBang, 'slide-')))
+
+  return !isNaN(slideIndex) ? slideIndex : 0
 }

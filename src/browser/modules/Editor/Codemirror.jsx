@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -29,21 +29,16 @@ import 'codemirror/addon/lint/lint.css'
 import 'cypher-codemirror/dist/cypher-codemirror-syntax.css'
 import { debounce } from 'services/utils'
 
-function normalizeLineEndings (str) {
-  if (!str) return str
-  return str.replace(/\r\n|\r/g, '\n')
-}
-
 export default class CodeMirror extends Component {
   lastChange = null
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isFocused: false
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.debouncedOnParse = debounce(this.onParsed, 300, this)
     const textareaNode = this.editorReference
     const { editor, editorSupport } = createCypherEditor(
@@ -65,7 +60,7 @@ export default class CodeMirror extends Component {
     }
   }
 
-  goToPosition (position) {
+  goToPosition(position) {
     for (let i = 0; i < position.line; i++) {
       this.codeMirror.execCommand('goLineDown')
     }
@@ -75,60 +70,43 @@ export default class CodeMirror extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (
-      this.codeMirror &&
-      nextProps.value !== undefined &&
-      normalizeLineEndings(this.codeMirror.getValue()) !==
-        normalizeLineEndings(nextProps.value)
-    ) {
-      if (this.props.preserveScrollPosition) {
-        const prevScrollPosition = this.codeMirror.getScrollInfo()
-        this.codeMirror.setValue(nextProps.value)
-        this.codeMirror.scrollTo(
-          prevScrollPosition.left,
-          prevScrollPosition.top
-        )
-      } else {
-        this.codeMirror.setValue(nextProps.value)
-      }
-    }
-    if (typeof nextProps.options === 'object') {
-      for (let optionName in nextProps.options) {
-        if (nextProps.options.hasOwnProperty(optionName)) {
-          this.codeMirror.setOption(optionName, nextProps.options[optionName])
+  componentDidUpdate(prevProps) {
+    if (typeof this.props.options === 'object') {
+      for (const optionName in this.props.options) {
+        if (this.props.options.hasOwnProperty(optionName)) {
+          this.codeMirror.setOption(optionName, this.props.options[optionName])
         }
       }
     }
-    if (nextProps.schema) {
-      this.editorSupport.setSchema(this.props.schema)
+    if (this.props.schema) {
+      this.editorSupport.setSchema(prevProps.schema)
     }
   }
 
-  getCodeMirror () {
+  getCodeMirror() {
     return this.codeMirror
   }
 
-  generateStatementsFromCurrentValue () {
+  generateStatementsFromCurrentValue() {
     const parsed = parse(this.codeMirror.getValue())
     const { queriesAndCommands } = parsed.referencesListener
     return queriesAndCommands
   }
 
-  focus () {
+  focus() {
     if (this.codeMirror) {
       this.codeMirror.focus()
     }
   }
 
-  focusChanged (focused) {
+  focusChanged(focused) {
     this.setState({
       isFocused: focused
     })
     this.props.onFocusChange && this.props.onFocusChange(focused)
   }
 
-  scrollChanged (cm) {
+  scrollChanged(cm) {
     this.props.onScroll && this.props.onScroll(cm.getScrollInfo())
   }
 
@@ -139,11 +117,13 @@ export default class CodeMirror extends Component {
     }
     this.debouncedOnParse()
   }
+
   codemirrorValueChanges = (doc, change) => {
     if (this.props.onChanges && change.origin !== 'setValue') {
       this.props.onChanges(doc.getValue(), change)
     }
   }
+
   onParsed = () => {
     this.props.onParsed &&
       this.props.onParsed(
@@ -151,7 +131,8 @@ export default class CodeMirror extends Component {
         this.lastChange
       )
   }
-  render () {
+
+  render() {
     const editorClassNames = classNames(
       'ReactCodeMirror',
       { 'ReactCodeMirror--focused': this.state.isFocused },
@@ -161,6 +142,12 @@ export default class CodeMirror extends Component {
     const setEditorReference = ref => {
       this.editorReference = ref
     }
-    return <div className={editorClassNames} ref={setEditorReference} />
+    return (
+      <div
+        className={editorClassNames}
+        ref={setEditorReference}
+        data-testid="editor-wrapper"
+      />
+    )
   }
 }

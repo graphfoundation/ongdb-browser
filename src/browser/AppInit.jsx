@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -83,21 +83,20 @@ bus.applyMiddleware((_, origin) => (channel, message, source) => {
 // Introduce environment to be able to fork functionality
 const env = detectRuntimeEnv(window, NEO4J_CLOUD_DOMAINS)
 
+// URL we're on
+const url = window.location.href
+
 // Signal app upstart (for epics)
-store.dispatch({ type: APP_START, url: window.location.href, env })
+store.dispatch({ type: APP_START, url, env })
 
 const AppInit = () => {
   return (
     <Provider store={store}>
       <BusProvider bus={bus}>
-        <React.Fragment>
+        <>
           <GlobalStyle />
-          <App
-            desktopIntegrationPoint={
-              window && window.neo4jDesktopApi ? window.neo4jDesktopApi : null
-            }
-          />
-        </React.Fragment>
+          <App />
+        </>
       </BusProvider>
     </Provider>
   )

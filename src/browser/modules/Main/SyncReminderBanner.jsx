@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -45,21 +45,23 @@ class SyncReminderBanner extends Component {
   state = {}
   importSyncManager = () => {
     if (this.syncManager) return Promise.resolve(this.syncManager)
-    return import(/* webpackChunkName: "sync-manager" */ 'shared/modules/sync/SyncSignInManager').then(
-      ({ default: SyncSignInManager }) => {
-        this.syncManager = new SyncSignInManager({
-          dbConfig: this.props.browserSyncConfig.firebaseConfig,
-          serviceReadyCallback: this.serviceReady.bind(this),
-          onSyncCallback: this.props.onSync
-        })
-        return this.syncManager
-      }
-    )
+    return import(
+      /* webpackChunkName: "sync-manager" */ 'shared/modules/sync/SyncSignInManager'
+    ).then(({ default: SyncSignInManager }) => {
+      this.syncManager = new SyncSignInManager({
+        dbConfig: this.props.browserSyncConfig.firebaseConfig,
+        serviceReadyCallback: this.serviceReady.bind(this),
+        onSyncCallback: this.props.onSync
+      })
+      return this.syncManager
+    })
   }
-  serviceReady (status) {
+
+  serviceReady(status) {
     this.setState({ status })
   }
-  logIn () {
+
+  logIn() {
     this.importSyncManager().then(syncManager => {
       BrowserSyncAuthWindow(
         this.props.browserSyncConfig.authWindowUrl,
@@ -67,7 +69,8 @@ class SyncReminderBanner extends Component {
       )
     })
   }
-  render () {
+
+  render() {
     const {
       dbConnectionState,
       syncConsent,
@@ -86,7 +89,7 @@ class SyncReminderBanner extends Component {
 
     return (
       <Render if={visible}>
-        <SyncDisconnectedBanner height='100px'>
+        <SyncDisconnectedBanner height="100px">
           <StyledSyncReminderSpan>
             You are currently not signed into Neo4j Browser Sync. Connect
             through a simple social sign-in to get started.

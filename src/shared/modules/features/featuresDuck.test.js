@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
 import reducer, * as features from './featuresDuck'
 import { canSendTxMetadata } from './versionedFeatures'
 import { NAME as META_NAME } from '../dbMeta/dbMetaDuck'
@@ -29,7 +28,11 @@ describe('features reducer', () => {
     const nextState = reducer(undefined, { type: '' })
     expect(dehydrate(nextState)).toEqual({
       availableProcedures: [],
-      browserSync: true
+      browserSync: true,
+      userCapabilities: {
+        proceduresReadable: false,
+        serverConfigReadable: false
+      }
     })
   })
 
@@ -93,13 +96,13 @@ describe('feature getters', () => {
 })
 describe('canSendTxMetadata', () => {
   // Valid versions that should send
-  const validSemverVersions = ['3.5.0-alpha02', '3.5.0', '3.6.1']
+  const validSemverVersions = ['3.5.0-alpha02', '3.5.0', '3.6.1', '6.2']
   test.each(validSemverVersions)('version %s returns true', version => {
     expect(canSendTxMetadata(createVersionState(version))).toEqual(true)
   })
 
   // Invalid or old versions that should not send
-  const invalidSemverVersions = ['dev', null, undefined, '6.2', '3.4.10']
+  const invalidSemverVersions = ['dev', null, undefined, '3.4.10']
   test.each(invalidSemverVersions)('version %s returns false', version => {
     expect(canSendTxMetadata(createVersionState(version))).toEqual(false)
   })

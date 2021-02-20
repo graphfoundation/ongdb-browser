@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -24,7 +24,7 @@ import { SpinnerContainer, StyledBodyMessage } from '../styled'
 import { Spinner } from 'browser-components/icons/Icons'
 import useTimer from 'browser/hooks/useTimer'
 
-export function CancelView () {
+export function CancelView() {
   const showClosingMessage = useTimer(1500)
   return (
     <Centered>

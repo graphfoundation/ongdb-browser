@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,7 +30,7 @@ import '@relate-by-ui/css/semantic/dist/relate-by.min.css'
 
 // non web env (just for tests)
 if (typeof btoa === 'undefined') {
-  global.btoa = function (str) {
+  global.btoa = function(str) {
     return Buffer.from(str, 'binary').toString('base64')
   }
 }

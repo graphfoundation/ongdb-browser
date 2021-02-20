@@ -1,4 +1,4 @@
-import { v1 as neo4j } from 'neo4j-driver'
+import neo4j from 'neo4j-driver'
 
 export const csvFormat = anything => {
   if (typeof anything === 'number') {
@@ -37,7 +37,7 @@ export const stringModifier = anything => {
 
 const numberFormat = anything => {
   // Exclude false positives and return early
-  if ([Infinity, -Infinity].includes(anything)) {
+  if ([Infinity, -Infinity, NaN].includes(anything)) {
     return `${anything}`
   }
   if (Math.floor(anything) === anything) {
@@ -47,9 +47,7 @@ const numberFormat = anything => {
 }
 const spacialFormat = anything => {
   const zString = anything.z ? `, z:${anything.z}` : ''
-  return `point({srid:${anything.srid}, x:${anything.x}, y:${
-    anything.y
-  }${zString}})`
+  return `point({srid:${anything.srid}, x:${anything.x}, y:${anything.y}${zString}})`
 }
 
 const isTemporalType = anything =>

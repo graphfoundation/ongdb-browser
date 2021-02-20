@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,13 +30,13 @@ import { getJSON } from 'services/remote'
 import { isValidURL } from 'shared/modules/commands/helpers/http'
 import jsonic from 'jsonic'
 
-export function handleGetConfigCommand (action, cmdchar, store) {
+export function handleGetConfigCommand(action, cmdchar, store) {
   const settingsState = getSettings(store.getState())
   const res = JSON.stringify(settingsState, null, 2)
   return { result: res, type: 'pre' }
 }
 
-export function handleUpdateConfigCommand (action, cmdchar, put, store) {
+export function handleUpdateConfigCommand(action, cmdchar, put, store) {
   const strippedCmd = action.cmd.substr(cmdchar.length)
   const parts = splitStringOnFirst(strippedCmd, ' ')
   const p = new Promise((resolve, reject) => {
@@ -53,21 +53,20 @@ export function handleUpdateConfigCommand (action, cmdchar, put, store) {
         } catch (e) {
           return reject(
             new Error(
-              'Could not parse input. Usage: `:config {"x":1,"y":"string"}`. ' +
-                e
+              `Could not parse input. Usage: \`:config {"x":1,"y":"string"}\`. ${e}`
             )
           )
         }
       } else {
         // Single param
         try {
-          const json = '{' + param + '}'
+          const json = `{${param}}`
           const res = jsonic(json)
           put(update(res))
           return resolve(res)
         } catch (e) {
           return reject(
-            new Error('Could not parse input. Usage: `:config "x": 2`. ' + e)
+            new Error(`Could not parse input. Usage: \`:config "x": 2\`. ${e}`)
           )
         }
       }

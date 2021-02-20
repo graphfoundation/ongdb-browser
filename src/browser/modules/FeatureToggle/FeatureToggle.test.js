@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,10 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
 import React from 'react'
 import { render, waitForElement } from '@testing-library/react'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 
 import FeatureToggle from './FeatureToggle'
 import { FeatureToggleProvider } from './FeatureToggleProvider'
@@ -37,21 +36,23 @@ class ErrorB extends React.Component {
   state = {
     error: ''
   }
-  componentDidCatch (e) {
+
+  componentDidCatch(e) {
     this.setState({ error: e })
   }
-  render () {
+
+  render() {
     if (!this.state.error) {
       return this.props.children
     }
-    return <span data-testid='error'>{this.state.error.toString()}</span>
+    return <span data-testid="error">{this.state.error.toString()}</span>
   }
 }
 
 describe('FeatureToggle', () => {
   test('shows features when theres no context provider available', () => {
     const { getByText, queryByText } = render(
-      <FeatureToggle name='testFeature' on={<On />} off={<Off />} />
+      <FeatureToggle name="testFeature" on={<On />} off={<Off />} />
     )
 
     // Then
@@ -64,7 +65,7 @@ describe('FeatureToggle', () => {
 
     const { getByText, queryByText } = render(
       <FeatureToggleProvider features={features}>
-        <FeatureToggle name='testFeature' on={<On />} off={<Off />} />
+        <FeatureToggle name="testFeature" on={<On />} off={<Off />} />
       </FeatureToggleProvider>
     )
 
@@ -78,7 +79,7 @@ describe('FeatureToggle', () => {
 
     const { getByText, queryByText } = render(
       <FeatureToggleProvider features={features}>
-        <FeatureToggle name='testFeature' on={<On />} off={<Off />} />
+        <FeatureToggle name="testFeature" on={<On />} off={<Off />} />
       </FeatureToggleProvider>
     )
 
@@ -92,7 +93,7 @@ describe('FeatureToggle', () => {
 
     const { queryByText } = render(
       <FeatureToggleProvider features={features}>
-        <FeatureToggle name='testFeature' on={<On />} />
+        <FeatureToggle name="testFeature" on={<On />} />
       </FeatureToggleProvider>
     )
     // Then
@@ -111,7 +112,7 @@ describe('FeatureToggle', () => {
     const { getByTestId } = render(
       <ErrorB>
         <FeatureToggleProvider features={features}>
-          <FeatureToggle name='testFeature' off={<Off />} />
+          <FeatureToggle name="testFeature" off={<Off />} />
         </FeatureToggleProvider>
       </ErrorB>
     )
@@ -121,7 +122,7 @@ describe('FeatureToggle', () => {
 
     // Then
     expect(getByTestId('error')).toHaveTextContent(
-      `No "on" property available for this enabled feature: testFeature for FeatureToggle component.`
+      'No "on" property available for this enabled feature: testFeature for FeatureToggle component.'
     )
 
     console.error = oldConsoleError
@@ -147,7 +148,7 @@ describe('FeatureToggle', () => {
 
     // Then
     expect(getByTestId('error')).toHaveTextContent(
-      `No "name" property provided to FeatureToggle component.`
+      'No "name" property provided to FeatureToggle component.'
     )
 
     console.error = oldConsoleError

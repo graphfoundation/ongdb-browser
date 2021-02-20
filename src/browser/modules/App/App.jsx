@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -32,7 +32,10 @@ import {
 import { FOCUS, EXPAND } from 'shared/modules/editor/editorDuck'
 import { useBrowserSync } from 'shared/modules/features/featuresDuck'
 import { getErrorMessage } from 'shared/modules/commands/commandsDuck'
-import { allowOutgoingConnections } from 'shared/modules/dbMeta/dbMetaDuck'
+import {
+  allowOutgoingConnections,
+  getDatabases
+} from 'shared/modules/dbMeta/dbMetaDuck'
 import {
   getActiveConnection,
   getConnectionState,
@@ -40,9 +43,11 @@ import {
   getActiveConnectionData,
   isConnected,
   getConnectionData,
-  SILENT_DISCONNECT,
+  INITIAL_SWITCH_CONNECTION_FAILED,
+  SWITCH_CONNECTION_FAILED,
   SWITCH_CONNECTION,
-  SWITCH_CONNECTION_FAILED
+  SILENT_DISCONNECT,
+  getUseDb
 } from 'shared/modules/connections/connectionsDuck'
 import { toggle } from 'shared/modules/sidebar/sidebarDuck'
 import {
@@ -63,11 +68,6 @@ import asTitleString from '../DocTitle/titleStringBuilder'
 import Intercom from '../Intercom'
 import Render from 'browser-components/Render'
 import BrowserSyncInit from '../Sync/BrowserSyncInit'
-import DesktopIntegration from 'browser-components/DesktopIntegration'
-import {
-  getActiveGraph,
-  buildConnectionCredentialsObject
-} from 'browser-components/DesktopIntegration/helpers'
 import { getMetadata, getUserAuthStatus } from 'shared/modules/sync/syncDuck'
 import ErrorBoundary from 'browser-components/ErrorBoundary'
 import { getExperimentalFeatures } from 'shared/modules/experimentalFeatures/experimentalFeaturesDuck'
@@ -75,12 +75,18 @@ import FeatureToggleProvider from '../FeatureToggle/FeatureToggleProvider'
 import { inWebEnv, URL_ARGUMENTS_CHANGE } from 'shared/modules/app/appDuck'
 import useDerivedTheme from 'browser-hooks/useDerivedTheme'
 import FileDrop from 'browser-components/FileDrop/FileDrop'
+import DesktopApi from 'browser-components/desktop-api/desktop-api'
+import {
+  buildConnectionCreds,
+  getDesktopTheme
+} from 'browser-components/desktop-api/desktop-api.handlers'
 
-export function App (props) {
+export function App(props) {
   const [derivedTheme, setEnvironmentTheme] = useDerivedTheme(
     props.theme,
     LIGHT_THEME
   )
+  const themeData = themes[derivedTheme] || themes[LIGHT_THEME]
 
   useEffect(() => {
     document.addEventListener('keyup', focusEditorOnSlash)
@@ -92,15 +98,6 @@ export function App (props) {
     }
   }, [])
 
-  const detectDesktopThemeChanges = (_, newContext) => {
-    if (newContext.global.prefersColorScheme) {
-      setEnvironmentTheme(newContext.global.prefersColorScheme)
-    } else {
-      setEnvironmentTheme(null)
-    }
-  }
-  const themeData = themes[derivedTheme] || themes[LIGHT_THEME]
-
   const focusEditorOnSlash = e => {
     if (['INPUT', 'TEXTAREA'].indexOf(e.target.tagName) > -1) return
     if (e.key !== '/') return
@@ -110,6 +107,7 @@ export function App (props) {
     if (e.keyCode !== 27) return
     props.bus && props.bus.send(EXPAND)
   }
+
   const {
     drawer,
     cmdchar,
@@ -126,7 +124,10 @@ export function App (props) {
     browserSyncAuthStatus,
     experimentalFeatures,
     store,
-    codeFontLigatures
+    codeFontLigatures,
+    defaultConnectionData,
+    useDb,
+    databases
   } = props
 
   const wrapperClassNames = []
@@ -136,35 +137,38 @@ export function App (props) {
 
   return (
     <ErrorBoundary>
+      <DesktopApi
+        onMount={(...args) => {
+          buildConnectionCreds(...args, { defaultConnectionData })
+            .then(creds => props.bus.send(INJECTED_DISCOVERY, creds))
+            .catch(() => props.bus.send(INITIAL_SWITCH_CONNECTION_FAILED))
+          getDesktopTheme(...args)
+            .then(theme => setEnvironmentTheme(theme))
+            .catch(setEnvironmentTheme(null))
+        }}
+        onGraphActive={(...args) => {
+          buildConnectionCreds(...args, { defaultConnectionData })
+            .then(creds => props.bus.send(SWITCH_CONNECTION, creds))
+            .catch(e => props.bus.send(SWITCH_CONNECTION_FAILED))
+        }}
+        onGraphInactive={() => props.bus.send(SILENT_DISCONNECT)}
+        onColorSchemeUpdated={(...args) =>
+          getDesktopTheme(...args)
+            .then(theme => setEnvironmentTheme(theme))
+            .catch(setEnvironmentTheme(null))
+        }
+        onArgumentsChange={argsString =>
+          props.bus.send(URL_ARGUMENTS_CHANGE, { url: `?${argsString}` })
+        }
+      />
       <ThemeProvider theme={themeData}>
         <FeatureToggleProvider features={experimentalFeatures}>
           <FileDrop store={store}>
             <StyledWrapper className={wrapperClassNames}>
               <DocTitle titleString={props.titleString} />
               <UserInteraction />
-              <DesktopIntegration
-                integrationPoint={props.desktopIntegrationPoint}
-                onArgumentsChange={props.onArgumentsChange}
-                onMount={(
-                  activeGraph,
-                  connectionsCredentials,
-                  context,
-                  getKerberosTicket
-                ) => {
-                  props.setInitialConnectionData(
-                    activeGraph,
-                    connectionsCredentials,
-                    context,
-                    getKerberosTicket
-                  )
-                  detectDesktopThemeChanges(null, context)
-                }}
-                onGraphActive={props.switchConnection}
-                onGraphInactive={props.closeConnectionMaybe}
-                onColorSchemeUpdated={detectDesktopThemeChanges}
-              />
               <Render if={loadExternalScripts}>
-                <Intercom appID='lq70afwx' />
+                <Intercom appID="lq70afwx" />
               </Render>
               <Render if={syncConsent && loadExternalScripts && loadSync}>
                 <BrowserSyncInit
@@ -186,6 +190,8 @@ export function App (props) {
                       lastConnectionUpdate={lastConnectionUpdate}
                       errorMessage={errorMessage}
                       useBrowserSync={loadSync}
+                      useDb={useDb}
+                      databases={databases}
                     />
                   </StyledMainWrapper>
                 </StyledBody>
@@ -219,7 +225,9 @@ const mapStateToProps = state => {
     browserSyncConfig: getBrowserSyncConfig(state),
     browserSyncAuthStatus: getUserAuthStatus(state),
     loadSync: useBrowserSync(state),
-    isWebEnv: inWebEnv(state)
+    isWebEnv: inWebEnv(state),
+    useDb: getUseDb(state),
+    databases: getDatabases(state)
   }
 }
 
@@ -231,61 +239,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const switchConnection = async (
-    event,
-    newContext,
-    oldContext,
-    getKerberosTicket
-  ) => {
-    const connectionCreds = await buildConnectionCredentialsObject(
-      newContext,
-      stateProps.defaultConnectionData,
-      getKerberosTicket
-    )
-    ownProps.bus.send(SWITCH_CONNECTION, connectionCreds)
-  }
-  const setInitialConnectionData = async (
-    graph,
-    credentials,
-    context,
-    getKerberosTicket
-  ) => {
-    const connectionCreds = await buildConnectionCredentialsObject(
-      context,
-      stateProps.defaultConnectionData,
-      getKerberosTicket
-    )
-    // No connection. Probably no graph active.
-    if (!connectionCreds) {
-      ownProps.bus.send(SWITCH_CONNECTION_FAILED)
-      return
-    }
-    ownProps.bus.send(INJECTED_DISCOVERY, connectionCreds)
-  }
-  const closeConnectionMaybe = (event, newContext, oldContext) => {
-    const activeGraph = getActiveGraph(newContext)
-    if (activeGraph) return // We still got an active graph, do nothing
-    ownProps.bus.send(SILENT_DISCONNECT, {})
-  }
-  const onArgumentsChange = argsString => {
-    ownProps.bus.send(URL_ARGUMENTS_CHANGE, { url: `?${argsString}` })
-  }
-  return {
-    ...stateProps,
-    ...ownProps,
-    ...dispatchProps,
-    switchConnection,
-    setInitialConnectionData,
-    closeConnectionMaybe,
-    onArgumentsChange
-  }
-}
-
 export default withBus(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
-    mergeProps
+    mapDispatchToProps
   )(App)
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,31 +30,30 @@ import graphView from '../lib/visualization/components/graphView'
 export class GraphComponent extends Component {
   state = {
     zoomInLimitReached: true,
-    zoomOutLimitReached: false,
-    shouldResize: false
+    zoomOutLimitReached: false
   }
 
-  graphInit (el) {
+  graphInit(el) {
     this.svgElement = el
   }
 
-  zoomInClicked (el) {
-    let limits = this.graphView.zoomIn(el)
+  zoomInClicked(el) {
+    const limits = this.graphView.zoomIn(el)
     this.setState({
       zoomInLimitReached: limits.zoomInLimit,
       zoomOutLimitReached: limits.zoomOutLimit
     })
   }
 
-  zoomOutClicked (el) {
-    let limits = this.graphView.zoomOut(el)
+  zoomOutClicked(el) {
+    const limits = this.graphView.zoomOut(el)
     this.setState({
       zoomInLimitReached: limits.zoomInLimit,
       zoomOutLimitReached: limits.zoomOutLimit
     })
   }
 
-  getVisualAreaHeight () {
+  getVisualAreaHeight() {
     return this.props.frameHeight && this.props.fullscreen
       ? this.props.frameHeight -
           (dim.frameStatusbarHeight + dim.frameTitlebarHeight * 2)
@@ -62,7 +61,7 @@ export class GraphComponent extends Component {
           this.svgElement.parentNode.offsetHeight
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.svgElement != null) {
       this.initGraphView()
       this.graph && this.props.setGraph && this.props.setGraph(this.graph)
@@ -73,10 +72,10 @@ export class GraphComponent extends Component {
     }
   }
 
-  initGraphView () {
+  initGraphView() {
     if (!this.graphView) {
-      let NeoConstructor = graphView
-      let measureSize = () => {
+      const NeoConstructor = graphView
+      const measureSize = () => {
         return {
           width: this.svgElement.offsetWidth,
           height: this.getVisualAreaHeight()
@@ -115,27 +114,19 @@ export class GraphComponent extends Component {
     }
   }
 
-  componentWillReceiveProps (props) {
-    if (props.styleVersion !== this.props.styleVersion) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.styleVersion !== this.props.styleVersion) {
       this.graphView.update()
     }
     if (
-      this.props.fullscreen !== props.fullscreen ||
-      this.props.frameHeight !== props.frameHeight
+      this.props.fullscreen !== prevProps.fullscreen ||
+      this.props.frameHeight !== prevProps.frameHeight
     ) {
-      this.setState({ shouldResize: true })
-    } else {
-      this.setState({ shouldResize: false })
-    }
-  }
-
-  componentDidUpdate () {
-    if (this.state.shouldResize) {
       this.graphView.resize()
     }
   }
 
-  zoomButtons () {
+  zoomButtons() {
     if (this.props.fullscreen) {
       return (
         <StyledZoomHolder>
@@ -161,10 +152,10 @@ export class GraphComponent extends Component {
     return null
   }
 
-  render () {
+  render() {
     return (
       <StyledSvgWrapper>
-        <svg className='neod3viz' ref={this.graphInit.bind(this)} />
+        <svg className="neod3viz" ref={this.graphInit.bind(this)} />
         {this.zoomButtons()}
       </StyledSvgWrapper>
     )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ import { SLASH, CYPHER_FILE_EXTENSION } from './export-favorites.constants'
  * @param     {Function<boolean>}   isAllowed   checks if a favorite should be allowed
  * @return    {Object[]}                        new user favorites objects ("my scripts")
  */
-export function mapOldFavoritesAndFolders (
+export function mapOldFavoritesAndFolders(
   favorites,
   folders,
   isAllowed = isNonStatic
@@ -81,7 +81,7 @@ export function mapOldFavoritesAndFolders (
  * @param     {Boolean}     oldFavoriteOrFolder.isStatic
  * @return    {Boolean}
  */
-function isNonStatic ({ isStatic }) {
+function isNonStatic({ isStatic }) {
   return !isStatic
 }
 
@@ -91,7 +91,7 @@ function isNonStatic ({ isStatic }) {
  * @param     {String}      oldFavorite.content
  * @return    {Boolean}
  */
-function hasContent ({ content }) {
+function hasContent({ content }) {
   return Boolean(content)
 }
 
@@ -100,7 +100,7 @@ function hasContent ({ content }) {
  * @param     {Object[]}    favorites
  * @param     {Object[]}    folders
  */
-export function exportFavorites (favorites) {
+export function exportFavorites(favorites) {
   const grouped = sortAndGroupScriptsByPath(SLASH, favorites)
   const zipArchive = new JSZip()
   const dirMap = new Map([[SLASH, zipArchive]])
@@ -135,7 +135,7 @@ export function exportFavorites (favorites) {
  * @param     {Object[]}  favorites   scripts to save
  * @return    {JSZip}                 created dir
  */
-function createZipDirAndFiles (parent, name, favorites) {
+function createZipDirAndFiles(parent, name, favorites) {
   const dir = parent.folder(name)
 
   forEach(favorites, favorite => {

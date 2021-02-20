@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -16,27 +16,27 @@
  */
 
 import React from 'react'
-import { sanitize } from 'dompurify'
+import { HTMLEntities } from 'services/santize.utils'
 
-export default function ClickableUrls ({ text }) {
+export default function ClickableUrls({ text }) {
   return (
     <span
       dangerouslySetInnerHTML={{
-        __html: convertUrlsToHrefTags(sanitize(text))
+        __html: convertUrlsToHrefTags(HTMLEntities(text))
       }}
     />
   )
 }
 
 // credits to https://www.regextester.com/96504
-const URL_REGEX = /(([a-zA-Z]+):\/\/)(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi
+const URL_REGEX = /(([a-zA-Z]+):\/\/)(?:(?:[^\s()<>"]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()[\]{};:'".,<>?«»“”‘’]))?/gi
 
 /**
  * Finds all urls in a string and wraps them in <a target="_blank" />
  * @param     {string}    text
  * @return    {string}
  */
-export function convertUrlsToHrefTags (text) {
+export function convertUrlsToHrefTags(text) {
   return `${text || ''}`.replace(
     URL_REGEX,
     match => `<a href="${match}" target="_blank">${match}</a>`

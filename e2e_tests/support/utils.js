@@ -1,9 +1,20 @@
-export const getDesktopContext = (config, connectionCredsType = 'host') => ({
+/* global Cypress */
+
+export const isEnterpriseEdition = () =>
+  Cypress.config('serverEdition') === 'enterprise'
+
+export const isAura = () => Cypress.config('serverEdition') === 'aura'
+
+export const getDesktopContext = (
+  config,
+  connectionCredsType = 'host',
+  status = 'ACTIVE'
+) => ({
   projects: [
     {
       graphs: [
         {
-          status: 'ACTIVE',
+          status,
           connection: {
             type: 'REMOTE',
             configuration: {
@@ -33,10 +44,18 @@ const getBoltConfig = (config, type) => {
     tlsLevel: config('baseUrl').startsWith('https') ? 'REQUIRED' : 'OPTIONAL'
   }
   if (type === 'url') {
-    obj.url = `bolt://${config('boltHost')}:${config('boltPort')}`
+    obj.url = config('boltUrl')
   } else {
     obj.host = config('boltHost')
     obj.port = config('boltPort')
   }
   return obj
+}
+
+export const stripScheme = url => {
+  const [_scheme, ...rest] = (url || '').split('://')
+  if (!rest || !rest.length) {
+    return _scheme
+  }
+  return rest.join('://')
 }

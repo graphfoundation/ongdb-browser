@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -29,11 +29,17 @@ import {
   StyledTd,
   StyledExpandable
 } from '../styled'
-import { TableStatusbar } from './TableView'
+import {
+  RelatableStatusbar,
+  RelatableStatusbarComponent
+} from './relatable-view'
+import { getMaxFieldItems } from 'shared/modules/settings/settingsDuck'
+import { connect } from 'react-redux'
+import { map, take } from 'lodash-es'
 
 class ExpandableContent extends Component {
   state = {}
-  render () {
+  render() {
     return (
       <StyledAlteringTr>
         <StyledStrongTd>
@@ -54,15 +60,33 @@ class ExpandableContent extends Component {
   }
 }
 
-export class CodeView extends Component {
-  shouldComponentUpdate (props) {
+const fieldLimiterFactory = maxFieldItems => (key, val) => {
+  if (!maxFieldItems || key !== '_fields') {
+    return val
+  }
+
+  return map(val, field => {
+    return Array.isArray(field) ? take(field, maxFieldItems) : field
+  })
+}
+
+export class CodeViewComponent extends Component {
+  shouldComponentUpdate(props) {
     return !this.props.result || !deepEquals(props.result, this.props.result)
   }
-  render () {
-    const { request = {}, query } = this.props
+  render() {
+    const { request = {}, query, maxFieldItems } = this.props
     if (request.status !== 'success') return null
-    const resultJson = JSON.stringify(request.result.records, null, 2)
-    const summaryJson = JSON.stringify(request.result.summary, null, 2)
+    const resultJson = JSON.stringify(
+      request.result.records,
+      fieldLimiterFactory(maxFieldItems),
+      2
+    )
+    const summaryJson = JSON.stringify(
+      request.result.summary,
+      fieldLimiterFactory(maxFieldItems),
+      2
+    )
     return (
       <PaddedDiv>
         <StyledTable>
@@ -80,12 +104,12 @@ export class CodeView extends Component {
               <StyledTd>{query}</StyledTd>
             </StyledAlteringTr>
             <ExpandableContent
-              title='Summary'
+              title="Summary"
               content={<pre>{summaryJson}</pre>}
               summary={summaryJson.split('\n').slice(0, 3) + ' ...'}
             />
             <ExpandableContent
-              title='Response'
+              title="Response"
               content={<pre>{resultJson}</pre>}
               summary={resultJson.split('\n').slice(0, 3) + ' ...'}
             />
@@ -96,4 +120,9 @@ export class CodeView extends Component {
   }
 }
 
-export const CodeStatusbar = TableStatusbar
+export const CodeView = connect(state => ({
+  maxFieldItems: getMaxFieldItems(state)
+}))(CodeViewComponent)
+
+export const CodeStatusbarComponent = RelatableStatusbarComponent
+export const CodeStatusbar = RelatableStatusbar

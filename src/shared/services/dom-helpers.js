@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,14 +25,14 @@ const addClass = (node, className) => {
   }
 
   // normalize node class name
-  var nodeClassName = ' ' + node.className + ' '
-  if (nodeClassName.indexOf(' ' + className + ' ') === -1) {
+  const nodeClassName = ` ${node.className} `
+  if (nodeClassName.indexOf(` ${className} `) === -1) {
     node.className += (node.className ? ' ' : '') + className
   }
 }
 
 const prependIcon = (element, classname) => {
-  let icon = document.createElement('i')
+  const icon = document.createElement('i')
   addClass(icon, classname)
   icon.setAttribute('style', 'padding-right:4px')
   element.insertBefore(icon, element.firstChild)

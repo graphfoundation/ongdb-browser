@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,7 +20,7 @@
 
 import { useState, useEffect } from 'react'
 
-export default function useTimer (ms) {
+export default function useTimer(ms) {
   const [didPling, pling] = useState(false)
   useEffect(() => {
     const timer = setTimeout(() => pling(true), ms)

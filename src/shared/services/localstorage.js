@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,9 +22,9 @@ import { dehydrate } from 'services/duckUtils'
 
 export let keyPrefix = 'neo4j.'
 let storage = window.localStorage
-let keys = []
+const keys = []
 
-export function getItem (key) {
+export function getItem(key) {
   try {
     const serializedVal = storage.getItem(keyPrefix + key)
     if (serializedVal === null) return undefined
@@ -35,7 +35,7 @@ export function getItem (key) {
   }
 }
 
-export function setItem (key, val) {
+export function setItem(key, val) {
   try {
     const serializedVal = JSON.stringify(val)
     storage.setItem(keyPrefix + key, serializedVal)
@@ -45,12 +45,17 @@ export function setItem (key, val) {
   }
 }
 
-export function getAll () {
-  let out = {}
+export function getAll() {
+  const out = {}
   keys.forEach(key => {
-    let current = getItem(key)
+    const current = getItem(key)
     if (current !== undefined) {
-      out[key] = current
+      if (key === 'settings') {
+        const { playImplicitInitCommands, ...otherSettings } = current
+        out[key] = { ...otherSettings, playImplicitInitCommands: true }
+      } else {
+        out[key] = current
+      }
     }
   })
   return out
@@ -58,7 +63,7 @@ export function getAll () {
 
 export const clear = () => storage.clear()
 
-export function createReduxMiddleware () {
+export function createReduxMiddleware() {
   return store => next => action => {
     const result = next(action)
     const state = store.getState()
@@ -67,7 +72,7 @@ export function createReduxMiddleware () {
   }
 }
 
-export function applyKeys () {
+export function applyKeys() {
   Array.from(arguments).forEach(arg => keys.push(arg))
 }
 export const setPrefix = p => (keyPrefix = p)

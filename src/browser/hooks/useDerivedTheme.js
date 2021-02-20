@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,26 +21,23 @@ import { useState, useEffect } from 'react'
 import useAutoTheme from './useAutoTheme'
 import { AUTO_THEME, LIGHT_THEME } from 'shared/modules/settings/settingsDuck'
 
-export default function useDerivedTheme (
+export default function useDerivedTheme(
   selectedTheme,
   defaultTheme = LIGHT_THEME
 ) {
   const [derivedTheme, overrideAutoTheme] = useAutoTheme(defaultTheme)
   const [environmentTheme, setEnvironmentTheme] = useState(null)
 
-  useEffect(
-    () => {
-      if (environmentTheme && selectedTheme === AUTO_THEME) {
-        overrideAutoTheme(environmentTheme)
-        return
-      }
-      if (selectedTheme !== AUTO_THEME) {
-        overrideAutoTheme(selectedTheme)
-      } else {
-        overrideAutoTheme(null)
-      }
-    },
-    [selectedTheme, environmentTheme]
-  )
+  useEffect(() => {
+    if (environmentTheme && selectedTheme === AUTO_THEME) {
+      overrideAutoTheme(environmentTheme)
+      return
+    }
+    if (selectedTheme !== AUTO_THEME) {
+      overrideAutoTheme(selectedTheme)
+    } else {
+      overrideAutoTheme(null)
+    }
+  }, [selectedTheme, environmentTheme])
   return [derivedTheme, setEnvironmentTheme]
 }

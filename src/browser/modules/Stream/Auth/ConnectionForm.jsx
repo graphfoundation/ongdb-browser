@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -27,50 +27,57 @@ import {
   setActiveConnection,
   updateConnection,
   CONNECT,
-  VERIFY_CREDENTIALS
+  VERIFY_CREDENTIALS,
+  isConnected
 } from 'shared/modules/connections/connectionsDuck'
-import { getInitCmd } from 'shared/modules/settings/settingsDuck'
+import {
+  getInitCmd,
+  getPlayImplicitInitCommands
+} from 'shared/modules/settings/settingsDuck'
 import { executeSystemCommand } from 'shared/modules/commands/commandsDuck'
 import { shouldRetainConnectionCredentials } from 'shared/modules/dbMeta/dbMetaDuck'
 import { FORCE_CHANGE_PASSWORD } from 'shared/modules/cypher/cypherDuck'
-import { changeCurrentUsersPasswordQueryObj } from 'shared/modules/cypher/procedureFactory'
-import { generateBoltHost } from 'services/utils'
-import { getEncryptionMode, NATIVE, NO_AUTH } from 'services/bolt/boltHelpers'
+import { NATIVE, NO_AUTH } from 'services/bolt/boltHelpers'
 
 import ConnectForm from './ConnectForm'
 import ConnectedView from './ConnectedView'
 import ChangePasswordForm from './ChangePasswordForm'
+import { getAllowedBoltSchemes } from 'shared/modules/app/appDuck'
+import {
+  generateBoltUrl,
+  getScheme,
+  toggleSchemeRouting,
+  isNonSupportedRoutingSchemeError
+} from 'services/boltscheme.utils'
+import { StyledConnectionBody } from './styled'
 
 export class ConnectionForm extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     const connection =
-      this.props.activeConnectionData || this.props.frame.connectionData
-    const isConnected = !!props.activeConnection
+      this.props.activeConnectionData || this.props.frame.connectionData || {}
     const authenticationMethod =
       (connection && connection.authenticationMethod) || NATIVE
 
     this.state = {
       ...connection,
+      host: generateBoltUrl(props.allowedSchemes, connection.host),
       authenticationMethod,
-      isConnected: isConnected,
       isLoading: false,
       passwordChangeNeeded: props.passwordChangeNeeded || false,
       forcePasswordChange: props.forcePasswordChange || false,
       successCallback: props.onSuccess || (() => {}),
-      used: isConnected
+      used: props.isConnected
     }
   }
+
   tryConnect = (password, doneFn) => {
     this.props.error({})
-    this.props.bus.self(
-      VERIFY_CREDENTIALS,
-      { ...this.state, password },
-      res => {
-        doneFn(res)
-      }
+    this.props.bus.self(VERIFY_CREDENTIALS, { ...this.state, password }, res =>
+      doneFn(res)
     )
   }
+
   connect = (
     doneFn = () => {},
     onError = null,
@@ -81,15 +88,35 @@ export class ConnectionForm extends Component {
       CONNECT,
       { ...this.state, noResetConnectionOnFail },
       res => {
-        doneFn()
         if (res.success) {
+          doneFn()
           this.saveAndStart()
         } else {
           if (
             res.error.code === 'Neo.ClientError.Security.CredentialsExpired'
           ) {
+            doneFn()
             this.setState({ passwordChangeNeeded: true })
+          } else if (isNonSupportedRoutingSchemeError(res.error)) {
+            // Need to switch scheme to bolt:// for Neo4j 3.x connections
+            const url = toggleSchemeRouting(this.state.host)
+            this.props.error(
+              Error(
+                `Could not connect with the "${getScheme(
+                  this.state.host
+                )}://" scheme to this Neoj server. Automatic retry using the "${getScheme(
+                  url
+                )}://" scheme in a moment...`
+              )
+            )
+            this.setState({ host: url, hostInputVal: url }, () => {
+              setTimeout(() => {
+                this.connect(doneFn, onError, noResetConnectionOnFail)
+              }, 5000)
+            })
+            return
           } else {
+            doneFn()
             if (onError) {
               return onError(res)
             }
@@ -99,17 +126,20 @@ export class ConnectionForm extends Component {
       }
     )
   }
-  onUsernameChange (event) {
+
+  onUsernameChange(event) {
     const username = event.target.value
     this.setState({ username })
     this.props.error({})
   }
-  onPasswordChange (event) {
+
+  onPasswordChange(event) {
     const password = event.target.value
     this.setState({ password })
     this.props.error({})
   }
-  onAuthenticationMethodChange (event) {
+
+  onAuthenticationMethodChange(event) {
     const authenticationMethod = event.target.value
     const username =
       authenticationMethod === NO_AUTH ? '' : this.state.username || 'neo4j'
@@ -117,18 +147,21 @@ export class ConnectionForm extends Component {
     this.setState({ authenticationMethod, username, password })
     this.props.error({})
   }
-  onHostChange (event) {
-    const host = event.target.value
+
+  onHostChange(fallbackScheme, val) {
+    const url = generateBoltUrl(this.props.allowedSchemes, val, fallbackScheme)
     this.setState({
-      host: generateBoltHost(host),
-      hostInputVal: host
+      host: url,
+      hostInputVal: url
     })
     this.props.error({})
   }
-  onChangePasswordChange () {
+
+  onChangePasswordChange() {
     this.props.error({})
   }
-  onChangePassword ({ newPassword, error }) {
+
+  onChangePassword({ newPassword, error }) {
     this.setState({ isLoading: true })
     if (error && error.code) {
       this.setState({ isLoading: false })
@@ -144,9 +177,8 @@ export class ConnectionForm extends Component {
       {
         host: this.state.host,
         username: this.state.username,
-        password: this.props.oldPassword || this.state.password,
-        encrypted: getEncryptionMode(this.state),
-        ...changeCurrentUsersPasswordQueryObj(newPassword)
+        password: this.state.password,
+        newPassword
       },
       response => {
         if (response.success) {
@@ -187,14 +219,18 @@ export class ConnectionForm extends Component {
       }
     )
   }
-  saveAndStart () {
+
+  saveAndStart() {
     this.setState({ forcePasswordChange: false, used: true })
     this.state.successCallback()
     this.saveCredentials()
     this.props.setActiveConnection(this.state.id)
-    this.props.executeInitCmd()
+    if (this.props.playImplicitInitCommands) {
+      this.props.executeInitCmd()
+    }
   }
-  saveCredentials () {
+
+  saveCredentials() {
     this.props.updateConnection({
       id: this.state.id,
       host: this.state.host,
@@ -203,21 +239,12 @@ export class ConnectionForm extends Component {
       authenticationMethod: this.state.authenticationMethod
     })
   }
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.oldPassword) {
-      this.setState({ oldPassword: nextProps.oldPassword })
-    }
-    if (nextProps.activeConnection && nextProps.activeConnectionData) {
-      this.setState({ isConnected: true })
-    } else {
-      this.setState({ isConnected: false })
-    }
-  }
-  render () {
+
+  render() {
     let view
     if (
       this.state.forcePasswordChange ||
-      (!this.state.isConnected && this.state.passwordChangeNeeded)
+      (!this.props.isConnected && this.state.passwordChangeNeeded)
     ) {
       view = (
         <ChangePasswordForm
@@ -234,16 +261,30 @@ export class ConnectionForm extends Component {
           {this.props.children}
         </ChangePasswordForm>
       )
-    } else if (this.state.isConnected) {
+    } else if (
+      this.props.isConnected &&
+      this.props.activeConnectionData &&
+      this.props.activeConnectionData.authEnabled !== false // falsy value indicates (except false) we don't know yet, so see that as enabled.
+    ) {
       view = (
         <ConnectedView
           host={this.state.host}
-          username={this.state.username}
+          username={this.props.activeConnectionData.username}
           storeCredentials={this.props.storeCredentials}
           hideStoreCredentials={this.state.authenticationMethod === NO_AUTH}
         />
       )
-    } else if (!this.state.isConnected && !this.state.passwordChangeNeeded) {
+    } else if (
+      this.props.isConnected &&
+      this.props.activeConnectionData &&
+      this.props.activeConnectionData.authEnabled === false // excplicit false = auth disabled for sure
+    ) {
+      view = (
+        <StyledConnectionBody>
+          You have a working connection and server auth is disabled.
+        </StyledConnectionBody>
+      )
+    } else if (!this.props.isConnected && !this.state.passwordChangeNeeded) {
       view = (
         <ConnectForm
           onConnectClick={this.connect.bind(this)}
@@ -258,6 +299,7 @@ export class ConnectionForm extends Component {
           password={this.state.password}
           authenticationMethod={this.state.authenticationMethod}
           used={this.state.used}
+          allowedSchemes={this.props.allowedSchemes}
         />
       )
     }
@@ -270,7 +312,10 @@ const mapStateToProps = state => {
     initCmd: getInitCmd(state),
     activeConnection: getActiveConnection(state),
     activeConnectionData: getActiveConnectionData(state),
-    storeCredentials: shouldRetainConnectionCredentials(state)
+    playImplicitInitCommands: getPlayImplicitInitCommands(state),
+    storeCredentials: shouldRetainConnectionCredentials(state),
+    isConnected: isConnected(state),
+    allowedSchemes: getAllowedBoltSchemes(state)
   }
 }
 
@@ -286,9 +331,12 @@ const mapDispatchToProps = dispatch => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
+    playImplicitInitCommands: stateProps.playImplicitInitCommands,
     activeConnection: stateProps.activeConnection,
     activeConnectionData: stateProps.activeConnectionData,
     storeCredentials: stateProps.storeCredentials,
+    isConnected: stateProps.isConnected,
+    allowedSchemes: stateProps.allowedSchemes,
     ...ownProps,
     ...dispatchProps,
     executeInitCmd: () => {

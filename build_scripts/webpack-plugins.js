@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -23,7 +23,7 @@ const webpack = require('webpack')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
@@ -60,10 +60,6 @@ module.exports = () => {
       {
         from: path.resolve(helpers.browserPath, 'images'),
         to: helpers.assetsPath + '/images'
-      },
-      {
-        from: path.resolve(helpers.browserPath, 'external/canvg'),
-        to: helpers.assetsPath + '/js/canvg'
       }
     ]),
     new MiniCssExtractPlugin({
@@ -88,13 +84,7 @@ module.exports = () => {
     plugins.push(new webpack.HotModuleReplacementPlugin())
   }
   if (helpers.isProduction) {
-    plugins.unshift(
-      new CleanWebpackPlugin([helpers.buildPath], {
-        root: helpers.projectPath,
-        verbose: false,
-        dry: false
-      })
-    )
+    plugins.unshift(new CleanWebpackPlugin())
   }
   return plugins
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, afterEach, test, expect, beforeAll */
 import configureMockStore from 'redux-mock-store'
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus, createReduxMiddleware } from 'suber'
@@ -47,7 +46,7 @@ describe('handleCommandEpic', () => {
     store = mockStore({
       settings: {
         cmdchar: ':',
-        maxHistory: maxHistory,
+        maxHistory,
         enableMultiStatementMode: true
       },
       history: [':xxx'],
@@ -70,14 +69,14 @@ describe('handleCommandEpic', () => {
     const cmd = 'RETURN 1'
     const id = 2
     const requestId = 'xxx'
-    const action = commands.executeCommand(cmd, id, requestId)
+    const action = commands.executeCommand(cmd, { id, requestId })
     bus.take('NOOP', currentAction => {
       // Then
       expect(store.getActions()).toEqual([
         action,
         commands.clearErrorMessage(),
         addHistory(action.cmd, maxHistory),
-        commands.executeSingleCommand(cmd, id, requestId),
+        commands.executeSingleCommand(cmd, { id, requestId }),
         { type: 'NOOP' }
       ])
       done()
@@ -95,7 +94,11 @@ describe('handleCommandEpic', () => {
     const id = 2
     const requestId = 'xxx'
     const parentId = 'yyy'
-    const action = commands.executeCommand(cmd, id, requestId, parentId)
+    const action = commands.executeCommand(cmd, {
+      id,
+      requestId,
+      parentId
+    })
 
     bus.take('NOOP', currentAction => {
       // Then

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,7 +21,7 @@
 export default class Relationship {
   isNode = false
   isRelationship = true
-  constructor (id, source, target, type, properties) {
+  constructor(id, source, target, type, properties) {
     this.id = id
     this.source = source
     this.target = target
@@ -29,7 +29,7 @@ export default class Relationship {
     this.propertyMap = properties
     this.propertyList = (() => {
       const result = []
-      for (let key of Object.keys(this.propertyMap || {})) {
+      for (const key of Object.keys(this.propertyMap || {})) {
         const value = this.propertyMap[key]
         result.push({ key, value })
       }
@@ -37,10 +37,11 @@ export default class Relationship {
     })()
   }
 
-  toJSON () {
+  toJSON() {
     return this.propertyMap
   }
-  isLoop () {
+
+  isLoop() {
     return this.source === this.target
   }
 }

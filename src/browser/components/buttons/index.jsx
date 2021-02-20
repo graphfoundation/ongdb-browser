@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -36,14 +36,7 @@ export const EditorButton = props => {
   const { icon, title, ...rest } = props
   return (
     <BaseButton title={title}>
-      {
-        <SVGInline
-          svg={icon}
-          accessibilityLabel={title}
-          {...rest}
-          width='24px'
-        />
-      }
+      <SVGInline svg={icon} accessibilityLabel={title} {...rest} width="24px" />
     </BaseButton>
   )
 }
@@ -219,27 +212,27 @@ export const FormButton = props => {
 
   if (icon && label) {
     return (
-      <ButtonType {...rest} type='button'>
+      <ButtonType {...rest} type="button">
         {label} {icon}
       </ButtonType>
     )
   }
   if (icon) {
     return (
-      <ButtonType {...rest} type='button'>
+      <ButtonType {...rest} type="button">
         {icon}
       </ButtonType>
     )
   }
   if (label) {
     return (
-      <ButtonType {...rest} type='button'>
+      <ButtonType {...rest} type="button">
         {label}
       </ButtonType>
     )
   }
   return (
-    <ButtonType {...props} type='button'>
+    <ButtonType {...props} type="button">
       {children}
     </ButtonType>
   )
@@ -349,6 +342,7 @@ export const ActionButton = props => {
 }
 
 const BaseCarouselButton = styled.button`
+  color: ${props => props.theme.secondaryButtonText};
   background-color: transparent;
   display: flex;
   justify-content: center;
@@ -362,7 +356,7 @@ const BaseCarouselButton = styled.button`
 
   &.rounded {
     background-color: ${props =>
-    hexToRgba(props.theme.secondaryButtonText, 0.1)};
+      hexToRgba(props.theme.secondaryButtonText, 0.1)};
     border-radius: 0 5px 5px 0;
     position: absolute;
     left: 0;

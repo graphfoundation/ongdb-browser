@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export function parseGrass (string) {
+export function parseGrass(string) {
   let result
   try {
     result = JSON.parse(string)
@@ -27,14 +27,14 @@ export function parseGrass (string) {
   return result
 }
 
-function parseGrassCSS (string) {
-  let chars = string.split('')
+function parseGrassCSS(string) {
+  const chars = string.split('')
   let insideString = false
   let insideProps = false
   let insideBinding = false
   let keyword = ''
   let props = ''
-  let rules = {}
+  const rules = {}
   let i, j
 
   for (i = 0; i < chars.length; i++) {
@@ -107,21 +107,19 @@ export const objToCss = obj => {
   }
   let output = ''
   try {
-    let level = '  '
-    for (let selector in obj) {
+    const level = '  '
+    for (const selector in obj) {
       if (obj.hasOwnProperty(selector)) {
-        output += selector + ' {\n' + level
-        for (let style in obj[selector]) {
+        output += `${selector} {\n${level}`
+        for (const style in obj[selector]) {
           if (obj[selector].hasOwnProperty(style)) {
-            output +=
-              style +
-              ': ' +
-              quoteSpecialStyles(style, obj[selector][style]) +
-              ';\n' +
-              level
+            output += `${style}: ${quoteSpecialStyles(
+              style,
+              obj[selector][style]
+            )};\n${level}`
           }
         }
-        output = output.trim() + '\n'
+        output = `${output.trim()}\n`
         output += '}\n'
       }
     }
@@ -142,14 +140,14 @@ export const selectorStringToArray = selector => {
   // We want to match all . that are not preceded by \\
   // Instead we reverse and look
   // for . that are not followed by \\ (negative lookahead)
-  selector = selector
+  const reverseSelector = selector
     .split('')
     .reverse()
     .join('')
-  var re = /(.+?)(?!\.\\)(?:\.|$)/g
+  const re = /(.+?)(?!\.\\)(?:\.|$)/g
   const out = []
   let m
-  while ((m = re.exec(selector)) !== null) {
+  while ((m = re.exec(reverseSelector)) !== null) {
     const res = m[1]
       .split('')
       .reverse()

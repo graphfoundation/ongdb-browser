@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,8 +22,6 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { ConnectionForm } from './ConnectionForm'
 
-/* global jest */
-
 test('should print correct state for retaining credentials', async () => {
   const bus = {
     //  eslint-disable-next-line
@@ -37,7 +35,7 @@ test('should print correct state for retaining credentials', async () => {
   let storeCredentials = true // initial default value
   let activeConnectionData = null
   let activeConnection = null
-  let frame = {}
+  const frame = {}
   const error = jest.fn()
 
   // When
@@ -52,6 +50,8 @@ test('should print correct state for retaining credentials', async () => {
       updateConnection={updateConnection}
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
+      isConnected={false}
+      allowedSchemes={['neo4j']}
     />
   )
 
@@ -68,7 +68,8 @@ test('should print correct state for retaining credentials', async () => {
   activeConnection = true
   activeConnectionData = {
     username,
-    host
+    host,
+    authEnabled: true
   }
   rerender(
     <ConnectionForm
@@ -80,12 +81,14 @@ test('should print correct state for retaining credentials', async () => {
       updateConnection={updateConnection}
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
+      isConnected={true}
+      allowedSchemes={['neo4j']}
     />
   )
 
   // Then
   expect(getByText(/my-username/i)).toBeDefined()
-  expect(getByText(/bolt:\/\/my-host/i)).toBeDefined()
+  expect(getByText(/neo4j:\/\/my-host/i)).toBeDefined()
   expect(
     getByText(/Connection credentials are\sstored in your web browser./i)
   ).toBeDefined()
@@ -102,12 +105,14 @@ test('should print correct state for retaining credentials', async () => {
       updateConnection={updateConnection}
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
+      isConnected={true}
+      allowedSchemes={['neo4j']}
     />
   )
 
   // Then
   expect(getByText(/my-username/i)).toBeDefined()
-  expect(getByText(/bolt:\/\/my-host/i)).toBeDefined()
+  expect(getByText(/neo4j:\/\/my-host/i)).toBeDefined()
   expect(
     getByText(/Connection credentials are\snot\sstored in your web browser./i)
   ).toBeDefined()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,8 +22,8 @@
 
 import d3 from 'd3'
 
-d3.selection.enter.prototype.appendSVG = function (SVGString) {
-  return this.select(function () {
+d3.selection.enter.prototype.appendSVG = function(SVGString) {
+  return this.select(function() {
     return this.appendChild(
       document.importNode(
         new DOMParser().parseFromString(SVGString, 'application/xml')

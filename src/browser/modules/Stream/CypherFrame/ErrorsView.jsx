@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -27,9 +27,16 @@ import {
 } from 'browser-components/icons/Icons'
 import { deepEquals } from 'services/utils'
 import Render from 'browser-components/Render'
-import { executeCommand } from 'shared/modules/commands/commandsDuck'
+import {
+  executeCommand,
+  listDbsCommand
+} from 'shared/modules/commands/commandsDuck'
 import { listAvailableProcedures } from 'shared/modules/cypher/procedureFactory'
-import { isUnknownProcedureError } from 'services/cypherErrorsHelper'
+import {
+  isUnknownProcedureError,
+  isNoDbAccessError,
+  isPeriodicCommitError
+} from 'services/cypherErrorsHelper'
 import { errorMessageFormater } from './../errorMessageFormater'
 
 import {
@@ -46,10 +53,11 @@ import {
 } from '../styled'
 
 export class ErrorsView extends Component {
-  shouldComponentUpdate (props, state) {
+  shouldComponentUpdate(props, state) {
     return !deepEquals(props.result, this.props.result)
   }
-  render () {
+
+  render() {
     const { result: error, bus } = this.props
     if (!error || !error.code) {
       return null
@@ -68,10 +76,31 @@ export class ErrorsView extends Component {
           </StyledDiv>
           <Render if={isUnknownProcedureError(error)}>
             <StyledLinkContainer>
-              <StyledLink onClick={() => onItemClick(bus)}>
+              <StyledLink
+                onClick={() => onItemClick(bus, listAvailableProcedures)}
+              >
                 <PlayIcon />
                 &nbsp;List available procedures
               </StyledLink>
+            </StyledLinkContainer>
+          </Render>
+          <Render if={isNoDbAccessError(error)}>
+            <StyledLinkContainer>
+              <StyledLink
+                onClick={() => onItemClick(bus, `:${listDbsCommand}`)}
+              >
+                <PlayIcon />
+                &nbsp;List available databases
+              </StyledLink>
+            </StyledLinkContainer>
+          </Render>
+          <Render if={isPeriodicCommitError(error)}>
+            <StyledLinkContainer>
+              <StyledLink onClick={() => onItemClick(bus, `:help auto`)}>
+                <PlayIcon />
+                &nbsp;Info on the <code>:auto</code> command
+              </StyledLink>
+              &nbsp;(auto-committing transactions)
             </StyledLinkContainer>
           </Render>
         </StyledHelpContent>
@@ -80,18 +109,19 @@ export class ErrorsView extends Component {
   }
 }
 
-const onItemClick = bus => {
-  const action = executeCommand(listAvailableProcedures)
+const onItemClick = (bus, statement) => {
+  const action = executeCommand(statement)
   bus.send(action.type, action)
 }
 
 export const ErrorsViewBus = withBus(ErrorsView)
 
 export class ErrorsStatusbar extends Component {
-  shouldComponentUpdate (props, state) {
+  shouldComponentUpdate(props, state) {
     return !deepEquals(props.result, this.props.result)
   }
-  render () {
+
+  render() {
     const error = this.props.result
     if (!error || (!error.code && !error.message)) return null
     const fullError = errorMessageFormater(error.code, error.message)

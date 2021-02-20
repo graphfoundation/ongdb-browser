@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,44 +19,43 @@
  */
 
 import React from 'react'
+import ManualLink from 'browser-components/ManualLink'
 const title = 'DROP INDEX ON'
 const subtitle = 'Drop a schema index'
 const category = 'schemaClauses'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The <code>DROP INDEX ON</code> clause will an index on all nodes that have
       a label.
     </p>
-    <div className='links'>
-      <div className='link'>
-        <p className='title'>Reference</p>
-        <p className='content'>
-          <code>
-            <a
-              target='_blank'
-              href='https://neo4j.com/docs/developer-manual/3.2/cypher/schema/index/'
-            >
-              schema indexes
-            </a>{' '}
-            manual page
-          </code>
+    <div className="links">
+      <div className="link">
+        <p className="title">Reference</p>
+        <p className="content">
+          <ManualLink
+            chapter="cypher-manual"
+            page="/administration/indexes-for-search-performance/"
+          >
+            Indexes for search performance
+          </ManualLink>{' '}
+          manual page
         </p>
       </div>
-      <div className='link'>
-        <p className='title'>Related</p>
-        <p className='content'>
-          <a help-topic='create-index-on'>:help CREATE INDEX ON</a>
-          <a help-topic='cypher'>:help Cypher</a>
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="create-index-on">:help CREATE INDEX ON</a>
+          <a help-topic="cypher">:help Cypher</a>
         </p>
       </div>
     </div>
-    <section className='example'>
-      <figure className='runnable'>
-        <pre>{`DROP INDEX ON :Person(name)`}</pre>
+    <section className="example">
+      <figure className="runnable">
+        <pre>DROP INDEX ON :Person(name)</pre>
       </figure>
     </section>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

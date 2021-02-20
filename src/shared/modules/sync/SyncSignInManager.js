@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,7 +30,7 @@ import { getBrowserName } from 'services/utils'
 import { UP, DOWN } from 'shared/modules/sync/syncDuck'
 
 class SyncSignInManager {
-  constructor ({
+  constructor({
     dbConfig,
     serviceReadyCallback,
     onSyncCallback,
@@ -41,7 +41,8 @@ class SyncSignInManager {
     this.onSync = onSyncCallback
     this.onDisconnect = disconnectCallback
   }
-  isServiceUp (serviceReadyCallback) {
+
+  isServiceUp(serviceReadyCallback) {
     status().on('value', v => {
       if (v.val()) {
         if (this._downTimer) {
@@ -55,7 +56,8 @@ class SyncSignInManager {
       }
     })
   }
-  authCallBack (data, error, successFn = null, errorFn = null) {
+
+  authCallBack(data, error, successFn = null, errorFn = null) {
     if (error) {
       this.serviceAuthenticated = false
       this.error = error
@@ -64,7 +66,8 @@ class SyncSignInManager {
       this.authenticateWithDataAndBind(data, successFn, errorFn)
     }
   }
-  authenticateWithDataAndBind (authData, successFn = null, errorFn = null) {
+
+  authenticateWithDataAndBind(authData, successFn = null, errorFn = null) {
     this.authData = authData
     authenticate(this.authData.data_token, this.onDisconnect)
       .then(a => {
@@ -79,7 +82,8 @@ class SyncSignInManager {
         errorFn && errorFn(e)
       })
   }
-  bindToResource () {
+
+  bindToResource() {
     this.syncRef = getResourceFor(this.authData.profile.user_id)
     this.syncRef.on('value', v => {
       if (v.val() === null) {
@@ -96,10 +100,12 @@ class SyncSignInManager {
       }
     })
   }
-  signOut () {
+
+  signOut() {
     signOut()
   }
-  setSyncData (value) {
+
+  setSyncData(value) {
     this.onSync({
       key: this.authData.profile.user_id,
       syncObj: value,

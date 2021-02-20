@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  */
 
 import React from 'react'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
@@ -29,18 +29,18 @@ const send = jest.fn()
 const initialState = { settings: { cmdchar: ':' } }
 const store = createStore(() => initialState, initialState)
 
-function renderWithRedux (ui) {
+function renderWithRedux(ui) {
   return render(<Provider store={store}>{ui}</Provider>)
 }
 
-describe('AutoExecButton', function () {
+describe('AutoExecButton', function() {
   beforeEach(() => {
     jest.resetAllMocks()
   })
   test('should display command with cmd char', () => {
     // Given
     const { getByText } = renderWithRedux(
-      <AutoExecButtonNoBus bus={{ send }} cmd='help params' />
+      <AutoExecButtonNoBus bus={{ send }} cmd="help params" />
     )
 
     // Then
@@ -51,7 +51,7 @@ describe('AutoExecButton', function () {
   test('should auto execute when clicked', () => {
     // Given
     const { getByText } = renderWithRedux(
-      <AutoExecButtonNoBus bus={{ send }} cmd='help params' />
+      <AutoExecButtonNoBus bus={{ send }} cmd="help params" />
     )
 
     fireEvent.click(getByText(':help params'))
@@ -64,14 +64,15 @@ describe('AutoExecButton', function () {
       id: undefined,
       parentId: undefined,
       requestId: undefined,
-      type: 'commands/COMMAND_QUEUED'
+      type: 'commands/COMMAND_QUEUED',
+      isRerun: false
     })
   })
 
   test('supports any random cmd string', () => {
     // Given
     const { getByText } = renderWithRedux(
-      <AutoExecButtonNoBus bus={{ send }} cmd='foo bar' />
+      <AutoExecButtonNoBus bus={{ send }} cmd="foo bar" />
     )
 
     fireEvent.click(getByText(':foo bar'))
@@ -84,7 +85,8 @@ describe('AutoExecButton', function () {
       id: undefined,
       parentId: undefined,
       requestId: undefined,
-      type: 'commands/COMMAND_QUEUED'
+      type: 'commands/COMMAND_QUEUED',
+      isRerun: false
     })
   })
 })

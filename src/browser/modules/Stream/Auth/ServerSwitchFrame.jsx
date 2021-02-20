@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -51,7 +51,7 @@ export const ServerSwitchFrame = props => {
   const { frame, activeConnectionData: dynamicConnectionData = {} } = props
   const { activeConnectionData, storeCredentials } = frame
   return (
-    <React.Fragment>
+    <>
       <StyledConnectionAside>
         <span>
           <Render if={connectionFailed(frame)}>
@@ -113,12 +113,12 @@ export const ServerSwitchFrame = props => {
               host={activeConnectionData && activeConnectionData.host}
               showHost
               hideStoreCredentials
-              additionalFooter='You have a working connection with the Neo4j database and server auth is disabled.'
+              additionalFooter="You have a working connection with the Neo4j database and server auth is disabled."
             />
           </div>
         </Render>
       </StyledConnectionBodyContainer>
-    </React.Fragment>
+    </>
   )
 }
 

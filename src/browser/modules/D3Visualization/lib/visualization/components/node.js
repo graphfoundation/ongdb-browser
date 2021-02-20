@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,13 +22,13 @@ export default class Node {
   isNode = true
   isRelationship = false
 
-  constructor (id, labels, properties) {
+  constructor(id, labels, properties) {
     this.id = id
     this.labels = labels
     this.propertyMap = properties
     this.propertyList = (() => {
       const result = []
-      for (let key of Object.keys(properties || {})) {
+      for (const key of Object.keys(properties || {})) {
         const value = properties[key]
         result.push({ key, value })
       }
@@ -36,14 +36,14 @@ export default class Node {
     })()
   }
 
-  toJSON () {
+  toJSON() {
     return this.propertyMap
   }
 
-  relationshipCount (graph) {
+  relationshipCount(graph) {
     const node = this
     const rels = []
-    for (let relationship of Array.from(graph.relationships())) {
+    for (const relationship of Array.from(graph.relationships())) {
       if (relationship.source === node || relationship.target === node) {
         rels.push(relationship)
       }

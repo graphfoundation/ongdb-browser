@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,43 +18,77 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global Cypress, cy, test, expect, before, after */
+import { isEnterpriseEdition } from '../support/utils'
+
+/* global Cypress, cy, before, after */
 
 describe('Plan output', () => {
-  before(function () {
+  before(function() {
     cy.visit(Cypress.config('url'))
       .title()
       .should('include', 'Neo4j Browser')
-    cy.wait(5000)
+    cy.wait(3000)
     cy.disableEditorAutocomplete()
+    const password = Cypress.config('password')
+    cy.connect('neo4j', password)
   })
-  after(function () {
+  after(function() {
     cy.enableEditorAutocomplete()
   })
-  it('can connect', () => {
-    const password = Cypress.config('password')
-    cy.connect(
-      'neo4j',
-      password
+  it('displays the expanded details by default and displays/hides details when clicking the plan expand/collapse buttons respectively', () => {
+    cy.executeCommand(':clear')
+    cy.executeCommand(
+      'EXPLAIN MATCH (n:Person) WHERE n.age > 18 RETURN n.name ORDER BY n.age'
     )
+
+    // initially should be expanded
+    const el1 = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
+    el1.find('.detail').should('exist')
+
+    // collapse
+    cy.get('[data-testid="planCollapseButton"]', { timeout: 10000 }).click()
+    const el2 = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
+    el2.find('.detail').should('not.exist')
+
+    // expand
+    cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
+    const el3 = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
+    el3.find('.detail').should('exist')
   })
   if (Cypress.config('serverVersion') >= 3.5) {
     it('print Order in PROFILE', () => {
       cy.executeCommand(':clear')
-      cy.executeCommand(`CREATE INDEX ON :Person(age)`)
+      cy.executeCommand('CREATE INDEX ON :Person(age)')
       cy.executeCommand(
-        `EXPLAIN MATCH (n:Person) WHERE n.age > 18 RETURN n.name ORDER BY n.age`
+        'EXPLAIN MATCH (n:Person) WHERE n.age > 18 RETURN n.name ORDER BY n.age'
       )
       cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
       const el = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
       el.should('contain', 'Ordered by n.age ASC')
     })
   }
-  if (Cypress.config('serverVersion') >= 3.4) {
+  if (Cypress.config('serverVersion') >= 4.1) {
+    it('print total memory in PROFILE', () => {
+      cy.executeCommand(':clear')
+      cy.executeCommand('CREATE INDEX ON :Person(age)')
+      cy.executeCommand(
+        'PROFILE MATCH (n:Person) WHERE n.age > 18 RETURN n.name ORDER BY n.age'
+      )
+      cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
+      cy.get('.global-memory').should('contain', 'total memory (bytes)')
+      cy.get('.operator-memory').should('contain', 'memory (bytes)')
+    })
+  }
+  if (
+    Cypress.config('serverVersion') >= 3.4 &&
+    Cypress.config('serverVersion') < 4.0 &&
+    isEnterpriseEdition()
+  ) {
     it('print pagecache stats in PROFILE', () => {
       cy.executeCommand(':clear')
       cy.executeCommand(
-        `PROFILE MATCH (n:VendorId {{}uid: "d8eedae3ef0b4c45a9a27308", vendor: "run"}) RETURN n.uid, n.vendor, id(n)`
+        'PROFILE CYPHER runtime=compiled MATCH (n:VendorId {uid: "d8eedae3ef0b4c45a9a27308", vendor: "run"}) RETURN n.uid, n.vendor, id(n)',
+        { parseSpecialCharSequences: false }
       )
       cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
       const el = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
@@ -64,7 +98,9 @@ describe('Plan output', () => {
   }
   it('ouputs and preselects plan when using PROFILE', () => {
     cy.executeCommand(':clear')
-    cy.executeCommand(`PROFILE MATCH (tag:Tag)
+    cy.executeCommand('CREATE (:Tag)')
+    cy.executeCommand(':clear')
+    cy.executeCommand(`PROFILE MATCH (tag:Tag){shift}{enter}
     WHERE tag.name IN ["Eutheria"]
     WITH tag
     MATCH (publication)-[:HAS_TAG]->(tag)
@@ -77,36 +113,24 @@ describe('Plan output', () => {
     LIMIT 50;`)
     cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
     const el = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
-    el.should('contain', 'NodeByLabelScan')
-      .and('contain', 'tag')
+    el.should('contain', 'tag')
       .and('contain', ':Tag')
       .and('contain', 'Filter')
       .and('contain', 'Expand(All)')
-      .and('contain', 'publication, tag')
-      .and('contain', '(tag)<-[') // Line breaks into next
-      .and('contain', '-(publication)')
-      .and('contain', ':PUBLISHED]-(expert)')
       .and('contain', 'EagerAggregation')
       .and('contain', 'Projection')
       .and('contain', 'ProduceResults')
       .and('contain', 'relevantNumberOfPublications')
       .and('contain', 'relevantNumberOfTags')
       .and('contain', 'Result')
-    if ([3.5].includes(Cypress.config('serverVersion'))) {
-      el.should('contain', 'tag.name IN').and('contain', 'GetDegree')
-    } else if ([3.3, 3.4].includes(Cypress.config('serverVersion'))) {
-      el.should('contain', 'tag.name IN').and('contain', 'GetDegreePrimitive')
-    } else if (Cypress.config('serverVersion') === 3.2) {
-      el.should('contain', 'ConstantCachedIn').and('contain', 'GetDegree')
-    }
 
     cy.executeCommand(':clear')
     cy.executeCommand(
-      `profile match (n:Person) with n where size ( (n)-[:Follows]->()) > 6 return n;`
+      'profile match (n:Person) with n where size ( (n)-[:Follows]->()) > 6 return n;'
     )
     cy.get('[data-testid="planExpandButton"]', { timeout: 10000 }).click()
     const el2 = cy.get('[data-testid="planSvg"]', { timeout: 10000 })
-    el2.should('contain', 'NodeByLabelScan')
+    el2.should('contain', 'NodeByLabelScan', { timeout: 10000 })
     if ([3.3, 3.4].includes(Cypress.config('serverVersion'))) {
       el2.should('contain', 'GetDegreePrimitive')
     } else if ([3.2, 3.5].includes(Cypress.config('serverVersion'))) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,24 +25,24 @@ const subtitle = 'Typing commands is 1337'
 const category = 'browserUiCommands'
 const filter = ['help']
 const description = (
-  <React.Fragment>
+  <>
     <p>
       In addition to composing and running Cypher queries, the editor bar up
-      above ↑ understands a few client-side commands, which begin with a{` `}
+      above ↑ understands a few client-side commands, which begin with a
       <code>:</code>. Without a colon, we'll assume you're trying to enter a
       Cypher query.
     </p>
-    <table className='table-condensed table-help'>
+    <table className="table-condensed table-help">
       <tbody>
         <tr>
           <th>Usage:</th>
           <td>
-            <code>{`:help <topic>`}</code>
+            <code>{':help <topic>'}</code>
           </td>
         </tr>
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content: null, description, filter }

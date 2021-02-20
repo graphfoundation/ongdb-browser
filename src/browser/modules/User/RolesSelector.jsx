@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -27,7 +27,7 @@ const RolesSelector = ({
   id
 }) => {
   let options = [
-    <option key={'-1'} value={0}>
+    <option key="-1" value={0}>
       {' '}
     </option>
   ]
@@ -48,8 +48,8 @@ const RolesSelector = ({
 
     return (
       <StyledSelect
-        className='roles-selector'
-        placeholder='Select role'
+        className="roles-selector"
+        placeholder="Select role"
         value={selectedValue}
         onChange={onChange}
         {...args}

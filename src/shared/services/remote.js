@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,10 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global fetch */
 import 'isomorphic-fetch'
 
-function request (method, url, data = null, extraHeaders = {}) {
+function request(method, url, data = null, extraHeaders = {}) {
   const headers = {
     'Content-Type': 'application/json',
     'X-Ajax-Browser-Auth': 'true',
@@ -30,23 +29,21 @@ function request (method, url, data = null, extraHeaders = {}) {
   }
   return fetch(url, {
     method,
-    headers: headers,
+    headers,
     body: data
   }).then(checkStatus)
 }
 
-function get (url, headers = {}) {
+function get(url, headers = {}) {
   return fetch(url, {
     method: 'get',
     headers
   })
     .then(checkStatus)
-    .then(function (response) {
-      return response.text()
-    })
+    .then(response => response.text())
 }
 
-export function getJSON (url) {
+export function getJSON(url) {
   return fetch(url, {
     method: 'get',
     headers: {
@@ -61,11 +58,11 @@ export function getJSON (url) {
     })
 }
 
-function checkStatus (response) {
+function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
-    var error = new Error(response.status + ' ' + response.statusText)
+    const error = new Error(`${response.status} ${response.statusText}`)
     error.response = response
     throw error
   }

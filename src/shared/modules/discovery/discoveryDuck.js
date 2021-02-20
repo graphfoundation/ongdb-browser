@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,10 +25,12 @@ import {
   APP_START,
   USER_CLEAR,
   hasDiscoveryEndpoint,
-  getHostedUrl
+  getHostedUrl,
+  getAllowedBoltSchemes
 } from 'shared/modules/app/appDuck'
 import { getDiscoveryEndpoint } from 'services/bolt/boltHelpers'
 import { getUrlParamValue } from 'services/utils'
+import { generateBoltUrl } from 'services/boltscheme.utils'
 import { getUrlInfo } from 'shared/services/utils'
 
 export const NAME = 'discover-bolt-host'
@@ -41,14 +43,15 @@ export const DONE = `${NAME}/DONE`
 export const INJECTED_DISCOVERY = `${NAME}/INJECTED_DISCOVERY`
 
 // Reducer
-export default function reducer (state = initialState, action = {}) {
-  if (action.type === APP_START) {
-    state = { ...initialState, ...state }
-  }
-
+export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case APP_START:
+      return { ...initialState, ...state }
     case SET:
-      return Object.assign({}, state, { boltHost: action.boltHost })
+      return {
+        ...state,
+        boltHost: action.boltHost
+      }
     default:
       return state
   }
@@ -77,8 +80,10 @@ export const getBoltHost = state => {
 
 const updateDiscoveryState = (action, store) => {
   const updateObj = { host: action.forceURL }
-  if (action.username && action.password) {
+  if (action.username) {
     updateObj.username = action.username
+  }
+  if (action.password) {
     updateObj.password = action.password
   }
   if (typeof action.encrypted !== 'undefined') {
@@ -93,9 +98,13 @@ const updateDiscoveryState = (action, store) => {
 export const injectDiscoveryEpic = (action$, store) =>
   action$
     .ofType(INJECTED_DISCOVERY)
-    .map(action =>
-      updateDiscoveryState({ ...action, forceURL: action.host }, store)
-    )
+    .map(action => {
+      const connectUrl = generateBoltUrl(
+        getAllowedBoltSchemes(store.getState(), action.encrypted),
+        action.host
+      )
+      return updateDiscoveryState({ ...action, forceURL: connectUrl }, store)
+    })
     .mapTo({ type: DONE })
 
 export const discoveryOnStartupEpic = (some$, store) => {
@@ -123,7 +132,7 @@ export const discoveryOnStartupEpic = (some$, store) => {
             ...action,
             username,
             password,
-            forceURL: `${protocol ? protocol + '//' : ''}${host}`
+            forceURL: `${protocol ? `${protocol}//` : ''}${host}`
           },
           store
         )
@@ -134,17 +143,24 @@ export const discoveryOnStartupEpic = (some$, store) => {
           .getJSON(getDiscoveryEndpoint(getHostedUrl(store.getState())))
           // Uncomment below and comment out above when doing manual tests in dev mode to
           // fake discovery response
-          // Promise.resolve({ bolt: 'bolt+routing://localhost:7687' })
+          // Promise.resolve({ bolt: 'bolt://localhost:7687' })
           .then(result => {
+            let host =
+              result &&
+              (result.bolt_routing || result.bolt_direct || result.bolt)
             // Try to get info from server
-            if (!result || !result.bolt) {
-              throw new Error('No bolt address found') // No bolt info from server, throw
+            if (!host) {
+              throw new Error('No bolt address found')
             }
-            store.dispatch(updateDiscoveryConnection({ host: result.bolt })) // Update discovery host in redux
+            host = generateBoltUrl(
+              getAllowedBoltSchemes(store.getState()),
+              host
+            )
+            store.dispatch(updateDiscoveryConnection({ host })) // Update discovery host in redux
             return { type: DONE }
           })
           .catch(e => {
-            throw new Error('No info from endpoint') // No info from server, throw
+            throw new Error('No info from endpoint')
           })
       ).catch(e => {
         return Promise.resolve({ type: DONE })

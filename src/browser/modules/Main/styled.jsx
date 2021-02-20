@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -70,6 +70,14 @@ export const StyledCodeBlockAuthBar = styled(StyledCodeBlock)`
 export const StyledCodeBlockErrorBar = styled(StyledCodeBlock)`
   background-color: white;
   color: ${props => props.theme.error};
+`
+export const StyledCodeBlockFrame = styled(StyledCodeBlock)`
+  white-space: nowrap;
+  overflow: hidden;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  cursor: pointer;
 `
 
 export const SyncDisconnectedBanner = styled(Banner)`

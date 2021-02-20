@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -18,11 +18,13 @@
 import { withBus } from 'react-suber'
 import { connect } from 'react-redux'
 import MyScripts from '@relate-by-ui/saved-scripts'
+import semver from 'semver'
 
 import * as editor from 'shared/modules/editor/editorDuck'
 import { executeCommand } from 'shared/modules/commands/commandsDuck'
 import * as favorites from '../../../shared/modules/favorites/favoritesDuck'
 import * as folders from '../../../shared/modules/favorites/foldersDuck'
+import { getVersion } from 'shared/modules/dbMeta/dbMetaDuck'
 
 import {
   mapOldFavoritesAndFolders,
@@ -30,16 +32,18 @@ import {
 } from '../../../shared/services/export-favorites'
 
 const mapFavoritesStateToProps = state => {
+  const version = semver.coerce(getVersion(state) || '0')
   const scripts = mapOldFavoritesAndFolders(
     favorites.getFavorites(state),
     folders.getFolders(state),
-    ({ isStatic }) => isStatic
+    ({ isStatic, versionRange }) =>
+      isStatic && semver.satisfies(version, versionRange)
   )
 
   return {
     title: 'Sample Scripts',
     scriptsNamespace: SLASH,
-    scripts: scripts,
+    scripts,
     isStatic: true
   }
 }

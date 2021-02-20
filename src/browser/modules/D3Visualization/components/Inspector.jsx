@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -39,19 +39,22 @@ import {
 import { GrassEditor } from './GrassEditor'
 import { RowExpandToggleComponent } from './RowExpandToggle'
 import ClickableUrls from '../../../components/clickable-urls'
+import numberToUSLocale from 'shared/utils/number-to-US-locale'
+import { StyledTruncatedMessage } from 'browser/modules/Stream/styled'
+import { Icon } from 'semantic-ui-react'
+import Ellipsis from 'browser-components/Ellipsis'
 
 const mapItemProperties = itemProperties =>
   itemProperties
-    .sort(
-      ({ key: keyA }, { key: keyB }) =>
-        keyA < keyB ? -1 : keyA === keyB ? 0 : 1
+    .sort(({ key: keyA }, { key: keyB }) =>
+      keyA < keyB ? -1 : keyA === keyB ? 0 : 1
     )
     .map((prop, i) => (
-      <StyledInspectorFooterRowListPair className='pair' key={'prop' + i}>
-        <StyledInspectorFooterRowListKey className='key'>
+      <StyledInspectorFooterRowListPair className="pair" key={'prop' + i}>
+        <StyledInspectorFooterRowListKey className="key">
           {prop.key + ': '}
         </StyledInspectorFooterRowListKey>
-        <StyledInspectorFooterRowListValue className='value'>
+        <StyledInspectorFooterRowListValue className="value">
           <ClickableUrls text={optionalToString(prop.value)} />
         </StyledInspectorFooterRowListValue>
       </StyledInspectorFooterRowListPair>
@@ -77,7 +80,7 @@ const mapLabels = (graphStyle, itemLabels) => {
 }
 
 export class InspectorComponent extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       contracted: true,
@@ -85,13 +88,13 @@ export class InspectorComponent extends Component {
     }
   }
 
-  setFooterRowELem (elem) {
+  setFooterRowELem(elem) {
     if (elem) {
       this.footerRowElem = elem
     }
   }
 
-  render () {
+  render() {
     let item
     let type
     let inspectorContent
@@ -118,37 +121,43 @@ export class InspectorComponent extends Component {
       }
       if (type === 'status-item') {
         inspectorContent = (
-          <StyledInspectorFooterStatusMessage className='value'>
+          <StyledInspectorFooterStatusMessage className="value">
             {item}
           </StyledInspectorFooterStatusMessage>
         )
       }
       if (type === 'context-menu-item') {
         inspectorContent = (
-          <StyledInlineList className='list-inline'>
+          <StyledInlineList className="list-inline">
             <StyledTokenContextMenuKey
-              key='token'
+              key="token"
               className={
                 'token' + ' ' + 'token-context-menu-key' + ' ' + 'token-label'
               }
             >
-              <SVGInline svg={item.label} width='12' />
+              <SVGInline svg={item.label} width="12px" />
             </StyledTokenContextMenuKey>
-            <StyledInspectorFooterRowListPair key='pair' className='pair'>
-              <StyledInspectorFooterRowListValue className='value'>
+            <StyledInspectorFooterRowListPair key="pair" className="pair">
+              <StyledInspectorFooterRowListValue className="value">
                 {item.content}
               </StyledInspectorFooterRowListValue>
             </StyledInspectorFooterRowListPair>
           </StyledInlineList>
         )
       } else if (type === 'canvas') {
-        const description = `Displaying ${item.nodeCount} nodes, ${
-          item.relationshipCount
-        } relationships.`
+        const description = `Displaying ${numberToUSLocale(
+          item.nodeCount
+        )} nodes, ${numberToUSLocale(item.relationshipCount)} relationships.`
         inspectorContent = (
-          <StyledInlineList className='list-inline'>
-            <StyledInspectorFooterRowListPair className='pair' key='pair'>
-              <StyledInspectorFooterRowListValue className='value'>
+          <StyledInlineList className="list-inline">
+            <StyledInspectorFooterRowListPair className="pair" key="pair">
+              <StyledInspectorFooterRowListValue className="value">
+                {this.props.hasTruncatedFields && (
+                  <StyledTruncatedMessage>
+                    <Icon name="warning sign" /> Record fields have been
+                    truncated.&nbsp;
+                  </StyledTruncatedMessage>
+                )}
                 {description}
               </StyledInspectorFooterRowListValue>
             </StyledInspectorFooterRowListPair>
@@ -156,13 +165,13 @@ export class InspectorComponent extends Component {
         )
       } else if (type === 'node') {
         inspectorContent = (
-          <StyledInlineList className='list-inline'>
+          <StyledInlineList className="list-inline">
             {mapLabels(this.state.graphStyle, item.labels)}
-            <StyledInspectorFooterRowListPair key='pair' className='pair'>
-              <StyledInspectorFooterRowListKey className='key'>
+            <StyledInspectorFooterRowListPair key="pair" className="pair">
+              <StyledInspectorFooterRowListKey className="key">
                 {'<id>:'}
               </StyledInspectorFooterRowListKey>
-              <StyledInspectorFooterRowListValue className='value'>
+              <StyledInspectorFooterRowListValue className="value">
                 {item.id}
               </StyledInspectorFooterRowListValue>
             </StyledInspectorFooterRowListPair>
@@ -179,19 +188,19 @@ export class InspectorComponent extends Component {
             .get('text-color-internal')
         }
         inspectorContent = (
-          <StyledInlineList className='list-inline'>
+          <StyledInlineList className="list-inline">
             <StyledTokenRelationshipType
-              key='token'
+              key="token"
               style={style}
               className={'token' + ' ' + 'token-relationship-type'}
             >
               {item.type}
             </StyledTokenRelationshipType>
-            <StyledInspectorFooterRowListPair key='pair' className='pair'>
-              <StyledInspectorFooterRowListKey className='key'>
+            <StyledInspectorFooterRowListPair key="pair" className="pair">
+              <StyledInspectorFooterRowListKey className="key">
                 {'<id>:'}
               </StyledInspectorFooterRowListKey>
-              <StyledInspectorFooterRowListValue className='value'>
+              <StyledInspectorFooterRowListValue className="value">
                 {item.id}
               </StyledInspectorFooterRowListValue>
             </StyledInspectorFooterRowListPair>
@@ -204,9 +213,9 @@ export class InspectorComponent extends Component {
     return (
       <StyledStatusBar
         fullscreen={this.props.fullscreen}
-        className='status-bar'
+        className="status-bar"
       >
-        <StyledStatus className='status'>
+        <StyledStatus className="status">
           <StyledInspectorFooter
             className={
               this.state.contracted
@@ -215,8 +224,8 @@ export class InspectorComponent extends Component {
             }
           >
             <StyledInspectorFooterRow
-              data-testid='vizInspector'
-              className='inspector-footer-row'
+              data-testid="vizInspector"
+              className="inspector-footer-row"
               ref={this.setFooterRowELem.bind(this)}
             >
               {type === 'canvas' ? null : (
@@ -235,7 +244,7 @@ export class InspectorComponent extends Component {
     )
   }
 
-  toggleExpand () {
+  toggleExpand() {
     this.setState({ contracted: !this.state.contracted }, () => {
       const inspectorHeight = this.footerRowElem.clientHeight
       this.props.onExpandToggled &&
@@ -245,8 +254,9 @@ export class InspectorComponent extends Component {
         )
     })
   }
-  componentWillReceiveProps (nextProps) {
-    if (!deepEquals(this.props.selectedItem, nextProps.selectedItem)) {
+
+  componentDidUpdate(prevProps) {
+    if (!deepEquals(this.props.selectedItem, prevProps.selectedItem)) {
       this.setState({ contracted: true })
       this.props.onExpandToggled && this.props.onExpandToggled(true, 0)
     }

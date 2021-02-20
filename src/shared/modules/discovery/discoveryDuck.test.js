@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, afterEach, test, expect, beforeAll */
 import configureMockStore from 'redux-mock-store'
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus, createReduxMiddleware } from 'suber'
@@ -91,6 +90,72 @@ describe('discoveryOnStartupEpic', () => {
     nock(getDiscoveryEndpoint())
       .get('/')
       .reply(200, { bolt: expectedHost })
+    bus.take(discovery.DONE, currentAction => {
+      // Then
+      expect(store.getActions()).toEqual([
+        action,
+        discovery.updateDiscoveryConnection({ host: expectedHost }),
+        { type: discovery.DONE }
+      ])
+      done()
+    })
+
+    // When
+    store.dispatch(action)
+  })
+
+  test('listens on APP_START and finds a bolt_direct host and dispatches an action with the found host', done => {
+    // Given
+    const action = { type: APP_START, env: WEB }
+    const expectedHost = 'bolt://myhost:7777'
+    nock(getDiscoveryEndpoint())
+      .get('/')
+      .reply(200, { bolt_direct: expectedHost })
+    bus.take(discovery.DONE, currentAction => {
+      // Then
+      expect(store.getActions()).toEqual([
+        action,
+        discovery.updateDiscoveryConnection({ host: expectedHost }),
+        { type: discovery.DONE }
+      ])
+      done()
+    })
+
+    // When
+    store.dispatch(action)
+  })
+
+  test('listens on APP_START and finds both a bolt_direct and a bold host and dispatches an action with the found bolt_direct host', done => {
+    // Given
+    const action = { type: APP_START, env: WEB }
+    const expectedHost = 'bolt://myhost:7777'
+    nock(getDiscoveryEndpoint())
+      .get('/')
+      .reply(200, { bolt_direct: expectedHost, bolt: 'very://bad:1337' })
+    bus.take(discovery.DONE, currentAction => {
+      // Then
+      expect(store.getActions()).toEqual([
+        action,
+        discovery.updateDiscoveryConnection({ host: expectedHost }),
+        { type: discovery.DONE }
+      ])
+      done()
+    })
+
+    // When
+    store.dispatch(action)
+  })
+  test('listens on APP_START and finds all of bolt_routing, bolt_direct and a bold host and dispatches an action with the found bolt_routing host', done => {
+    // Given
+    const action = { type: APP_START, env: WEB }
+    const expectedHost = 'neo4j://myhost:7777'
+    nock(getDiscoveryEndpoint())
+      .get('/')
+      .reply(200, {
+        bolt_routing: expectedHost,
+        bolt_direct: 'bolt://myhost:666',
+        bolt: 'very://bad:1337'
+      })
     bus.take(discovery.DONE, currentAction => {
       // Then
       expect(store.getActions()).toEqual([

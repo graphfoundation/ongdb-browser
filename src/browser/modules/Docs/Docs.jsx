@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,59 +18,68 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import uuid from 'uuid'
 import Directives from 'browser-components/Directives'
 import Carousel from '../Carousel/Carousel'
 import Slide from '../Carousel/Slide'
 
-export default class Guides extends Component {
-  constructor (props) {
-    super(props)
-    this.ref = React.createRef()
-    this.state = { slides: null, firstRender: true }
-  }
+export default function Docs({
+  slides,
+  content,
+  html,
+  withDirectives,
+  initialSlide,
+  onSlide,
+  originFrameId,
+  lastUpdate
+}) {
+  const [stateSlides, setStateSlides] = useState([])
 
-  componentDidMount () {
-    if (!this.ref) return
-    if (!this.ref.current) return
-    const slides = this.ref.current.getElementsByTagName('slide')
-    let reactSlides = this
-    if (slides.length > 0) {
-      reactSlides = Array.from(slides).map(slide => {
-        return {
-          html: slide
-        }
-      })
+  useEffect(() => {
+    if (slides && slides.length) {
+      setStateSlides(slides)
+      return
     }
-    this.setState({ slides: reactSlides, firstRender: false })
-  }
-
-  render () {
-    const { content, html, withDirectives, hasCarouselComponent } = this.props
-
-    if (hasCarouselComponent) {
-      return content
-    }
-
-    if (this.state.slides && Array.isArray(this.state.slides)) {
-      const ListOfSlides = this.state.slides.map(slide => {
-        return <Slide key={uuid.v4()} html={slide.html.innerHTML} />
-      })
-      return <Carousel slides={ListOfSlides} withDirectives={withDirectives} />
-    }
-
-    let slide = <Slide ref={this.ref} html={''} />
+    let slide = <Slide html="" />
     if (content) {
-      slide = <Slide ref={this.ref} content={content} />
+      slide = <Slide content={content} />
     } else if (html) {
-      slide = <Slide ref={this.ref} html={html} />
+      const tmpDiv = document.createElement('div')
+      tmpDiv.innerHTML = html
+      const htmlSlides = tmpDiv.getElementsByTagName('slide')
+      if (htmlSlides && htmlSlides.length) {
+        const reactSlides = Array.from(htmlSlides).map(slide => {
+          return <Slide key={uuid.v4()} html={slide.innerHTML} />
+        })
+        setStateSlides(reactSlides)
+        return
+      }
+      slide = <Slide html={html} />
     }
 
     if (withDirectives) {
-      return <Directives content={slide} />
-    } else {
-      return slide
+      slide = <Directives originFrameId={originFrameId} content={slide} />
     }
+    setStateSlides([slide])
+
+    if (onSlide) {
+      onSlide({ hasPrev: false, hasNext: false, slideIndex: 0 })
+    }
+  }, [slides, content, html, withDirectives, lastUpdate])
+
+  if (stateSlides.length > 1) {
+    return (
+      <Carousel
+        onSlide={onSlide}
+        slides={stateSlides}
+        initialSlide={initialSlide}
+        withDirectives={withDirectives}
+        originFrameId={originFrameId}
+      />
+    )
+  } else if (stateSlides.length) {
+    return stateSlides[0]
   }
+  return null
 }

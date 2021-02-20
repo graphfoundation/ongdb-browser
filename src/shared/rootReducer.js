@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -32,7 +32,6 @@ import userReducer, {
   NAME as currentUser
 } from 'shared/modules/currentUser/currentUserDuck'
 import dbMetaReducer, { NAME as dbMeta } from 'shared/modules/dbMeta/dbMetaDuck'
-import jmxReducer, { NAME as jmx } from 'shared/modules/jmx/jmxDuck'
 import favoritesReducer, {
   NAME as documents
 } from 'shared/modules/favorites/favoritesDuck'
@@ -75,7 +74,6 @@ export default {
   [history]: historyReducer,
   [currentUser]: userReducer,
   [dbMeta]: dbMetaReducer,
-  [jmx]: jmxReducer,
   [documents]: favoritesReducer,
   [folders]: foldersReducer,
   [sidebar]: sidebarReducer,

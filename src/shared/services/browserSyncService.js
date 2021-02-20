@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -51,18 +51,18 @@ export const status = () => {
 }
 
 export const getResourceFor = userId => {
-  return firebase.database().ref('users/' + userId)
+  return firebase.database().ref(`users/${userId}`)
 }
 
 export const syncResourceFor = (userId, key, value) => {
-  const userRef = firebase.database().ref('users/' + userId)
+  const userRef = firebase.database().ref(`users/${userId}`)
   userRef.child(key).set(value)
 }
 
 export const setupUser = (userId, initialData) => {
   firebase
     .database()
-    .ref('users/' + userId)
+    .ref(`users/${userId}`)
     .set(initialData)
 }
 

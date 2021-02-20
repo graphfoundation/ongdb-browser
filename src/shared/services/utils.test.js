@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global jest, describe, test, expect */
 import * as utils from './utils'
 import { DESKTOP, CLOUD, WEB } from 'shared/modules/app/appDuck'
 
@@ -132,6 +131,14 @@ describe('utils', () => {
     expect(utils.deepEquals(o1, o3)).toBeFalsy()
     expect(utils.deepEquals(o4, o5)).toBeTruthy()
   })
+  test('deepEquals compares object methods by source instead of by reference', () => {
+    const foo1 = { someMethod: () => 'foo' }
+    const foo2 = { someMethod: () => 'foo' }
+    const bar = { someMethod: () => 'bar' }
+
+    expect(utils.deepEquals(foo1, foo2)).toBeTruthy()
+    expect(utils.deepEquals(foo1, bar)).toBeFalsy()
+  })
   test('can shallowEquals compare objects', () => {
     // Given
     const o1 = { a: 1, b: 2, c: 'hello' }
@@ -190,9 +197,9 @@ describe('utils', () => {
     // Given
     jest.useFakeTimers()
     const callMe = jest.fn()
-    function TestFn () {
+    function TestFn() {
       this.val = 'hello'
-      this.fn = function (extVal) {
+      this.fn = function(extVal) {
         callMe(this.val, extVal)
       }
       this.dbFn = utils.debounce(this.fn, 500, this)
@@ -235,9 +242,9 @@ describe('utils', () => {
     // Given
     jest.useFakeTimers()
     const callMe = jest.fn()
-    function TestFn () {
+    function TestFn() {
       this.val = 'hello'
-      this.fn = function (extVal) {
+      this.fn = function(extVal) {
         callMe(this.val, extVal)
       }
       this.thFn = utils.throttle(this.fn, 500, this)
@@ -563,7 +570,7 @@ describe('utils', () => {
       expect(utils.parseTimeMillis(time.test)).toEqual(time.expect)
     })
   })
-  describe('ecsapeCypherMetaItem', () => {
+  describe('escapeCypherIdentifier', () => {
     // Given
     const items = [
       { test: 'Label', expect: 'Label' },
@@ -575,7 +582,21 @@ describe('utils', () => {
 
     // When && Then
     items.forEach(item => {
-      expect(utils.ecsapeCypherMetaItem(item.test)).toEqual(item.expect)
+      expect(utils.escapeCypherIdentifier(item.test)).toEqual(item.expect)
+    })
+  })
+  describe('unescapeCypherIdentifier', () => {
+    // Given
+    const items = [
+      { test: 'Label', expect: 'Label' },
+      { test: '`Label Space`', expect: 'Label Space' },
+      { test: '`Label-dash`', expect: 'Label-dash' },
+      { test: '`Label``Backtick`', expect: 'Label`Backtick' }
+    ]
+
+    // When && Then
+    items.forEach(item => {
+      expect(utils.unescapeCypherIdentifier(item.test)).toEqual(item.expect)
     })
   })
 })
@@ -671,30 +692,6 @@ describe('toKeyString', () => {
       expect(utils.toKeyString(str.str)).toEqual(str.expect)
     })
   })
-  describe('generateBoltHost', () => {
-    it('generates a bolt host as expected', () => {
-      const tests = [
-        { host: '', expected: 'bolt://localhost:7687' },
-        { host: 'localhost', expected: 'bolt://localhost' },
-        { host: 'localhost:7688', expected: 'bolt://localhost:7688' },
-        { host: 'bolt://localhost', expected: 'bolt://localhost' },
-        { host: 'bolt://localhost:7688', expected: 'bolt://localhost:7688' },
-        {
-          host: 'bolt+routing://localhost',
-          expected: 'bolt+routing://localhost'
-        },
-        {
-          host: 'bolt+routing://localhost:7688',
-          expected: 'bolt+routing://localhost:7688'
-        },
-        { host: null, expected: 'bolt://localhost:7687' }
-      ]
-
-      tests.forEach(test => {
-        expect(utils.generateBoltHost(test.host)).toEqual(test.expected)
-      })
-    })
-  })
   describe('detectRuntimeEnv', () => {
     const tests = [
       [
@@ -713,10 +710,9 @@ describe('toKeyString', () => {
         [
           {
             location: {
-              href:
-                'https://mydomain.com:7474?neo4jDesktopApiUrl=' +
-                encodeURIComponent('https://graphql.api.local:3001') +
-                '&neo4jDesktopGraphAppClientId=xxx'
+              href: `https://mydomain.com:7474?neo4jDesktopApiUrl=${encodeURIComponent(
+                'https://graphql.api.local:3001'
+              )}&neo4jDesktopGraphAppClientId=xxx`
             }
           },
           []

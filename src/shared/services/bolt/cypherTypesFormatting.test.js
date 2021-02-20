@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -26,7 +26,8 @@ describe('Cypher Types Number modifier only modifies where needed', () => {
     [Number(123.1), undefined],
     [Number(-123.1), undefined],
     [Number(Infinity), 'Infinity'],
-    [Number(-Infinity), '-Infinity']
+    [Number(-Infinity), '-Infinity'],
+    [Number(NaN), 'NaN']
   ]
 
   test.each(tests)('Modifies %s correctly if needed', (input, output) => {

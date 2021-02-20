@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,7 +20,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import DatabaseInfo from '../DatabaseInfo/DatabaseInfo'
+import DBMSInfo from '../DBMSInfo/DBMSInfo'
 import Documents from './Documents'
 import About from './About'
 import Favorites from './favorites'
@@ -45,43 +45,49 @@ import {
   AboutIcon
 } from 'browser-components/icons/Icons'
 
-function Sidebar (props) {
+function Sidebar(props) {
   const openDrawer = props.openDrawer
   const onNavClick = props.onNavClick
   const { showStaticScripts } = props
-  const DatabaseDrawer = DatabaseInfo
+  const DatabaseDrawer = DBMSInfo
   const FavoritesDrawer = () => (
-    <React.Fragment>
+    <>
       <Favorites />
       {showStaticScripts && <StaticScripts />}
-    </React.Fragment>
+    </>
   )
   const DocumentsDrawer = Documents
   const SettingsDrawer = Settings
   const AboutDrawer = About
   const topNavItemsList = [
     {
-      name: 'DB',
+      name: 'DBMS',
       title: 'Database',
-      icon: isOpen => (
-        <DatabaseIcon
-          isOpen={isOpen}
-          connectionState={props.neo4jConnectionState}
-          title='Database'
-        />
-      ),
+      icon: function dbIcon(isOpen) {
+        return (
+          <DatabaseIcon
+            isOpen={isOpen}
+            connectionState={props.neo4jConnectionState}
+            title="Database"
+          />
+        )
+      },
       content: DatabaseDrawer
     },
     {
       name: 'Favorites',
       title: 'Favorites',
-      icon: isOpen => <FavoritesIcon isOpen={isOpen} title='Favorites' />,
+      icon: function favIcon(isOpen) {
+        return <FavoritesIcon isOpen={isOpen} title="Favorites" />
+      },
       content: FavoritesDrawer
     },
     {
       name: 'Documents',
       title: 'Documentation',
-      icon: isOpen => <DocumentsIcon isOpen={isOpen} title='Documentation' />,
+      icon: function docsIcon(isOpen) {
+        return <DocumentsIcon isOpen={isOpen} title="Documentation" />
+      },
       content: DocumentsDrawer
     }
   ]
@@ -89,25 +95,31 @@ function Sidebar (props) {
     {
       name: 'Sync',
       title: 'Cloud Services',
-      icon: isOpen => (
-        <CloudSyncIcon
-          isOpen={isOpen}
-          connected={props.syncConnected}
-          title='Cloud Services'
-        />
-      ),
+      icon: function syncIcon(isOpen) {
+        return (
+          <CloudSyncIcon
+            isOpen={isOpen}
+            connected={props.syncConnected}
+            title="Cloud Services"
+          />
+        )
+      },
       content: BrowserSync
     },
     {
       name: 'Settings',
       title: 'Browser Settings',
-      icon: isOpen => <SettingsIcon isOpen={isOpen} title='Browser Settings' />,
+      icon: function settingIcon(isOpen) {
+        return <SettingsIcon isOpen={isOpen} title="Browser Settings" />
+      },
       content: SettingsDrawer
     },
     {
       name: 'About',
       title: 'About Neo4j',
-      icon: isOpen => <AboutIcon isOpen={isOpen} title='About Neo4j' />,
+      icon: function aboutIcon(isOpen) {
+        return <AboutIcon isOpen={isOpen} title="About Neo4j" />
+      },
       content: AboutDrawer
     }
   ]

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -28,19 +28,22 @@ export const handleCypherCommand = (
   put,
   params = {},
   shouldUseCypherThread = false,
-  txMetadata = {}
+  txMetadata = {},
+  autoCommit = false
 ) => {
   const paramsToNeo4jType = Object.keys(params).map(k => ({
     [k]: applyGraphTypes(params[k])
   }))
   const [id, request] = bolt.routedWriteTransaction(
-    action.cmd,
+    action.query,
     arrayToObject(paramsToNeo4jType),
     {
       useCypherThread: shouldUseCypherThread,
       requestId: action.requestId,
       cancelable: true,
-      ...txMetadata
+      ...txMetadata,
+      autoCommit,
+      useDb: action.useDb
     }
   )
   put(send('cypher', id))

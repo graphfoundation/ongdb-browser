@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -27,19 +27,19 @@ export const CLEAR = 'history/CLEAR'
 // Selectors
 export const getHistory = state => state[NAME]
 
-function addHistoryHelper (state, newState, maxHistory) {
+function addHistoryHelper(state, newState, maxHistory) {
   // If it's the same as the last entry, don't add it
   if (state && state.length && state[0] === newState) {
     return state
   }
-  let newHistory = [...state]
+  const newHistory = [...state]
   newHistory.unshift(newState)
   return newHistory.slice(0, maxHistory)
 }
 
 // Reducer
 const initialState = []
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case ADD:
       return addHistoryHelper(state, action.state, action.maxHistory)

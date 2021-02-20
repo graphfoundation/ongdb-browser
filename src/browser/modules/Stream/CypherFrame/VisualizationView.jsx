@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import neo4j from 'neo4j-driver'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deepEquals } from 'services/utils'
@@ -29,19 +30,23 @@ import { StyledVisContainer } from './VisualizationView.styled'
 
 import { CYPHER_REQUEST } from 'shared/modules/cypher/cypherDuck'
 import { NEO4J_BROWSER_USER_ACTION_QUERY } from 'services/bolt/txMetadata'
+import { getMaxFieldItems } from 'shared/modules/settings/settingsDuck'
+import { resultHasTruncatedFields } from 'browser/modules/Stream/CypherFrame/helpers'
 
 export class Visualization extends Component {
   state = {
     nodes: [],
     relationships: []
   }
-  componentDidMount () {
+
+  componentDidMount() {
     const { records = [] } = this.props.result
     if (records && records.length > 0) {
       this.populateDataToStateFromProps(this.props)
     }
   }
-  shouldComponentUpdate (props, state) {
+
+  shouldComponentUpdate(props, state) {
     return (
       this.props.updated !== props.updated ||
       !deepEquals(props.graphStyleData, this.props.graphStyleData) ||
@@ -50,28 +55,38 @@ export class Visualization extends Component {
       this.props.autoComplete !== props.autoComplete
     )
   }
-  componentWillReceiveProps (props) {
+
+  componentDidUpdate(prevProps) {
     if (
-      this.props.updated !== props.updated ||
-      this.props.autoComplete !== props.autoComplete
+      this.props.updated !== prevProps.updated ||
+      this.props.autoComplete !== prevProps.autoComplete
     ) {
-      this.populateDataToStateFromProps(props)
+      this.populateDataToStateFromProps(this.props)
     }
   }
-  populateDataToStateFromProps (props) {
+
+  populateDataToStateFromProps(props) {
     const {
       nodes,
       relationships
     } = bolt.extractNodesAndRelationshipsFromRecordsForOldVis(
-      props.result.records
+      props.result.records,
+      true,
+      props.maxFieldItems
+    )
+    const hasTruncatedFields = resultHasTruncatedFields(
+      props.result,
+      props.maxFieldItems
     )
     this.setState({
       nodes,
       relationships,
+      hasTruncatedFields,
       updated: new Date().getTime()
     })
   }
-  autoCompleteRelationships (existingNodes, newNodes) {
+
+  autoCompleteRelationships(existingNodes, newNodes) {
     if (this.props.autoComplete) {
       const existingNodeIds = existingNodes.map(node => parseInt(node.id))
       const newNodeIds = newNodes.map(node => parseInt(node.id))
@@ -86,7 +101,8 @@ export class Visualization extends Component {
       this.autoCompleteCallback && this.autoCompleteCallback([])
     }
   }
-  getNeighbours (id, currentNeighbourIds = []) {
+
+  getNeighbours(id, currentNeighbourIds = []) {
     const query = `MATCH path = (a)--(o)
                    WHERE id(a) = ${id}
                    AND NOT (id(o) IN[${currentNeighbourIds.join(',')}])
@@ -103,13 +119,14 @@ export class Visualization extends Component {
             if (!response.success) {
               reject(new Error())
             } else {
-              let count =
+              const count =
                 response.result.records.length > 0
                   ? parseInt(response.result.records[0].get('c').toString())
                   : 0
               const resultGraph = bolt.extractNodesAndRelationshipsFromRecordsForOldVis(
                 response.result.records,
-                false
+                false,
+                this.props.maxFieldItems
               )
               this.autoCompleteRelationships(
                 this.graph._nodes,
@@ -121,9 +138,10 @@ export class Visualization extends Component {
         )
     })
   }
-  getInternalRelationships (existingNodeIds, newNodeIds) {
-    newNodeIds = newNodeIds.map(bolt.neo4j.int)
-    existingNodeIds = existingNodeIds.map(bolt.neo4j.int)
+
+  getInternalRelationships(existingNodeIds, newNodeIds) {
+    newNodeIds = newNodeIds.map(neo4j.int)
+    existingNodeIds = existingNodeIds.map(neo4j.int)
     existingNodeIds = existingNodeIds.concat(newNodeIds)
     const query =
       'MATCH (a)-[r]->(b) WHERE id(a) IN $existingNodeIds AND id(b) IN $newNodeIds RETURN r;'
@@ -143,7 +161,8 @@ export class Visualization extends Component {
               resolve({
                 ...bolt.extractNodesAndRelationshipsFromRecordsForOldVis(
                   response.result.records,
-                  false
+                  false,
+                  this.props.maxFieldItems
                 )
               })
             }
@@ -151,17 +170,20 @@ export class Visualization extends Component {
         )
     })
   }
-  setGraph (graph) {
+
+  setGraph(graph) {
     this.graph = graph
     this.autoCompleteRelationships([], this.graph._nodes)
   }
-  render () {
+
+  render() {
     if (!this.state.nodes.length) return null
 
     return (
       <StyledVisContainer fullscreen={this.props.fullscreen}>
         <ExplorerComponent
           maxNeighbours={this.props.maxNeighbours}
+          hasTruncatedFields={this.state.hasTruncatedFields}
           initialNodeDisplay={this.props.initialNodeDisplay}
           graphStyleData={this.props.graphStyleData}
           updateStyle={this.props.updateStyle}
@@ -183,7 +205,8 @@ export class Visualization extends Component {
 
 const mapStateToProps = state => {
   return {
-    graphStyleData: grassActions.getGraphStyleData(state)
+    graphStyleData: grassActions.getGraphStyleData(state),
+    maxFieldItems: getMaxFieldItems(state)
   }
 }
 

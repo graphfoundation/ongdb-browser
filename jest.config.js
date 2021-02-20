@@ -12,7 +12,9 @@ module.exports = {
     '/dist/',
     '/node_modules/'
   ],
-  transformIgnorePatterns: [`/node_modules/(?!lodash-es|@neo4j/browser-lambda-parser|react-dnd|dnd-core)`],
+  transformIgnorePatterns: [
+    '/node_modules/(?!lodash-es|@neo4j/browser-lambda-parser|react-dnd|dnd-core)'
+  ],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|html)$':
       '<rootDir>/test_utils/__mocks__/fileMock.js',
@@ -24,11 +26,7 @@ module.exports = {
     'project-root(.*)$': '<rootDir>$1'
   },
   modulePaths: ['<rootDir>/src', '<rootDir>/src/shared'],
-  collectCoverageFrom: [
-    '**/src/**/*.js',
-    '**/src/**/*.jsx',
-    '!**/src/browser/external/**/*.js'
-  ],
+  collectCoverageFrom: ['**/src/**/*.js', '**/src/**/*.jsx'],
   coverageThreshold: {
     global: {
       statements: 45,

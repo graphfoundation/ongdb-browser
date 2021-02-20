@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,7 +21,7 @@ import React from 'react'
 import { withBus } from 'react-suber'
 import * as editor from 'shared/modules/editor/editorDuck'
 import FrameTemplate from '../Frame/FrameTemplate'
-import { StyledHistoryList, PaddedDiv } from './styled'
+import { UnstyledList, PaddedDiv } from './styled'
 import HistoryRow from './HistoryRow'
 
 export const HistoryFrame = props => {
@@ -48,7 +48,7 @@ export const HistoryFrame = props => {
   return (
     <FrameTemplate
       header={frame}
-      contents={<StyledHistoryList>{historyRows}</StyledHistoryList>}
+      contents={<UnstyledList>{historyRows}</UnstyledList>}
     />
   )
 }

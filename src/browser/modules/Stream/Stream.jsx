@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -38,6 +38,7 @@ import ConnectionFrame from './Auth/ConnectionFrame'
 import DisconnectFrame from './Auth/DisconnectFrame'
 import ServerStatusFrame from './Auth/ServerStatusFrame'
 import ServerSwitchFrame from './Auth/ServerSwitchFrame'
+import UseDbFrame from './Auth/UseDbFrame'
 import ChangePasswordFrame from './Auth/ChangePasswordFrame'
 import QueriesFrame from './Queries/QueriesFrame'
 import UserList from '../User/UserList'
@@ -45,6 +46,8 @@ import UserAdd from '../User/UserAdd'
 import { getFrames } from 'shared/modules/stream/streamDuck'
 import { getActiveConnectionData } from 'shared/modules/connections/connectionsDuck'
 import { getScrollToTop } from 'shared/modules/settings/settingsDuck'
+import DbsFrame from './Auth/DbsFrame'
+import { getLatestFromFrameStack } from './stream.utils'
 
 const getFrame = type => {
   const trans = {
@@ -69,19 +72,24 @@ const getFrame = type => {
     status: ServerStatusFrame,
     'switch-success': ServerSwitchFrame,
     'switch-fail': ServerSwitchFrame,
+    'use-db': UseDbFrame,
+    'reset-db': UseDbFrame,
+    dbs: DbsFrame,
     style: StyleFrame,
     default: Frame
   }
-  return trans[type] || trans['default']
+  return trans[type] || trans.default
 }
 
 class Stream extends PureComponent {
-  componentDidMount () {
+  componentDidMount() {
     this.base = React.createRef()
   }
-  componentDidUpdate (prevProps) {
+
+  componentDidUpdate(prevProps) {
+    // If we want to scroll to top when a new frame is added
     if (
-      prevProps.framesSignature !== this.props.framesSignature &&
+      prevProps.frames.length < this.props.frames.length &&
       this.props.scrollToTop &&
       this.base &&
       this.base.current
@@ -89,20 +97,23 @@ class Stream extends PureComponent {
       this.base.current.scrollTop = 0
     }
   }
-  render () {
+
+  render() {
     return (
       <StyledStream ref={this.base}>
-        {this.props.frames.map(frame => {
+        {this.props.frames.map(frameObject => {
+          const frame = getLatestFromFrameStack(frameObject)
           const frameProps = {
-            frame,
-            activeConnectionData: this.props.activeConnectionData
+            frame: { ...frame, isPinned: frameObject.isPinned },
+            activeConnectionData: this.props.activeConnectionData,
+            stack: frameObject.stack
           }
           let MyFrame = getFrame(frame.type)
           if (frame.type === 'error') {
             try {
               const cmd = frame.cmd.replace(/^:/, '')
               const Frame = cmd[0].toUpperCase() + cmd.slice(1) + 'Frame'
-              MyFrame = require(`./Extras/index.js`)[Frame]
+              MyFrame = require('./Extras/index.js')[Frame]
               if (!MyFrame) {
                 MyFrame = getFrame(frame.type)
               }
@@ -118,9 +129,6 @@ class Stream extends PureComponent {
 const mapStateToProps = state => {
   const frames = getFrames(state)
   return {
-    framesSignature: frames
-      .map(frame => frame.id + (frame.requestId || ''))
-      .join(''),
     frames,
     activeConnectionData: getActiveConnectionData(state),
     scrollToTop: getScrollToTop(state)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -61,7 +61,7 @@ const mapFavoritesDispatchToProps = (dispatch, ownProps) => ({
   onExportScripts: scripts => exportFavorites(scripts),
   onRemoveScript: favorite =>
     dispatch(favoritesDuck.removeFavorite(favorite.id)),
-  onUpdateFolder (favorites, payload, allFavorites, allFolders) {
+  onUpdateFolder(favorites, payload, allFavorites, allFolders) {
     // favorite name update
     if (payload.name) {
       dispatch(
@@ -113,7 +113,7 @@ const mapFavoritesDispatchToProps = (dispatch, ownProps) => ({
       dispatch(foldersDuck.removeFolder(sourceFolder.id))
     }
   },
-  onRemoveFolder (favorites) {
+  onRemoveFolder(favorites) {
     const { folder } = getFirstFavorite(favorites) || {}
 
     if (!folder) return

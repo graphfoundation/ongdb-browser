@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -49,8 +49,8 @@ export const parseHttpVerbCommand = input => {
 }
 
 // Check if valid url, from http://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
-export function isValidURL (str) {
-  var pattern = new RegExp(
+export function isValidURL(str) {
+  const pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address

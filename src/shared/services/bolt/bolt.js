@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,34 +19,35 @@
  */
 
 import { v4 } from 'uuid'
-import { v1 as neo4j } from 'neo4j-driver'
+import neo4j from 'neo4j-driver'
 import WorkPool from '../WorkPool'
 import * as mappings from './boltMappings'
 import * as boltConnection from './boltConnection'
-import { generateBoltHost } from 'services/utils'
+import {
+  cancelTransaction as globalCancelTransaction,
+  routedReadTransaction as globalRoutedReadTransaction,
+  routedWriteTransaction as globalRoutedWriteTransaction,
+  directTransaction as globalDirectTransaction
+} from './transactions'
 import {
   runCypherMessage,
   cancelTransactionMessage,
-  closeConnectionMessage,
-  CYPHER_ERROR_MESSAGE,
-  CYPHER_RESPONSE_MESSAGE,
-  POST_CANCEL_TRANSACTION_MESSAGE,
-  BOLT_CONNECTION_ERROR_MESSAGE
+  closeConnectionMessage
 } from './boltWorkerMessages'
 import { NATIVE } from 'services/bolt/boltHelpers'
+import { setupBoltWorker, addTypesAsField } from './setup-bolt-worker'
 
-/* eslint-disable import/no-webpack-loader-syntax */
 import BoltWorkerModule from 'worker-loader?inline!./boltWorker.js'
-/* eslint-enable import/no-webpack-loader-syntax */
 
 let connectionProperties = null
-let boltWorkPool = new WorkPool(() => new BoltWorkerModule(), 10)
+let _useDb = null
+const boltWorkPool = new WorkPool(() => new BoltWorkerModule(), 10)
 
-function openConnection (props, opts = {}, onLostConnection) {
+function openConnection(props, opts = {}, onLostConnection) {
   return new Promise((resolve, reject) => {
     boltConnection
       .openConnection(props, opts, onLostConnection)
-      .then(r => {
+      .then(() => {
         connectionProperties = {
           authenticationMethod: props.authenticationMethod || NATIVE,
           username: props.username,
@@ -54,7 +55,7 @@ function openConnection (props, opts = {}, onLostConnection) {
           host: props.host,
           opts
         }
-        resolve(r)
+        resolve()
       })
       .catch(e => {
         connectionProperties = null
@@ -63,23 +64,25 @@ function openConnection (props, opts = {}, onLostConnection) {
   })
 }
 
-function cancelTransaction (id, cb) {
+function cancelTransaction(id, cb) {
   const work = boltWorkPool.getWorkById(id)
   if (work) {
     work.onFinish(cb)
     work.execute(cancelTransactionMessage(id))
   } else {
-    boltConnection.cancelTransaction(id, cb)
+    globalCancelTransaction(id, cb)
   }
 }
 
-function routedWriteTransaction (input, parameters, requestMetaData = {}) {
+function routedWriteTransaction(input, parameters, requestMetaData = {}) {
   const {
     useCypherThread = false,
     requestId = null,
     cancelable = false,
     onLostConnection = () => {},
-    txMetadata = undefined
+    txMetadata = undefined,
+    autoCommit = false,
+    useDb = null
   } = requestMetaData
   if (useCypherThread && window.Worker) {
     const id = requestId || v4()
@@ -91,33 +94,37 @@ function routedWriteTransaction (input, parameters, requestMetaData = {}) {
       cancelable,
       {
         ...connectionProperties,
-        inheritedUseRouting: boltConnection.useRouting(
-          generateBoltHost(
-            connectionProperties ? connectionProperties.host : ''
-          )
-        ),
-        txMetadata
+        txMetadata,
+        useDb: useDb || _useDb,
+        autoCommit
       }
     )
-    const workerPromise = setupBoltWorker(id, workFn, onLostConnection)
+    const workerPromise = setupBoltWorker(
+      boltWorkPool,
+      id,
+      workFn,
+      onLostConnection
+    )
     return [id, workerPromise]
   } else {
-    return boltConnection.routedWriteTransaction(
-      input,
-      parameters,
+    return globalRoutedWriteTransaction(input, parameters, {
       requestId,
-      cancelable
-    )
+      cancelable,
+      txMetadata,
+      useDb: useDb || _useDb,
+      autoCommit
+    })
   }
 }
 
-function routedReadTransaction (input, parameters, requestMetaData = {}) {
+function routedReadTransaction(input, parameters, requestMetaData = {}) {
   const {
     useCypherThread = false,
     requestId = null,
     cancelable = false,
     onLostConnection = () => {},
-    txMetadata = undefined
+    txMetadata = undefined,
+    useDb = null
   } = requestMetaData
   if (useCypherThread && window.Worker) {
     const id = requestId || v4()
@@ -129,33 +136,35 @@ function routedReadTransaction (input, parameters, requestMetaData = {}) {
       cancelable,
       {
         ...connectionProperties,
-        inheritedUseRouting: boltConnection.useRouting(
-          generateBoltHost(
-            connectionProperties ? connectionProperties.host : ''
-          )
-        ),
-        txMetadata
+        txMetadata,
+        useDb: useDb || _useDb
       }
     )
-    const workerPromise = setupBoltWorker(id, workFn, onLostConnection)
+    const workerPromise = setupBoltWorker(
+      boltWorkPool,
+      id,
+      workFn,
+      onLostConnection
+    )
     return workerPromise
   } else {
-    return boltConnection.routedReadTransaction(
-      input,
-      parameters,
+    return globalRoutedReadTransaction(input, parameters, {
       requestId,
-      cancelable
-    )
+      cancelable,
+      txMetadata,
+      useDb: useDb || _useDb
+    })
   }
 }
 
-function directTransaction (input, parameters, requestMetaData = {}) {
+function directTransaction(input, parameters, requestMetaData = {}) {
   const {
     useCypherThread = false,
     requestId = null,
     cancelable = false,
     onLostConnection = () => {},
-    txMetadata = undefined
+    txMetadata = undefined,
+    useDb = null
   } = requestMetaData
   if (useCypherThread && window.Worker) {
     const id = requestId || v4()
@@ -167,66 +176,25 @@ function directTransaction (input, parameters, requestMetaData = {}) {
       cancelable,
       {
         ...connectionProperties,
-        inheritedUseRouting: boltConnection.useRouting(
-          generateBoltHost(
-            connectionProperties ? connectionProperties.host : ''
-          )
-        ),
-        txMetadata
+        txMetadata,
+        useDb: useDb || _useDb
       }
     )
-    const workerPromise = setupBoltWorker(id, workFn, onLostConnection)
+    const workerPromise = setupBoltWorker(
+      boltWorkPool,
+      id,
+      workFn,
+      onLostConnection
+    )
     return workerPromise
   } else {
-    return boltConnection.directTransaction(
-      input,
-      parameters,
+    return globalDirectTransaction(input, parameters, {
       requestId,
-      cancelable
-    )
-  }
-}
-
-const addTypesAsField = result => {
-  const records = result.records.map(record => {
-    const typedRecord = new neo4j.types.Record(
-      record.keys,
-      record._fields,
-      record._fieldLookup
-    )
-    if (typedRecord._fields) {
-      typedRecord._fields = mappings.applyGraphTypes(typedRecord._fields)
-    }
-    return typedRecord
-  })
-  const summary = mappings.applyGraphTypes(result.summary)
-  return { summary, records }
-}
-
-function setupBoltWorker (id, workFn, onLostConnection = () => {}) {
-  const workerPromise = new Promise((resolve, reject) => {
-    const work = boltWorkPool.doWork({
-      id,
-      payload: workFn,
-      onmessage: msg => {
-        if (msg.data.type === BOLT_CONNECTION_ERROR_MESSAGE) {
-          work.finish()
-          onLostConnection(msg.data.error)
-          return reject(msg.data.error)
-        }
-        if (msg.data.type === CYPHER_ERROR_MESSAGE) {
-          work.finish()
-          reject(msg.data.error)
-        } else if (msg.data.type === CYPHER_RESPONSE_MESSAGE) {
-          work.finish()
-          resolve(addTypesAsField(msg.data.result))
-        } else if (msg.data.type === POST_CANCEL_TRANSACTION_MESSAGE) {
-          work.finish()
-        }
-      }
+      cancelable,
+      txMetadata,
+      useDb: useDb || _useDb
     })
-  })
-  return workerPromise
+  }
 }
 
 const closeConnectionInWorkers = () => {
@@ -234,6 +202,11 @@ const closeConnectionInWorkers = () => {
 }
 
 export default {
+  hasMultiDbSupport: async () => {
+    const supportsMultiDb = await boltConnection.hasMultiDbSupport()
+    return supportsMultiDb
+  },
+  useDb: db => (_useDb = db),
   directConnect: boltConnection.directConnect,
   openConnection,
   closeConnection: () => {
@@ -249,10 +222,10 @@ export default {
     const intChecker = convertInts ? neo4j.isInt : () => true
     const intConverter = convertInts
       ? item =>
-        mappings.itemIntToString(item, {
-          intChecker: neo4j.isInt,
-          intConverter: val => val.toNumber()
-        })
+          mappings.itemIntToString(item, {
+            intChecker: neo4j.isInt,
+            intConverter: val => val.toNumber()
+          })
       : val => val
     return mappings.recordsToTableArray(records, {
       intChecker,
@@ -260,18 +233,21 @@ export default {
       objectConverter: mappings.extractFromNeoObjects
     })
   },
-  extractNodesAndRelationshipsFromRecords: records => {
+  extractNodesAndRelationshipsFromRecords: (records, maxFieldItems) => {
     return mappings.extractNodesAndRelationshipsFromRecords(
       records,
-      neo4j.types
+      neo4j.types,
+      maxFieldItems
     )
   },
   extractNodesAndRelationshipsFromRecordsForOldVis: (
     records,
-    filterRels = true
+    filterRels = true,
+    maxFieldItems
   ) => {
     const intChecker = neo4j.isInt
     const intConverter = val => val.toString()
+
     return mappings.extractNodesAndRelationshipsFromRecordsForOldVis(
       records,
       neo4j.types,
@@ -280,7 +256,8 @@ export default {
         intChecker,
         intConverter,
         objectConverter: mappings.extractFromNeoObjects
-      }
+      },
+      maxFieldItems
     )
   },
   extractPlan: (result, calculateTotalDbHits) => {
@@ -293,6 +270,5 @@ export default {
       intConverter: val => val.toNumber(),
       objectConverter: mappings.extractFromNeoObjects
     }),
-  neo4j: neo4j,
   addTypesAsField
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -24,17 +24,21 @@ export default class Display extends PureComponent {
   state = {
     mounted: false
   }
-  componentDidMount () {
+
+  componentDidMount() {
     if (this.props.if) {
       this.setState({ mounted: true })
     }
   }
-  componentWillReceiveProps (props) {
-    if (this.state.mounted === false && props.if) {
-      this.setState({ mounted: true })
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.mounted === false && props.if) {
+      return { mounted: true }
     }
+    return null
   }
-  render () {
+
+  render() {
     // If lazy, don't load anything until it's time
     if (!this.props.if && !this.state.mounted && this.props.lazy) {
       return null

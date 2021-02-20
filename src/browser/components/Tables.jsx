@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -79,7 +79,7 @@ export const SysInfoTableEntry = ({
   const getValue = (v, m) => (m && v ? mapper(v) : v)
   if (headers) {
     return (
-      <StyledTr key='headers-row'>
+      <StyledTr key="headers-row">
         {headers.map(value => {
           const mappedValue = getValue(value, mapper)
           const val = mappedValue || missingValuePlaceholder
@@ -92,12 +92,12 @@ export const SysInfoTableEntry = ({
   }
   if (values) {
     return (
-      <StyledTr key='values-row'>
-        {values.map(value => {
+      <StyledTr key="values-row">
+        {values.map((value, rowIndex) => {
           const mappedValue = getValue(value, mapper)
           const val = mappedValue || missingValuePlaceholder
           return mappedValue || !optional ? (
-            <StyledTd key={toKeyString(val)}>{val}</StyledTd>
+            <StyledTd key={toKeyString(`${val}${rowIndex}`)}>{val}</StyledTd>
           ) : null
         })}
       </StyledTr>

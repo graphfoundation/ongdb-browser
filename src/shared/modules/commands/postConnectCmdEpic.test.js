@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
 import configureMockStore from 'redux-mock-store'
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus, createReduxMiddleware } from 'suber'
@@ -41,7 +40,8 @@ describe('postConnectCmdEpic', () => {
     const command = 'play hello'
     const store = mockStoreLocal({
       settings: {
-        cmdchar: ':'
+        cmdchar: ':',
+        playImplicitInitCommands: true
       },
       meta: {
         settings: {
@@ -56,7 +56,7 @@ describe('postConnectCmdEpic', () => {
       expect(store.getActions()).toEqual([
         action,
         action2,
-        commands.executeSystemCommand(':' + command),
+        commands.executeSystemCommand(`:${command}`),
         { type: 'NOOP' }
       ])
       done()
@@ -70,7 +70,7 @@ describe('postConnectCmdEpic', () => {
     // Given
     const command1 = 'play hello'
     const command2 = 'play intro'
-    const command = command1 + '; ' + command2
+    const command = `${command1}; ${command2}`
     const bus = createBus()
     const epicMiddlewareLocal = createEpicMiddleware(
       commands.postConnectCmdEpic
@@ -81,7 +81,8 @@ describe('postConnectCmdEpic', () => {
     ])
     const store = mockStoreLocal({
       settings: {
-        cmdchar: ':'
+        cmdchar: ':',
+        playImplicitInitCommands: true
       },
       meta: {
         settings: {
@@ -96,8 +97,8 @@ describe('postConnectCmdEpic', () => {
       expect(store.getActions()).toEqual([
         action,
         action2,
-        commands.executeSystemCommand(':' + command1),
-        commands.executeSystemCommand(':' + command2),
+        commands.executeSystemCommand(`:${command1}`),
+        commands.executeSystemCommand(`:${command2}`),
         { type: 'NOOP' }
       ])
       done()

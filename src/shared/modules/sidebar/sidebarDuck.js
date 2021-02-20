@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,7 +22,7 @@ export const NAME = 'drawer'
 
 export const TOGGLE = 'drawer/TOGGLE'
 
-function toggleDrawer (state, newState) {
+function toggleDrawer(state, newState) {
   if (!newState.drawer) {
     return null
   }
@@ -32,7 +32,7 @@ function toggleDrawer (state, newState) {
   return newState.drawer
 }
 
-export default function reducer (state = '', action) {
+export default function reducer(state = '', action) {
   switch (action.type) {
     case TOGGLE:
       return toggleDrawer(state, action.state)
@@ -40,7 +40,7 @@ export default function reducer (state = '', action) {
   return state
 }
 
-export function toggle (id) {
+export function toggle(id) {
   return {
     type: TOGGLE,
     state: { drawer: id }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,18 +20,18 @@
 
 import * as messages from './exceptionMessages'
 
-export function getErrorMessage (errorObject) {
+export function getErrorMessage(errorObject) {
   let str = messages[errorObject.type]
   if (!str) return
   const keys = Object.keys(errorObject)
   keys.forEach(prop => {
-    const re = new RegExp('(#' + prop + '#)', 'g')
+    const re = new RegExp(`(#${prop}#)`, 'g')
     str = str.replace(re, errorObject[prop])
   })
   return str
 }
 
-export function createErrorObject (ErrorType, ...rest) {
+export function createErrorObject(ErrorType, ...rest) {
   let Co = ErrorType
   if (typeof ErrorType === 'string' && errorFunctions[ErrorType]) {
     Co = errorFunctions[ErrorType]
@@ -44,58 +44,74 @@ export function createErrorObject (ErrorType, ...rest) {
 
 const errorFunctions = {}
 
-export function BoltConnectionError () {
+export function BoltConnectionError() {
   return {
     type: 'BoltConnectionError'
   }
 }
-errorFunctions['BoltConnectionError'] = BoltConnectionError
+errorFunctions.BoltConnectionError = BoltConnectionError
 
-export function BoltError (obj) {
+export function BoltError(obj) {
   return {
     type: 'BoltError',
     code: obj.fields[0].code,
     message: obj.fields[0].message
   }
 }
-errorFunctions['BoltError'] = BoltError
+errorFunctions.BoltError = BoltError
 
-export function Neo4jError (obj) {
+export function Neo4jError(obj) {
   return {
     type: 'Neo4jError',
     message: obj.message
   }
 }
-errorFunctions['Neo4jError'] = Neo4jError
+errorFunctions.Neo4jError = Neo4jError
 
-export function UnknownCommandError (error) {
+export function UnknownCommandError(error) {
   return {
     type: 'UnknownCommandError',
     cmd: error.cmd
   }
 }
-errorFunctions['UnknownCommandError'] = UnknownCommandError
+errorFunctions.UnknownCommandError = UnknownCommandError
 
-export function UndefinedError (error) {
+export function UndefinedError(error) {
   return {
     type: 'UndefinedError',
     cmd: error.cmd
   }
 }
-errorFunctions['UndefinedError'] = UndefinedError
+errorFunctions.UndefinedError = UndefinedError
 
-export function CouldNotFetchRemoteGuideError (error) {
+export function CouldNotFetchRemoteGuideError(error) {
   return {
     type: 'CouldNotFetchRemoteGuideError',
     error: error.error
   }
 }
-errorFunctions['CouldNotFetchRemoteGuideError'] = CouldNotFetchRemoteGuideError
+errorFunctions.CouldNotFetchRemoteGuideError = CouldNotFetchRemoteGuideError
 
-export function FetchURLError (error) {
+export function FetchURLError(error) {
   return {
     type: 'FetchURLError',
     error: error.error
   }
 }
-errorFunctions['FetchURLError'] = FetchURLError
+errorFunctions.FetchURLError = FetchURLError
+
+export function UnsupportedError(message) {
+  return {
+    type: 'UnsupportedError',
+    message
+  }
+}
+errorFunctions.UnsupportedError = UnsupportedError
+
+export function NotFoundError(message) {
+  return {
+    type: 'NotFoundError',
+    message
+  }
+}
+errorFunctions.NotFoundError = NotFoundError

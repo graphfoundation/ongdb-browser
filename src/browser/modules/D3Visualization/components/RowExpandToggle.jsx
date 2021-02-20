@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,22 +30,23 @@ export class RowExpandToggleComponent extends Component {
     this.setState({ rowHeight: getHeightFromElem(this.props.rowElem) })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.updateDimensions()
     window.addEventListener('resize', this.updateDimensions)
   }
-  componentWillUnmount () {
+
+  componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions)
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const rowHeight = getHeightFromElem(this.props.rowElem)
     if (this.state.rowHeight !== rowHeight) {
       this.updateDimensions()
     }
   }
 
-  render () {
+  render() {
     if (this.props.containerHeight * 1.1 < this.state.rowHeight) {
       return (
         <StyledRowToggle onClick={this.props.onClick}>

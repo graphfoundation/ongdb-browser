@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -28,3 +28,5 @@ export const CouldNotFetchRemoteGuideError =
   'Can not fetch remote guide: #error#'
 export const FetchURLError =
   'Could not fetch URL: "#error#". This could be due to the remote server policy. See your web browsers error console for more information.'
+export const UnsupportedError = '#message#'
+export const NotFoundError = '#message#'

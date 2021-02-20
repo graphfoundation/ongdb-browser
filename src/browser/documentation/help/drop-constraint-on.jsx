@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,35 +19,42 @@
  */
 
 import React from 'react'
+import ManualLink from 'browser-components/ManualLink'
 const title = 'DROP CONSTRAINT ON'
 const subtitle =
   'Drops a property constraint on a node label or relationship type'
 const category = 'schemaClauses'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The <code>DROP CONSTRAINT ON</code> clause will delete a property
       constraint
     </p>
-    <table className='table-condensed table-help'>
-      <tbody>
-        {/* <tr>
-        <th>Reference:</th>
-        <td><code><a href='{{ neo4j.version | neo4jDeveloperDoc }}/cypher/#query-constraints'>schema constraints</a></code> manual page</td>
-      </tr> */}
-        <tr>
-          <th>Related:</th>
-          <td>
-            <a help-topic='drop-constraint-on'>:help CREATE CONSTRAINT ON</a>{' '}
-            <a help-topic='schema'>:help Schema</a>{' '}
-            <a help-topic='cypher'>:help Cypher</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <section className='example'>
+    <div className="links">
+      <div className="link">
+        <p className="title">Reference</p>
+        <p className="content">
+          <ManualLink
+            chapter="cypher-manual"
+            page="/administration/constraints/"
+          >
+            Constraints
+          </ManualLink>{' '}
+          manual page
+        </p>
+      </div>
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="drop-constraint-on">:help CREATE CONSTRAINT ON</a>{' '}
+          <a help-topic="schema">:help Schema</a>{' '}
+          <a help-topic="cypher">:help Cypher</a>
+        </p>
+      </div>
+    </div>
+    <section className="example">
       <figure>
-        <pre className='code runnable standalone-example'>
+        <pre className="code runnable standalone-example">
           DROP CONSTRAINT ON (p:Person) ASSERT p.name IS UNIQUE
         </pre>
         <figcaption>
@@ -56,9 +63,9 @@ const content = (
         </figcaption>
       </figure>
     </section>
-    <section className='example'>
+    <section className="example">
       <figure>
-        <pre className='code runnable standalone-example'>
+        <pre className="code runnable standalone-example">
           DROP CONSTRAINT ON (p:Person) ASSERT exists(p.name)
         </pre>
         <figcaption>
@@ -67,9 +74,9 @@ const content = (
         </figcaption>
       </figure>
     </section>
-    <section className='example'>
+    <section className="example">
       <figure>
-        <pre className='code runnable standalone-example'>
+        <pre className="code runnable standalone-example">
           DROP CONSTRAINT ON ()-[l:LIKED]-() ASSERT exists(l.when)
         </pre>
         <figcaption>
@@ -78,7 +85,7 @@ const content = (
         </figcaption>
       </figure>
     </section>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
 import React from 'react'
 import { render } from '@testing-library/react'
 import { Provider } from 'react-redux'
@@ -42,7 +41,12 @@ describe('CypherFrame', () => {
   const store = {
     subscribe: () => {},
     dispatch: () => {},
-    getState: () => ({})
+    getState: () => ({
+      settings: {
+        maxRows: 1000,
+        maxFieldItems: 1000
+      }
+    })
   }
   test('renders accordingly from pending to success to error to success', () => {
     // Given

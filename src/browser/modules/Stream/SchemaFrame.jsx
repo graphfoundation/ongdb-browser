@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,21 +19,126 @@
  */
 
 import React, { Component } from 'react'
+import { v4 } from 'uuid'
+import { connect } from 'react-redux'
 import { withBus } from 'react-suber'
+import { replace, toUpper } from 'lodash-es'
+import semver from 'semver'
+
+import { getVersion } from 'shared/modules/dbMeta/dbMetaDuck'
 import { CYPHER_REQUEST } from 'shared/modules/cypher/cypherDuck'
 import FrameTemplate from '../Frame/FrameTemplate'
-import { StyledSchemaBody } from './styled'
+import Slide from '../Carousel/Slide'
+import {
+  StyledTable,
+  StyledTh,
+  StyledBodyTr,
+  StyledTd
+} from 'browser-components/DataTables'
+import Directives from 'browser-components/Directives'
 import { NEO4J_BROWSER_USER_ACTION_QUERY } from 'services/bolt/txMetadata'
 
+const Indexes = ({ indexes, neo4jVersion }) => {
+  if (
+    !semver.valid(neo4jVersion) ||
+    semver.satisfies(neo4jVersion, '<4.0.0-rc01')
+  ) {
+    const rows = indexes.map(index => [
+      `${replace(index.description, 'INDEX', '')} ${toUpper(index.state)} ${
+        index.type === 'node_unique_property'
+          ? '(for uniqueness constraint)'
+          : ''
+      }`
+    ])
+
+    return (
+      <SchemaTable
+        testid="schemaFrameIndexesTable"
+        header={['Indexes']}
+        rows={rows}
+      />
+    )
+  }
+
+  const rows = indexes.map(index => [
+    index.name,
+    index.type,
+    index.uniqueness,
+    index.entityType,
+    JSON.stringify(index.labelsOrTypes, null, 2),
+    JSON.stringify(index.properties, null, 2),
+    index.state
+  ])
+
+  const header = [
+    'Index Name',
+    'Type',
+    'Uniqueness',
+    'EntityType',
+    'LabelsOrTypes',
+    'Properties',
+    'State'
+  ]
+
+  return (
+    <SchemaTable testid="schemaFrameIndexesTable" header={header} rows={rows} />
+  )
+}
+
+const Constraints = ({ constraints }) => {
+  const rows = constraints.map(constraint => [
+    replace(constraint.description, 'CONSTRAINT', '')
+  ])
+
+  return (
+    <SchemaTable
+      testid="schemaFrameConstraintsTable"
+      header={['Constraints']}
+      rows={rows}
+    />
+  )
+}
+
+const SchemaTable = ({ testid, header, rows }) => {
+  const rowsOrNone =
+    rows && rows.length ? rows : [header.map((_, i) => (i === 0 ? 'None' : ''))]
+
+  const body = rowsOrNone.map(row => (
+    <StyledBodyTr className="table-row" key={v4()}>
+      {row.map(cell => (
+        <StyledTd className="table-properties" key={v4()}>
+          {cell}
+        </StyledTd>
+      ))}
+    </StyledBodyTr>
+  ))
+
+  return (
+    <StyledTable data-testid={testid}>
+      <thead>
+        <tr>
+          {header.map(cell => (
+            <StyledTh className="table-header" key={v4()}>
+              {cell}
+            </StyledTh>
+          ))}
+        </tr>
+      </thead>
+      <tbody>{body}</tbody>
+    </StyledTable>
+  )
+}
+
 export class SchemaFrame extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       indexes: [],
       constraints: []
     }
   }
-  responseHandler (name) {
+
+  responseHandler(name) {
     return res => {
       if (!res.success || !res.result || !res.result.records.length) {
         this.setState({ [name]: [] })
@@ -48,7 +153,8 @@ export class SchemaFrame extends Component {
       this.setState({ [name]: out })
     }
   }
-  componentDidMount () {
+
+  fetchData() {
     if (this.props.bus) {
       // Indexes
       this.props.bus.self(
@@ -69,6 +175,9 @@ export class SchemaFrame extends Component {
         this.responseHandler('constraints')
       )
     }
+  }
+  componentDidMount() {
+    this.fetchData()
     if (this.props.indexes) {
       this.responseHandler('indexes')(this.props.indexes)
     }
@@ -77,48 +186,41 @@ export class SchemaFrame extends Component {
     }
   }
 
-  formatIndexAndConstraints (indexes, constraints) {
-    let indexString
-    let constraintsString
-
-    if (indexes.length === 0) {
-      indexString = 'No indexes'
-    } else {
-      indexString = 'Indexes'
-      indexString += indexes.reduce((acc, index) => {
-        acc += `\n  ${index.description.replace(
-          'INDEX',
-          ''
-        )} ${index.state.toUpperCase()} ${
-          index.type === 'node_unique_property'
-            ? ' (for uniqueness constraint)'
-            : ''
-        }`
-        return acc
-      }, '')
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.frame &&
+      this.props.frame.schemaRequestId !== prevProps.frame.schemaRequestId
+    ) {
+      this.fetchData()
     }
-
-    if (constraints.length === 0) {
-      constraintsString = 'No constraints'
-    } else {
-      constraintsString = 'Constraints'
-      constraintsString += constraints.reduce((acc, constraint) => {
-        acc += `\n  ${constraint.description.replace('CONSTRAINT', '')}`
-        return acc
-      }, '')
-    }
-
-    return `${indexString}\n\n${constraintsString}\n`
   }
 
-  render () {
+  render() {
+    const { neo4jVersion } = this.props
+    const { indexes, constraints } = this.state
+    const schemaCommand =
+      semver.valid(neo4jVersion) && semver.satisfies(neo4jVersion, '<=3.4.*')
+        ? 'CALL db.schema()'
+        : 'CALL db.schema.visualization'
+
+    const frame = (
+      <Slide>
+        <Indexes indexes={indexes} neo4jVersion={neo4jVersion} />
+        <Constraints constraints={constraints} />
+        <br />
+        <p className="lead">
+          Execute the following command to visualize what's related, and how
+        </p>
+        <figure>
+          <pre className="code runnable">{schemaCommand}</pre>
+        </figure>
+      </Slide>
+    )
+
     return (
-      <StyledSchemaBody>
-        {this.formatIndexAndConstraints(
-          this.state.indexes,
-          this.state.constraints
-        )}
-      </StyledSchemaBody>
+      <div style={{ width: '100%' }}>
+        <Directives content={frame} />
+      </div>
     )
   }
 }
@@ -129,4 +231,13 @@ const Frame = props => {
   )
 }
 
-export default withBus(Frame)
+const mapStateToProps = state => ({
+  neo4jVersion: getVersion(state)
+})
+
+export default withBus(
+  connect(
+    mapStateToProps,
+    null
+  )(Frame)
+)

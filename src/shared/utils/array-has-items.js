@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -15,6 +15,6 @@
  *
  */
 
-export default function arrayHasItems (arr) {
+export default function arrayHasItems(arr) {
   return Array.isArray(arr) && arr.length > 0
 }

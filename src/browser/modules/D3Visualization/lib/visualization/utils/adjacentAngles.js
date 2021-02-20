@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,12 +19,12 @@
  */
 
 export default class AdjacentAngles {
-  findRuns (AngleList, minSeparation) {
+  findRuns(AngleList, minSeparation) {
     let p = 0
     let start = 0
     let end = 0
     const runs = []
-    const minStart = function () {
+    const minStart = function() {
       if (runs.length === 0) {
         return 0
       } else {
@@ -32,7 +32,7 @@ export default class AdjacentAngles {
       }
     }
 
-    var scanForDensePair = function () {
+    const scanForDensePair = function() {
       start = p
       end = AngleList.wrapIndex(p + 1)
       if (end === minStart()) {
@@ -47,7 +47,7 @@ export default class AdjacentAngles {
       }
     }
 
-    var extendEnd = function () {
+    const extendEnd = function() {
       if (p === minStart()) {
         return 'done'
       } else if (tooDense(start, AngleList.wrapIndex(p + 1))) {
@@ -60,7 +60,7 @@ export default class AdjacentAngles {
       }
     }
 
-    var extendStart = function () {
+    const extendStart = function() {
       const candidateStart = AngleList.wrapIndex(p - 1)
       if (tooDense(candidateStart, end) && candidateStart !== end) {
         start = candidateStart
@@ -76,7 +76,7 @@ export default class AdjacentAngles {
       }
     }
 
-    var tooDense = function (start, end) {
+    const tooDense = function(start, end) {
       const run = {
         start,
         end
@@ -92,7 +92,7 @@ export default class AdjacentAngles {
           'Warning: failed to layout arrows',
           (() => {
             const result = []
-            for (let key of Object.keys(AngleList.list || {})) {
+            for (const key of Object.keys(AngleList.list || {})) {
               const value = AngleList.list[key]
               result.push(`${key}: ${value.angle}`)
             }

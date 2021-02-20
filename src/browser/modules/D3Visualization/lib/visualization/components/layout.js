@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -40,7 +40,7 @@ const layout = {
           )
           .charge(-1000)
 
-        const newStatsBucket = function () {
+        const newStatsBucket = function() {
           const bucket = {
             layoutTime: 0,
             layoutSteps: 0
@@ -50,13 +50,13 @@ const layout = {
 
         let currentStats = newStatsBucket()
 
-        forceLayout.collectStats = function () {
+        forceLayout.collectStats = function() {
           const latestStats = currentStats
           currentStats = newStatsBucket()
           return latestStats
         }
 
-        const accelerateLayout = function () {
+        const accelerateLayout = function() {
           let maxStepsPerTick = 100
           const maxAnimationFramesPerSecond = 60
           const maxComputeTime = 1000 / maxAnimationFramesPerSecond
@@ -66,7 +66,7 @@ const layout = {
               : () => Date.now()
 
           const d3Tick = d3force.tick
-          return (d3force.tick = function () {
+          return (d3force.tick = function() {
             const startTick = now()
             let step = maxStepsPerTick
             while (step-- && now() - startTick < maxComputeTime) {
@@ -93,7 +93,7 @@ const layout = {
             pair => pair.relationships[0]
           )
 
-        forceLayout.update = function (graph, size) {
+        forceLayout.update = function(graph, size) {
           const nodes = cloneArray(graph.nodes())
           const relationships = oneRelationshipPerPairOfNodes(graph)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -37,6 +37,7 @@ export const base = {
   editorCommandColor: '#333',
   topicText: '#428BCA',
   preText: '#333',
+  promptText: '#c0c2c5',
 
   // Backgrounds
   primaryBackground: '#D2D5DA',

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -198,7 +198,7 @@ export const StyledSlide = styled.div`
   .content > p,
   .table-help {
     color: ${props => props.theme.primaryText} !important;
-    line-height: 2;
+    line-height: 1.3;
 
     th {
       padding-right: 20px;
@@ -253,7 +253,7 @@ export const StyledSlide = styled.div`
   & a {
     color: ${props => props.theme.link};
     text-decoration: ${props =>
-    props.theme.name === 'dark' ? 'underline' : 'none'};
+      props.theme.name === 'dark' ? 'underline' : 'none'};
   }
   & kbd {
     color: ${props => props.theme.primaryBackground} !important; /* inverted */

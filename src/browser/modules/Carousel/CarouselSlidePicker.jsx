@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -26,25 +26,24 @@ import {
 
 const CarouselSlidePicker = ({ slides, visibleSlide, onClickEvent }) => {
   if (!slides || slides.length === 0) return null
-  const Indicators = slides.map(
-    (_, i) =>
-      i !== visibleSlide ? (
-        <CarouselIndicatorInactive
-          key={i}
-          aria-label={i + 1}
-          onClick={() => onClickEvent(i)}
-        >
-          <span />
-        </CarouselIndicatorInactive>
-      ) : (
-        <CarouselIndicatorActive
-          key={i}
-          aria-label={i + 1}
-          onClick={() => onClickEvent(i)}
-        >
-          <span />
-        </CarouselIndicatorActive>
-      )
+  const Indicators = slides.map((_, i) =>
+    i !== visibleSlide ? (
+      <CarouselIndicatorInactive
+        key={i}
+        aria-label={i + 1}
+        onClick={() => onClickEvent(i)}
+      >
+        <span />
+      </CarouselIndicatorInactive>
+    ) : (
+      <CarouselIndicatorActive
+        key={i}
+        aria-label={i + 1}
+        onClick={() => onClickEvent(i)}
+      >
+        <span />
+      </CarouselIndicatorActive>
+    )
   )
   return <StyledUl>{Indicators}</StyledUl>
 }

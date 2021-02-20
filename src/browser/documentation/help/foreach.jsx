@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,50 +19,48 @@
  */
 
 import React from 'react'
+import ManualLink from 'browser-components/ManualLink'
 const title = 'FOREACH'
 const subtitle = 'Operate on a collection'
 const category = 'cypherHelp'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The <code>FOREACH</code> clause is used to update data within a collection
       whether components of a path, or result of aggregation.
     </p>
-    <div className='links'>
-      <div className='link'>
-        <p className='title'>Reference</p>
-        <p className='content'>
-          <code>
-            <a
-              target='_blank'
-              href='https://neo4j.com/docs/developer-manual/3.2/cypher/clauses/foreach/'
-            >
-              FOREACH
-            </a>{' '}
-            manual page
-          </code>
+    <div className="links">
+      <div className="link">
+        <p className="title">Reference</p>
+        <p className="content">
+          <ManualLink chapter="cypher-manual" page="/clauses/foreach/">
+            FOREACH
+          </ManualLink>{' '}
+          manual page
         </p>
       </div>
-      <div className='link'>
-        <p className='title'>Related</p>
-        <p className='content'>
-          <a help-topic='create'>:help CREATE</a>
-          <a help-topic='delete'>:help DELETE</a>
-          <a help-topic='set'>:help SET</a>
-          <a help-topic='cypher'>:help Cypher</a>
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="create">:help CREATE</a>
+          <a help-topic="delete">:help DELETE</a>
+          <a help-topic="set">:help SET</a>
+          <a help-topic="cypher">:help Cypher</a>
         </p>
       </div>
     </div>
-    <section className='example'>
-      <figure className='runnable'>
-        <pre>{`MATCH p = (ups)<-[DEPENDS_ON]-(device) WHERE ups.id='EPS-7001'
-FOREACH (n IN nodes(p) | SET n.available = FALSE )`}</pre>
+    <section className="example">
+      <figure className="runnable">
+        <pre>
+          {`MATCH p = (ups)<-[DEPENDS_ON]-(device) WHERE ups.id='EPS-7001'
+FOREACH (n IN nodes(p) | SET n.available = FALSE )`}
+        </pre>
         <figcaption>
           Mark all devices plugged into a failed UPS as unavailable.
         </figcaption>
       </figure>
     </section>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,22 +25,22 @@ const subtitle = 'Display a mini-deck'
 const category = 'browserUiCommands'
 const filter = ['play']
 const description = (
-  <React.Fragment>
+  <>
     <p>
       The <code>:play</code> command loads a mini-deck with either guide
       material or sample data.
     </p>
-    <table className='table-condensed table-help'>
+    <table className="table-condensed table-help">
       <tbody>
         <tr>
           <th>Usage:</th>
           <td>
-            <code>{`:play <guide | url>`}</code>
+            <code>{':play <guide | url>'}</code>
           </td>
         </tr>
       </tbody>
     </table>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content: null, description, filter }

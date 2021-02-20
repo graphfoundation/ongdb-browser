@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -35,70 +35,42 @@ import {
 } from 'shared/modules/sync/syncDuck'
 import { getBrowserSyncConfig } from 'shared/modules/settings/settingsDuck'
 import { BrowserSyncAuthIframe } from './BrowserSyncAuthIframes'
+import { deepEquals } from 'services/utils'
 
-export function hasAuthData (props) {
+export function hasAuthData(props) {
   return props.authData && props.authData.data_token
 }
 
 export class BrowserSyncInit extends Component {
-  constructor (props) {
+  constructor(props) {
     super()
     this.state = {
       pendingSignIn: false
     }
   }
-  componentWillReceiveProps (props) {
-    // We only connect when props update and not on CDM because
-    // tokens should never be in state when this component first loads
-    this.connect(props)
-  }
-  componentWillUnmount () {
-    this.syncManager && this.syncManager.signOut()
-    this.props.onSignOut()
+
+  shouldComponentUpdate(props) {
+    return !deepEquals(this.props, props)
   }
 
-  componentDidMount () {
-    BrowserSyncAuthIframe(
-      this.props.silentAuthIframeUrl,
-      this.props.delegationTokenIframeUrl,
-      this.props.onTokensReceived
-    )
-  }
-  setAuthStatus (status) {
-    this.props.onUserAuthStatusChange(status)
-  }
-  setServiceStatus (status) {
-    this.props.onServiceStatusChange(status)
-  }
-  importSyncManager = () => {
-    if (this.syncManager) return Promise.resolve(this.syncManager)
-    return import(/* webpackChunkName: "sync-manager" */ 'shared/modules/sync/SyncSignInManager').then(
-      ({ default: SyncSignInManager }) => {
-        this.syncManager = new SyncSignInManager({
-          dbConfig: this.props.config.firebaseConfig,
-          serviceReadyCallback: this.setServiceStatus.bind(this),
-          onSyncCallback: this.props.onSync,
-          disconnectCallback: () => this.setAuthStatus(SIGNED_OUT)
-        })
-        return this.syncManager
-      }
-    )
-  }
-  connect (props) {
+  componentDidUpdate() {
+    // We only connect when props update and not on CDM because
+    // tokens should never be in state when this component first loads
+
     // Sign in one time only
     if (this.state.pendingSignIn) return
 
-    if (hasAuthData(props) && props.authStatus !== SIGNED_IN) {
+    if (hasAuthData(this.props) && this.props.authStatus !== SIGNED_IN) {
       this.setState({ pendingSignIn: true }, () => {
         this.importSyncManager().then(syncManager => {
           syncManager.authenticateWithDataAndBind(
-            props.authData,
+            this.props.authData,
             data => {
               this.setAuthStatus(SIGNED_IN)
-              props.onSignIn(data)
+              this.props.onSignIn(data)
               this.setState({ pendingSignIn: false })
             },
-            e => {
+            () => {
               this.setAuthStatus(SIGNED_OUT)
               this.props.resetSyncMetadata()
               this.setState({ pendingSignIn: false })
@@ -108,7 +80,44 @@ export class BrowserSyncInit extends Component {
       })
     }
   }
-  render () {
+
+  componentWillUnmount() {
+    this.syncManager && this.syncManager.signOut()
+    this.props.onSignOut()
+  }
+
+  componentDidMount() {
+    BrowserSyncAuthIframe(
+      this.props.silentAuthIframeUrl,
+      this.props.delegationTokenIframeUrl,
+      this.props.onTokensReceived
+    )
+  }
+
+  setAuthStatus(status) {
+    this.props.onUserAuthStatusChange(status)
+  }
+
+  setServiceStatus(status) {
+    this.props.onServiceStatusChange(status)
+  }
+
+  importSyncManager = () => {
+    if (this.syncManager) return Promise.resolve(this.syncManager)
+    return import(
+      /* webpackChunkName: "sync-manager" */ 'shared/modules/sync/SyncSignInManager'
+    ).then(({ default: SyncSignInManager }) => {
+      this.syncManager = new SyncSignInManager({
+        dbConfig: this.props.config.firebaseConfig,
+        serviceReadyCallback: this.setServiceStatus.bind(this),
+        onSyncCallback: this.props.onSync,
+        disconnectCallback: () => this.setAuthStatus(SIGNED_OUT)
+      })
+      return this.syncManager
+    })
+  }
+
+  render() {
     return null
   }
 }

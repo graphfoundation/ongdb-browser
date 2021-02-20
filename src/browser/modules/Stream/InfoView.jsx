@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -28,10 +28,11 @@ import {
 } from './styled'
 
 export class InfoView extends Component {
-  shouldComponentUpdate (props, state) {
+  shouldComponentUpdate(props, state) {
     return false
   }
-  render () {
+
+  render() {
     const { title, description } = this.props
     return (
       <StyledHelpFrame>

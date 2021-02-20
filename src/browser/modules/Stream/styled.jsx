@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -177,6 +177,9 @@ export const StyledStatsBar = styled.div`
   padding-left: 24px;
   width: 100%;
 `
+export const StyledTruncatedMessage = styled.span`
+  color: orange;
+`
 
 export const StyledOneRowStatsBar = styled(StyledStatsBar)`
   height: 39px;
@@ -185,6 +188,7 @@ export const StyledOneRowStatsBar = styled(StyledStatsBar)`
 export const StyledSchemaBody = styled(StyledPreformattedArea)`
   padding-top: 6px;
 `
+
 export const StyledBodyMessage = styled.div`
   padding-top: 20px;
   line-height: 1.428;
@@ -351,8 +355,9 @@ export const StyledStrongTd = styled.td`
 
 export const StyledTd = styled.td``
 
-export const StyledHistoryList = styled.ul`
+export const UnstyledList = styled.ul`
   list-style: none;
+  width: 100%;
 `
 
 export const StyledHistoryRow = styled.li`

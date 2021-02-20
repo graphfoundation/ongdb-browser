@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -29,9 +29,16 @@ export const StyledConnectionForm = styled.form`
     opacity: 0.5;
   }
 `
+export const StyledChangePasswordForm = styled(StyledConnectionForm)`
+  flex: 1;
+`
+
 export const StyledConnectionAside = styled(StyledFrameAside)``
 export const StyledConnectionFormEntry = styled.div`
   padding-bottom: 15px;
+  &:hover .url-hint-text {
+    display: block;
+  }
 `
 export const StyledConnectionLabel = styled.label`
   display: block;
@@ -42,6 +49,71 @@ export const StyledConnectionLabel = styled.label`
 export const StyledConnectionTextInput = styled(StyledInput)`
   min-width: 200px;
   width: 44%;
+`
+export const StyledSegment = styled.div`
+  min-width: 200px;
+  width: 44%;
+  position: relative;
+  display: flex;
+  justify-content: left;
+  > select {
+    border-radius: 4px;
+    width: auto;
+    min-width: unset;
+    display: inline-block;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    text-align: right;
+    border: ${props => props.theme.formButtonBorder};
+    color: ${props => props.theme.inputText};
+    height: 34px;
+    font-size: 14px;
+    padding: 7px 12px 6px 12px;
+    vertical-align: bottom;
+  }
+  > input {
+    display: inline-block;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+    flex: 1;
+    min-width: unset;
+    width: auto;
+  }
+`
+
+export const StyledBoltUrlHintText = styled.span`
+  height: 0;
+  overflow: visible;
+  font-size: 12px;
+  display: none;
+`
+
+export const StyledSegmentedConnectionTextInput = styled(StyledInput)`
+  min-width: 200px;
+  width: 44%;
+`
+export const StyledRevealablePasswordWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  width: 44%;
+  min-width: 200px;
+
+  > input {
+    padding-right: 30px;
+    width: 100%;
+  }
+
+  > .icon {
+    position: absolute;
+    user-select: none;
+    right: 0;
+    top: 6px;
+    height: auto;
+    width: auto;
+    padding: 3px;
+    cursor: pointer;
+  }
 `
 
 export const StyledConnectionSelect = styled(StyledSelect)`
@@ -74,3 +146,5 @@ export const StyledCode = styled.code`
     color: #c7254e !important;
   }
 `
+
+export const StyledDbsRow = styled.li``

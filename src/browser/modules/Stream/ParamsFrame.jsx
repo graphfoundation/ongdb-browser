@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -33,18 +33,18 @@ const ParamsFrame = ({ frame }) => {
   const contents = (
     <PaddedDiv>
       <Render if={frame.success !== false}>
-        <pre data-testid='rawParamData'>
+        <pre data-testid="rawParamData">
           {stringifyMod(params, stringModifier, true)}
         </pre>
       </Render>
       <div style={{ marginTop: '20px' }}>
-        See <AutoExecButton cmd='help param' /> for usage of the{' '}
+        See <AutoExecButton cmd="help param" /> for usage of the{' '}
         <code>:param</code> command.
       </div>
     </PaddedDiv>
   )
   const statusbar =
-    typeof frame['success'] === 'undefined' ? null : (
+    typeof frame.success === 'undefined' ? null : (
       <StyledStatsBar>
         <Ellipsis>
           <Render if={frame.success === true}>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -17,8 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* global describe, test, expect */
 
 import React from 'react'
 import { render } from '@testing-library/react'
@@ -55,7 +53,7 @@ describe('WarningsViews', () => {
                 }
               }
             ],
-            statement: {
+            query: {
               text: 'EXPLAIN MATCH xx3'
             }
           }
@@ -93,7 +91,7 @@ describe('WarningsViews', () => {
                 }
               }
             ],
-            statement: {
+            query: {
               text: 'EXPLAIN MATCH zz3'
             }
           }

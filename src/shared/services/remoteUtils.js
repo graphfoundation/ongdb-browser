@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,8 +22,8 @@
 import { getUrlInfo } from 'services/utils'
 
 const removeJavascriptFromHref = string => {
-  string = string.replace(/href=".*javascript:[^"]*"/, 'href=""')
-  return string.replace(/href='.*javascript:[^']*'/, "href=''")
+  const localString = string.replace(/href=".*javascript:[^"]*"/, 'href=""')
+  return localString.replace(/href='.*javascript:[^']*'/, "href=''")
 }
 const removeScriptTags = string =>
   string.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*(<\/script>)?/gi, '')
@@ -33,11 +33,11 @@ const removeOnHandlersFromHtml = string =>
     ''
   )
 
-export function cleanHtml (string) {
+export function cleanHtml(string) {
   if (typeof string !== 'string') return string
-  string = removeOnHandlersFromHtml(string)
-  string = removeScriptTags(string)
-  return removeJavascriptFromHref(string)
+  const stringWithoutHandlers = removeOnHandlersFromHtml(string)
+  const stringWithoutScript = removeScriptTags(stringWithoutHandlers)
+  return removeJavascriptFromHref(stringWithoutScript)
 }
 
 export const authHeaderFromCredentials = (username, password) => {

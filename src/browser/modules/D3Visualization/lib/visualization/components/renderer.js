@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,16 +20,13 @@
 export default class Renderer {
   onGraphChange = null
   onTick = null
-  constructor (opts) {
-    if (opts == null) {
-      opts = {}
-    }
-    Object.assign(this, opts)
+  constructor(opts) {
+    Object.assign(this, opts == null ? {} : opts)
     if (this.onGraphChange === null) {
-      this.onGraphChange = function () {}
+      this.onGraphChange = function() {}
     }
     if (this.onTick === null) {
-      this.onTick = function () {}
+      this.onTick = function() {}
     }
   }
 }

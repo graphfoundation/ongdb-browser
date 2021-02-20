@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,13 +25,6 @@ export const KERBEROS = 'KERBEROS'
 export const NATIVE = 'NATIVE'
 export const NO_AUTH = 'NO_AUTH'
 
-export const getEncryptionMode = options => {
-  if (options && typeof options['encrypted'] !== 'undefined') {
-    return options.encrypted
-  }
-  return location.protocol === 'https:'
-}
-
 export const getDiscoveryEndpoint = url => {
   const info = getUrlInfo(url || 'http://localhost:7474/')
   return `${info.protocol}//${info.host}/`
@@ -41,3 +34,12 @@ export const isConfigValTruthy = val =>
   [true, 'true', 'yes', 1, '1'].indexOf(val) > -1
 export const isConfigValFalsy = val =>
   [false, 'false', 'no', 0, '0'].indexOf(val) > -1
+
+export const buildTxFunctionByMode = session => {
+  if (!session) {
+    return null
+  }
+  return session._mode !== 'READ'
+    ? session.writeTransaction.bind(session)
+    : session.readTransaction.bind(session)
+}

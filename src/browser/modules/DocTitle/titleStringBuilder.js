@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,19 +21,20 @@
 const asTitleString = connectionData => {
   const buildTitleFromConnectionData = () => {
     if (!connectionData) return null
+    const dbPath = connectionData.db ? `/${connectionData.db}` : ''
     if (connectionData.username && connectionData.host) {
-      return `${connectionData.username}@${connectionData.host}`
+      return `${connectionData.username}@${connectionData.host}${dbPath}`
     }
     if (connectionData.username) {
       return connectionData.username
     }
     if (connectionData.host) {
-      return connectionData.host
+      return `${connectionData.host}${dbPath}`
     }
     return null
   }
   const builtTitle = buildTitleFromConnectionData()
-  return (builtTitle ? builtTitle + ' - ' : '') + 'Neo4j Browser'
+  return `${builtTitle ? `${builtTitle} - ` : ''}Neo4j Browser`
 }
 
 export default asTitleString

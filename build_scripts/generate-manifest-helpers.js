@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,7 +20,7 @@
 
 const fs = require('fs')
 
-function loadDataFromFile (file) {
+function loadDataFromFile(file) {
   try {
     const obj = JSON.parse(fs.readFileSync(file, 'utf8'))
     return obj
@@ -29,14 +29,14 @@ function loadDataFromFile (file) {
   }
 }
 
-function buildTargetObject (data, dataProp) {
+function buildTargetObject(data, dataProp) {
   const out = {}
   const keys = data[dataProp] || []
   keys.forEach(key => (out[key] = data[key]))
   return out
 }
 
-function mergeObjects (source, target) {
+function mergeObjects(source, target) {
   return { ...target, ...source }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,14 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global Cypress, cy, test, expect, before */
+/* global Cypress, cy, before */
 
 describe(':param in Browser', () => {
-  before(function () {
+  before(function() {
     cy.visit(Cypress.config('url'))
       .title()
       .should('include', 'Neo4j Browser')
-    cy.wait(5000)
+    cy.wait(3000)
   })
   it('handles :param without web worker', () => {
     cy.executeCommand(':config userCypherThread: false').then(() => {
@@ -41,15 +41,12 @@ describe(':param in Browser', () => {
   })
 })
 
-function runTests () {
+function runTests() {
   let setParamQ
   let getParamQ
   // it('can connect', () => {
   const password = Cypress.config('password')
-  cy.connect(
-    'neo4j',
-    password
-  )
+  cy.connect('neo4j', password)
   // })
   // it(':param x => 1+1', () => {
   // Set param
@@ -67,9 +64,7 @@ function runTests () {
   // it(':param x => {prop: 1} multi line', () => {
   // Set param
   cy.executeCommand(':clear')
-  setParamQ = `:param [x] => {
-    RETURN {{}prop: 1} AS x
-  }`
+  setParamQ = `:param [x] => {{}{shift}{enter}RETURN {{}prop: 1} AS x{enter}}`
   cy.executeCommand(setParamQ)
   cy.resultContains('"prop": 1')
   // return param
@@ -113,9 +108,9 @@ function runTests () {
   if (Cypress.config('serverVersion') >= 3.4) {
     // it(":param x => point({crs: 'wgs-84', latitude: 57.7346, longitude: 12.9082})", () => {
     cy.executeCommand(':clear')
-    let query =
-      ":param x => point({{}crs: 'wgs-84', latitude: 57.7346, longitude: 12.9082})"
-    cy.executeCommand(query)
+    const query =
+      ":param x => point({crs: 'wgs-84', latitude: 57.7346, longitude: 12.9082})"
+    cy.executeCommand(query, { parseSpecialCharSequences: false })
 
     cy.get('[data-testid="rawParamData"]', { timeout: 20000 })
       .first()

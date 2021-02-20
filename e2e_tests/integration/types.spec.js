@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,21 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global Cypress, cy, test, expect, before */
+/* global Cypress, cy, before */
 
 describe('Types in Browser', () => {
-  before(function () {
+  before(function() {
     cy.visit(Cypress.config('url'))
       .title()
       .should('include', 'Neo4j Browser')
-    cy.wait(5000)
+    cy.wait(3000)
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect(
-      'neo4j',
-      password
-    )
+    cy.connect('neo4j', password)
   })
   if (Cypress.config('serverVersion') >= 3.4) {
     it('presents the point type correctly', () => {
@@ -44,7 +41,7 @@ describe('Types in Browser', () => {
       cy.resultContains('point({srid:4326, x:12.78, y:56.7})')
 
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│point({srid:4326, x:12.78, y:56.7})')
@@ -58,7 +55,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"2015-07-20T15:11:42[Europe/Stockholm]"')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"2015-07-20T15:11:42[Europe/Stockholm]"')
@@ -72,7 +69,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"2015-07-20T15:11:42"')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"2015-07-20T15:11:42"')
@@ -85,7 +82,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"2015-07-20"')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"2015-07-20"')
@@ -99,7 +96,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"P14M3DT14706S"')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"P14M3DT14706S"')
@@ -113,7 +110,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"14:03:04')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"14:03:04')
@@ -126,7 +123,7 @@ describe('Types in Browser', () => {
 
       cy.resultContains('"14:03:04"')
       // Go to ascii view
-      cy.get('[data-testid="cypherFrameSidebarAscii"')
+      cy.get('[data-testid="cypherFrameSidebarAscii"]')
         .first()
         .click()
       cy.resultContains('│"14:03:04"')

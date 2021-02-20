@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,7 +19,7 @@
  */
 import d3 from 'd3'
 
-const measureUsingCanvas = function (text, font) {
+const measureUsingCanvas = function(text, font) {
   const canvasSelection = d3.select('canvas#textMeasurementCanvas').data([this])
   canvasSelection
     .enter()
@@ -33,7 +33,7 @@ const measureUsingCanvas = function (text, font) {
   return context.measureText(text).width
 }
 
-const cache = function () {
+const cache = function() {
   const cacheSize = 10000
   const map = {}
   const list = []
@@ -52,7 +52,7 @@ const cache = function () {
   }
 }
 
-export default function (text, fontFamily, fontSize) {
+export default function(text, fontFamily, fontSize) {
   const font = `normal normal normal ${fontSize}px/normal ${fontFamily}`
   return cache()(text + font, () => measureUsingCanvas(text, font))
 }

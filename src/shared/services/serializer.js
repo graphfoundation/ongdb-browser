@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -25,7 +25,7 @@ const csvEscape = str => {
   if (!isString(str)) return str
   if (isEmptyString(str)) return '""'
   if (hasQuotes(str) || hasDelimiterChars(str)) {
-    return '"' + str.replace(/"/g, '""') + '"'
+    return `"${str.replace(/"/g, '""')}"`
   }
   return str
 }
@@ -47,7 +47,7 @@ const csvChain = input =>
 
 export const CSVSerializer = cols => {
   const _cols = cols
-  let _data = []
+  const _data = []
   const append = row => {
     const emptyRowInOneCol = isEmpty(row) && _cols.length === 1
     if (emptyRowInOneCol) return _data.push(row)

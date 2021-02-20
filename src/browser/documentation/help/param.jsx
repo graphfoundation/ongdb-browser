@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,11 +19,12 @@
  */
 
 import React from 'react'
+import ParamsOnSystemDb from './partials/params-on-systemdb'
 const title = 'Set a parameter'
 const subtitle = 'Set a parameter to be sent with queries.'
 const category = 'cypherQueries'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The
       <code>:param name => 'Stella'</code> command will define a parameter named
@@ -46,15 +47,16 @@ const content = (
       Cypher query example with a param:
       <code>MATCH (n:Person) WHERE n.name = $name</code>
     </p>
-    <div className='links'>
-      <div className='link'>
-        <p className='title'>Related</p>
-        <p className='content'>
-          <a help-topic='params'>:help params</a>
+    <ParamsOnSystemDb />
+    <div className="links">
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="params">:help params</a>
         </p>
       </div>
     </div>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

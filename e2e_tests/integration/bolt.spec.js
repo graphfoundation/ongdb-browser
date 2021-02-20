@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,23 +18,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { isEnterpriseEdition } from '../support/utils'
+
 /* global Cypress, cy, test, expect, before */
 
 describe('Bolt connections', () => {
-  before(function () {
+  before(function() {
     cy.visit(Cypress.config('url'))
       .title()
       .should('include', 'Neo4j Browser')
-    cy.wait(5000)
+    cy.wait(3000)
   })
   it('can show connection error', () => {
     const password = 'unlikely password'
-    cy.connect(
-      'neo4j',
-      password,
-      undefined,
-      false
-    )
+    cy.connect('neo4j', password, undefined, false)
   })
   it('show "no connection" error when not using web workers', () => {
     cy.executeCommand(':clear')
@@ -49,12 +46,7 @@ describe('Bolt connections', () => {
     cy.resultContains('No connection found, did you connect to Neo4j')
   })
   it('does not show the "Reconnect" banner when trying to connect', () => {
-    cy.connect(
-      'neo4j',
-      'x',
-      'bolt://localhost:7685',
-      false
-    ) // Non open port
+    cy.connect('neo4j', 'x', 'bolt://localhost:7685', false) // Non open port
     cy.wait(10000)
     cy.get('[data-testid="reconnectBanner"]').should('not.be.visible')
     cy.get('[data-testid="disconnectedBanner"]').should('be.visible')
@@ -62,44 +54,59 @@ describe('Bolt connections', () => {
       .and('contain', 'Database access not available')
       .should('not.contain', 'Connection lost')
   })
-  it('users with no role can connect', () => {
-    cy.executeCommand(':clear')
-    const password = Cypress.config('password')
-    cy.connect(
-      'neo4j',
-      password
-    )
-    cy.executeCommand('CALL dbms.security.deleteUser("no-roles")')
-    cy.executeCommand(':clear')
-    cy.executeCommand('CALL dbms.security.createUser("no-roles", "pw", true)')
-    cy.executeCommand(':server disconnect')
-    cy.executeCommand(':clear')
-    cy.executeCommand(':server connect')
+  if (Cypress.config('serverVersion') >= 3.5 && isEnterpriseEdition()) {
+    it('send tx metadata with queries', () => {
+      cy.executeCommand(':clear')
+      const password = Cypress.config('password')
+      cy.connect('neo4j', password)
 
-    // Make sure initial pw set works
-    cy.setInitialPassword(
-      '.',
-      'pw',
-      'no-roles',
-      Cypress.config('boltUrl'),
-      true
-    )
+      cy.executeCommand(':queries')
+      cy.resultContains('"type": "user-action"')
+    })
+  }
 
-    // Try regular connect
-    cy.executeCommand(':server disconnect')
-    cy.connect(
-      'no-roles',
-      '.'
-    )
-  })
-  it('displays user info in sidebar (when connected)', () => {
-    cy.executeCommand(':clear')
-    cy.get('[data-testid="drawerDB"]').click()
-    cy.get('[data-testid="user-details-username"]').should(
-      'contain',
-      'no-roles'
-    )
-    cy.get('[data-testid="user-details-roles"]').should('contain', '-')
-    cy.get('[data-testid="drawerDB"]').click()
-  })
+  if (isEnterpriseEdition()) {
+    it('users with no role can connect and shows up in sidebar', () => {
+      cy.executeCommand(':clear')
+      const password = Cypress.config('password')
+      cy.connect('neo4j', password)
+
+      cy.createUser('noroles', 'pw', true)
+      cy.executeCommand(':server disconnect')
+      cy.executeCommand(':clear')
+      cy.executeCommand(':server connect')
+
+      // Make sure initial pw set works
+      cy.setInitialPassword(
+        '.',
+        'pw',
+        'noroles',
+        Cypress.config('boltUrl'),
+        true
+      )
+
+      // Try regular connect
+      cy.executeCommand(':server disconnect')
+      cy.connect('noroles', '.')
+
+      // Check sidebar
+      cy.get('[data-testid="drawerDBMS"]').click()
+      cy.get('[data-testid="user-details-username"]').should(
+        'contain',
+        'noroles'
+      )
+      if (Cypress.config('serverVersion') <= 4.0) {
+        cy.get('[data-testid="user-details-roles"]').should('contain', '-')
+      }
+      if (Cypress.config('serverVersion') === 4.1) {
+        cy.get('[data-testid="user-details-roles"]').should('contain', 'PUBLIC')
+      }
+      cy.get('[data-testid="drawerDBMS"]').click()
+
+      cy.executeCommand(':server disconnect')
+      cy.executeCommand(':server connect')
+      cy.connect('neo4j', password)
+      cy.dropUser('noroles')
+    })
+  }
 })

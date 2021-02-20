@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -24,14 +24,14 @@ const subtitle = 'Using Bolt in Neo4j Browser'
 const category = 'browserUiCommands'
 const filter = ['bolt']
 const description = (
-  <React.Fragment>
+  <>
     <p>
       By default, Neo4j Browser communicates with the database via Bolt using
       the Neo4j JavaScript Driver. However it is possible to turn off Bolt and
       communicate with the database using HTTP(S) as in older versions of Neo4j
       Browser.
     </p>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content: null, description, filter }

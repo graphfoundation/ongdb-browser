@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,12 +30,10 @@ const initialState = {}
 export const getParams = state => state[NAME]
 
 // Reducer
-export default function reducer (state = initialState, action) {
-  if (action.type === APP_START) {
-    state = { ...initialState, ...state }
-  }
-
+export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case APP_START:
+      return { ...initialState, ...state }
     case UPDATE:
       return { ...state, ...action.params }
     case REPLACE:

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -31,6 +31,7 @@ import {
   disconnectEpic,
   startupConnectEpic,
   disconnectSuccessEpic,
+  verifyConnectionCredentialsEpic,
   startupConnectionSuccessEpic,
   startupConnectionFailEpic,
   detectActiveConnectionChangeEpic,
@@ -38,15 +39,16 @@ import {
   switchConnectionEpic,
   switchConnectionSuccessEpic,
   switchConnectionFailEpic,
+  initialSwitchConnectionFailEpic,
   silentDisconnectEpic,
-  verifyConnectionCredentialsEpic
+  useDbEpic
 } from './modules/connections/connectionsDuck'
 import {
   dbMetaEpic,
   serverConfigEpic,
+  serverInfoEpic,
   clearMetaOnDisconnectEpic
 } from './modules/dbMeta/dbMetaDuck'
-import { jmxEpic } from './modules/jmx/jmxDuck'
 import { cancelRequestEpic } from './modules/requests/requestsDuck'
 import {
   discoveryOnStartupEpic,
@@ -60,7 +62,10 @@ import {
   clusterCypherRequestEpic,
   handleForcePasswordChangeEpic
 } from './modules/cypher/cypherDuck'
-import { featuresDiscoveryEpic } from './modules/features/featuresDuck'
+import {
+  featuresDiscoveryEpic,
+  clearOnDisconnectEpic
+} from './modules/features/featuresDuck'
 import {
   syncItemsEpic,
   clearSyncEpic,
@@ -95,19 +100,21 @@ export default combineEpics(
   switchConnectionEpic,
   switchConnectionSuccessEpic,
   switchConnectionFailEpic,
+  initialSwitchConnectionFailEpic,
   retainCredentialsSettingsEpic,
   connectEpic,
-  jmxEpic,
   disconnectEpic,
   silentDisconnectEpic,
-  verifyConnectionCredentialsEpic,
+  useDbEpic,
   startupConnectEpic,
   disconnectSuccessEpic,
+  verifyConnectionCredentialsEpic,
   startupConnectionSuccessEpic,
   startupConnectionFailEpic,
   detectActiveConnectionChangeEpic,
   dbMetaEpic,
   serverConfigEpic,
+  serverInfoEpic,
   clearMetaOnDisconnectEpic,
   cancelRequestEpic,
   discoveryOnStartupEpic,
@@ -119,6 +126,7 @@ export default combineEpics(
   clearLocalstorageEpic,
   handleForcePasswordChangeEpic,
   featuresDiscoveryEpic,
+  clearOnDisconnectEpic,
   syncFavoritesEpic,
   loadFavoritesFromSyncEpic,
   loadGrassFromSyncEpic,

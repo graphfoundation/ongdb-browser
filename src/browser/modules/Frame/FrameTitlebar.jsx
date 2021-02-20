@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -73,16 +73,16 @@ import arrayHasItems from 'shared/utils/array-has-items'
 const JSON_EXPORT_INDENT = 2
 
 class FrameTitlebar extends Component {
-  hasData () {
+  hasData() {
     return this.props.numRecords > 0
   }
 
-  exportCSV (records) {
+  exportCSV(records) {
     const exportData = stringifyResultArray(
       csvFormat,
       transformResultRecordsToResultArray(records)
     )
-    let data = exportData.slice()
+    const data = exportData.slice()
     const csv = CSVSerializer(data.shift())
     csv.appendRows(data)
     var blob = new Blob([csv.output()], {
@@ -114,7 +114,7 @@ class FrameTitlebar extends Component {
     }
   }
 
-  exportJSON (records) {
+  exportJSON(records) {
     const data = JSON.stringify(
       map(records, recordToJSONMapper),
       null,
@@ -127,17 +127,17 @@ class FrameTitlebar extends Component {
     saveAs(blob, 'records.json')
   }
 
-  exportPNG () {
+  exportPNG() {
     const { svgElement, graphElement, type } = this.props.visElement
     downloadPNGFromSVG(svgElement, graphElement, type)
   }
 
-  exportSVG () {
+  exportSVG() {
     const { svgElement, graphElement, type } = this.props.visElement
     downloadSVG(svgElement, graphElement, type)
   }
 
-  exportGrass (data) {
+  exportGrass(data) {
     var blob = new Blob([data], {
       type: 'text/plain;charset=utf-8'
     })
@@ -145,7 +145,7 @@ class FrameTitlebar extends Component {
   }
 
   canExport = () => {
-    let props = this.props
+    const props = this.props
     const { frame = {} } = props
 
     return (
@@ -155,23 +155,23 @@ class FrameTitlebar extends Component {
     )
   }
 
-  canExportTXT () {
+  canExportTXT() {
     const { frame = {} } = this.props
 
     return frame.type === 'history' && arrayHasItems(frame.result)
   }
 
-  render () {
-    let props = this.props
+  render() {
+    const props = this.props
     const { frame = {} } = props
     const fullscreenIcon = props.fullscreen ? <ContractIcon /> : <ExpandIcon />
     const expandCollapseIcon = props.collapse ? <DownIcon /> : <UpIcon />
     const cmd = removeComments(frame.cmd)
     return (
       <StyledFrameTitleBar>
-        <StyledFrameCommand>
+        <StyledFrameCommand selectedDb={frame.useDb}>
           <DottedLineHover
-            data-testid='frameCommand'
+            data-testid="frameCommand"
             onClick={() => props.onTitlebarClick(frame.cmd)}
           >
             {cmd}
@@ -179,20 +179,10 @@ class FrameTitlebar extends Component {
         </StyledFrameCommand>
         <StyledFrameTitlebarButtonSection>
           <Render if={this.canExport()}>
-            <DropdownButton data-testid='frame-export-dropdown'>
+            <DropdownButton data-testid="frame-export-dropdown">
               <DownloadIcon />
               <DropdownList>
                 <DropdownContent>
-                  <Render if={props.visElement}>
-                    <span>
-                      <DropdownItem onClick={() => this.exportPNG()}>
-                        Export PNG
-                      </DropdownItem>
-                      <DropdownItem onClick={() => this.exportSVG()}>
-                        Export SVG
-                      </DropdownItem>
-                    </span>
-                  </Render>
                   <Render if={this.hasData() && frame.type === 'cypher'}>
                     <DropdownItem
                       onClick={() => this.exportCSV(props.getRecords())}
@@ -205,6 +195,14 @@ class FrameTitlebar extends Component {
                       Export JSON
                     </DropdownItem>
                   </Render>
+                  <Render if={props.visElement}>
+                    <DropdownItem onClick={() => this.exportPNG()}>
+                      Export PNG
+                    </DropdownItem>
+                    <DropdownItem onClick={() => this.exportSVG()}>
+                      Export SVG
+                    </DropdownItem>
+                  </Render>
                   <Render if={this.canExportTXT()}>
                     <DropdownItem onClick={this.exportTXT}>
                       Export TXT
@@ -212,7 +210,7 @@ class FrameTitlebar extends Component {
                   </Render>
                   <Render if={this.hasData() && frame.type === 'style'}>
                     <DropdownItem
-                      data-testid='exportGrassButton'
+                      data-testid="exportGrassButton"
                       onClick={() => this.exportGrass(props.getRecords())}
                     >
                       Export GraSS
@@ -223,7 +221,7 @@ class FrameTitlebar extends Component {
             </DropdownButton>
           </Render>
           <FrameButton
-            title='Pin at top'
+            title="Pin at top"
             onClick={() => {
               props.togglePin()
               props.togglePinning(frame.id, frame.isPinned)
@@ -250,19 +248,15 @@ class FrameTitlebar extends Component {
           >
             {expandCollapseIcon}
           </FrameButton>
-          <Render if={['cypher', 'style'].includes(frame.type)}>
-            <FrameButton
-              data-testid='rerunFrameButton'
-              title='Rerun'
-              onClick={() =>
-                props.onReRunClick(frame.cmd, frame.id, frame.requestId)
-              }
-            >
-              <RefreshIcon />
-            </FrameButton>
-          </Render>
           <FrameButton
-            title='Close'
+            data-testid="rerunFrameButton"
+            title="Rerun"
+            onClick={() => props.onReRunClick(frame)}
+          >
+            <RefreshIcon />
+          </FrameButton>
+          <FrameButton
+            title="Close"
             onClick={() =>
               props.onCloseClick(frame.id, frame.requestId, props.request)
             }
@@ -297,11 +291,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       dispatch(remove(id))
     },
-    onReRunClick: (cmd, id, requestId) => {
+    onReRunClick: ({ cmd, useDb, id, requestId }) => {
       if (requestId) {
         dispatch(cancelRequest(requestId))
       }
-      dispatch(commands.executeCommand(cmd, id))
+      dispatch(commands.executeCommand(cmd, { id, useDb, isRerun: true }))
     },
     togglePinning: (id, isPinned) => {
       isPinned ? dispatch(unpin(id)) : dispatch(pin(id))

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,51 +19,72 @@
  */
 
 import Rx from 'rxjs'
-
+import neo4j from 'neo4j-driver'
 import bolt from 'services/bolt/bolt'
 import { getActiveConnectionData } from 'shared/modules/connections/connectionsDuck'
 import { getCausalClusterAddresses } from './queriesProcedureHelper'
-import { getEncryptionMode } from 'services/bolt/boltHelpers'
+import { buildTxFunctionByMode } from 'services/bolt/boltHelpers'
 import { flatten } from 'services/utils'
 import { shouldUseCypherThread } from 'shared/modules/settings/settingsDuck'
 import { getUserTxMetadata } from 'services/bolt/txMetadata'
-import { canSendTxMetadata } from '../features/versionedFeatures'
+import {
+  canSendTxMetadata,
+  changeUserPasswordQuery,
+  driverDatabaseSelection,
+  FIRST_MULTI_DB_SUPPORT,
+  FIRST_NO_MULTI_DB_SUPPORT
+} from '../features/versionedFeatures'
+import {
+  updateServerInfo,
+  serverInfoQuery,
+  getVersion
+} from '../dbMeta/dbMetaDuck'
 
 const NAME = 'cypher'
-export const CYPHER_REQUEST = NAME + '/REQUEST'
-export const AD_HOC_CYPHER_REQUEST = NAME + '/AD_HOC_REQUEST'
-export const CLUSTER_CYPHER_REQUEST = NAME + '/CLUSTER_REQUEST'
-export const FORCE_CHANGE_PASSWORD = NAME + '/FORCE_CHANGE_PASSWORD'
+export const CYPHER_REQUEST = `${NAME}/REQUEST`
+export const AD_HOC_CYPHER_REQUEST = `${NAME}/AD_HOC_REQUEST`
+export const CLUSTER_CYPHER_REQUEST = `${NAME}/CLUSTER_REQUEST`
+export const FORCE_CHANGE_PASSWORD = `${NAME}/FORCE_CHANGE_PASSWORD`
 
 // Helpers
-const adHocSession = (driver, resolve, action, host) => {
-  const session = driver.session()
-  session
-    .run(action.query, action.parameters)
-    .then(r => {
-      driver.close()
-      resolve({
-        type: action.$$responseChannel,
-        success: true,
-        result: Object.assign({}, r, { meta: action.host })
-      })
+const queryAndResolve = async (driver, action, host, useDb = {}) => {
+  return new Promise(resolve => {
+    const session = driver.session({
+      defaultAccessMode: neo4j.session.WRITE,
+      ...useDb
     })
-    .catch(e => {
-      driver.close()
-      resolve({
-        type: action.$$responseChannel,
-        success: false,
-        error: e,
-        host
+    const txFn = buildTxFunctionByMode(session)
+    txFn(tx => tx.run(action.query, action.parameters))
+      .then(r => {
+        session.close()
+        resolve({
+          type: action.$$responseChannel,
+          success: true,
+          result: {
+            ...r,
+            meta: action.host
+          }
+        })
       })
-    })
+      .catch(e => {
+        session.close()
+        resolve({
+          type: action.$$responseChannel,
+          success: false,
+          error: e,
+          host
+        })
+      })
+  })
 }
-const callClusterMember = (connection, action, store) => {
-  return new Promise((resolve, reject) => {
+const callClusterMember = async (connection, action, store) => {
+  return new Promise(resolve => {
     bolt
       .directConnect(connection, undefined, undefined, false) // Ignore validation errors
-      .then(driver => {
-        adHocSession(driver, resolve, action, connection.host)
+      .then(async driver => {
+        const res = await queryAndResolve(driver, action, connection.host)
+        driver.close()
+        resolve(res)
       })
       .catch(error => {
         resolve({
@@ -85,7 +106,8 @@ export const cypherRequestEpic = (some$, store) =>
         useCypherThread: shouldUseCypherThread(store.getState()),
         ...getUserTxMetadata(action.queryType || null)({
           hasServerSupport: canSendTxMetadata(store.getState())
-        })
+        }),
+        useDb: action.useDb
       })
       .then(r => ({ type: action.$$responseChannel, success: true, result: r }))
       .catch(e => ({
@@ -98,7 +120,10 @@ export const cypherRequestEpic = (some$, store) =>
 export const adHocCypherRequestEpic = (some$, store) =>
   some$.ofType(AD_HOC_CYPHER_REQUEST).mergeMap(action => {
     const connection = getActiveConnectionData(store.getState())
-    const tempConnection = Object.assign({}, connection, { host: action.host })
+    const tempConnection = {
+      ...connection,
+      host: action.host
+    }
     return callClusterMember(tempConnection, action, store)
   })
 
@@ -121,7 +146,10 @@ export const clusterCypherRequestEpic = (some$, store) =>
             action,
             observables: addresses.map(host => {
               const connection = getActiveConnectionData(store.getState())
-              const tempConnection = Object.assign({}, connection, { host })
+              const tempConnection = {
+                ...connection,
+                host
+              }
               return Rx.Observable.fromPromise(
                 callClusterMember(tempConnection, action, store)
               )
@@ -176,16 +204,54 @@ export const clusterCypherRequestEpic = (some$, store) =>
 export const handleForcePasswordChangeEpic = (some$, store) =>
   some$.ofType(FORCE_CHANGE_PASSWORD).mergeMap(action => {
     if (!action.$$responseChannel) return Rx.Observable.of(null)
+
     return new Promise((resolve, reject) => {
       bolt
         .directConnect(
           action,
-          { encrypted: getEncryptionMode(action) },
+          {},
           undefined,
           false // Ignore validation errors
         )
-        .then(driver => {
-          adHocSession(driver, resolve, action)
+        .then(async driver => {
+          // Let's establish what server version we're connected to if not in state
+          if (!getVersion(store.getState())) {
+            const versionRes = await queryAndResolve(
+              driver,
+              { ...action, query: serverInfoQuery, parameters: {} },
+              undefined
+            )
+            // What does the driver say, does the server support multidb?
+            const supportsMultiDb = await driver.supportsMultiDb()
+            if (!versionRes.success) {
+              // This is just a placeholder version to figure out how to
+              // change password. This will be updated to the correct server version
+              // when we're connected and dbMetaEpic runs
+              const fakeVersion = supportsMultiDb
+                ? FIRST_MULTI_DB_SUPPORT
+                : FIRST_NO_MULTI_DB_SUPPORT
+              versionRes.result = {
+                records: [],
+                summary: { server: { version: `placeholder/${fakeVersion}` } }
+              }
+            }
+            store.dispatch(updateServerInfo(versionRes.result))
+          }
+          // Figure out how to change the pw on that server version
+          const queryObj = changeUserPasswordQuery(
+            store.getState(),
+            action.password,
+            action.newPassword
+          )
+          // and then change the password
+          const res = await queryAndResolve(
+            driver,
+            { ...action, ...queryObj },
+            undefined,
+            driverDatabaseSelection(store.getState(), 'system') // target system db if it has multi-db support
+          )
+          driver.close()
+          resolve(res)
         })
         .catch(e =>
           resolve({ type: action.$$responseChannel, success: false, error: e })

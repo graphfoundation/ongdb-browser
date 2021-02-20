@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -112,33 +112,35 @@ export const TextInput = props => {
 
 export const CheckboxSelector = props => {
   return props.checked ? (
-    <StyledCheckbox type='checkbox' {...props} />
+    <StyledCheckbox type="checkbox" {...props} />
   ) : (
-    <StyledCheckbox type='checkbox' {...props} />
+    <StyledCheckbox type="checkbox" {...props} />
   )
 }
 
 export class RadioSelector extends Component {
   state = {}
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state.selectedValue = this.props.selectedValue || null
   }
-  isSelectedValue (option) {
+
+  isSelectedValue(option) {
     return option === this.state.selectedValue
   }
-  render () {
+
+  render() {
     return (
       <form>
         {this.props.options.map(option => {
           return (
             <StyledRadioEntry key={option}>
               <StyledRadio
-                type='radio'
+                type="radio"
                 value={option}
                 checked={this.isSelectedValue(option)}
                 onChange={event => {
-                  this.state.selectedValue = option
+                  this.setState({ selectedValue: option })
                   this.props.onChange(event)
                 }}
               />

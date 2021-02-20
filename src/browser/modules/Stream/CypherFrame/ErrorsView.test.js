@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -17,8 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* global describe, test, expect */
 
 import React from 'react'
 import { render } from '@testing-library/react'
@@ -70,6 +68,25 @@ describe('ErrorsViews', () => {
       // Then
       expect(container).toMatchSnapshot()
       expect(getByText('List available procedures')).not.toBeUndefined()
+    })
+    test('displays procedure link if periodic commit error', () => {
+      // Given
+      const props = {
+        result: {
+          code: 'Neo.ClientError.Statement.SemanticError',
+          message:
+            'Executing queries that use periodic commit in an open transaction is not possible.'
+        }
+      }
+
+      // When
+      const { getByText } = render(<ErrorsView {...props} />)
+
+      // Then
+      // We need to split up because of the use of <code> tags in the rendered document
+      expect(getByText(/info on the/i)).not.toBeUndefined()
+      expect(getByText(':auto')).not.toBeUndefined()
+      expect(getByText('(auto-committing transactions)')).not.toBeUndefined()
     })
   })
   describe('ErrorsStatusbar', () => {

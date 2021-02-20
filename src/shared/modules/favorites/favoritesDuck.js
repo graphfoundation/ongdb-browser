@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -43,11 +43,12 @@ export const removeFavoritesById = (state, ids) =>
 const versionSize = 20
 
 // reducer
-const initialState = staticScriptsList.map(script =>
-  Object.assign({}, script, { isStatic: true })
-)
+const initialState = staticScriptsList.map(script => ({
+  ...script,
+  isStatic: true
+}))
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case REMOVE_FAVORITE:
       return removeFavoriteById(state, action.id)
@@ -56,11 +57,12 @@ export default function reducer (state = initialState, action) {
     case ADD_FAVORITE:
       return state.concat([{ id: action.id || uuid.v4(), content: action.cmd }])
     case UPDATE_FAVORITE:
-      const mergedFavorite = Object.assign({}, getFavorite(state, action.id), {
+      const mergedFavorite = {
+        ...getFavorite(state, action.id),
         content: action.cmd
-      })
-      const updatedFavorites = state.map(
-        _ => (_.id === action.id ? mergedFavorite : _)
+      }
+      const updatedFavorites = state.map(_ =>
+        _.id === action.id ? mergedFavorite : _
       )
       return mergeFavorites(initialState, updatedFavorites)
     case LOAD_FAVORITES:
@@ -75,45 +77,45 @@ export default function reducer (state = initialState, action) {
   }
 }
 
-export function removeFavorite (id) {
+export function removeFavorite(id) {
   return {
     type: REMOVE_FAVORITE,
     id
   }
 }
-export function removeFavorites (ids) {
+export function removeFavorites(ids) {
   return {
     type: REMOVE_FAVORITES,
     ids
   }
 }
-export function addFavorite (cmd, id) {
+export function addFavorite(cmd, id) {
   return {
     type: ADD_FAVORITE,
     cmd,
     id
   }
 }
-export function loadFavorites (favorites) {
+export function loadFavorites(favorites) {
   return {
     type: LOAD_FAVORITES,
     favorites
   }
 }
-export function syncFavorites (favorites) {
+export function syncFavorites(favorites) {
   return {
     type: SYNC_FAVORITES,
     favorites
   }
 }
-export function updateFavorite (id, cmd) {
+export function updateFavorite(id, cmd) {
   return {
     type: UPDATE_FAVORITE,
     id,
     cmd
   }
 }
-export function updateFavorites (favorites) {
+export function updateFavorites(favorites) {
   return {
     type: UPDATE_FAVORITES,
     favorites
@@ -124,7 +126,7 @@ export const composeDocumentsToSync = (store, syncValue) => {
   const documents = syncValue.syncObj.documents || []
   const favorites = getFavorites(store.getState()).filter(fav => !fav.isStatic)
 
-  let newDocuments = [
+  const newDocuments = [
     {
       client: getBrowserName(),
       data: favorites,
@@ -145,7 +147,7 @@ export const mergeFavorites = (list1, list2) => {
 }
 
 export const favoritesToLoad = (action, store) => {
-  let favoritesFromSync =
+  const favoritesFromSync =
     action.obj.syncObj && action.obj.syncObj.documents.length > 0
       ? action.obj.syncObj.documents[0].data || []
       : null

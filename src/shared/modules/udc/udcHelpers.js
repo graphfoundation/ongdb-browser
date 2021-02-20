@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,12 +20,12 @@
 
 export const shouldTriggerConnectEvent = (state, todayDate = null) => {
   const pingDate = new Date(state.pingTime || 0)
-  todayDate = todayDate || getTodayDate()
-  if (pingDate < todayDate) return true
+  const localTodayDate = todayDate || getTodayDate()
+  if (pingDate < localTodayDate) return true
   return false
 }
 
 export const getTodayDate = () => {
-  let today = new Date()
+  const today = new Date()
   return new Date(today.getFullYear(), today.getMonth(), today.getDate())
 }

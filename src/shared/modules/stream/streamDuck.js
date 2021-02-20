@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -33,47 +33,62 @@ export const FRAME_TYPE_FILTER_UPDATED = 'frames/FRAME_TYPE_FILTER_UPDATED'
 export const PIN = `${NAME}/PIN`
 export const UNPIN = `${NAME}/UNPIN`
 export const SET_RECENT_VIEW = 'frames/SET_RECENT_VIEW'
-export const SET_MAX_FRAMES = NAME + '/SET_MAX_FRAMES'
+export const SET_MAX_FRAMES = `${NAME}/SET_MAX_FRAMES`
 
 /**
  * Selectors
  */
-export function getFrame (state, id) {
+export function getFrame(state, id) {
   return state[NAME].byId[id]
 }
 
-export function getFrames (state) {
+export function getFrames(state) {
   return state[NAME].allIds.map(id => state[NAME].byId[id])
 }
 
-export function getFramesInContext (state, context) {
+export function getFramesInContext(state, context) {
   return getFrames(state).filter(f => f.context === context)
 }
 
-export function getRecentView (state) {
+export function getRecentView(state) {
   return state[NAME].recentView
 }
 
 /**
  * Reducer helpers
  */
-function addFrame (state, newState) {
+function addFrame(state, newState) {
   if (newState.parentId && state.allIds.indexOf(newState.parentId) < 0) {
     // No parent
     return state
   }
-  let byId = Object.assign({}, state.byId, { [newState.id]: newState })
+
+  let frameObject = state.byId[newState.id] || { stack: [], isPinned: false }
+  if (!newState.isRerun) {
+    frameObject.stack.unshift(newState)
+  } else {
+    frameObject.stack = [newState]
+  }
+  let byId = {
+    ...state.byId,
+    [newState.id]: frameObject
+  }
   let allIds = [].concat(state.allIds)
 
   if (newState.parentId) {
-    const currentStatements = byId[newState.parentId].statements || []
+    const currentStatements = byId[newState.parentId].stack[0].statements || []
     // Need to add this id to parent's list of statements
     if (!currentStatements.includes(newState.id)) {
       byId = {
         ...byId,
         [newState.parentId]: {
           ...byId[newState.parentId],
-          statements: currentStatements.concat(newState.id)
+          stack: [
+            {
+              ...byId[newState.parentId].stack[0],
+              statements: currentStatements.concat(newState.id)
+            }
+          ]
         }
       }
     }
@@ -87,7 +102,7 @@ function addFrame (state, newState) {
   })
 }
 
-function insertIntoAllIds (state, allIds, newState) {
+function insertIntoAllIds(state, allIds, newState) {
   if (allIds.indexOf(newState.id) < 0) {
     // new frame
     const pos = findFirstFreePos(state)
@@ -96,17 +111,25 @@ function insertIntoAllIds (state, allIds, newState) {
   return allIds
 }
 
-function removeFrame (state, id) {
-  const byId = Object.assign({}, state.byId)
+function removeFrame(state, id) {
+  const byId = {
+    ...state.byId
+  }
   delete byId[id]
   const allIds = state.allIds.filter(fid => fid !== id)
-  return Object.assign({}, state, { allIds, byId })
+  return {
+    ...state,
+    allIds,
+    byId
+  }
 }
 
-function pinFrame (state, id) {
+function pinFrame(state, id) {
   const pos = state.allIds.indexOf(id)
   const allIds = moveInArray(pos, 0, state.allIds) // immutable operation
-  const byId = Object.assign({}, state.byId)
+  const byId = {
+    ...state.byId
+  }
   byId[id].isPinned = true
   return {
     ...state,
@@ -115,11 +138,13 @@ function pinFrame (state, id) {
   }
 }
 
-function unpinFrame (state, id) {
+function unpinFrame(state, id) {
   const currentPos = state.allIds.indexOf(id)
   const pos = findFirstFreePos(state)
   const allIds = moveInArray(currentPos, pos - 1, state.allIds) // immutable operation
-  const byId = Object.assign({}, state.byId)
+  const byId = {
+    ...state.byId
+  }
   byId[id].isPinned = false
   return {
     ...state,
@@ -128,7 +153,7 @@ function unpinFrame (state, id) {
   }
 }
 
-function findFirstFreePos ({ byId, allIds }) {
+function findFirstFreePos({ byId, allIds }) {
   let freePos = -1
   allIds.forEach((id, index) => {
     if (freePos > -1 || byId[id].isPinned) return
@@ -137,18 +162,21 @@ function findFirstFreePos ({ byId, allIds }) {
   return freePos === -1 ? allIds.length : freePos
 }
 
-function setRecentViewHelper (state, recentView) {
-  return Object.assign({}, state, { recentView })
+function setRecentViewHelper(state, recentView) {
+  return {
+    ...state,
+    recentView
+  }
 }
 
-function ensureFrameLimit (state) {
+function ensureFrameLimit(state) {
   const limit = state.maxFrames || 1
   if (state.allIds.length <= limit) return state
-  let numToRemove = state.allIds.length - limit
-  let removeIds = state.allIds
+  const numToRemove = state.allIds.length - limit
+  const removeIds = state.allIds
     .slice(-1 * numToRemove)
     .filter(id => !state.byId[id].isPinned)
-  let byId = { ...state.byId }
+  const byId = { ...state.byId }
   removeIds.forEach(id => delete byId[id])
   return {
     ...state,
@@ -168,12 +196,10 @@ export const initialState = {
 /**
  * Reducer
  */
-export default function reducer (state = initialState, action) {
-  if (action.type === APP_START) {
-    state = { ...initialState, ...state }
-  }
-
+export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case APP_START:
+      return { ...initialState, ...state }
     case ADD:
       return addFrame(state, action.state)
     case REMOVE:
@@ -195,41 +221,44 @@ export default function reducer (state = initialState, action) {
 }
 
 // Action creators
-export function add (payload) {
+export function add(payload) {
   return {
     type: ADD,
-    state: Object.assign({}, payload, { id: payload.id || uuid.v1() })
+    state: {
+      ...payload,
+      id: payload.id || uuid.v1()
+    }
   }
 }
 
-export function remove (id) {
+export function remove(id) {
   return {
     type: REMOVE,
     id
   }
 }
 
-export function clear () {
+export function clear() {
   return {
     type: CLEAR_ALL
   }
 }
 
-export function pin (id) {
+export function pin(id) {
   return {
     type: PIN,
     id
   }
 }
 
-export function unpin (id) {
+export function unpin(id) {
   return {
     type: UNPIN,
     id
   }
 }
 
-export function setRecentView (view) {
+export function setRecentView(view) {
   return {
     type: SET_RECENT_VIEW,
     view

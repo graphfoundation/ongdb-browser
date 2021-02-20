@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,7 +22,7 @@ const fs = require('fs')
 const path = require('path')
 const ncp = require('ncp').ncp
 
-function mkPath (dirPath) {
+function mkPath(dirPath) {
   if (!fs.existsSync(dirPath)) {
     try {
       fs.mkdirSync(dirPath)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -38,6 +38,7 @@ import { addHistory } from '../history/historyDuck'
 import {
   getCmdChar,
   getMaxHistory,
+  getPlayImplicitInitCommands,
   shouldEnableMultiStatementMode
 } from '../settings/settingsDuck'
 import { fetchRemoteGuide } from './helpers/play'
@@ -45,7 +46,6 @@ import { CONNECTION_SUCCESS } from '../connections/connectionsDuck'
 import {
   UPDATE_SETTINGS,
   getAvailableSettings,
-  fetchMetaData,
   getRemoteContentHostnameWhitelist,
   getDefaultRemoteContentHostnameWhitelist
 } from '../dbMeta/dbMetaDuck'
@@ -54,26 +54,29 @@ import { add as addFrame } from 'shared/modules/stream/streamDuck'
 import { update as updateQueryResult } from 'shared/modules/requests/requestsDuck'
 
 export const NAME = 'commands'
-export const SINGLE_COMMAND_QUEUED = NAME + '/SINGLE_COMMAND_QUEUED'
-export const COMMAND_QUEUED = NAME + '/COMMAND_QUEUED'
-export const SYSTEM_COMMAND_QUEUED = NAME + '/SYSTEM_COMMAND_QUEUED'
-export const UNKNOWN_COMMAND = NAME + '/UNKNOWN_COMMAND'
-export const SHOW_ERROR_MESSAGE = NAME + '/SHOW_ERROR_MESSAGE'
-export const CLEAR_ERROR_MESSAGE = NAME + '/CLEAR_ERROR_MESSAGE'
-export const CYPHER = NAME + '/CYPHER'
-export const CYPHER_SUCCEEDED = NAME + '/CYPHER_SUCCEEDED'
-export const CYPHER_FAILED = NAME + '/CYPHER_FAILED'
-export const FETCH_GUIDE_FROM_WHITELIST = NAME + 'FETCH_GUIDE_FROM_WHITELIST'
+export const SINGLE_COMMAND_QUEUED = `${NAME}/SINGLE_COMMAND_QUEUED`
+export const COMMAND_QUEUED = `${NAME}/COMMAND_QUEUED`
+export const SYSTEM_COMMAND_QUEUED = `${NAME}/SYSTEM_COMMAND_QUEUED`
+export const UNKNOWN_COMMAND = `${NAME}/UNKNOWN_COMMAND`
+export const SHOW_ERROR_MESSAGE = `${NAME}/SHOW_ERROR_MESSAGE`
+export const CLEAR_ERROR_MESSAGE = `${NAME}/CLEAR_ERROR_MESSAGE`
+export const CYPHER = `${NAME}/CYPHER`
+export const CYPHER_SUCCEEDED = `${NAME}/CYPHER_SUCCEEDED`
+export const CYPHER_FAILED = `${NAME}/CYPHER_FAILED`
+export const FETCH_GUIDE_FROM_WHITELIST = `${NAME}FETCH_GUIDE_FROM_WHITELIST`
+
+export const useDbCommand = 'use'
+export const listDbsCommand = 'dbs'
+export const autoCommitTxCommand = 'auto'
 
 const initialState = {}
 export const getErrorMessage = state => state[NAME].errorMessage
+export const whitelistedMultiCommands = () => [':param', ':use']
 
-export default function reducer (state = initialState, action) {
-  if (action.type === APP_START) {
-    state = { ...initialState, ...state }
-  }
-
+export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case APP_START:
+      return { ...initialState, ...state }
     case SHOW_ERROR_MESSAGE:
       return { errorMessage: action.errorMessage }
     case CLEAR_ERROR_MESSAGE:
@@ -87,22 +90,32 @@ export default function reducer (state = initialState, action) {
 
 // Action creators
 
-export const executeCommand = (cmd, id, requestId, parentId) => {
+export const executeCommand = (
+  cmd,
+  { id, requestId, parentId, useDb, isRerun = false } = {}
+) => {
   return {
     type: COMMAND_QUEUED,
     cmd,
     id,
     requestId,
-    parentId
+    parentId,
+    useDb,
+    isRerun
   }
 }
 
-export const executeSingleCommand = (cmd, id, requestId) => {
+export const executeSingleCommand = (
+  cmd,
+  { id, requestId, useDb, isRerun = false } = {}
+) => {
   return {
     type: SINGLE_COMMAND_QUEUED,
     cmd,
     id,
-    requestId
+    requestId,
+    useDb,
+    isRerun
   }
 }
 
@@ -120,7 +133,7 @@ export const unknownCommand = cmd => ({
 
 export const showErrorMessage = errorMessage => ({
   type: SHOW_ERROR_MESSAGE,
-  errorMessage: errorMessage
+  errorMessage
 })
 export const clearErrorMessage = () => ({
   type: CLEAR_ERROR_MESSAGE
@@ -157,29 +170,28 @@ export const handleCommandEpic = (action$, store) =>
       }
       if (statements.length === 1) {
         // Single command
-        return store.dispatch(
-          executeSingleCommand(statements[0], action.id, action.requestId)
-        )
+        return store.dispatch(executeSingleCommand(statements[0], action))
       }
       const parentId = action.parentId || v4()
       store.dispatch(
         addFrame({ type: 'cypher-script', id: parentId, cmd: action.cmd })
       )
       const cmdchar = getCmdChar(store.getState())
-      let jobs = []
+      const jobs = []
       statements.forEach(cmd => {
-        cmd = cleanCommand(cmd)
+        const cleanCmd = cleanCommand(cmd)
         const requestId = v4()
         const cmdId = v4()
-        const whitelistedCommands = [`${cmdchar}param`]
+        const whitelistedCommands = whitelistedMultiCommands()
         const isWhitelisted =
-          whitelistedCommands.filter(wcmd => !!cmd.startsWith(wcmd)).length > 0
+          whitelistedCommands.filter(wcmd => !!cleanCmd.startsWith(wcmd))
+            .length > 0
 
         // Ignore client commands that aren't whitelisted
-        const ignore = !!cmd.startsWith(cmdchar) && !isWhitelisted
+        const ignore = !!cleanCmd.startsWith(cmdchar) && !isWhitelisted
 
-        let { action, interpreted } = buildCommandObject(
-          { cmd, ignore },
+        const { action, interpreted } = buildCommandObject(
+          { cmd: cleanCmd, ignore },
           helper.interpret,
           getCmdChar(store.getState())
         )
@@ -220,13 +232,13 @@ export const handleSingleCommandEpic = (action$, store) =>
         if (interpreted.name !== 'cypher') {
           action.cmd = cleanCommand(action.cmd)
         }
+        action.ts = new Date().getTime()
         const res = interpreted.exec(action, cmdchar, store.dispatch, store)
         if (!res || !res.then) {
           resolve(noop)
         } else {
           res
             .then(r => {
-              store.dispatch(fetchMetaData())
               resolve(noop)
             })
             .catch(e => resolve(noop))
@@ -245,7 +257,10 @@ export const postConnectCmdEpic = (some$, store) =>
           const cmds = extractPostConnectCommandsFromServerConfig(
             serverSettings['browser.post_connect_cmd']
           )
-          if (cmds !== undefined) {
+          const playImplicitInitCommands = getPlayImplicitInitCommands(
+            store.getState()
+          )
+          if (playImplicitInitCommands && cmds !== undefined) {
             cmds.forEach(cmd => {
               store.dispatch(executeSystemCommand(`${cmdchar}${cmd}`))
             })
@@ -271,7 +286,8 @@ export const fetchGuideFromWhitelistEpic = (some$, store) =>
       defaultWhitelist
     )
     const urlWhitelist = addProtocolsToUrlList(resolvedWildcardWhitelist)
-    const guidesUrls = urlWhitelist.map(url => url + '/' + action.url)
+    const guidesUrls = urlWhitelist.map(url => `${url}/${action.url}`)
+
     return firstSuccessPromise(guidesUrls, url => {
       // Get first successful fetch
       return fetchRemoteGuide(url, whitelistStr).then(r => ({

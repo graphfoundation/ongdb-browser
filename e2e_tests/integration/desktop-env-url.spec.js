@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,10 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global Cypress, cy, test, expect, before */
+/* global Cypress, cy, before */
 
-import { getDesktopContext } from '../support/utils'
+import { isAura, getDesktopContext } from '../support/utils'
 let appContextListener
+let appOnAgumentsChange
 
 // This file only esists to be able to test the auto connect using
 // the host field.
@@ -34,35 +35,50 @@ describe('Neo4j Desktop environment using url field', () => {
         win.neo4jDesktopApi = {
           getContext: () =>
             Promise.resolve(getDesktopContext(Cypress.config, 'url')),
-          onContextUpdate: fn => (appContextListener = fn.bind(fn))
+          onContextUpdate: fn => (appContextListener = fn.bind(fn)),
+          onArgumentsChange: fn => (appOnAgumentsChange = fn.bind(fn))
         }
       }
     })
   })
-  it('can auto connect using url field', () => {
-    const frames = cy.get('[data-testid="frameCommand"]', { timeout: 10000 })
-    frames.should('have.length', 2)
+  // No need to run these when in Aura
+  if (!isAura()) {
+    it('can auto connect using url field', () => {
+      const frames = cy.get('[data-testid="frameCommand"]', { timeout: 10000 })
+      frames.should('have.length', 2)
 
-    // Auto connected = :play start
-    frames.first().should('contain', ':play start')
-    cy.wait(1000)
-  })
-  it('switches connection when that event is triggered using url field', () => {
-    cy.executeCommand(':clear')
-    cy.wait(1000).then(() => {
-      appContextListener(
-        { type: 'GRAPH_ACTIVE', id: 'test' },
-        getDesktopContext(Cypress.config, 'url')
-      )
+      // Auto connected = :play start
+      frames.first().should('contain', ':play start')
+      cy.wait(1000)
     })
+    it('switches connection when that event is triggered using url field', () => {
+      cy.executeCommand(':clear')
+      cy.wait(1000).then(() => {
+        appContextListener(
+          { type: 'GRAPH_ACTIVE', id: 'test' },
+          getDesktopContext(Cypress.config, 'url')
+        )
+      })
 
-    const frames = cy.get('[data-testid="frameCommand"]', { timeout: 10000 })
-    frames.should('have.length', 1)
+      const frames = cy.get('[data-testid="frameCommand"]', { timeout: 10000 })
+      frames.should('have.length', 1)
 
-    frames.first().should('contain', ':server switch success')
+      frames.first().should('contain', ':server switch success')
 
-    cy.get('[data-testid="frame"]', { timeout: 10000 })
-      .first()
-      .should('contain', 'Connection updated')
-  })
+      cy.get('[data-testid="frame"]', { timeout: 10000 })
+        .first()
+        .should('contain', 'Connection updated')
+    })
+    it('reacts to arguments changing and handle different encodings', () => {
+      // Use regular expression to match multiple lines
+      const expectedCommand = /RETURN 1;[^R]*RETURN 2;/
+      cy.executeCommand(':clear')
+
+      cy.wait(1000).then(() => {
+        appOnAgumentsChange('cmd=edit&arg=RETURN+1;&arg=RETURN%202;')
+      })
+
+      cy.getEditor().contains(expectedCommand)
+    })
+  }
 })

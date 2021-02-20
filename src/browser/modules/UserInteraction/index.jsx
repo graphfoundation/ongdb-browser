@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -30,7 +30,7 @@ const reportInteraction = bus => {
 const throttledReportInteraction = throttle(reportInteraction, 5000)
 
 export class UserInteraction extends Component {
-  componentDidMount () {
+  componentDidMount() {
     document.addEventListener('keyup', () =>
       throttledReportInteraction(this.props.bus)
     )
@@ -38,7 +38,8 @@ export class UserInteraction extends Component {
       throttledReportInteraction(this.props.bus)
     )
   }
-  componentWillUnmount () {
+
+  componentWillUnmount() {
     document.removeEventListener('keyup', () =>
       throttledReportInteraction(this.props.bus)
     )
@@ -46,7 +47,8 @@ export class UserInteraction extends Component {
       throttledReportInteraction(this.props.bus)
     )
   }
-  render () {
+
+  render() {
     return null
   }
 }

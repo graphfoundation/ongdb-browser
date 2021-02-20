@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,24 +21,21 @@
 import { useState, useEffect } from 'react'
 import useDetectColorScheme from './useDetectColorScheme'
 
-export default function useAutoTheme (defaultTheme = 'light') {
+export default function useAutoTheme(defaultTheme = 'light') {
   const detectedScheme = useDetectColorScheme()
   const [autoTheme, setAutoTheme] = useState(detectedScheme || defaultTheme)
   const [overriddenTheme, overrideAutoTheme] = useState(null)
 
-  useEffect(
-    () => {
-      if (overriddenTheme) {
-        setAutoTheme(overriddenTheme)
-        return
-      }
-      if (!detectedScheme && !overriddenTheme) {
-        setAutoTheme(defaultTheme)
-        return
-      }
-      setAutoTheme(detectedScheme)
-    },
-    [detectedScheme, overriddenTheme]
-  )
+  useEffect(() => {
+    if (overriddenTheme) {
+      setAutoTheme(overriddenTheme)
+      return
+    }
+    if (!detectedScheme && !overriddenTheme) {
+      setAutoTheme(defaultTheme)
+      return
+    }
+    setAutoTheme(detectedScheme)
+  }, [detectedScheme, overriddenTheme])
   return [autoTheme, overrideAutoTheme]
 }

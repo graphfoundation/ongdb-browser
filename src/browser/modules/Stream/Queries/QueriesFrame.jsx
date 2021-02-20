@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -50,15 +50,15 @@ import {
 import {
   StyledStatusBar,
   AutoRefreshToggle,
-  RefreshQueriesButton,
   AutoRefreshSpan,
   StatusbarWrapper
 } from '../AutoRefresh/styled'
 import { EnterpriseOnlyFrame } from 'browser-components/EditionView'
-import { RefreshIcon } from 'browser-components/icons/Icons'
 import Render from 'browser-components/Render'
 import FrameError from '../../Frame/FrameError'
 import { NEO4J_BROWSER_USER_ACTION_QUERY } from 'services/bolt/txMetadata'
+import { getDefaultBoltScheme } from 'shared/modules/features/versionedFeatures'
+import { getVersion } from 'shared/modules/dbMeta/dbMetaDuck'
 
 export class QueriesFrame extends Component {
   state = {
@@ -68,7 +68,8 @@ export class QueriesFrame extends Component {
     success: null,
     errors: []
   }
-  componentDidMount () {
+
+  componentDidMount() {
     if (this.props.connectionState === CONNECTED_STATE) {
       this.getRunningQueries()
     } else {
@@ -76,7 +77,7 @@ export class QueriesFrame extends Component {
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.autoRefresh !== this.state.autoRefresh) {
       if (this.state.autoRefresh) {
         this.timer = setInterval(
@@ -87,16 +88,24 @@ export class QueriesFrame extends Component {
         clearInterval(this.timer)
       }
     }
+    if (
+      this.props.frame &&
+      this.props.frame.ts !== prevProps.frame.ts &&
+      this.props.frame.isRerun
+    ) {
+      this.getRunningQueries()
+    }
   }
 
-  isCC () {
+  isCC() {
     return this.props.availableProcedures.includes('dbms.cluster.overview')
   }
-  canListQueries () {
+
+  canListQueries() {
     return this.props.availableProcedures.includes('dbms.listQueries')
   }
 
-  getRunningQueries (suppressQuerySuccessMessage = false) {
+  getRunningQueries(suppressQuerySuccessMessage = false) {
     this.props.bus.self(
       this.isCC() ? CLUSTER_CYPHER_REQUEST : CYPHER_REQUEST,
       {
@@ -133,7 +142,7 @@ export class QueriesFrame extends Component {
     )
   }
 
-  killQueries (host, queryIdList) {
+  killQueries(host, queryIdList) {
     this.props.bus.self(
       this.isCC() ? AD_HOC_CYPHER_REQUEST : CYPHER_REQUEST,
       { host, query: killQueriesProcedure(queryIdList) },
@@ -155,7 +164,7 @@ export class QueriesFrame extends Component {
     )
   }
 
-  extractQueriesFromBoltResult (result) {
+  extractQueriesFromBoltResult(result) {
     return result.records.map(({ keys, _fields, host, error }) => {
       if (error) {
         return { error }
@@ -165,19 +174,21 @@ export class QueriesFrame extends Component {
         queryInfo[key] = bolt.itemIntToNumber(_fields[idx])
       })
       if (host) {
-        queryInfo.host = 'bolt://' + host
+        queryInfo.host = getDefaultBoltScheme(this.props.neo4jVersion) + host
       } else {
-        queryInfo.host = 'bolt://' + result.summary.server.address
+        queryInfo.host =
+          getDefaultBoltScheme(this.props.neo4jVersion) +
+          result.summary.server.address
       }
       return queryInfo
     })
   }
 
-  onCancelQuery (host, queryId) {
+  onCancelQuery(host, queryId) {
     this.killQueries(host, [queryId])
   }
 
-  constructOverviewMessage (queries, errors) {
+  constructOverviewMessage(queries, errors) {
     const clusterCount = new Set(queries.map(query => query.host)).size
 
     const numMachinesMsg =
@@ -187,9 +198,7 @@ export class QueriesFrame extends Component {
 
     const numQueriesMsg = queries.length > 1 ? 'queries' : 'query'
 
-    const successMessage = `Found ${
-      queries.length
-    } ${numQueriesMsg} ${numMachinesMsg}`
+    const successMessage = `Found ${queries.length} ${numQueriesMsg} ${numMachinesMsg}`
 
     return errors.length > 0 ? (
       <span>
@@ -200,7 +209,7 @@ export class QueriesFrame extends Component {
     )
   }
 
-  constructViewFromQueryList (queries, errors) {
+  constructViewFromQueryList(queries, errors) {
     if (queries.length === 0) {
       return null
     }
@@ -217,36 +226,36 @@ export class QueriesFrame extends Component {
       return (
         <tr key={`rows${i}`}>
           <StyledTd
-            key='host'
+            key="host"
             title={query.host}
             width={tableHeaderSizes[0][1]}
           >
             <Code>{query.host}</Code>
           </StyledTd>
-          <StyledTd key='username' width={tableHeaderSizes[1][1]}>
+          <StyledTd key="username" width={tableHeaderSizes[1][1]}>
             {query.username}
           </StyledTd>
           <StyledTd
-            key='query'
+            key="query"
             title={query.query}
             width={tableHeaderSizes[2][1]}
           >
             <Code>{query.query}</Code>
           </StyledTd>
-          <StyledTd key='params' width={tableHeaderSizes[3][1]}>
+          <StyledTd key="params" width={tableHeaderSizes[3][1]}>
             <Code>{JSON.stringify(query.parameters, null, 2)}</Code>
           </StyledTd>
           <StyledTd
-            key='meta'
+            key="meta"
             title={JSON.stringify(query.metaData, null, 2)}
             width={tableHeaderSizes[4][1]}
           >
             <Code>{JSON.stringify(query.metaData, null, 2)}</Code>
           </StyledTd>
-          <StyledTd key='time' width={tableHeaderSizes[5][1]}>
+          <StyledTd key="time" width={tableHeaderSizes[5][1]}>
             {query.elapsedTimeMillis} ms
           </StyledTd>
-          <StyledTd key='actions' width={tableHeaderSizes[6][1]}>
+          <StyledTd key="actions" width={tableHeaderSizes[6][1]}>
             <ConfirmationButton
               onConfirmed={this.onCancelQuery.bind(
                 this,
@@ -261,7 +270,7 @@ export class QueriesFrame extends Component {
 
     const errorRows = errors.map((error, i) => (
       <tr key={`error${i}`}>
-        <StyledTd colSpan='7' title={error.message}>
+        <StyledTd colSpan="7" title={error.message}>
           <Code>Error connecting to: {error.host}</Code>
         </StyledTd>
       </tr>
@@ -289,7 +298,7 @@ export class QueriesFrame extends Component {
     )
   }
 
-  setAutoRefresh (autoRefresh) {
+  setAutoRefresh(autoRefresh) {
     this.setState({ autoRefresh: autoRefresh })
 
     if (autoRefresh) {
@@ -297,7 +306,7 @@ export class QueriesFrame extends Component {
     }
   }
 
-  render () {
+  render() {
     let frameContents
     let aside
     let statusbar
@@ -319,9 +328,6 @@ export class QueriesFrame extends Component {
           <Render if={this.state.success}>
             <StyledStatusBar>
               {this.state.success}
-              <RefreshQueriesButton onClick={() => this.getRunningQueries()}>
-                <RefreshIcon />
-              </RefreshQueriesButton>
               <AutoRefreshSpan>
                 <AutoRefreshToggle
                   checked={this.state.autoRefresh}
@@ -333,7 +339,12 @@ export class QueriesFrame extends Component {
         </StatusbarWrapper>
       )
     } else {
-      aside = <FrameAside title={'Frame unavailable'} subtitle={'What edition are you running?'} />
+      aside = (
+        <FrameAside
+          title="Frame unavailable"
+          subtitle="What edition are you running?"
+        />
+      )
       frameContents = <EnterpriseOnlyFrame command={this.props.frame.cmd} />
     }
     return (
@@ -350,7 +361,8 @@ export class QueriesFrame extends Component {
 const mapStateToProps = state => {
   return {
     availableProcedures: getAvailableProcedures(state) || [],
-    connectionState: getConnectionState(state)
+    connectionState: getConnectionState(state),
+    neo4jVersion: getVersion(state)
   }
 }
 

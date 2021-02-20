@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -29,7 +29,7 @@ const Disconnect = ({ frame, activeConnectionData }) => {
     <FrameTemplate
       header={frame}
       contents={
-        <React.Fragment>
+        <>
           <StyledConnectionAside>
             <Render if={activeConnectionData}>
               <div>
@@ -44,7 +44,7 @@ const Disconnect = ({ frame, activeConnectionData }) => {
               </div>
             </Render>
           </StyledConnectionAside>
-        </React.Fragment>
+        </>
       }
     />
   )

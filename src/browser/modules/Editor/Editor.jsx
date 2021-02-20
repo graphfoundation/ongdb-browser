@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -56,6 +56,7 @@ import controlsPlay from 'icons/controls-play.svg'
 import eraser2 from 'icons/eraser-2.svg'
 import pencil from 'icons/pencil.svg'
 import { NEO4J_BROWSER_USER_ACTION_QUERY } from 'services/bolt/txMetadata'
+import { getUseDb } from 'shared/modules/connections/connectionsDuck'
 
 const shouldCheckForHints = code =>
   code.trim().length > 0 &&
@@ -70,7 +71,7 @@ const shouldCheckForHints = code =>
     .startsWith('PROFILE')
 
 export class Editor extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       historyIndex: -1,
@@ -82,46 +83,62 @@ export class Editor extends Component {
       contentId: null,
       editorHeight: 0
     }
+
+    if (this.props.bus) {
+      this.props.bus.take(SET_CONTENT, msg => {
+        this.setContentId(null)
+        this.setEditorValue(msg.message)
+      })
+      this.props.bus.take(EDIT_CONTENT, msg => {
+        this.setContentId(msg.id)
+        this.setEditorValue(msg.message)
+      })
+      this.props.bus.take(FOCUS, this.focusEditor.bind(this))
+      this.props.bus.take(EXPAND, this.expandEditorToggle.bind(this))
+    }
   }
-  shouldComponentUpdate (nextProps, nextState) {
+
+  shouldComponentUpdate(nextProps, nextState) {
     return !(
       nextState.expanded === this.state.expanded &&
       nextState.contentId === this.state.contentId &&
       nextState.editorHeight === this.state.editorHeight &&
       shallowEquals(nextState.notifications, this.state.notifications) &&
-      deepEquals(nextProps.schema, this.props.schema)
+      deepEquals(nextProps.schema, this.props.schema) &&
+      nextProps.useDb === this.props.useDb
     )
   }
-  focusEditor () {
+
+  focusEditor() {
     this.codeMirror.focus()
     this.codeMirror.setCursor(this.codeMirror.lineCount(), 0)
   }
 
-  expandEditorToggle () {
+  expandEditorToggle() {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  clearEditor () {
+  clearEditor() {
     this.setEditorValue('')
     this.setContentId(null)
   }
 
-  handleEnter (cm) {
+  handleEnter(cm) {
     if (cm.lineCount() === 1) {
       return this.execCurrent(cm)
     }
     this.newlineAndIndent(cm)
   }
 
-  newlineAndIndent (cm) {
+  newlineAndIndent(cm) {
     cm.execCommand('newlineAndIndent')
   }
 
-  execCommand (cmd) {
+  execCommand(cmd) {
     this.props.onExecute(cmd)
   }
 
-  execCurrent () {
+  execCurrent() {
     this.execCommand(this.getEditorValue())
     this.clearEditor()
     this.setState({
@@ -132,11 +149,11 @@ export class Editor extends Component {
     })
   }
 
-  moveCursorToEndOfLine (cm) {
+  moveCursorToEndOfLine(cm) {
     cm.setCursor(cm.lineCount(), 0)
   }
 
-  handleUp (cm) {
+  handleUp(cm) {
     if (cm.lineCount() === 1) {
       this.historyPrev(cm)
       this.moveCursorToEndOfLine(cm)
@@ -145,7 +162,7 @@ export class Editor extends Component {
     }
   }
 
-  handleDown (cm) {
+  handleDown(cm) {
     if (cm.lineCount() === 1) {
       this.historyNext(cm)
       this.moveCursorToEndOfLine(cm)
@@ -154,7 +171,7 @@ export class Editor extends Component {
     }
   }
 
-  historyPrev (cm) {
+  historyPrev(cm) {
     if (!this.props.history.length) return
     if (this.state.historyIndex + 1 === this.props.history.length) return
     if (this.state.historyIndex === -1) {
@@ -167,7 +184,7 @@ export class Editor extends Component {
     this.setEditorValue(this.props.history[this.state.historyIndex])
   }
 
-  historyNext (cm) {
+  historyNext(cm) {
     if (!this.props.history.length) return
     if (this.state.historyIndex <= -1) return
     if (this.state.historyIndex === 0) {
@@ -209,22 +226,7 @@ export class Editor extends Component {
     }
   }
 
-  componentWillMount () {
-    if (this.props.bus) {
-      this.props.bus.take(SET_CONTENT, msg => {
-        this.setContentId(null)
-        this.setEditorValue(msg.message)
-      })
-      this.props.bus.take(EDIT_CONTENT, msg => {
-        this.setContentId(msg.id)
-        this.setEditorValue(msg.message)
-      })
-      this.props.bus.take(FOCUS, this.focusEditor.bind(this))
-      this.props.bus.take(EXPAND, this.expandEditorToggle.bind(this))
-    }
-  }
-
-  componentDidMount () {
+  componentDidMount() {
     this.loadCodeMirror()
   }
 
@@ -246,18 +248,18 @@ export class Editor extends Component {
     })
   }
 
-  getEditorValue () {
+  getEditorValue() {
     return this.codeMirror ? this.codeMirror.getValue().trim() : ''
   }
 
-  setEditorValue (cmd) {
+  setEditorValue(cmd) {
     this.codeMirror.setValue(cmd)
     this.updateCode(undefined, undefined, () => {
       this.focusEditor()
     })
   }
 
-  setContentId (id) {
+  setContentId(id) {
     this.setState({ contentId: id })
   }
 
@@ -275,7 +277,7 @@ export class Editor extends Component {
     )
   }
 
-  checkForHints (statements) {
+  checkForHints(statements) {
     if (!statements.length) return
     statements.forEach(stmt => {
       const text = stmt.getText()
@@ -299,7 +301,7 @@ export class Editor extends Component {
                 n => ({
                   ...n,
                   position: { ...n.position, line: n.position.line + offset },
-                  statement: response.result.summary.statement.text
+                  statement: response.result.summary.query.text
                 })
               )
               this.setState(state => ({
@@ -312,7 +314,7 @@ export class Editor extends Component {
     })
   }
 
-  setGutterMarkers () {
+  setGutterMarkers() {
     if (this.codeMirror) {
       this.codeMirror.clearGutter('cypher-hints')
       this.state.notifications.forEach(notification => {
@@ -320,7 +322,7 @@ export class Editor extends Component {
           (notification.position.line || 1) - 1,
           'cypher-hints',
           (() => {
-            let gutter = document.createElement('div')
+            const gutter = document.createElement('div')
             gutter.style.color = '#822'
             gutter.innerHTML =
               '<i class="fa fa-exclamation-triangle gutter-warning gutter-warning" aria-hidden="true"></i>'
@@ -337,9 +339,10 @@ export class Editor extends Component {
     }
   }
 
-  lineNumberFormatter (line) {
+  lineNumberFormatter = line => {
+    const useDbString = this.props.useDb || ''
     if (!this.codeMirror || this.codeMirror.lineCount() === 1) {
-      return '$'
+      return `${useDbString}$`
     } else {
       return line
     }
@@ -354,7 +357,7 @@ export class Editor extends Component {
     }
   }
 
-  render (cm) {
+  render(cm) {
     const options = {
       lineNumbers: true,
       mode: this.state.mode,
@@ -363,7 +366,7 @@ export class Editor extends Component {
       lineWrapping: true,
       autofocus: true,
       smartIndent: false,
-      lineNumberFormatter: this.lineNumberFormatter.bind(this),
+      lineNumberFormatter: this.lineNumberFormatter,
       lint: this.props.enableEditorLint,
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
@@ -423,34 +426,34 @@ export class Editor extends Component {
                 )
               }
               disabled={this.getEditorValue().length < 1}
-              color='#ffaf00'
-              title='Favorite'
+              color="#ffaf00"
+              title="Favorite"
               icon={pencil}
             />
           </Render>
           <Render if={!this.state.contentId}>
             <EditorButton
-              data-testid='editorFavorite'
+              data-testid="editorFavorite"
               onClick={() => {
                 this.props.onFavoriteClick(this.getEditorValue())
               }}
               disabled={this.getEditorValue().length < 1}
-              title='Update favorite'
+              title="Update favorite"
               icon={ratingStar}
             />
           </Render>
           <EditorButton
-            data-testid='clearEditorContent'
+            data-testid="clearEditorContent"
             onClick={() => this.clearEditor()}
             disabled={this.getEditorValue().length < 1}
-            title='Clear'
+            title="Clear"
             icon={eraser2}
           />
           <EditorButton
-            data-testid='submitQuery'
+            data-testid="submitQuery"
             onClick={() => this.execCurrent()}
             disabled={this.getEditorValue().length < 1}
-            title='Play'
+            title="Play"
             icon={controlsPlay}
           />
         </ActionButtonSection>
@@ -483,6 +486,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = state => {
   return {
+    useDb: getUseDb(state),
     enableEditorAutocomplete: shouldEditorAutocomplete(state),
     enableEditorLint: shouldEditorLint(state),
     history: getHistory(state),

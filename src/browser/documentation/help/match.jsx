@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,11 +19,12 @@
  */
 
 import React from 'react'
+import ManualLink from 'browser-components/ManualLink'
 const title = 'MATCH'
 const subtitle = 'Describe a data pattern'
 const category = 'cypherHelp'
 const content = (
-  <React.Fragment>
+  <>
     <p>
       The <code>MATCH</code> clause describes a pattern of graph data. Neo4j
       will collect all paths within the graph which match this pattern. This is
@@ -33,40 +34,37 @@ const content = (
       The <code>MATCH</code> describes the structure, and <code>WHERE</code>{' '}
       specifies the content of a query.
     </p>
-    <div className='links'>
-      <div className='link'>
-        <p className='title'>Reference</p>
-        <p className='content'>
-          <code>
-            <a
-              target='_blank'
-              href='https://neo4j.com/docs/developer-manual/3.2/cypher/clauses/match/'
-            >
-              MATCH
-            </a>{' '}
-            manual page
-          </code>
+    <div className="links">
+      <div className="link">
+        <p className="title">Reference</p>
+        <p className="content">
+          <ManualLink chapter="cypher-manual" page="/clauses/match/">
+            MATCH
+          </ManualLink>{' '}
+          manual page
         </p>
       </div>
-      <div className='link'>
-        <p className='title'>Related</p>
-        <p className='content'>
-          <a help-topic='where'>:help WHERE</a>
-          <a help-topic='cypher'>:help Cypher</a>
+      <div className="link">
+        <p className="title">Related</p>
+        <p className="content">
+          <a help-topic="where">:help WHERE</a>
+          <a help-topic="cypher">:help Cypher</a>
         </p>
       </div>
     </div>
-    <section className='example'>
-      <figure className='runnable'>
-        <pre>{`MATCH (director:Person)-[:DIRECTED]->(movie)
+    <section className="example">
+      <figure className="runnable">
+        <pre>
+          {`MATCH (director:Person)-[:DIRECTED]->(movie)
 WHERE director.name = "Steven Spielberg"
-RETURN movie.title`}</pre>
+RETURN movie.title`}
+        </pre>
         <figcaption>
           Find all the many fine films directed by Steven Spielberg.
         </figcaption>
       </figure>
     </section>
-  </React.Fragment>
+  </>
 )
 
 export default { title, subtitle, category, content }

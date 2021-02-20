@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,7 +21,7 @@
 export default class StraightArrow {
   deflection = 0
 
-  constructor (
+  constructor(
     startRadius,
     endRadius,
     centreDistance,
@@ -44,7 +44,7 @@ export default class StraightArrow {
       y: 0
     }
 
-    this.outline = function (shortCaptionLength) {
+    this.outline = function(shortCaptionLength) {
       if (captionLayout === 'external') {
         const startBreak =
           startArrow + (this.shaftLength - shortCaptionLength) / 2
@@ -115,7 +115,7 @@ export default class StraightArrow {
       }
     }
 
-    this.overlay = function (minWidth) {
+    this.overlay = function(minWidth) {
       const radius = Math.max(minWidth / 2, shaftRadius)
       return [
         'M',

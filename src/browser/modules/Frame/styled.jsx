@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -58,14 +58,15 @@ export const StyledFrameBody = styled.div`
     props.collapsed
       ? 0
       : props.fullscreen
-        ? '100%'
-        : dim.frameBodyHeight - dim.frameStatusbarHeight + 1 + 'px'};
+      ? '100%'
+      : dim.frameBodyHeight - dim.frameStatusbarHeight + 1 + 'px'};
   display: ${props => (props.collapsed ? 'none' : 'flex')};
   flex-direction: row;
   width: 100%;
   padding: 30px;
 
-  .has-carousel & {
+  .has-carousel &,
+  .has-stack & {
     position: relative;
     padding-bottom: 40px;
     padding-left: 40px;
@@ -87,14 +88,14 @@ export const StyledFrameMainSection = styled.div`
 `
 
 export const StyledFrameAside = styled.div`
-  flex: 0 0 25%;
+  flex: 0 0 20%;
   padding: 0 15px;
   width: 25%;
   font-family: ${props => props.theme.primaryFontFamily};
   font-size: 16px;
   font-weight: 300;
   color: ${props => props.theme.asideText};
-  min-width: 150px;
+  min-width: 120px;
 `
 
 export const StyledFrameContents = styled.div`
@@ -182,8 +183,9 @@ export const StyledFrameCommand = styled.label`
   text-overflow: ellipsis;
   overflow: hidden;
   display: block;
-  &:before {
-    content: '$ ';
+  &::before {
+    color: ${props => props.theme.promptText};
+    content: "${props => (props.selectedDb || '') + '$ '}";
   }
   .disable-font-ligatures & {
     font-variant-ligatures: none !important;

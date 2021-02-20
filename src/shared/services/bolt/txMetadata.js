@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,10 +21,10 @@
 import { version } from 'project-root/package.json'
 
 // Application info
-export const NEO4J_BROWSER_BACKGROUND_QUERY = `system`
-export const NEO4J_BROWSER_USER_QUERY = `user-direct`
-export const NEO4J_BROWSER_USER_ACTION_QUERY = `user-action`
-export const NEO4J_BROWSER_USER_TRANSPILED_QUERY = `user-transpiled`
+export const NEO4J_BROWSER_BACKGROUND_QUERY = 'system'
+export const NEO4J_BROWSER_USER_QUERY = 'user-direct'
+export const NEO4J_BROWSER_USER_ACTION_QUERY = 'user-action'
+export const NEO4J_BROWSER_USER_TRANSPILED_QUERY = 'user-transpiled'
 export const NEO4J_BROWSER_APP_ID = `neo4j-browser_v${version}`
 
 export const getBackgroundTxMetadata = ({ hasServerSupport = false }) => {
@@ -45,7 +45,7 @@ export const getUserTxMetadata = type => ({ hasServerSupport = false }) => {
   }
   return {
     txMetadata: {
-      type: type,
+      type,
       app: NEO4J_BROWSER_APP_ID
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -68,7 +68,7 @@ const appendGraphLayers = (svgElement, svg) => {
   window.d3
     .select(svgElement)
     .selectAll('g.layer')
-    .each(function (node) {
+    .each(function(node) {
       svg.node().appendChild(
         window.d3
           .select(this)
@@ -82,7 +82,7 @@ const appendPlanLayers = (svgElement, svg) => {
   window.d3
     .select(svgElement)
     .selectAll('g.layer')
-    .each(function (node) {
+    .each(function(node) {
       svg.node().appendChild(
         window.d3
           .select(this)

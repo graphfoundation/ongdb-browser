@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -38,38 +38,40 @@ import ErrorBoundary from 'browser-components/ErrorBoundary'
 import { useSlowConnectionState } from './main.hooks'
 import AutoExecButton from '../Stream/auto-exec-button'
 
-const Main = React.memo(function Main (props) {
+const Main = React.memo(function Main(props) {
   const [past5Sec, past10Sec] = useSlowConnectionState(props)
+  const { databases, useDb } = props
+  const dbMeta = databases && databases.find(db => db.name === useDb)
+  const dbIsUnavailable = useDb && (!dbMeta || dbMeta.status !== 'online')
 
   return (
-    <StyledMain data-testid='main'>
+    <StyledMain data-testid="main">
       <ErrorBoundary>
         <Editor />
       </ErrorBoundary>
-      <Render if={props.showUnknownCommandBanner}>
+      <Render if={dbIsUnavailable}>
         <ErrorBanner>
-          Type&nbsp;
-          <AutoExecButton cmd={`help commands`} />
-          &nbsp;for a list of available commands.
+          Database '{useDb}' is unavailable. Run{' '}
+          <AutoExecButton cmd="sysinfo" /> for more info.
         </ErrorBanner>
       </Render>
       <Render if={props.errorMessage}>
-        <ErrorBanner data-testid='errorBanner'>
+        <ErrorBanner data-testid="errorBanner">
           {props.errorMessage}
         </ErrorBanner>
       </Render>
       <Render if={props.connectionState === DISCONNECTED_STATE}>
-        <NotAuthedBanner data-testid='disconnectedBanner'>
+        <NotAuthedBanner data-testid="disconnectedBanner">
           Database access not available. Please use&nbsp;
           <AutoExecButton
-            cmd={`server connect`}
-            data-testid='disconnectedBannerCode'
+            cmd="server connect"
+            data-testid="disconnectedBannerCode"
           />
           &nbsp; to establish connection. There's a graph waiting for you.
         </NotAuthedBanner>
       </Render>
       <Render if={props.connectionState === PENDING_STATE && !past10Sec}>
-        <WarningBanner data-testid='reconnectBanner'>
+        <WarningBanner data-testid="reconnectBanner">
           Connection to server lost. Reconnecting...
         </WarningBanner>
       </Render>

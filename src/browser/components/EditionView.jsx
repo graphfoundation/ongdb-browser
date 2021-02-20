@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,17 +20,17 @@
 import React from 'react'
 import { Code } from '../modules/Stream/Queries/styled'
 
-export const EnterpriseOnlyFrame = ({command}) => {
+export const EnterpriseOnlyFrame = ({ command }) => {
   return (
     <div>
       <p>
-        Unable to display <Code>{command}</Code> because the procedures
-        required to run this frame are missing. These procedures are usually
-        found in Neo4j Enterprise edition.
+        Unable to display <Code>{command}</Code> because the procedures required
+        to run this frame are missing. These procedures are usually found in
+        Neo4j Enterprise edition.
       </p>
       <p>
         Find out more over at{' '}
-        <a href='https://neo4j.com/editions/' target='_blank'>
+        <a href="https://neo4j.com/editions/" target="_blank">
           neo4j.com/editions
         </a>
       </p>

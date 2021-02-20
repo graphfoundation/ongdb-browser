@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -166,7 +166,7 @@ describe('favorites.utils', () => {
 
     test('adds name as a comment to top of a query, replacing old name', () => {
       const name = 'foo'
-      const contents = [`// old name`, 'RETURN 1'].join('\n')
+      const contents = ['// old name', 'RETURN 1'].join('\n')
       const expected = [`// ${name}`, 'RETURN 1'].join('\n')
 
       expect(addNameComment(contents, name)).toBe(expected)
@@ -174,10 +174,10 @@ describe('favorites.utils', () => {
 
     test('adds name as a comment to top of a query, without replacing additional comments', () => {
       const name = 'foo'
-      const contents = [`// old name`, `// random comment`, 'RETURN 1'].join(
+      const contents = ['// old name', '// random comment', 'RETURN 1'].join(
         '\n'
       )
-      const expected = [`// ${name}`, `// random comment`, 'RETURN 1'].join(
+      const expected = [`// ${name}`, '// random comment', 'RETURN 1'].join(
         '\n'
       )
 

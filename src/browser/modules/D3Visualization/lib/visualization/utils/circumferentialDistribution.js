@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -20,7 +20,7 @@
 import AngleListClass from './angleList'
 import AdjacentAngles from './adjacentAngles'
 
-export default function distributeCircular (arrowAngles, minSeparation) {
+export default function distributeCircular(arrowAngles, minSeparation) {
   let angle
   const list = []
   for (var key in arrowAngles.floating) {
@@ -48,7 +48,7 @@ export default function distributeCircular (arrowAngles, minSeparation) {
     minSeparation
   )
 
-  const wrapAngle = function (angle) {
+  const wrapAngle = function(angle) {
     if (angle >= 360) {
       return angle - 360
     } else if (angle < 0) {
@@ -60,7 +60,7 @@ export default function distributeCircular (arrowAngles, minSeparation) {
 
   const result = {}
 
-  const splitByFixedArrows = function (run) {
+  const splitByFixedArrows = function(run) {
     let asc, i
     let end
     const runs = []
@@ -88,13 +88,13 @@ export default function distributeCircular (arrowAngles, minSeparation) {
     return runs
   }
 
-  for (let tooDenseRun of Array.from(runsOfTooDenseArrows)) {
+  for (const tooDenseRun of Array.from(runsOfTooDenseArrows)) {
     const moveableRuns = splitByFixedArrows(tooDenseRun)
-    for (let run of Array.from(moveableRuns)) {
-      var end, i, rawAngle
+    for (const run of Array.from(moveableRuns)) {
+      let end, i, rawAngle
       const runLength = AngleList.length(run)
       if (AngleList.fixed(run.start) && AngleList.fixed(run.end)) {
-        var asc
+        let asc
         const separation = AngleList.angle(run) / runLength
         for (
           i = 0, end = runLength, asc = end >= 0;
@@ -107,7 +107,7 @@ export default function distributeCircular (arrowAngles, minSeparation) {
           )
         }
       } else if (AngleList.fixed(run.start) && !AngleList.fixed(run.end)) {
-        var asc1, end1
+        let asc1, end1
         for (
           i = 0, end1 = runLength, asc1 = end1 >= 0;
           asc1 ? i <= end1 : i >= end1;
@@ -119,7 +119,7 @@ export default function distributeCircular (arrowAngles, minSeparation) {
           )
         }
       } else if (!AngleList.fixed(run.start) && AngleList.fixed(run.end)) {
-        var asc2, end2
+        let asc2, end2
         for (
           i = 0, end2 = runLength, asc2 = end2 >= 0;
           asc2 ? i <= end2 : i >= end2;
@@ -131,7 +131,7 @@ export default function distributeCircular (arrowAngles, minSeparation) {
           )
         }
       } else {
-        var asc3, end3
+        let asc3, end3
         const center = list[run.start].angle + AngleList.angle(run) / 2
         for (
           i = 0, end3 = runLength, asc3 = end3 >= 0;

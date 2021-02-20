@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,18 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { splitStringOnFirst } from 'services/commandUtils'
+import { getCommandAndParam } from 'services/commandUtils'
 import * as connections from 'shared/modules/connections/connectionsDuck'
 import { add as addFrameAction } from 'shared/modules/stream/streamDuck'
 import { CONNECTION_ID as DISCOVERY_CONNECTION_ID } from 'shared/modules/discovery/discoveryDuck'
 import { UnknownCommandError, getErrorMessage } from 'services/exceptions'
 import { shouldRetainConnectionCredentials } from 'shared/modules/dbMeta/dbMetaDuck'
 
-export function handleServerCommand (action, cmdchar, put, store) {
-  const [serverCmd, props] = splitStringOnFirst(
-    splitStringOnFirst(action.cmd.substr(cmdchar.length), ' ')[1],
-    ' '
+export function handleServerCommand(action, cmdchar, put, store) {
+  const [serverCmd, props] = getCommandAndParam(
+    action.cmd.substr(cmdchar.length)
   )
+
   if (serverCmd === 'connect') {
     return connectToConnection(action, props, put, store)
   }
@@ -55,7 +55,7 @@ export function handleServerCommand (action, cmdchar, put, store) {
   }
 }
 
-function handleDisconnectCommand (action, cmdchar, put, store) {
+function handleDisconnectCommand(action, cmdchar, put, store) {
   put(addFrameAction({ ...action, type: 'disconnect' }))
   const activeConnection = connections.getActiveConnection(store.getState())
   const disconnectAction = connections.disconnectAction(activeConnection)
@@ -63,7 +63,7 @@ function handleDisconnectCommand (action, cmdchar, put, store) {
   return null
 }
 
-function handleUserCommand (action, props, cmdchar) {
+function handleUserCommand(action, props, cmdchar) {
   switch (props) {
     case 'list':
       return { ...action, type: 'user-list' }
@@ -72,13 +72,13 @@ function handleUserCommand (action, props, cmdchar) {
   }
 }
 
-function handleChangePasswordCommand (action, props, cmdchar) {
+function handleChangePasswordCommand(action, props, cmdchar) {
   return { ...action, type: 'change-password' }
 }
 
-export function connectToConnection (action, connectionName, put, store) {
+export function connectToConnection(action, name, put, store) {
   const state = store.getState()
-  connectionName = connectionName || DISCOVERY_CONNECTION_ID
+  const connectionName = name || DISCOVERY_CONNECTION_ID
   const foundConnections = connections
     .getConnections(state)
     .filter(c => c && c.name === connectionName)
@@ -86,11 +86,11 @@ export function connectToConnection (action, connectionName, put, store) {
   return { ...action, type: 'connection', connectionData }
 }
 
-function handleServerStatusCommand (action) {
+function handleServerStatusCommand(action) {
   return { ...action, type: 'status' }
 }
 
-function handleServerSwitchCommand (action, props, store) {
+function handleServerSwitchCommand(action, props, store) {
   switch (props) {
     case 'success':
       const activeConnectionData = connections.getActiveConnectionData(

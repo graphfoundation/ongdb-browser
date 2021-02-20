@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -39,6 +39,8 @@ const categorize = commands => {
     executionPlans: { title: 'Execution Plans' },
     cypherHelp: { title: 'Cypher Help' },
     schemaClauses: { title: 'Schema Clauses' },
+    administration: { title: 'Administration' },
+    security: { title: 'Security' },
     cypherPredicates: { title: 'Cypher Predicates' },
     restApiCommands: { title: 'Rest API Commands' },
     guides: { title: 'Guides' },
@@ -65,10 +67,10 @@ const categorize = commands => {
       }
       categories[value.category].entries.push(newValue)
     } else {
-      if (!(categories['undefined'] || {}).entries) {
-        categories['undefined'].entries = []
+      if (!(categories.undefined || {}).entries) {
+        categories.undefined.entries = []
       }
-      categories['undefined'].entries.push(newValue)
+      categories.undefined.entries.push(newValue)
     }
   })
 
@@ -92,8 +94,8 @@ const Entry = ({ type, command }) => {
 
 const Section = ({ section, type, i }) => {
   return (
-    <React.Fragment>
-      <tr className='table-help--subheader'>
+    <>
+      <tr className="table-help--subheader">
         <th>{section.title}</th>
         <th />
       </tr>
@@ -104,16 +106,16 @@ const Section = ({ section, type, i }) => {
           command={command}
         />
       ))}
-    </React.Fragment>
+    </>
   )
 }
 
 const Categories = ({ types, type, i }) => {
   const showCategoryHeadline = !!Object.keys(types).length
   return (
-    <React.Fragment>
+    <>
       {showCategoryHeadline && (
-        <tr className='table-help--header'>
+        <tr className="table-help--header">
           <th>{types[type].title}</th>
           <th />
         </tr>
@@ -126,7 +128,7 @@ const Categories = ({ types, type, i }) => {
           i={i}
         />
       ))}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -152,10 +154,10 @@ export const DynamicTopics = ({ docs = {}, description = '', filter = [] }) => {
   })
 
   return (
-    <React.Fragment>
+    <>
       {description && <React.Fragment>{description}</React.Fragment>}
       {Object.keys(types) && (
-        <table className='table-condensed table-help table-help--commands'>
+        <table className="table-condensed table-help table-help--commands">
           <tbody>
             {Object.keys(types).map((type, i) => (
               <Categories
@@ -168,6 +170,6 @@ export const DynamicTopics = ({ docs = {}, description = '', filter = [] }) => {
           </tbody>
         </table>
       )}
-    </React.Fragment>
+    </>
   )
 }

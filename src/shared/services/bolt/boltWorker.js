@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -22,15 +22,17 @@ import 'core-js/stable'
 import { BoltConnectionError, createErrorObject } from '../exceptions'
 import {
   ensureConnection,
-  routedWriteTransaction,
-  cancelTransaction,
-  routedReadTransaction,
-  directTransaction,
   closeConnection,
   DIRECT_CONNECTION,
   ROUTED_WRITE_CONNECTION,
   ROUTED_READ_CONNECTION
 } from './boltConnection'
+import {
+  routedWriteTransaction,
+  cancelTransaction,
+  routedReadTransaction,
+  directTransaction
+} from './transactions'
 import {
   cypherErrorMessage,
   cypherResponseMessage,
@@ -57,7 +59,7 @@ const connectionTypeMap = {
 let busy = false
 const workQue = []
 
-const onmessage = function (message) {
+const onmessage = function(message) {
   const messageType = message.data.type
 
   if (messageType === RUN_CYPHER_MESSAGE) {
@@ -70,7 +72,7 @@ const onmessage = function (message) {
       connectionProperties
     } = message.data
     beforeWork()
-    const { txMetadata } = connectionProperties
+    const { txMetadata, useDb, autoCommit } = connectionProperties
     ensureConnection(connectionProperties, connectionProperties.opts, e => {
       self.postMessage(
         boltConnectionErrorMessage(createErrorObject(BoltConnectionError))
@@ -80,9 +82,7 @@ const onmessage = function (message) {
         const res = connectionTypeMap[connectionType].create(
           input,
           applyGraphTypes(parameters),
-          requestId,
-          cancelable,
-          txMetadata
+          { requestId, cancelable, txMetadata, useDb, autoCommit }
         )
         connectionTypeMap[connectionType]
           .getPromise(res)

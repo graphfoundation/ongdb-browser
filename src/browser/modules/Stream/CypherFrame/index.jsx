@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -40,7 +40,6 @@ import {
   Spinner
 } from 'browser-components/icons/Icons'
 import { AsciiView, AsciiStatusbar } from './AsciiView'
-import { TableView, TableStatusbar } from './TableView'
 import { CodeView, CodeStatusbar } from './CodeView'
 import { ErrorsViewBus as ErrorsView, ErrorsStatusbar } from './ErrorsView'
 import { WarningsView, WarningsStatusbar } from './WarningsView'
@@ -67,6 +66,10 @@ import {
 } from 'shared/modules/settings/settingsDuck'
 import { setRecentView, getRecentView } from 'shared/modules/stream/streamDuck'
 import { CancelView } from './CancelView'
+import RelatableView, {
+  RelatableStatusbar
+} from 'browser/modules/Stream/CypherFrame/relatable-view'
+import { requestExceedsVisLimits } from 'browser/modules/Stream/CypherFrame/helpers'
 
 export class CypherFrame extends Component {
   visElement = null
@@ -77,12 +80,14 @@ export class CypherFrame extends Component {
     frameHeight: 472,
     hasVis: false
   }
-  changeView (view) {
+
+  changeView(view) {
     this.setState({ openView: view })
     if (this.props.onRecentViewChanged) {
       this.props.onRecentViewChanged(view)
     }
   }
+
   onResize = (fullscreen, collapse, frameHeight) => {
     if (frameHeight) {
       this.setState({ fullscreen, collapse, frameHeight })
@@ -90,7 +95,8 @@ export class CypherFrame extends Component {
       this.setState({ fullscreen, collapse })
     }
   }
-  shouldComponentUpdate (props, state) {
+
+  shouldComponentUpdate(props, state) {
     return (
       this.props.request.updated !== props.request.updated ||
       this.state.openView !== state.openView ||
@@ -103,7 +109,8 @@ export class CypherFrame extends Component {
       this.state.hasVis !== state.hasVis
     )
   }
-  componentDidUpdate () {
+
+  componentDidUpdate() {
     // When going from REQUEST_STATUS_PENDING to some other status
     // we want to show an initial view.
     // This happens on first render of a response and on re-runs
@@ -118,21 +125,30 @@ export class CypherFrame extends Component {
       this.setState({ hasVis: false })
     }
   }
-  componentDidMount () {
+
+  componentDidMount() {
     const view = initialView(this.props, this.state)
     if (view) this.setState({ openView: view })
   }
+
   getRecords = () => {
     if (this.props.request.result && this.props.request.result.records) {
       return this.props.request.result.records
     }
     return []
   }
+
   sidebar = () => {
+    const canShowViz =
+      !requestExceedsVisLimits(this.props.request) &&
+      resultHasNodes(this.props.request) &&
+      !this.state.errors
+
     return (
       <FrameSidebar>
-        <Render if={resultHasNodes(this.props.request) && !this.state.errors}>
+        <Render if={canShowViz}>
           <CypherFrameButton
+            data-testid="cypherFrameSidebarVisualization"
             selected={this.state.openView === viewTypes.VISUALIZATION}
             onClick={() => {
               this.changeView(viewTypes.VISUALIZATION)
@@ -143,7 +159,7 @@ export class CypherFrame extends Component {
         </Render>
         <Render if={!resultIsError(this.props.request)}>
           <CypherFrameButton
-            data-testid='cypherFrameSidebarTable'
+            data-testid="cypherFrameSidebarTable"
             selected={this.state.openView === viewTypes.TABLE}
             onClick={() => {
               this.changeView(viewTypes.TABLE)
@@ -159,7 +175,7 @@ export class CypherFrame extends Component {
           }
         >
           <CypherFrameButton
-            data-testid='cypherFrameSidebarAscii'
+            data-testid="cypherFrameSidebarAscii"
             selected={this.state.openView === viewTypes.TEXT}
             onClick={() => {
               this.changeView(viewTypes.TEXT)
@@ -170,6 +186,7 @@ export class CypherFrame extends Component {
         </Render>
         <Render if={resultHasPlan(this.props.request)}>
           <CypherFrameButton
+            data-testid="cypherFrameSidebarPlan"
             selected={this.state.openView === viewTypes.PLAN}
             onClick={() => this.changeView(viewTypes.PLAN)}
           >
@@ -198,6 +215,7 @@ export class CypherFrame extends Component {
         </Render>
         <Render if={!resultIsError(this.props.request)}>
           <CypherFrameButton
+            data-testid="cypherFrameSidebarCode"
             selected={this.state.openView === viewTypes.CODE}
             onClick={() => {
               this.changeView(viewTypes.CODE)
@@ -209,7 +227,8 @@ export class CypherFrame extends Component {
       </FrameSidebar>
     )
   }
-  getSpinner () {
+
+  getSpinner() {
     return (
       <Centered>
         <SpinnerContainer>
@@ -218,10 +237,11 @@ export class CypherFrame extends Component {
       </Centered>
     )
   }
-  getFrameContents (request, result, query) {
+
+  getFrameContents(request, result, query) {
     return (
       <StyledFrameBody
-        data-testid='frame-loaded-contents'
+        data-testid="frame-loaded-contents"
         fullscreen={this.state.fullscreen}
         collapsed={this.state.collapse}
       >
@@ -235,13 +255,7 @@ export class CypherFrame extends Component {
           />
         </Display>
         <Display if={this.state.openView === viewTypes.TABLE} lazy>
-          <TableView
-            {...this.state}
-            maxRows={this.props.maxRows}
-            result={result}
-            updated={this.props.request.updated}
-            setParentState={this.setState.bind(this)}
-          />
+          <RelatableView updated={this.props.request.updated} result={result} />
         </Display>
         <Display if={this.state.openView === viewTypes.CODE} lazy>
           <CodeView
@@ -300,7 +314,8 @@ export class CypherFrame extends Component {
       </StyledFrameBody>
     )
   }
-  getStatusbar (result) {
+
+  getStatusbar(result) {
     return (
       <StyledStatsBarContainer>
         <Display if={this.state.openView === viewTypes.TEXT} lazy>
@@ -313,12 +328,9 @@ export class CypherFrame extends Component {
           />
         </Display>
         <Display if={this.state.openView === viewTypes.TABLE} lazy>
-          <TableStatusbar
-            {...this.state}
-            maxRows={this.props.maxRows}
-            result={result}
+          <RelatableStatusbar
             updated={this.props.request.updated}
-            setParentState={this.setState.bind(this)}
+            result={result}
           />
         </Display>
         <Display if={this.state.openView === viewTypes.CODE} lazy>
@@ -356,7 +368,8 @@ export class CypherFrame extends Component {
       </StyledStatsBarContainer>
     )
   }
-  render () {
+
+  render() {
     const { frame = {}, request = {} } = this.props
     const { cmd: query = '' } = frame
     const { result = {}, status: requestStatus } = request
@@ -378,7 +391,7 @@ export class CypherFrame extends Component {
     return (
       <FrameTemplate
         sidebar={requestStatus !== 'error' ? this.sidebar : null}
-        className='no-padding'
+        className="no-padding"
         header={frame}
         contents={frameContents}
         statusbar={statusBar}

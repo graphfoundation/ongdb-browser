@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,14 +21,10 @@
 export const getCausalClusterAddresses =
   'CALL dbms.cluster.overview YIELD addresses'
 
-export function listQueriesProcedure () {
+export function listQueriesProcedure() {
   return 'CALL dbms.listQueries'
 }
 
-export function killQueriesProcedure (queryIdList) {
-  return (
-    'CALL dbms.killQueries([' +
-    queryIdList.map(q => '"' + q + '"').join() +
-    '])'
-  )
+export function killQueriesProcedure(queryIdList) {
+  return `CALL dbms.killQueries([${queryIdList.map(q => `"${q}"`).join()}])`
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -21,6 +21,7 @@ import jsonic from 'jsonic'
 import { splitStringOnFirst } from 'services/commandUtils'
 import { update, replace } from 'shared/modules/params/paramsDuck'
 import { collectLambdaValues, parseLambdaStatement } from './lambdas'
+import { SYSTEM_DB } from 'shared/modules/dbMeta/dbMetaDuck'
 
 export const extractParams = param => {
   // early bail, now handled by parser
@@ -34,12 +35,9 @@ export const extractParams = param => {
   if (!matchParam) return {}
   const [, paramName, delimiter, paramValue] = matchParam
   try {
-    const json =
-      '{' +
-      paramName +
-      (paramName.endsWith(':') ? ' ' : ': ') +
-      paramValue +
-      '}'
+    const json = `{${paramName}${
+      paramName.endsWith(':') ? ' ' : ': '
+    }${paramValue}}`
     const res = jsonic(json)
     const key = Object.keys(res)[0]
     const value = res[key]
@@ -66,7 +64,7 @@ const resolveAndStoreJsonValue = (param, put) => {
     put(update(res))
     return { result: res, type: 'param' }
   } catch (e) {
-    throw new Error('Could not parse input. Usage: `:param x => 2`. ' + e)
+    throw new Error(`Could not parse input. Usage: \`:param x => 2\`. ${e}`)
   }
 }
 
@@ -77,7 +75,12 @@ export const getParamName = (input, cmdchar) => {
   return parts[0].trim()
 }
 
-export const handleParamsCommand = (action, cmdchar, put) => {
+export const handleParamsCommand = (action, cmdchar, put, targetDb) => {
+  if (targetDb === SYSTEM_DB) {
+    return Promise.reject(
+      new Error('Parameters cannot be declared when using system database.')
+    )
+  }
   const strippedCmd = action.cmd.substr(cmdchar.length)
   const parts = splitStringOnFirst(strippedCmd, ' ')
   const param = parts[1].trim()
@@ -91,7 +94,7 @@ export const handleParamsCommand = (action, cmdchar, put) => {
         return { result: res, type: 'params' }
       } catch (e) {
         throw new Error(
-          'Could not parse input. Usage: `:params {"x":1,"y":"string"}`. ' + e
+          `Could not parse input. Usage: \`:params {"x":1,"y":"string"}\`. ${e}`
         )
       }
     }

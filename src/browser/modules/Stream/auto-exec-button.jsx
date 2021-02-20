@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  * This file is part of Neo4j.
  * Neo4j is free software: you can redistribute it and/or modify
@@ -37,19 +37,16 @@ const StyledAutoExecButton = styled.button`
   outline: transparent;
 `
 
-function AutoExecButtonComponent ({ bus, cmd, cmdChar, ...rest }) {
-  const onClick = useCallback(
-    () => {
-      const action = executeCommand(`${cmdChar}${cmd}`)
+function AutoExecButtonComponent({ bus, cmd, cmdChar, ...rest }) {
+  const onClick = useCallback(() => {
+    const action = executeCommand(`${cmdChar}${cmd}`)
 
-      bus.send(action.type, action)
-    },
-    [cmd]
-  )
+    bus.send(action.type, action)
+  }, [cmd])
 
   return (
-    <StyledAutoExecButton type='button' onClick={onClick} {...rest}>
-      <i className='fa fa-play-circle-o' /> {cmdChar}
+    <StyledAutoExecButton type="button" onClick={onClick} {...rest}>
+      <i className="fa fa-play-circle-o" /> {cmdChar}
       {cmd}
     </StyledAutoExecButton>
   )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -19,12 +19,12 @@
  */
 
 /* global jest, test, expect */
+/* eslint-disable react/display-name */
+
 import React from 'react'
 import { render } from '@testing-library/react'
 import configureMockStore from 'redux-mock-store'
 import { App } from './App'
-import { buildConnectionCredentialsObject } from 'browser-components/DesktopIntegration/helpers'
-import { flushPromises } from 'services/utils'
 
 const mockStore = configureMockStore()
 const store = mockStore({})
@@ -36,89 +36,21 @@ jest.mock('./styled', () => {
   const orig = require.requireActual('./styled')
   return {
     ...orig,
-    StyledApp: () => null
+    StyledApp: () => <div>Loaded</div>
   }
 })
 
 describe('App', () => {
   test('App loads', async () => {
     // Given
-    const getKerberosTicket = jest.fn(() => Promise.resolve('xxx'))
-    const desktopIntegrationPoint = getIntegrationPoint(true, getKerberosTicket)
-    let connectionCreds = null
     const props = {
-      store,
-      desktopIntegrationPoint,
-      setInitialConnectionData: async (
-        graph,
-        credentials,
-        context,
-        getKerberosTicket
-      ) => {
-        connectionCreds = await buildConnectionCredentialsObject(
-          context,
-          {},
-          getKerberosTicket
-        )
-      }
+      store
     }
 
     // When
-    render(<App {...props} />)
+    const { getByText } = render(<App {...props} />)
 
     // Then
-    await flushPromises()
-    expect(connectionCreds).toMatchObject({
-      authenticationMethod: 'KERBEROS',
-      password: 'xxx'
-    })
-    expect(getKerberosTicket).toHaveBeenCalledTimes(1)
+    expect(getByText('Loaded'))
   })
-})
-
-const getIntegrationPoint = (kerberosEnabled, getKerberosTicket) => {
-  const context = Promise.resolve(getDesktopContext(kerberosEnabled))
-  return {
-    getKerberosTicket: getKerberosTicket,
-    getContext: () => context
-  }
-}
-
-const getDesktopContext = (kerberosEnabled = false) => ({
-  projects: [
-    {
-      graphs: [
-        {
-          status: 'ACTIVE',
-          connection: {
-            type: 'REMOTE',
-            configuration: {
-              authenticationMethods: {
-                kerberos: {
-                  enabled: kerberosEnabled,
-                  servicePrincipal: 'KERBEROS'
-                }
-              },
-              protocols: {
-                bolt: {
-                  enabled: true,
-                  username: 'neo4j',
-                  password: 'password',
-                  tlsLevel: 'REQUIRED',
-                  url: `bolt://localhost:7687`
-                },
-                http: {
-                  enabled: true,
-                  username: 'neo4j',
-                  password: 'password',
-                  host: 'localhost',
-                  port: '7474'
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
-  ]
 })

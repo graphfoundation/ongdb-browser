@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -38,8 +38,8 @@ export const composeGrassToSync = (store, syncValue) => {
   if (
     grassFromSync.length < 1 ||
     (grassFromSync[0].data &&
-      (grassFromSync[0].data !== stringifyedGrassFromState &&
-        grassFromSync[0].data !== grassFromState))
+      grassFromSync[0].data !== stringifyedGrassFromState &&
+      grassFromSync[0].data !== grassFromState)
   ) {
     return [
       {
@@ -53,15 +53,14 @@ export const composeGrassToSync = (store, syncValue) => {
   return grassFromSync
 }
 
-function updateStyleData (state, styleData) {
+function updateStyleData(state, styleData) {
   return styleData
 }
 
-export default function visualization (state = initialState, action) {
-  if (action.type === APP_START) {
-    state = !state ? state : { ...initialState, ...state }
-  }
+export default function visualization(state = initialState, action) {
   switch (action.type) {
+    case APP_START:
+      return !state ? state : { ...initialState, ...state }
     case UPDATE_GRAPH_STYLE_DATA:
       return updateStyleData(state, action.styleData)
     default:
@@ -75,7 +74,7 @@ export const updateGraphStyleData = graphStyleData => {
     styleData: graphStyleData
   }
 }
-export function syncGrass (grass) {
+export function syncGrass(grass) {
   return {
     type: SYNC_GRASS,
     grass

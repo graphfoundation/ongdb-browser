@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -61,7 +61,7 @@ export const syncFolders = folders => {
   return { type: SYNC_FOLDERS, folders }
 }
 
-export default function reducer (state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_FOLDERS:
     case UPDATE_FOLDERS:
@@ -85,7 +85,7 @@ export const composeFoldersToSync = (store, syncValue) => {
     fold => !fold.isStatic
   )
 
-  let newFolders = [
+  const newFolders = [
     {
       client: getBrowserName(),
       data: stateFolders,

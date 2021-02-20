@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -39,7 +39,7 @@ import {
   SIGNED_IN
 } from 'shared/modules/sync/syncDuck'
 
-const SyncReminderBanner = React.memo(function SyncReminderBanner ({
+const SyncReminderBanner = React.memo(function SyncReminderBanner({
   dbConnectionState,
   syncConsent,
   optOutSync,
@@ -57,7 +57,7 @@ const SyncReminderBanner = React.memo(function SyncReminderBanner ({
 
   return (
     <Render if={visible}>
-      <SyncDisconnectedBanner height='100px'>
+      <SyncDisconnectedBanner height="100px">
         <StyledSyncReminderSpan>
           To enjoy the full Neo4j Browser experience, we advise you to use
           <SyncSignInBarButton onClick={onGetstartedClicked}>

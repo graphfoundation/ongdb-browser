@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -35,8 +35,8 @@ export const BrowserSyncAuthIframe = (
 export const BrowserSyncSignoutIframe = (logoutUrl, callback = () => {}) =>
   setupIframe(logoutUrl, undefined, callback)
 
-function setupIframe (url, type, cb) {
-  let iframe = document.createElement('iframe')
+function setupIframe(url, type, cb) {
+  const iframe = document.createElement('iframe')
   iframe.style.display = 'none'
   iframe.src = url
   if (!type) {

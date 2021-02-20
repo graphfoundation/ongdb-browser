@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global jest, describe, afterEach, test, expect */
 import { version } from 'project-root/package.json'
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus } from 'suber'
@@ -26,7 +25,8 @@ import { flushPromises } from 'services/utils'
 import {
   executeSystemCommand,
   executeSingleCommand,
-  handleSingleCommandEpic
+  handleSingleCommandEpic,
+  autoCommitTxCommand
 } from './commandsDuck'
 
 jest.mock('services/bolt/bolt', () => {
@@ -76,7 +76,10 @@ describe('tx metadata with cypher', () => {
     const bus = createBus()
     bus.applyReduxMiddleware(createEpicMiddleware(handleSingleCommandEpic))
     const $$responseChannel = 'test-channel'
-    const action = executeSingleCommand('RETURN 1', 'id', 'rqid')
+    const action = executeSingleCommand('RETURN 1', {
+      id: 'id',
+      requestId: 'rqid'
+    })
     action.$$responseChannel = $$responseChannel
 
     bus.send(action.type, action)
@@ -109,6 +112,54 @@ describe('tx metadata with cypher', () => {
         {},
         expect.objectContaining({
           txMetadata: { app: `neo4j-browser_v${version}`, type: 'system' }
+        })
+      )
+      done()
+    })
+  })
+})
+
+describe('Implicit vs explicit transactions', () => {
+  afterEach(() => {
+    bolt.routedWriteTransaction.mockClear()
+  })
+  test(`it sends the autoCommit flag = true to tx functions when using the :${autoCommitTxCommand} command`, done => {
+    // Given
+    const bus = createBus()
+    bus.applyReduxMiddleware(createEpicMiddleware(handleSingleCommandEpic))
+    const $$responseChannel = 'test-channel3'
+    const action = executeSingleCommand(`:${autoCommitTxCommand} RETURN 1`)
+    action.$$responseChannel = $$responseChannel
+
+    bus.send(action.type, action)
+    flushPromises().then(() => {
+      expect(bolt.routedWriteTransaction).toHaveBeenCalledTimes(1)
+      expect(bolt.routedWriteTransaction).toHaveBeenCalledWith(
+        'RETURN 1',
+        {},
+        expect.objectContaining({
+          autoCommit: true
+        })
+      )
+      done()
+    })
+  })
+  test('it sends the autoCommit flag = false to tx functions on regular cypher', done => {
+    // Given
+    const bus = createBus()
+    bus.applyReduxMiddleware(createEpicMiddleware(handleSingleCommandEpic))
+    const $$responseChannel = 'test-channel4'
+    const action = executeSingleCommand(`RETURN 1`)
+    action.$$responseChannel = $$responseChannel
+
+    bus.send(action.type, action)
+    flushPromises().then(() => {
+      expect(bolt.routedWriteTransaction).toHaveBeenCalledTimes(1)
+      expect(bolt.routedWriteTransaction).toHaveBeenCalledWith(
+        'RETURN 1',
+        {},
+        expect.objectContaining({
+          autoCommit: false
         })
       )
       done()

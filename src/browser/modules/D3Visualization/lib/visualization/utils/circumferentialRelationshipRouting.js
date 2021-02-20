@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -23,11 +23,11 @@ import StraightArrow from './straightArrow'
 import ArcArrow from './arcArrow'
 
 export default class circumferentialRelationshipRouting {
-  constructor (style) {
+  constructor(style) {
     this.style = style
   }
 
-  measureRelationshipCaption (relationship, caption) {
+  measureRelationshipCaption(relationship, caption) {
     const fontFamily = 'sans-serif'
     const fontSize = parseFloat(
       this.style.forRelationship(relationship).get('font-size')
@@ -38,17 +38,17 @@ export default class circumferentialRelationshipRouting {
     return measureText(caption, fontFamily, fontSize) + padding * 2
   }
 
-  captionFitsInsideArrowShaftWidth (relationship) {
+  captionFitsInsideArrowShaftWidth(relationship) {
     return (
       parseFloat(this.style.forRelationship(relationship).get('shaft-width')) >
       parseFloat(this.style.forRelationship(relationship).get('font-size'))
     )
   }
 
-  measureRelationshipCaptions (relationships) {
+  measureRelationshipCaptions(relationships) {
     return (() => {
       const result = []
-      for (let relationship of Array.from(relationships)) {
+      for (const relationship of Array.from(relationships)) {
         relationship.captionLength = this.measureRelationshipCaption(
           relationship,
           relationship.type
@@ -65,20 +65,21 @@ export default class circumferentialRelationshipRouting {
     })()
   }
 
-  shortenCaption (relationship, caption, targetWidth) {
+  shortenCaption(relationship, caption, targetWidth) {
     let shortCaption = caption
     while (true) {
       if (shortCaption.length <= 2) {
         return ['', 0]
       }
-      shortCaption = shortCaption.substr(0, shortCaption.length - 2) + '\u2026'
+      shortCaption = `${shortCaption.substr(0, shortCaption.length - 2)}\u2026`
       const width = this.measureRelationshipCaption(relationship, shortCaption)
       if (width < targetWidth) {
         return [shortCaption, width]
       }
     }
   }
-  layoutRelationships (graph) {
+
+  layoutRelationships(graph) {
     let dx, dy
     for (var relationship of Array.from(graph.relationships())) {
       dx = relationship.target.x - relationship.source.x
@@ -151,7 +152,7 @@ export default class circumferentialRelationshipRouting {
               angle = distributedAngles[id]
               relationship = relationshipMap[id]
               if (!relationship.hasOwnProperty('arrow')) {
-                var ref
+                let ref
                 const deflection =
                   node === relationship.source
                     ? angle - relationship.naturalAngle
@@ -203,10 +204,10 @@ export default class circumferentialRelationshipRouting {
                       relationship.captionLength
                         ? [relationship.caption, relationship.captionLength]
                         : this.shortenCaption(
-                          relationship,
-                          relationship.caption,
-                          relationship.arrow.shaftLength
-                        ))
+                            relationship,
+                            relationship.caption,
+                            relationship.arrow.shaftLength
+                          ))
                   )),
                   ref
                 )

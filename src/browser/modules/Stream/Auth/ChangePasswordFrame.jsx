@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -31,7 +31,7 @@ import { StyledConnectionAside } from './styled'
 import { getActiveConnection } from 'shared/modules/connections/connectionsDuck'
 
 export class ChangePasswordFrame extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     const connection = this.props.frame.connectionData
     this.state = {
@@ -41,19 +41,22 @@ export class ChangePasswordFrame extends Component {
       success: false
     }
   }
+
   error = e => {
     if (e.code === 'N/A') {
       e.message = 'Existing password is incorrect'
     }
     this.setState({ error: e })
   }
+
   onSuccess = () => {
     this.setState({ password: '' })
     this.setState({ success: true })
   }
-  render () {
+
+  render() {
     const content = (
-      <React.Fragment>
+      <>
         <StyledConnectionAside>
           <H3>Password change</H3>
           <Render if={!this.state.success}>
@@ -77,7 +80,7 @@ export class ChangePasswordFrame extends Component {
             showExistingPasswordInput
           />
         </Render>
-      </React.Fragment>
+      </>
     )
     return (
       <FrameTemplate

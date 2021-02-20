@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,8 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
-import { v1 as neo4j } from 'neo4j-driver'
+import neo4j from 'neo4j-driver'
 import {
   applyGraphTypes,
   recursivelyTypeGraphItems,
@@ -60,7 +59,7 @@ describe('applyGraphTypes', () => {
   })
 
   test('should work with boolean', () => {
-    let x = nativeTypesToCustom(true)
+    const x = nativeTypesToCustom(true)
     const result = applyGraphTypes(nativeTypesToCustom(true))
     const xResult = applyGraphTypes(x)
     expect(result).toEqual(true)

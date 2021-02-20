@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -266,22 +266,22 @@ export const Settings = ({
     })
     .filter(r => r)
   return (
-    <Drawer id='db-settings'>
+    <Drawer id="db-settings">
       <DrawerHeader>Browser Settings</DrawerHeader>
       <DrawerBody>
         <DrawerSection>
-          <DrawerSectionBody key='settings'>{mappedSettings}</DrawerSectionBody>
+          <DrawerSectionBody key="settings">{mappedSettings}</DrawerSectionBody>
           <FeatureToggle
             name={experimentalFeatureSelfName}
             on={
-              <React.Fragment>
+              <>
                 {mappedExperimentalFeatures.length ? (
                   <DrawerSubHeader>Experimental features</DrawerSubHeader>
                 ) : null}
-                <DrawerSectionBody key='experimental-features'>
+                <DrawerSectionBody key="experimental-features">
                   {mappedExperimentalFeatures}
                 </DrawerSectionBody>
-              </React.Fragment>
+              </>
             }
           />
         </DrawerSection>

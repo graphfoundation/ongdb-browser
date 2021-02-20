@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,18 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global describe, test, expect */
-
 import React from 'react'
 import { render } from '@testing-library/react'
-import { v1 as neo4j } from 'neo4j-driver'
+import neo4j from 'neo4j-driver'
 import { Visualization } from './VisualizationView'
 
 const mockEmptyResult = {
   records: []
 }
 const node = new neo4j.types.Node('1', ['Person'], {
-  prop1: 'prop1'
+  prop1: '<b>String</b> with HTML <strong>in</strong> it'
 })
 const mockResult = {
   records: [{ keys: ['0'], __fields: [node], get: key => node }]
@@ -39,7 +37,7 @@ test('Visualization renders', () => {
   const { container } = render(<Visualization result={mockEmptyResult} />)
   expect(container).toMatchSnapshot()
 })
-test('Visualization renders with result', () => {
+test('Visualization renders with result and escapes any HTML', () => {
   const { container } = render(
     <Visualization updateStyle={() => {}} autoComplete result={mockResult} />
   )

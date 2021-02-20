@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019 "Neo4j,"
+ * Copyright (c) 2002-2020 "Neo4j,"
  * Neo4j Sweden AB [http://neo4j.com]
  *
  * This file is part of Neo4j.
@@ -18,14 +18,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global jest, describe, test, expect */
-
 import React from 'react'
 import { render } from '@testing-library/react'
 import { SysInfoFrame } from './index'
 
 jest.mock(
   'browser/modules/Frame/FrameTemplate',
+  // eslint-disable-next-line
   () => ({ contents, children }) => (
     <div>
       {contents}
@@ -46,7 +45,7 @@ describe('sysinfo component', () => {
     expect(getByText('Causal Cluster Members')).not.toBeNull()
     expect(
       container.querySelector(
-        `[data-testid="sysinfo-casual-cluster-members-title"]`
+        '[data-testid="sysinfo-casual-cluster-members-title"]'
       )
     ).not.toBeNull()
   })
@@ -69,6 +68,6 @@ describe('sysinfo component', () => {
     const { getByText } = render(<SysInfoFrame {...props} />)
 
     // Then
-    expect(getByText('No connection available')).not.toBeNull()
+    expect(getByText(/No connection available/i)).not.toBeNull()
   })
 })
