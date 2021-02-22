@@ -93,20 +93,6 @@ function Sidebar(props) {
   ]
   const bottomNavItemsList = [
     {
-      name: 'Sync',
-      title: 'Cloud Services',
-      icon: function syncIcon(isOpen) {
-        return (
-          <CloudSyncIcon
-            isOpen={isOpen}
-            connected={props.syncConnected}
-            title="Cloud Services"
-          />
-        )
-      },
-      content: BrowserSync
-    },
-    {
       name: 'Settings',
       title: 'Browser Settings',
       icon: function settingIcon(isOpen) {
@@ -161,7 +147,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Sidebar)
+export default connect(mapStateToProps, null)(Sidebar)
