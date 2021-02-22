@@ -102,9 +102,9 @@ function Sidebar(props) {
     },
     {
       name: 'About',
-      title: 'About Neo4j',
+      title: 'About ONgDB',
       icon: function aboutIcon(isOpen) {
-        return <AboutIcon isOpen={isOpen} title="About Neo4j" />
+        return <AboutIcon isOpen={isOpen} title="About ONgDB" />
       },
       content: AboutDrawer
     }
