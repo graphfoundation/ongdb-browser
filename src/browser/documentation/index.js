@@ -103,14 +103,12 @@ import helpWith from './help/with'
 
 // Dynamic Help
 import helpCommands from './dynamic/commands'
-import helpCypher from './dynamic/cypher'
 import helpGeequel from './dynamic/geequel'
 import helpHelp from './dynamic/help'
 import helpPlay from './dynamic/play'
 
 // Carousels
 import guideConcepts from './guides/concepts'
-import guideCypher from './guides/cypher'
 import guideGeequel from './guides/geequel'
 import guideIntro from './guides/intro'
 import guideLearn from './guides/learn'
@@ -130,7 +128,6 @@ export default {
     chapters: {
       auto: helpAuto,
       clear: helpClear,
-      cypher: helpCypher,
       geequel: helpGeequel,
       bolt: helpBolt,
       commands: helpCommands,
@@ -212,7 +209,6 @@ export default {
     title: 'Guides & Examples',
     chapters: {
       concepts: guideConcepts,
-      cypher: guideCypher,
       geequel: guideGeequel,
       intro: guideIntro,
       learn: guideLearn,
