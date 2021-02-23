@@ -70,7 +70,7 @@ const slides = [
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>
@@ -134,7 +134,7 @@ SET n = row`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="match">MATCH</a>
       </p>
     </div>
@@ -187,7 +187,7 @@ CREATE (s)-[:SUPPLIES]->(p)`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="match">MATCH</a>
       </p>
     </div>
@@ -223,7 +223,7 @@ RETURN DISTINCT s.companyName as ProduceSuppliers`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>
@@ -286,7 +286,7 @@ CREATE (c)-[:PURCHASED]->(o)`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>

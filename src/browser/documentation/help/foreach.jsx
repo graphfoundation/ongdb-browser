@@ -45,7 +45,7 @@ const content = (
           <a help-topic="create">:help CREATE</a>
           <a help-topic="delete">:help DELETE</a>
           <a help-topic="set">:help SET</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

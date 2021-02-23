@@ -50,7 +50,7 @@ const content = (
           <a help-topic="show-users">:help SHOW USERS</a>{' '}
           <a help-topic="create-user">:help CREATE USER</a>{' '}
           <a help-topic="drop-user">:help DROP USER</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

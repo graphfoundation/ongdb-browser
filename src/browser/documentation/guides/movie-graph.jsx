@@ -67,7 +67,7 @@ const slides = [
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="geequel">geequel</a>{' '}
         <a help-topic="create">CREATE</a>
       </p>
     </div>

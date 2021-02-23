@@ -49,7 +49,7 @@ const content = (
         <p className="content">
           <a help-topic="match">:help MATCH</a>
           <a help-topic="return">:help RETURN</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

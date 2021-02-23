@@ -51,7 +51,7 @@ const content = (
         <p className="content">
           <a help-topic="set">:help SET</a>
           <a help-topic="merge">:help MERGE</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
       <div className="link">

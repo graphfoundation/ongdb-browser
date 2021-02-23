@@ -52,7 +52,7 @@ const content = (
         <div className="content">
           <a help-topic="drop-constraint-on">:help DROP CONSTRAINT ON</a>{' '}
           <a help-topic="schema">:help Schema</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </div>
       </div>
     </div>

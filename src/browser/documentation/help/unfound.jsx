@@ -35,7 +35,7 @@ const content = (
         Browser
       </li>
       <li>
-        <a help-topic="cypher">:help commands</a> - to see available commands
+        <a help-topic="commands">:help commands</a> - to see available commands
       </li>
       <li>
         <a href="https://neo4j.com/docs/">Neo4j Documentation</a> - for detailed

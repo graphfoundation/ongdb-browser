@@ -51,7 +51,7 @@ const content = (
           <a help-topic="create-role">:help CREATE ROLE</a>{' '}
           <a help-topic="drop-role">:help DROP ROLE</a>{' '}
           <a help-topic="revoke-role">:help REVOKE ROLE</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

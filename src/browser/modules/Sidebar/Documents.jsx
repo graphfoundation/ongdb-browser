@@ -45,7 +45,7 @@ const intro = [
 ]
 const help = [
   { name: 'Help', command: ':help help', type: 'help' },
-  { name: 'Geequel syntax', command: ':help cypher', type: 'help' },
+  { name: 'Geequel syntax', command: ':help geequel', type: 'help' },
   { name: 'Available commands', command: ':help commands', type: 'help' },
   { name: 'Keyboard shortcuts', command: ':help keys', type: 'help' }
 ]

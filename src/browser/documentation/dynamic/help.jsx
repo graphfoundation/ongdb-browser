@@ -45,7 +45,7 @@ const description = (
         <tr>
           <th>Topics:</th>
           <td>
-            <a help-topic="cypher">:help cypher</a>{' '}
+            <a help-topic="geequel">:help geequel</a>{' '}
             <a help-topic="commands">:help commands</a>{' '}
             <a help-topic="keys">:help keys</a>
           </td>

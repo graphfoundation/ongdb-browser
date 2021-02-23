@@ -46,7 +46,7 @@ const content = (
           <a help-topic="where">:help WHERE</a>
           <a help-topic="return">:help RETURN</a>
           <a help-topic="delete">:help DELETE</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

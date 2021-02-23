@@ -39,7 +39,7 @@ const content = (
           <th>Related:</th>
           <td>
             <a help-topic="load csv">:help load csv</a>
-            <a help-topic="cypher">:help cypher</a>
+            <a help-topic="geequel">:help geequel</a>
             <a help-topic="commands">:help commands</a>
           </td>
         </tr>

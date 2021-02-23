@@ -85,6 +85,7 @@ import helpWith from './help/with'
 // Dynamic Help
 import helpCommands from './dynamic/commands'
 import helpCypher from './dynamic/cypher'
+import helpGeequel from './dynamic/geequel'
 import helpHelp from './dynamic/help'
 import helpPlay from './dynamic/play'
 
@@ -111,6 +112,7 @@ export default {
       auto: helpAuto,
       clear: helpClear,
       cypher: helpCypher,
+      geequel: helpGeequel,
       bolt: helpBolt,
       commands: helpCommands,
       guides: helpPlay,

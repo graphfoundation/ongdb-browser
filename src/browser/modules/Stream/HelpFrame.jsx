@@ -105,7 +105,15 @@ function generateContent(frame) {
       let { content } = chapter
 
       // The commands topic is a special case that uses dynamic data
-      const dynamic = ['bolt', 'commands', 'play', 'guides', 'help', 'cypher']
+      const dynamic = [
+        'bolt',
+        'commands',
+        'play',
+        'guides',
+        'help',
+        'cypher',
+        'geequel'
+      ]
       if (dynamic.includes(helpTopic)) {
         content = <DynamicTopics docs={docs} {...chapter} />
       }

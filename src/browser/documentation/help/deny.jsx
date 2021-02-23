@@ -59,7 +59,7 @@ const content = (
           <a help-topic="show-privileges">:help SHOW PRIVILEGES</a>{' '}
           <a help-topic="grant">:help GRANT</a>{' '}
           <a help-topic="revoke">:help REVOKE</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="geequel">:help Geequel</a>
         </p>
       </div>
     </div>

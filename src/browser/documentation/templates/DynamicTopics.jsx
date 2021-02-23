@@ -38,6 +38,7 @@ const categorize = commands => {
     cypherQueries: { title: 'Geequel Queries' },
     executionPlans: { title: 'Execution Plans' },
     cypherHelp: { title: 'Geequel Help' },
+    geequelHelp: { title: 'Geequel Help' },
     schemaClauses: { title: 'Schema Clauses' },
     administration: { title: 'Administration' },
     security: { title: 'Security' },
