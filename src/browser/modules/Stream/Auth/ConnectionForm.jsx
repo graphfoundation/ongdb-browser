@@ -98,13 +98,13 @@ export class ConnectionForm extends Component {
             doneFn()
             this.setState({ passwordChangeNeeded: true })
           } else if (isNonSupportedRoutingSchemeError(res.error)) {
-            // Need to switch scheme to bolt:// for Neo4j 3.x connections
+            // Need to switch scheme to bolt:// for ONgDB 3.x connections
             const url = toggleSchemeRouting(this.state.host)
             this.props.error(
               Error(
                 `Could not connect with the "${getScheme(
                   this.state.host
-                )}://" scheme to this Neoj server. Automatic retry using the "${getScheme(
+                )}://" scheme to this ONgDB server. Automatic retry using the "${getScheme(
                   url
                 )}://" scheme in a moment...`
               )
@@ -346,9 +346,5 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 }
 
 export default withBus(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    mergeProps
-  )(ConnectionForm)
+  connect(mapStateToProps, mapDispatchToProps, mergeProps)(ConnectionForm)
 )

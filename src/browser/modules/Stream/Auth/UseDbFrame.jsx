@@ -40,7 +40,7 @@ export const UseDbFrame = props => {
         <span>
           <React.Fragment>
             <H3>Use database</H3>
-            You have updated what database to use in the Neo4j dbms.
+            You have updated what database to use in the ONgDB dbms.
           </React.Fragment>
         </span>
       </StyledConnectionAside>

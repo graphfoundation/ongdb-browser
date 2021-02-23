@@ -51,7 +51,7 @@ export const ServerStatusFrame = props => {
       <StyledConnectionBodyContainer>
         <Render if={!isConnected || !activeConnectionData}>
           <StyledConnectionBody>
-            You are currently not connected to Neo4j.
+            You are currently not connected to ONgDB.
             <br />
             Execute <ClickToCode>:server connect</ClickToCode> and enter your
             credentials to connect.
@@ -105,7 +105,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Frame)
+export default connect(mapStateToProps, null)(Frame)

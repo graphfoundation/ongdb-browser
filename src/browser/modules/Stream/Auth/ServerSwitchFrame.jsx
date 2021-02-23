@@ -113,7 +113,7 @@ export const ServerSwitchFrame = props => {
               host={activeConnectionData && activeConnectionData.host}
               showHost
               hideStoreCredentials
-              additionalFooter="You have a working connection with the Neo4j database and server auth is disabled."
+              additionalFooter="You have a working connection with the ONgDB database and server auth is disabled."
             />
           </div>
         </Render>

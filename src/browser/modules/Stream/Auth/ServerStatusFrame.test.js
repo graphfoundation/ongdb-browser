@@ -31,7 +31,7 @@ test("shows friendly message on how to connect if you're not connected (empty da
   const { getByText } = render(<ServerStatusFrame {...props} />)
 
   // Then
-  expect(getByText(/You are currently not connected to Neo4j/i)).not.toBe(null)
+  expect(getByText(/You are currently not connected to ONgDB/i)).not.toBe(null)
 })
 
 test("shows friendly message on how to connect if you're not connected (populated data)", () => {
@@ -50,7 +50,7 @@ test("shows friendly message on how to connect if you're not connected (populate
   const { getByText } = render(<ServerStatusFrame {...props} />)
 
   // Then
-  expect(getByText(/You are currently not connected to Neo4j/i)).not.toBe(null)
+  expect(getByText(/You are currently not connected to ONgDB/i)).not.toBe(null)
 })
 
 test('shows connection info when connected (retain creds)', () => {
