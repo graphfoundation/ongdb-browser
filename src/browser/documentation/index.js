@@ -127,7 +127,7 @@ export default {
     }
   },
   cypher: {
-    title: 'Cypher',
+    title: 'Geequel',
     chapters: {
       alterUser: helpAlterUser,
       contains: helpContains,

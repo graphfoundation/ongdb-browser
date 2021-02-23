@@ -23,17 +23,17 @@ import ManualLink from 'browser-components/ManualLink'
 import Carousel from '../../modules/Carousel/Carousel'
 import Slide from '../../modules/Carousel/Slide'
 
-const title = 'Cypher'
+const title = 'Geequel'
 const category = 'guides'
 const slides = [
   <Slide key="first">
     <div className="col-sm-3">
-      <h3>Cypher</h3>
+      <h3>Geequel</h3>
       <p className="lead">ONgDB's graph query language</p>
     </div>
     <div className="col-sm-9">
       <p>
-        ONgDB's Cypher language is purpose built for working with graph data.
+        ONgDB's Geequel language is purpose built for working with graph data.
       </p>
       <ul className="big">
         <li>uses patterns to describe graph data</li>
@@ -48,7 +48,7 @@ const slides = [
       <p className="lead">Create a node</p>
     </div>
     <div className="col-sm-9">
-      <p>Let's use Cypher to generate a small social graph.</p>
+      <p>Let's use Geequel to generate a small social graph.</p>
       <figure>
         <pre mode="cypher" className="pre-scrollable code runnable">
           {'CREATE (ee:Person { name: "Emil", from: "Sweden", klout: 99 })'}
@@ -219,7 +219,7 @@ RETURN DISTINCT surfer`}
   </Slide>,
   <Slide key="eighth">
     <div className="col-sm-3">
-      <h3>Live Cypher warnings</h3>
+      <h3>Live Geequel warnings</h3>
       <p className="lead">Identify query problems in real time</p>
     </div>
     <div className="col-sm-5">
@@ -239,7 +239,7 @@ RETURN DISTINCT surfer`}
     <div className="col-sm-4">
       <h3>Next steps</h3>
       <p>
-        Start your application using Cypher to create and query graph data. Use
+        Start your application using Geequel to create and query graph data. Use
         the REST API to monitor the database. In special cases, consider a
         plugin.
       </p>
@@ -260,30 +260,6 @@ RETURN DISTINCT surfer`}
         <li>
           <a play-topic="northwind-graph">Northwind Graph</a> - from RDBMS to
           graph
-        </li>
-      </ul>
-    </div>
-    <div className="col-sm-4">
-      <h3>Reference</h3>
-      <ul className="undecorated">
-        <li>
-          <a
-            target="_blank"
-            href="https://neo4j.com/developer/guide-importing-data-and-etl/"
-          >
-            Full Northwind import example
-          </a>
-        </li>
-        <li>
-          <ManualLink chapter="cypher-refcard" page="/">
-            Cypher Refcard
-          </ManualLink>
-        </li>
-        <li>
-          <ManualLink chapter="cypher-manual" page="/">
-            The Cypher chapter
-          </ManualLink>{' '}
-          of the ONgDB Developer Manual
         </li>
       </ul>
     </div>

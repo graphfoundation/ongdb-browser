@@ -20,15 +20,15 @@
 
 import React from 'react'
 import ManualLink from 'browser-components/ManualLink'
-const title = 'Cypher'
+const title = 'Geequel'
 const subtitle = 'A graph query language'
 const category = 'browserUiCommands'
 const filter = ['cypher']
 const description = (
   <>
     <p>
-      Cypher is Neo4j&apos;s graph query language. Working with a graph is all
-      about understanding patterns of data, which are central to Cypher queries.
+      Geequel is ONgDB's graph query language. Working with a graph is all about
+      understanding patterns of data, which are central to Geequel queries.
     </p>
     <p>
       Use
@@ -37,14 +37,6 @@ const description = (
       <code>MERGE</code> for writing data.
     </p>
     <div className="links">
-      <div className="link">
-        <p className="title">Reference</p>
-        <p className="content">
-          <ManualLink chapter="cypher-manual" page="/">
-            Cypher introduction
-          </ManualLink>
-        </p>
-      </div>
       <div className="link">
         <p className="title">Related</p>
         <p className="content">
@@ -69,7 +61,7 @@ const description = (
       <div className="link">
         <p className="title">Guide</p>
         <p className="content">
-          <a play-topic="cypher">Cypher</a>
+          <a play-topic="cypher">Geequel</a>
         </p>
       </div>
     </div>
@@ -81,7 +73,7 @@ WHERE <conditions>
 RETURN <expressions>`}
         </pre>
         <figcaption>
-          Basic form of a Cypher read statement. (Not executable)
+          Basic form of a Geequel read statement. (Not executable)
         </figcaption>
       </figure>
     </section>
