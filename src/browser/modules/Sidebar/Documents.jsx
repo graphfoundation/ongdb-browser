@@ -137,7 +137,6 @@ const Documents = ({ version, urlVersion }) => {
       <DrawerBody>
         <DocumentItems header="Introduction" items={items.intro} />
         <DocumentItems header="Help" items={items.help} />
-        <DocumentItems header="Useful Resources" items={items.reference} />
       </DrawerBody>
     </Drawer>
   )
