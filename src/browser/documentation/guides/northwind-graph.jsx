@@ -78,7 +78,7 @@ const slides = [
       <h4>Load records</h4>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/products.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/products.csv" AS row
 CREATE (n:Product)
 SET n = row,
 n.unitPrice = toFloat(row.unitPrice),
@@ -88,14 +88,14 @@ n.reorderLevel = toInteger(row.reorderLevel), n.discontinued = (row.discontinued
       </figure>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/categories.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/categories.csv" AS row
 CREATE (n:Category)
 SET n = row`}
         </pre>
       </figure>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/suppliers.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/suppliers.csv" AS row
 CREATE (n:Supplier)
 SET n = row`}
         </pre>
@@ -231,14 +231,14 @@ RETURN DISTINCT s.companyName as ProduceSuppliers`}
       <h4>Load and index records</h4>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/customers.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/customers.csv" AS row
 CREATE (n:Customer)
 SET n = row`}
         </pre>
       </figure>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/orders.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/orders.csv" AS row
 CREATE (n:Order)
 SET n = row`}
         </pre>
@@ -294,7 +294,7 @@ CREATE (c)-[:PURCHASED]->(o)`}
       <h4>Load and index records</h4>
       <figure>
         <pre className="pre-scrollable code runnable">
-          {`LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/order-details.csv" AS row
+          {`LOAD CSV WITH HEADERS FROM "https://cdn.graphfoundation.org/data/northwind/order-details.csv" AS row
 MATCH (p:Product), (o:Order)
 WHERE p.productID = row.productID AND o.orderID = row.orderID
 CREATE (o)-[details:ORDERS]->(p)
@@ -338,13 +338,13 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
         <li>
           <a
             target="_blank"
-            href="https://neo4j.com/developer/guide-importing-data-and-etl/"
+            href="https://graphfoundation.org/developer/guide-importing-data-and-etl/"
           >
             Full Northwind import example
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://neo4j.com/developer/">
+          <a target="_blank" href="https://graphfoundation.org/developer/">
             Developer resources
           </a>
         </li>

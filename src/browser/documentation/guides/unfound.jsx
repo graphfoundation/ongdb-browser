@@ -34,7 +34,7 @@ const content = (
         <a play-topic="start">:play start</a> - to see a few available guides
       </li>
       <li>
-        <a href="https://graphfoundation.com/docs/">ONgDB Documentation</a> -
+        <a href="https://graphfoundation.org/docs/">ONgDB Documentation</a> -
         for detailed information about ONgDB
       </li>
     </ul>

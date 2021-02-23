@@ -54,52 +54,52 @@ const getReferences = (version, v) => {
   const newRefs = [
     {
       name: 'Getting Started',
-      command: `https://neo4j.com/docs/getting-started/${v}`,
+      command: `https://graphfoundation.org/docs/getting-started/${v}`,
       type: 'link'
     },
     {
       name: 'Cypher Introduction',
-      command: ` https://neo4j.com/docs/cypher-manual/${v}/introduction/ `,
+      command: ` https://graphfoundation.org/docs/cypher-manual/${v}/introduction/ `,
       type: 'link'
     }
   ]
   const oldRefs = [
     {
       name: 'Getting Started',
-      command: `https://neo4j.com/docs/developer-manual/${v}/get-started/`,
+      command: `https://graphfoundation.org/docs/developer-manual/${v}/get-started/`,
       type: 'link'
     },
     {
       name: 'Developer Manual',
-      command: `https://neo4j.com/docs/developer-manual/${v}/`,
+      command: `https://graphfoundation.org/docs/developer-manual/${v}/`,
       type: 'link'
     },
     {
       name: 'Cypher Introduction',
-      command: `https://neo4j.com/docs/developer-manual/${v}/cypher/`,
+      command: `https://graphfoundation.org/docs/developer-manual/${v}/cypher/`,
       type: 'link'
     }
   ]
   const commonRefs = [
     {
       name: 'Operations Manual',
-      command: `https://neo4j.com/docs/operations-manual/${v}/`,
+      command: `https://graphfoundation.org/docs/operations-manual/${v}/`,
       type: 'link'
     },
     // Drivers manual needs to wait for the page to be published
     // {
     //   name: 'Drivers Manual',
-    //   command: `https://neo4j.com/docs/driver-manual/current/`,
+    //   command: `https://graphfoundation.org/docs/driver-manual/current/`,
     //   type: 'link'
     // },
     {
       name: 'Cypher Refcard',
-      command: `https://neo4j.com/docs/cypher-refcard/${v}/`,
+      command: `https://graphfoundation.org/docs/cypher-refcard/${v}/`,
       type: 'link'
     },
     {
       name: 'GraphGists',
-      command: 'https://neo4j.com/graphgists/',
+      command: 'https://graphfoundation.org/graphgists/',
       type: 'link'
     },
     {
@@ -109,12 +109,12 @@ const getReferences = (version, v) => {
     },
     {
       name: 'Knowledge Base',
-      command: 'https://neo4j.com/developer/kb/',
+      command: 'https://graphfoundation.org/developer/kb/',
       type: 'link'
     },
     {
       name: 'ONgDB Browser Developer Pages',
-      command: 'https://neo4j.com/developer/neo4j-browser/',
+      command: 'https://graphfoundation.org/developer/neo4j-browser/',
       type: 'link'
     }
   ]

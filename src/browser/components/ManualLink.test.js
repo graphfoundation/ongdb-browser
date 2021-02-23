@@ -26,7 +26,7 @@ import { ManualLink } from './ManualLink'
 const tests = [
   [
     { neo4jVersion: null, chapter: 'graph-algorithms', page: '/' },
-    'https://neo4j.com/docs/graph-algorithms/current/'
+    'https://graphfoundation.org/docs/graph-algorithms/current/'
   ],
   [
     {
@@ -34,11 +34,11 @@ const tests = [
       chapter: 'cypher-manual',
       page: '/schema/constraints/'
     },
-    'https://neo4j.com/docs/cypher-manual/3.5/schema/constraints/'
+    'https://graphfoundation.org/docs/cypher-manual/3.5/schema/constraints/'
   ],
   [
     { neo4jVersion: '4.0.0-beta03mr03', chapter: 'driver-manual', page: '' },
-    'https://neo4j.com/docs/driver-manual/4.0-preview/'
+    'https://graphfoundation.org/docs/driver-manual/4.0-preview/'
   ],
   [
     {
@@ -47,7 +47,7 @@ const tests = [
       page: '',
       minVersion: '4.0.0'
     },
-    'https://neo4j.com/docs/driver-manual/4.0/'
+    'https://graphfoundation.org/docs/driver-manual/4.0/'
   ],
   [
     {
@@ -56,11 +56,11 @@ const tests = [
       page: '',
       minVersion: '3.5.0'
     },
-    'https://neo4j.com/docs/driver-manual/4.0-preview/'
+    'https://graphfoundation.org/docs/driver-manual/4.0-preview/'
   ],
   [
     { chapter: 'driver-manual', page: '/', minVersion: '3.5.0' },
-    'https://neo4j.com/docs/driver-manual/3.5/'
+    'https://graphfoundation.org/docs/driver-manual/3.5/'
   ]
 ]
 
@@ -78,21 +78,22 @@ const movedPages = [
     { neo4jVersion: '3.5.0', page: '/administration/' },
     {
       text: 'Cypher Schema',
-      url: 'https://neo4j.com/docs/cypher-manual/3.5/schema/'
+      url: 'https://graphfoundation.org/docs/cypher-manual/3.5/schema/'
     }
   ],
   [
     { neo4jVersion: '4.0.0', page: '/administration/' },
     {
       text: 'link to manual',
-      url: 'https://neo4j.com/docs/cypher-manual/4.0/administration/'
+      url: 'https://graphfoundation.org/docs/cypher-manual/4.0/administration/'
     }
   ],
   [
     { page: '/administration/' },
     {
       text: 'link to manual',
-      url: 'https://neo4j.com/docs/cypher-manual/current/administration/'
+      url:
+        'https://graphfoundation.org/docs/cypher-manual/current/administration/'
     }
   ]
 ]

@@ -68,7 +68,7 @@ export function ManualLink({
     version = formatDocVersion(minVersion)
   }
 
-  const url = `https://neo4j.com/docs/${chapter}/${version}/${cleanPage}`
+  const url = `https://graphfoundation.org/docs/${chapter}/${version}/${cleanPage}`
 
   return (
     <a href={url} target="_blank">
@@ -81,7 +81,4 @@ const mapStateToProps = state => ({
   neo4jVersion: getVersion(state)
 })
 
-export default connect(
-  mapStateToProps,
-  null
-)(ManualLink)
+export default connect(mapStateToProps, null)(ManualLink)
