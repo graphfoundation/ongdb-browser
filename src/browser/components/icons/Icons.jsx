@@ -27,7 +27,7 @@ import bookSearch from 'icons/book-search.svg'
 import cog from 'icons/cog.svg'
 import cloudCheck from 'icons/cloud-check.svg'
 import cloudRemove from 'icons/cloud-remove.svg'
-import neo4j from 'icons/neo-world.svg'
+import ongdb from 'icons/ongdb-world.svg'
 import pin from 'icons/pin.svg'
 import close from 'icons/close.svg'
 import expand01 from 'icons/expand-01.svg'
@@ -67,7 +67,7 @@ const lightBlue = `
   color: #5dade2;
 `
 
-const neo4jPulse = keyframes`
+const ongdbPulse = keyframes`
   0%,
   100% {
     fill: #1bf621;
@@ -78,7 +78,7 @@ const neo4jPulse = keyframes`
 `
 
 const credits = css`
-  animation: ${neo4jPulse} 2s infinite;
+  animation: ${ongdbPulse} 2s infinite;
   animation-timing-function: ease-in-out;
 `
 
@@ -177,7 +177,7 @@ export const AboutIcon = props => (
   <IconContainer
     activeStyle={credits}
     inactiveStyle={inactive}
-    icon={neo4j}
+    icon={ongdb}
     width={32}
     {...props}
   />
@@ -203,7 +203,7 @@ export const TableIcon = () => (
   <IconContainer icon={table01} text="Table" width={20} />
 )
 export const VisualizationIcon = () => (
-  <IconContainer icon={neo4j} text="Graph" width={20} />
+  <IconContainer icon={ongdb} text="Graph" width={20} />
 )
 export const AsciiIcon = () => (
   <IconContainer icon={Text201} text="Text" width={18} />
