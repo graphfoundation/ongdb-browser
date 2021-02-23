@@ -148,7 +148,7 @@ describe('editorDuck Epics', () => {
     // When
     store.dispatch(action)
   })
-  test('Accepts one or more Cypher queries from URL params and populates the editor', done => {
+  test('Accepts one or more Geequel queries from URL params and populates the editor', done => {
     const cmd = 'edit'
     const args = ['RETURN 1;', 'RETURN rand();']
     const action = {

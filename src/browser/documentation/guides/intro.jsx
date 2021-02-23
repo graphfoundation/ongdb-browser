@@ -37,7 +37,7 @@ const slides = [
       </p>
       <ul className="big">
         <li>
-          Developer focused, for writing and running graph queries with Cypher
+          Developer focused, for writing and running graph queries with Geequel
         </li>
         <li>Exportable tabular results of any query result</li>
         <li>
@@ -56,7 +56,7 @@ const slides = [
     <div className="col-sm-5">
       <p>
         The editor is the primary interface for entering and running commands.
-        Enter Cypher queries to work with graph data. Use client-side commands
+        Enter Geequel queries to work with graph data. Use client-side commands
         like
         <code>:help</code> for other operations.
       </p>

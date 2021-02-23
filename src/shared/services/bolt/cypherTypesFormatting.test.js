@@ -20,7 +20,7 @@
 
 import { stringModifier } from 'services/bolt/cypherTypesFormatting'
 
-describe('Cypher Types Number modifier only modifies where needed', () => {
+describe('Geequel Types Number modifier only modifies where needed', () => {
   const tests = [
     [Number(123), '123.0'],
     [Number(123.1), undefined],

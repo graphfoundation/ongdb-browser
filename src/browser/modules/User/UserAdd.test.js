@@ -30,7 +30,7 @@ import { listRolesQuery } from 'shared/modules/cypher/boltUserHelper'
 jest.mock('browser/modules/Frame/FrameTitlebar', () => () => null)
 
 describe('<UserAdd />', () => {
-  it('should send a Cypher request to list user roles when mounted', () => {
+  it('should send a Geequel request to list user roles when mounted', () => {
     const bus = createBus()
     const useSystemDb = true
     const props = {

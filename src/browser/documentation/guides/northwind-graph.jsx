@@ -59,7 +59,7 @@ const slides = [
       <p>
         The load statements to the right require public internet access.
         <code>LOAD CSV</code> will retrieve a CSV file from a valid URL,
-        applying a Cypher statement to each row using a named map (here we're
+        applying a Geequel statement to each row using a named map (here we're
         using the name `row`).
       </p>
       <p>
@@ -350,7 +350,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            ONgDB Cypher Manual
+            ONgDB Geequel Manual
           </ManualLink>
         </li>
       </ul>

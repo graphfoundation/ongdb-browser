@@ -34,7 +34,7 @@ const content = (
     </p>
     <p>
       The right hand side of
-      <code>=></code> is sent to the server and evaluated as Cypher with an
+      <code>=></code> is sent to the server and evaluated as Geequel with an
       implicit
       <code>RETURN</code> in front. This gives better type safety since some
       types (especially numbers) in JavaScript are hard to match with ONgDB's
@@ -44,7 +44,7 @@ const content = (
       <code>:param x => 1.0</code>.
     </p>
     <p>
-      Cypher query example with a param:
+      Geequel query example with a param:
       <code>MATCH (n:Person) WHERE n.name = $name</code>
     </p>
     <ParamsOnSystemDb />

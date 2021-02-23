@@ -74,7 +74,7 @@ const content = (
       </div>
       <div className="teaser teaser-3">
         <h3>Jump into code</h3>
-        <p className="lead">Use Cypher, the graph query language.</p>
+        <p className="lead">Use Geequel, the graph query language.</p>
         <div className="icon-holder">
           <div className="icon sl yellow">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

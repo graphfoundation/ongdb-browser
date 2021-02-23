@@ -168,7 +168,7 @@ const content = (
       <div className="col-lg-4">
         <h2 className="vtop">Code</h2>
         <p>
-          Within body text, use <code>{'<code>'}</code> for citing Cypher
+          Within body text, use <code>{'<code>'}</code> for citing Geequel
           keywords like <code>MERGE</code> or indicating key-combinations. Avoid
           code-snippets within a paragraph, preferring a code block.
         </p>
@@ -182,7 +182,7 @@ const content = (
       </div>
       <div className="col-lg-8">
         <h5 className="vtop">Code Block</h5>
-        <p>Create a static block of Cypher using...</p>
+        <p>Create a static block of Geequel using...</p>
         <pre>
           {
             '<figure><pre mode="cypher" className="code">>MATCH ... RETURN ... </pre></figure>'

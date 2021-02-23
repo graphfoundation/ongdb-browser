@@ -27,10 +27,10 @@ const filter = ['help']
 const description = (
   <>
     <p>
-      In addition to composing and running Cypher queries, the editor bar up
+      In addition to composing and running Geequel queries, the editor bar up
       above ↑ understands a few client-side commands, which begin with a
       <code>:</code>. Without a colon, we'll assume you're trying to enter a
-      Cypher query.
+      Geequel query.
     </p>
     <table className="table-condensed table-help">
       <tbody>

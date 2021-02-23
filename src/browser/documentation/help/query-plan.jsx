@@ -27,7 +27,7 @@ const content = (
   <>
     <div className="details">
       <p>
-        Cypher breaks down the work of executing a query into small pieces
+        Geequel breaks down the work of executing a query into small pieces
         called <em>operators</em>. Each operator is responsible for a small part
         of the overall query. The operators are connected together in a pattern
         called a Query Plan.
@@ -82,7 +82,7 @@ const content = (
         is not actually executed; so it's not possible to show actual number of
         rows for each pipe. In this case, the Query Plan diagram shows{' '}
         <em>estimated rows</em> instead. These numbers are predicted based on
-        ONgDB's built-in statistics. The Cypher cost-based planner uses
+        ONgDB's built-in statistics. The Geequel cost-based planner uses
         estimated rows to determine the optimal query plan.
       </p>
     </div>
@@ -141,7 +141,7 @@ const content = (
         works with. if you've named identifers in your query, e.g.{' '}
         <code>MATCH (n)</code> then you should find the identifier n bound in
         one of the operators. In addition to identifiers that you named in your
-        query you may see some internal identifiers that Cypher has introduced
+        query you may see some internal identifiers that Geequel has introduced
         to keep track of unnamed entities.
       </p>
       <h4>Expressions</h4>

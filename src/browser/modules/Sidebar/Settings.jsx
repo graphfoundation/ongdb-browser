@@ -64,7 +64,8 @@ const visualSettings = [
       {
         codeFontLigatures: {
           displayName: 'Code font ligatures',
-          tooltip: 'Use font ligatures for the command bar and cypher snippets',
+          tooltip:
+            'Use font ligatures for the command bar and Geequel snippets',
           type: 'checkbox'
         }
       },
@@ -163,7 +164,7 @@ const visualSettings = [
         autoComplete: {
           displayName: 'Connect result nodes',
           tooltip:
-            'If this is checked, after a cypher query result is retrieved, a second query is executed to fetch relationships between result nodes.',
+            'If this is checked, after a Geequel query result is retrieved, a second query is executed to fetch relationships between result nodes.',
           type: 'checkbox'
         }
       }

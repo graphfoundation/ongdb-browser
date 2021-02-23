@@ -36,7 +36,7 @@ const movedPages = {
   },
   '/administration/': {
     oldPage: 'schema/',
-    oldContent: 'Cypher Schema'
+    oldContent: 'Geequel Schema'
   }
 }
 

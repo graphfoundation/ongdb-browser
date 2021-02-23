@@ -58,8 +58,8 @@ const getReferences = (version, v) => {
       type: 'link'
     },
     {
-      name: 'Cypher Introduction',
-      command: ` https://graphfoundation.org/docs/cypher-manual/${v}/introduction/ `,
+      name: 'Geequel Introduction',
+      command: ` https://graphfoundation.org/docs/geequel-manual/${v}/introduction/ `,
       type: 'link'
     }
   ]
@@ -75,8 +75,8 @@ const getReferences = (version, v) => {
       type: 'link'
     },
     {
-      name: 'Cypher Introduction',
-      command: `https://graphfoundation.org/docs/developer-manual/${v}/cypher/`,
+      name: 'Geequel Introduction',
+      command: `https://graphfoundation.org/docs/developer-manual/${v}/geequel/`,
       type: 'link'
     }
   ]
@@ -93,8 +93,8 @@ const getReferences = (version, v) => {
     //   type: 'link'
     // },
     {
-      name: 'Cypher Refcard',
-      command: `https://graphfoundation.org/docs/cypher-refcard/${v}/`,
+      name: 'Geequel Refcard',
+      command: `https://graphfoundation.org/docs/geequel-refcard/${v}/`,
       type: 'link'
     },
     {

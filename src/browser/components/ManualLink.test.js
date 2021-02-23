@@ -77,7 +77,7 @@ const movedPages = [
   [
     { neo4jVersion: '3.5.0', page: '/administration/' },
     {
-      text: 'Cypher Schema',
+      text: 'Geequel Schema',
       url: 'https://graphfoundation.org/docs/cypher-manual/3.5/schema/'
     }
   ],

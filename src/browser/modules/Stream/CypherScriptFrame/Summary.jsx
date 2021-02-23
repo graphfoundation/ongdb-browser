@@ -69,7 +69,7 @@ const GenericSummary = ({ status }) => {
               const maybeComma = i > 0 ? ', ' : ''
               return [maybeComma, <code key={cmd}>{cmd}</code>]
             })}{' '}
-            and Cypher will be executed in the multi-statement mode.
+            and Geequel will be executed in the multi-statement mode.
           </MessageArea>
         </PaddedStatsBar>
       )

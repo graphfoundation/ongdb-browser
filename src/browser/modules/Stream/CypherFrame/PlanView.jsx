@@ -179,7 +179,7 @@ export class PlanStatusbar extends Component {
       <StyledOneRowStatsBar>
         <StyledLeftPartial>
           <Ellipsis>
-            Cypher version: {plan.root.version}, planner: {plan.root.planner},
+            Geequel version: {plan.root.version}, planner: {plan.root.planner},
             runtime: {plan.root.runtime}.
             {plan.root.totalDbHits
               ? ` ${

@@ -191,7 +191,7 @@ const slides = [
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            ONgDB Cypher Manual
+            ONgDB Geequel Manual
           </ManualLink>
         </li>
       </ul>

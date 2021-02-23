@@ -50,7 +50,7 @@ const content = (
     </p>
     <ul className="topic-bullets">
       <li>
-        use a <b>routing</b> driver for all cypher queries submitted via the
+        use a <b>routing</b> driver for all Geequel queries submitted via the
         editor (including calls to user administration procedures)
       </li>
       <li>
@@ -65,7 +65,7 @@ const content = (
     </p>
     <ul className="topic-bullets">
       <li>
-        use a <b>direct</b> driver for all cypher queries submitted via the
+        use a <b>direct</b> driver for all Geequel queries submitted via the
         editor
       </li>
       <li>
