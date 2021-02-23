@@ -187,7 +187,7 @@ const slides = [
           <a play-topic="intro">Intro</a> - a guided tour
         </li>
         <li>
-          <a play-topic="cypher">Cypher</a> - query language
+          <a play-topic="geequel">Geequel</a> - query language
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">

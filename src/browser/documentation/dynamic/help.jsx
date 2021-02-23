@@ -55,7 +55,7 @@ const description = (
           <td>
             <a play-topic="intro">:play intro</a>{' '}
             <a play-topic="concepts">:play concepts</a>{' '}
-            <a play-topic="cypher">:play cypher</a>
+            <a play-topic="geequel">:play geequel</a>
           </td>
         </tr>
         <tr>

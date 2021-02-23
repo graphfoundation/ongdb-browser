@@ -61,7 +61,7 @@ const description = (
       <div className="link">
         <p className="title">Guide</p>
         <p className="content">
-          <a play-topic="cypher">Geequel</a>
+          <a play-topic="geequel">Geequel</a>
         </p>
       </div>
     </div>

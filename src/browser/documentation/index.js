@@ -91,6 +91,7 @@ import helpPlay from './dynamic/play'
 // Carousels
 import guideConcepts from './guides/concepts'
 import guideCypher from './guides/cypher'
+import guideGeequel from './guides/geequel'
 import guideIntro from './guides/intro'
 import guideLearn from './guides/learn'
 import guideMovieGraph from './guides/movie-graph'
@@ -191,6 +192,7 @@ export default {
     chapters: {
       concepts: guideConcepts,
       cypher: guideCypher,
+      geequel: guideGeequel,
       intro: guideIntro,
       learn: guideLearn,
       movieGraph: guideMovieGraph,

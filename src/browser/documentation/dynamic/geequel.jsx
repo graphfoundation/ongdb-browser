@@ -20,15 +20,15 @@
 
 import React from 'react'
 import ManualLink from 'browser-components/ManualLink'
-const title = 'CREATE'
-const subtitle = 'Insert graph data'
-const category = 'cypherHelp'
-const content = (
+const title = 'Geequel'
+const subtitle = 'A graph query language'
+const category = 'browserUiCommands'
+const filter = ['geequel']
+const description = (
   <>
     <p>
-      The
-      <code>CREATE</code> clause is used to create data by specifying named
-      nodes and relationships with inline properties.
+      Geequel is ONgDB's graph query language. Working with a graph is all about
+      understanding patterns of data, which are central to Geequel queries.
     </p>
     <p>
       Use
@@ -38,20 +38,24 @@ const content = (
     </p>
     <div className="links">
       <div className="link">
-        <p className="title">Reference</p>
-        <p className="content">
-          <ManualLink chapter="cypher-manual" page="/clauses/create/">
-            CREATE
-          </ManualLink>{' '}
-          manual page
-        </p>
-      </div>
-      <div className="link">
         <p className="title">Related</p>
         <p className="content">
-          <a help-topic="set">:help SET</a>
+          <a help-topic="match">:help MATCH</a>
+          <a help-topic="where">:help WHERE</a>
+          <a help-topic="return">:help RETURN</a>
+          <a help-topic="create">:help CREATE</a>
           <a help-topic="merge">:help MERGE</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="delete">:help DELETE</a>
+          <a help-topic="detach-delete">:help DETACH DELETE</a>
+          <a help-topic="set">:help SET</a>
+          <a help-topic="foreach">:help FOREACH</a>
+          <a help-topic="with">:help WITH</a>
+          <a help-topic="load-csv">:help LOAD CSV</a>
+          <a help-topic="unwind">:help UNWIND</a>
+          <a help-topic="create-index-on">:help CREATE INDEX ON</a>
+          <a help-topic="starts-with">:help STARTS WITH</a>
+          <a help-topic="ends-with">:help ENDS WITH</a>
+          <a help-topic="contains">:help CONTAINS</a>
         </p>
       </div>
       <div className="link">
@@ -63,15 +67,24 @@ const content = (
     </div>
     <section className="example">
       <figure>
-        <pre className="code runnable">
-          {`CREATE (le:Person {name: Euler }),
-  (db:Person {name: Bernoulli }),
-  (le)-[:KNOWS {since:1768}]->(db)
-  RETURN le, db`}
+        <pre>
+          {`MATCH <pattern>
+WHERE <conditions>
+RETURN <expressions>`}
         </pre>
-        <figcaption>Create two related people, returning them.</figcaption>
+        <figcaption>
+          Basic form of a Geequel read statement. (Not executable)
+        </figcaption>
       </figure>
     </section>
   </>
 )
-export default { title, subtitle, category, content }
+
+export default {
+  title,
+  subtitle,
+  category,
+  content: null,
+  description,
+  filter
+}

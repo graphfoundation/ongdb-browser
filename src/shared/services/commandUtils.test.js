@@ -104,14 +104,14 @@ describe('commandutils', () => {
     const testStrs = [
       { str: '', expect: undefined },
       { str: ';;;;;;;;', expect: undefined },
-      { str: ':play cypher', expect: [':play cypher'] },
-      { str: '    :play cypher     ', expect: [':play cypher'] },
-      { str: ':play cypher;', expect: [':play cypher'] },
-      { str: ':play cypher ;', expect: [':play cypher'] },
-      { str: ';:play cypher;', expect: [':play cypher'] },
+      { str: ':play geequel', expect: [':play geequel'] },
+      { str: '    :play geequel     ', expect: [':play geequel'] },
+      { str: ':play geequel;', expect: [':play geequel'] },
+      { str: ':play geequel ;', expect: [':play geequel'] },
+      { str: ';:play geequel;', expect: [':play geequel'] },
       {
-        str: ':play cypher; :param x: 1',
-        expect: [':play cypher', ':param x: 1']
+        str: ':play geequel; :param x: 1',
+        expect: [':play geequel', ':param x: 1']
       },
       {
         str: 'RETURN 1; RETURN 3; :play start',
@@ -134,8 +134,8 @@ describe('commandutils', () => {
         expect: ['MATCH (n: {foo: `bar;;`}) RETURN n']
       },
       {
-        str: ':play cypher; MATCH (n: {foo: `bar; en;`}) RETURN n',
-        expect: [':play cypher', 'MATCH (n: {foo: `bar; en;`}) RETURN n']
+        str: ':play geequel; MATCH (n: {foo: `bar; en;`}) RETURN n',
+        expect: [':play geequel', 'MATCH (n: {foo: `bar; en;`}) RETURN n']
       }
     ]
 

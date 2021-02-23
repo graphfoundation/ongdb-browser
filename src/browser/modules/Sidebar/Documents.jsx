@@ -41,7 +41,7 @@ export const shouldLinkToNewRefs = v => {
 const intro = [
   { name: 'Getting started', command: ':play intro', type: 'play' },
   { name: 'Basic graph concepts', command: ':play concepts', type: 'play' },
-  { name: 'Writing Geequel queries', command: ':play cypher', type: 'play' }
+  { name: 'Writing Geequel queries', command: ':play geequel', type: 'play' }
 ]
 const help = [
   { name: 'Help', command: ':help help', type: 'help' },

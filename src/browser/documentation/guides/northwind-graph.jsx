@@ -328,7 +328,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
           <a play-topic="movie-graph">Movie Graph</a> - actors & movies
         </li>
         <li>
-          <a play-topic="cypher">Cypher</a> - query language fundamentals
+          <a play-topic="geequel">Geequel</a> - query language fundamentals
         </li>
       </ul>
     </div>

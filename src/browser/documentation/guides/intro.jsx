@@ -157,7 +157,7 @@ const slides = [
           <a play-topic="concepts">Concepts</a> - GraphDB 101
         </li>
         <li>
-          <a play-topic="cypher">Cypher</a> - query language
+          <a play-topic="geequel">Geequel</a> - query language
         </li>
       </ul>
     </div>

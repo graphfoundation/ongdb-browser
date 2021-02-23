@@ -817,7 +817,7 @@ RETURN tom, m, coActors, m2, cruise`}
           graph
         </li>
         <li>
-          <a play-topic="cypher">Cypher</a> - query language fundamentals
+          <a play-topic="geequel">Geequel</a> - query language fundamentals
         </li>
       </ul>
     </div>
