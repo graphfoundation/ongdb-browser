@@ -154,7 +154,7 @@ CREATE (p)-[:PART_OF]->(c)`}
           Calculate join, materialize relationship. (See{' '}
           <a
             target="_blank"
-            href="http://neo4j.com/developer/guide-importing-data-and-etl"
+            href="https://graphfoundation.org/developer/guide-importing-data-and-etl"
           >
             {' '}
             importing guide

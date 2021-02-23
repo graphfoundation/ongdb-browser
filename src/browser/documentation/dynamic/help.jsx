@@ -65,10 +65,6 @@ const description = (
             <a play-topic="northwind graph">:play northwind graph</a>
           </td>
         </tr>
-        {/* <tr>
-        <th>Reference:</th>
-        <td><a href="{{ neo4j.version | neo4jDeveloperDoc }}/">ONgDB Manual</a><br/><a href="http://neo4j.com/developer">ONgDB Developer Pages</a><br/><a href="{{ neo4j.version | neo4jCypherRefcardDoc }}/">Cypher Refcard</a></td>
-      </tr> */}
       </tbody>
     </table>
   </>
