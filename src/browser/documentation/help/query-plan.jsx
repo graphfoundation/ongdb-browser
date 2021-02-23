@@ -34,7 +34,7 @@ const content = (
       </p>
       <p>
         When you use the <a help-topic="explain">EXPLAIN</a> or{' '}
-        <a help-topic="profile">PROFILE</a> commands, Neo4j Browser displays a
+        <a help-topic="profile">PROFILE</a> commands, ONgDB Browser displays a
         diagram of the Query Plan.
       </p>
       <p>
@@ -82,7 +82,7 @@ const content = (
         is not actually executed; so it's not possible to show actual number of
         rows for each pipe. In this case, the Query Plan diagram shows{' '}
         <em>estimated rows</em> instead. These numbers are predicted based on
-        Neo4j's built-in statistics. The Cypher cost-based planner uses
+        ONgDB's built-in statistics. The Cypher cost-based planner uses
         estimated rows to determine the optimal query plan.
       </p>
     </div>
@@ -95,7 +95,7 @@ const content = (
     <div className="details">
       <h4>Database hits</h4>
       <p>
-        Each operator will ask the Neo4j storage engine to do work such as
+        Each operator will ask the ONgDB storage engine to do work such as
         retrieving or updating data. A <em>database hit</em> is an abstract unit
         of this storage engine work.
       </p>

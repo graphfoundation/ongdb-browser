@@ -27,11 +27,11 @@ const Carousel = '[data-testid="carousel"]'
 const SubmitQueryButton = '[data-testid="submitQuery"]'
 const ClearEditorButton = '[data-testid="clearEditorContent"]'
 
-describe('Neo4j Browser', () => {
+describe('ONgDB Browser', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('sets new login credentials', () => {
@@ -48,7 +48,7 @@ describe('Neo4j Browser', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
 
   it('can empty the db', () => {
@@ -122,7 +122,7 @@ describe('Neo4j Browser', () => {
   it('displays user info in sidebar (when connected)', () => {
     cy.executeCommand(':clear')
     cy.get('[data-testid="drawerDBMS"]').click()
-    cy.get('[data-testid="user-details-username"]').should('contain', 'neo4j')
+    cy.get('[data-testid="user-details-username"]').should('contain', 'ongdb')
     console.log('isEnterpriseEdition(): ', isEnterpriseEdition())
     cy.get('[data-testid="user-details-roles"]').should(
       'contain',
@@ -136,9 +136,9 @@ describe('Neo4j Browser', () => {
     cy.executeCommand(':server disconnect')
     cy.get('[data-testid="user-details-username"]').should('have.length', 0)
     cy.get('[data-testid="user-details-roles"]').should('have.length', 0)
-    cy.connect('neo4j', Cypress.config('password'))
+    cy.connect('ongdb', Cypress.config('password'))
     cy.executeCommand(':clear')
-    cy.get('[data-testid="user-details-username"]').should('contain', 'neo4j')
+    cy.get('[data-testid="user-details-username"]').should('contain', 'ongdb')
     cy.get('[data-testid="user-details-roles"]').should(
       'contain',
       isAura()

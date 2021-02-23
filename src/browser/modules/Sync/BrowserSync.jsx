@@ -127,7 +127,7 @@ export class BrowserSync extends Component {
         <Drawer id="sync-drawer">
           <DrawerHeader>Browser Sync is disabled</DrawerHeader>
           <DrawerBody>
-            Browser Sync is disabled due to Neo4j server configuration. Raise
+            Browser Sync is disabled due to ONgDB server configuration. Raise
             the issue with your administrator.
           </DrawerBody>
         </Drawer>
@@ -160,7 +160,7 @@ export class BrowserSync extends Component {
         </DrawerToppedHeader>
       )
     } else {
-      headerContent = <DrawerHeader>Neo4j Browser Sync</DrawerHeader>
+      headerContent = <DrawerHeader>ONgDB Browser Sync</DrawerHeader>
     }
 
     if (this.state.clearLocalRequested === true) {
@@ -220,7 +220,7 @@ export class BrowserSync extends Component {
             <DrawerSubHeader>Sign In or Register</DrawerSubHeader>
             <DrawerSectionBody>
               <DrawerSection>
-                Neo4j Browser Sync is a companion service for Neo4j Browser.
+                ONgDB Browser Sync is a companion service for ONgDB Browser.
                 Connect through a simple social sign-in to get started.
               </DrawerSection>
               <DrawerSection>

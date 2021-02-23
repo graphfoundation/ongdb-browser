@@ -35,7 +35,7 @@ export const ConsentCheckBox = props => {
           href="http://neo4j.com/terms/neo4j-browser-sync/"
           target="blank"
         >
-          Neo4j Browser Sync Terms of Use
+          ONgDB Browser Sync Terms of Use
         </StyledSimpleLink>
         &nbsp; and our &nbsp;
         <StyledSimpleLink

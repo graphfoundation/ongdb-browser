@@ -24,7 +24,7 @@ describe(':param in Browser', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('handles :param without web worker', () => {
@@ -46,7 +46,7 @@ function runTests() {
   let getParamQ
   // it('can connect', () => {
   const password = Cypress.config('password')
-  cy.connect('neo4j', password)
+  cy.connect('ongdb', password)
   // })
   // it(':param x => 1+1', () => {
   // Set param

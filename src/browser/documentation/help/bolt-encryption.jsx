@@ -30,7 +30,7 @@ const content = (
       certificate before a secure Bolt connection to the server can be created.
     </p>
     <p>
-      By default Neo4j offers a HTTPS URL on{' '}
+      By default ONgDB offers a HTTPS URL on{' '}
       <a href="https://localhost:7473">https://localhost:7473</a>.
     </p>
     <p>

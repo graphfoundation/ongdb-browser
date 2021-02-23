@@ -26,7 +26,7 @@ const category = 'cypherHelp'
 const content = (
   <>
     <p>
-      The <code>MATCH</code> clause describes a pattern of graph data. Neo4j
+      The <code>MATCH</code> clause describes a pattern of graph data. ONgDB
       will collect all paths within the graph which match this pattern. This is
       often used with <code>WHERE</code> to filter the collection.
     </p>

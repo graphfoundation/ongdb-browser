@@ -26,27 +26,27 @@ describe('Bolt connections', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('can show connection error', () => {
     const password = 'unlikely password'
-    cy.connect('neo4j', password, undefined, false)
+    cy.connect('ongdb', password, undefined, false)
   })
   it('show "no connection" error when not using web workers', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(':config useCypherThread: false')
     cy.executeCommand('RETURN 1')
-    cy.resultContains('No connection found, did you connect to Neo4j')
+    cy.resultContains('No connection found, did you connect to ONgDB')
   })
   it('show "no connection" error when using web workers', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(':config useCypherThread: true')
     cy.executeCommand('RETURN 1')
-    cy.resultContains('No connection found, did you connect to Neo4j')
+    cy.resultContains('No connection found, did you connect to ONgDB')
   })
   it('does not show the "Reconnect" banner when trying to connect', () => {
-    cy.connect('neo4j', 'x', 'bolt://localhost:7685', false) // Non open port
+    cy.connect('ongdb', 'x', 'bolt://localhost:7685', false) // Non open port
     cy.wait(10000)
     cy.get('[data-testid="reconnectBanner"]').should('not.be.visible')
     cy.get('[data-testid="disconnectedBanner"]').should('be.visible')
@@ -58,7 +58,7 @@ describe('Bolt connections', () => {
     it('send tx metadata with queries', () => {
       cy.executeCommand(':clear')
       const password = Cypress.config('password')
-      cy.connect('neo4j', password)
+      cy.connect('ongdb', password)
 
       cy.executeCommand(':queries')
       cy.resultContains('"type": "user-action"')
@@ -69,7 +69,7 @@ describe('Bolt connections', () => {
     it('users with no role can connect and shows up in sidebar', () => {
       cy.executeCommand(':clear')
       const password = Cypress.config('password')
-      cy.connect('neo4j', password)
+      cy.connect('ongdb', password)
 
       cy.createUser('noroles', 'pw', true)
       cy.executeCommand(':server disconnect')
@@ -105,7 +105,7 @@ describe('Bolt connections', () => {
 
       cy.executeCommand(':server disconnect')
       cy.executeCommand(':server connect')
-      cy.connect('neo4j', password)
+      cy.connect('ongdb', password)
       cy.dropUser('noroles')
     })
   }

@@ -24,7 +24,7 @@ describe('Help topics', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it(':help commands has contents', () => {

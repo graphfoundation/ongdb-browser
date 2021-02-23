@@ -26,7 +26,7 @@ describe('Play command', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('can stack `:play` commands', () => {
@@ -102,7 +102,7 @@ describe('Play command', () => {
     cy.executeCommand(':play reco')
     cy.getFrames().should(
       'contain',
-      'Welcome to the Neo4j recommendations training'
+      'Welcome to the ONgDB recommendations training'
     )
 
     // Next slide
@@ -122,7 +122,7 @@ describe('Play command', () => {
     // Assert
     cy.getFrames()
       .should('have.length', 1)
-      .should('contain', 'Welcome to the Neo4j recommendations training')
+      .should('contain', 'Welcome to the ONgDB recommendations training')
   })
   it('handles not found guides', () => {
     cy.executeCommand(':clear')

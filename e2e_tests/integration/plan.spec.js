@@ -26,11 +26,11 @@ describe('Plan output', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
     cy.disableEditorAutocomplete()
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   after(function() {
     cy.enableEditorAutocomplete()

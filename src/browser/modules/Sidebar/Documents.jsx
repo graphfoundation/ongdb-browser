@@ -113,7 +113,7 @@ const getReferences = (version, v) => {
       type: 'link'
     },
     {
-      name: 'Neo4j Browser Developer Pages',
+      name: 'ONgDB Browser Developer Pages',
       command: 'https://neo4j.com/developer/neo4j-browser/',
       type: 'link'
     }

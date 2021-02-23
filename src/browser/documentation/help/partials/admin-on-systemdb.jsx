@@ -23,7 +23,7 @@ export default function AdminOnSystemDb() {
     <p>
       <strong>A note on system database</strong>
       <br />
-      Neo4j has a complex security model stored in the system graph, maintained
+      ONgDB has a complex security model stored in the system graph, maintained
       in a special database called the <code>system</code> database. All
       administrative commands need to be executed against the{' '}
       <code>system</code> database.

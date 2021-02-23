@@ -19,7 +19,7 @@
  */
 
 export const BoltConnectionError =
-  'No connection found, did you connect to Neo4j?'
+  'No connection found, did you connect to ONgDB?'
 export const BoltError = '#code# - #message#'
 export const Neo4jError = '#message#'
 export const UnknownCommandError = 'Unknown command #cmd#'

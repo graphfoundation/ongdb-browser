@@ -25,7 +25,7 @@ const npmrc = './.npmrc'
 const yarnrc = './.yarnrc'
 const registry = 'https://registry.npmjs.org/'
 const packageName = '@neo4j/neo4j-browser-canary'
-const displayName = 'Neo4j Browser Canary'
+const displayName = 'ONgDB Browser Canary'
 
 function failExit(msg) {
   console.log('Error. ' + msg)

@@ -26,7 +26,7 @@ const category = 'cypherQueries'
 const content = (
   <>
     <p>
-      Cypher is Neo4j's graph query language. Working with a graph is all about
+      Cypher is ONgDB's graph query language. Working with a graph is all about
       understanding patterns of data, which are central to Cypher queries.
     </p>
     <p>

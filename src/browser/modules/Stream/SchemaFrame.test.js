@@ -40,7 +40,7 @@ test('SchemaFrame renders empty', () => {
   expect(container).toMatchSnapshot()
 })
 
-test('SchemaFrame renders empty for Neo4j >= 4.0', () => {
+test('SchemaFrame renders empty for ONgDB >= 4.0', () => {
   const indexResult = { records: [] }
   const { container } = renderWithRedux(
     <SchemaFrame indexes={indexResult} neo4jVersion={'4.0.0-rc1'} />
@@ -49,7 +49,7 @@ test('SchemaFrame renders empty for Neo4j >= 4.0', () => {
   expect(container).toMatchSnapshot()
 })
 
-test('SchemaFrame renders results for Neo4j < 4.0', () => {
+test('SchemaFrame renders results for ONgDB < 4.0', () => {
   const indexResult = {
     success: true,
     result: {
@@ -108,7 +108,7 @@ test('SchemaFrame renders results for Neo4j < 4.0', () => {
   expect(container).toMatchSnapshot()
 })
 
-test('SchemaFrame renders correct suggestion for Neo4j > 3.4', () => {
+test('SchemaFrame renders correct suggestion for ONgDB > 3.4', () => {
   const indexResult = { records: [] }
   const { getByText } = renderWithRedux(
     <SchemaFrame indexes={indexResult} neo4jVersion={'3.5.1'} />
@@ -117,7 +117,7 @@ test('SchemaFrame renders correct suggestion for Neo4j > 3.4', () => {
   expect(getByText('CALL db.schema.visualization')).not.toBeNull()
 })
 
-test('SchemaFrame renders correct suggestion for Neo4j <= 3.4', () => {
+test('SchemaFrame renders correct suggestion for ONgDB <= 3.4', () => {
   const indexResult = { records: [] }
   const { getByText } = renderWithRedux(
     <SchemaFrame indexes={indexResult} neo4jVersion={'3.4.1'} />

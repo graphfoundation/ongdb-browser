@@ -31,7 +31,7 @@ const content = (
         <p className="title">Reference</p>
         <p className="content">
           <ManualLink chapter="cypher-manual" page="/administration/">
-            Neo4j Database Administration
+            ONgDB Database Administration
           </ManualLink>
         </p>
       </div>

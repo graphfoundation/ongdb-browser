@@ -26,14 +26,14 @@ const filter = ['help', 'play']
 const description = (
   <>
     <p>
-      Neo4j Browser is a command shell. Use the editor bar up above ↑ to enter
+      ONgDB Browser is a command shell. Use the editor bar up above ↑ to enter
       Cypher queries or client-side commands. Each command will produce a
       "frame" like this one in the result stream.
     </p>
     <p>
       Use the <code>:help</code> command to learn about other topics.
     </p>
-    <p>New to Neo4j? Try one of the guides to learn the basics.</p>
+    <p>New to ONgDB? Try one of the guides to learn the basics.</p>
     <table className="table-condensed table-help">
       <tbody>
         <tr>
@@ -67,7 +67,7 @@ const description = (
         </tr>
         {/* <tr>
         <th>Reference:</th>
-        <td><a href="{{ neo4j.version | neo4jDeveloperDoc }}/">Neo4j Manual</a><br/><a href="http://neo4j.com/developer">Neo4j Developer Pages</a><br/><a href="{{ neo4j.version | neo4jCypherRefcardDoc }}/">Cypher Refcard</a></td>
+        <td><a href="{{ neo4j.version | neo4jDeveloperDoc }}/">ONgDB Manual</a><br/><a href="http://neo4j.com/developer">ONgDB Developer Pages</a><br/><a href="{{ neo4j.version | neo4jCypherRefcardDoc }}/">Cypher Refcard</a></td>
       </tr> */}
       </tbody>
     </table>

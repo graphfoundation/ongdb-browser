@@ -43,7 +43,7 @@ export const buildGlobalDriversObject = async (
   let routingSupported = !isNonRoutingScheme(props.host)
 
   // Scheme says routing should be supported
-  // but in the Neo4j 3.X case, it might not be true.
+  // but in the ONgDB 1.x case, it might not be true.
   // We need to verify this.
   if (routingSupported) {
     try {

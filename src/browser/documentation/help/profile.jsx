@@ -26,7 +26,7 @@ const category = 'executionPlans'
 const content = (
   <>
     <p>
-      Prefix any query with the <code>PROFILE</code> keyword to have Neo4j
+      Prefix any query with the <code>PROFILE</code> keyword to have ONgDB
       return the execution plan for the query, including detailed profiling
       information.
     </p>

@@ -28,7 +28,7 @@ describe('Multi statements', () => {
   before(() => {
     cy.visit(Cypress.config('url'))
       .title()
-      .should('include', 'Neo4j Browser')
+      .should('include', 'ONgDB Browser')
     cy.wait(3000)
     cy.enableMultiStatement()
   })
@@ -37,7 +37,7 @@ describe('Multi statements', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   it('can run multiple statements (non open by default)', () => {
     cy.executeCommand(':clear')

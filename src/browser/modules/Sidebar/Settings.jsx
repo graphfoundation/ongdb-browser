@@ -105,7 +105,7 @@ const visualSettings = [
         connectionTimeout: {
           displayName: 'Connection timeout (ms)',
           tooltip:
-            'The timeout in milliseconds when establishing a connection to Neo4j.',
+            'The timeout in milliseconds when establishing a connection to ONgDB.',
           type: 'input'
         }
       }

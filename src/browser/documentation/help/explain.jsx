@@ -25,9 +25,9 @@ const category = 'executionPlans'
 const content = (
   <>
     <p>
-      Prefix any query with the <code>EXPLAIN</code> keyword to have Neo4j
+      Prefix any query with the <code>EXPLAIN</code> keyword to have ONgDB
       return the execution plan it would use to execute the query. However, the
-      query is not executed, and Neo4j will make no changes to the database.
+      query is not executed, and ONgDB will make no changes to the database.
     </p>
     <p>
       See <a help-topic="query plan">:help QUERY PLAN</a> for a guide to

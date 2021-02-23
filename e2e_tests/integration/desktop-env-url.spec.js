@@ -28,7 +28,7 @@ let appOnAgumentsChange
 // the host field.
 // We can't load two times in the same file
 
-describe('Neo4j Desktop environment using url field', () => {
+describe('ONgDB Desktop environment using url field', () => {
   before(() => {
     cy.visit(Cypress.config('url'), {
       onBeforeLoad: win => {

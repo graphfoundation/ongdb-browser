@@ -26,7 +26,7 @@ const category = 'cypherHelp'
 const content = (
   <>
     <p>
-      The <code>LOAD CSV</code> clause instructs Neo4j to load data from a CSV
+      The <code>LOAD CSV</code> clause instructs ONgDB to load data from a CSV
       file located at the given URL. This is typically used with{' '}
       <code>CREATE</code> and <code>MERGE</code> to import tabular data into the
       graph. If you are importing a substantially sized data set, you should

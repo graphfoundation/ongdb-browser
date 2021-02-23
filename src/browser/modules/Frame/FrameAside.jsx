@@ -27,8 +27,8 @@ class FrameAside extends Component {
     const { subtitle } = this.props
     let { title } = this.props
 
-    // Use logo as title if title is only Neo4j
-    if (title === 'Neo4j') {
+    // Use logo as title if title is only ONgDB
+    if (title === 'ONgDB') {
       title = (
         <img
           src="./assets/images/ongdb-world.png"

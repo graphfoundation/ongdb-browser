@@ -82,7 +82,7 @@ exports[`SchemaFrame renders empty 1`] = `
 </div>
 `;
 
-exports[`SchemaFrame renders empty for Neo4j >= 4.0 1`] = `
+exports[`SchemaFrame renders empty for ONgDB >= 4.0 1`] = `
 <div>
   <div
     style="width: 100%;"
@@ -212,7 +212,7 @@ exports[`SchemaFrame renders empty for Neo4j >= 4.0 1`] = `
 </div>
 `;
 
-exports[`SchemaFrame renders results for Neo4j < 4.0 1`] = `
+exports[`SchemaFrame renders results for ONgDB < 4.0 1`] = `
 <div>
   <div
     style="width: 100%;"

@@ -19,7 +19,7 @@
  */
 
 import React from 'react'
-const title = 'bolt+routing in Neo4j Browser'
+const title = 'bolt+routing in ONgDB Browser'
 const subtitle = 'What drivers are used when'
 const category = 'boltProtocol'
 const content = (
@@ -27,13 +27,13 @@ const content = (
     <p>
       There are two kinds of Bolt drivers specified by URI scheme: the 'bolt://'
       scheme is used to create a <b>direct</b> driver and the 'bolt+routing://'
-      scheme is used to create a <b>routing</b> driver. In Neo4j Browser, the
+      scheme is used to create a <b>routing</b> driver. In ONgDB Browser, the
       bolt+routing setting is used to control which driver should be used.
-      However it is not always appropriate for Neo4j Browser to use a{' '}
+      However it is not always appropriate for ONgDB Browser to use a{' '}
       <b>routing</b> driver even when bolt+routing is on.
     </p>
     <p>
-      Neo4j Browser will always:
+      ONgDB Browser will always:
       <ul className="topic-bullets">
         <li>
           use a <b>direct</b> driver for user administration frames
@@ -46,7 +46,7 @@ const content = (
     </p>
     <p>
       If bolt+routing is on and the provided URI points to a Core Causal Cluster
-      member Neo4j Browser will:
+      member ONgDB Browser will:
     </p>
     <ul className="topic-bullets">
       <li>
@@ -61,7 +61,7 @@ const content = (
     <p>
       If bolt+routing is off or the provided URI does not point to a Causal
       Cluster member or the provided URI points to a Read-Replica Causal Cluster
-      member, Neo4j Browser will:
+      member, ONgDB Browser will:
     </p>
     <ul className="topic-bullets">
       <li>

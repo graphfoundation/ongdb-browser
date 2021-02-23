@@ -24,8 +24,8 @@ export const prepareForExport = (svgElement, graphElement, type) => {
     document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   )
 
-  svg.append('title').text('Neo4j Graph Visualization')
-  svg.append('desc').text('Created using Neo4j (http://www.neo4j.com/)')
+  svg.append('title').text('ONgDB Graph Visualization')
+  svg.append('desc').text('Created using ONgDB (https://graphfoundation.org/)')
 
   switch (type) {
     case 'plan': {

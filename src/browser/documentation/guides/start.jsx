@@ -176,7 +176,7 @@ const content = (
       </p>
       <p className="text-muted">
         Copyright &copy;
-        <a target="_blank" href="http://neo4j.com/" className="no-icon">
+        <a target="_blank" href="https://neo4j.com/" className="no-icon">
           {' '}
           Neo4j, Inc.
         </a>

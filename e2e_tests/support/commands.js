@@ -20,8 +20,8 @@ Cypress.Commands.add(
   'setInitialPassword',
   (
     newPassword,
-    initialPassword = 'neo4j',
-    username = 'neo4j',
+    initialPassword = 'ongdb',
+    username = 'ongdb',
     boltUrl = Cypress.config('boltUrl'),
     force = false
   ) => {
@@ -30,7 +30,7 @@ Cypress.Commands.add(
       return
     }
 
-    cy.title().should('include', 'Neo4j Browser')
+    cy.title().should('include', 'ONgDB Browser')
     cy.wait(3000)
 
     cy.get('input[data-testid="boltaddress"]')

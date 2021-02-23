@@ -25,7 +25,7 @@ const category = 'browserUiCommands'
 const content = (
   <>
     <p>
-      The <code>:server</code> command lets you manage the connection to Neo4j,
+      The <code>:server</code> command lets you manage the connection to ONgDB,
       such as connecting, disconnecting and viewing metadata for the current
       connection.
     </p>

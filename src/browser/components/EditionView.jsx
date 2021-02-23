@@ -26,7 +26,7 @@ export const EnterpriseOnlyFrame = ({ command }) => {
       <p>
         Unable to display <Code>{command}</Code> because the procedures required
         to run this frame are missing. These procedures are usually found in
-        Neo4j Enterprise edition.
+        ONgDB Enterprise edition.
       </p>
       <p>
         Find out more over at{' '}

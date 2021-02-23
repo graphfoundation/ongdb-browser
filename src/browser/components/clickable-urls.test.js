@@ -92,7 +92,7 @@ describe('clickable-urls', () => {
   })
   describe('ClickableUrls', () => {
     it('renders escaped HTML except for generated tags', () => {
-      const text = `Hello, my <strong>name</strong> is <a href="http://twitter.com/neo4j" onClick="alert(1)">Neo4j</a>.`
+      const text = `Hello, my <strong>name</strong> is <a href="http://twitter.com/neo4j" onClick="alert(1)">ONgDB</a>.`
 
       const { container } = render(<ClickableUrls text={text} />)
       expect(container).toMatchInlineSnapshot(`
@@ -105,7 +105,7 @@ describe('clickable-urls', () => {
             >
               http://twitter.com/neo4j
             </a>
-            " onclick="alert(1)"&gt;Neo4j&lt;/a&gt;.
+            " onclick="alert(1)"&gt;ONgDB&lt;/a&gt;.
           </span>
         </div>
       `)

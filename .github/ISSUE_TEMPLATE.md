@@ -31,8 +31,8 @@ What needs to be done to address this issue? Ideally, provide a pull request wit
 | node.js        | 
 | npm            |
 | yarn           |
-| Neo4j Browser  |
-| Neo4j          |
+| ONgDB Browser  |
+| ONgDB          |
 
 ### Additional Information
 

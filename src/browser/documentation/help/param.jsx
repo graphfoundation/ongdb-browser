@@ -37,7 +37,7 @@ const content = (
       <code>=></code> is sent to the server and evaluated as Cypher with an
       implicit
       <code>RETURN</code> in front. This gives better type safety since some
-      types (especially numbers) in JavaScript are hard to match with Neo4j:s
+      types (especially numbers) in JavaScript are hard to match with ONgDB's
       type system.
       <br /> To set a param as an integer, do
       <code>:param x => 1</code> and to set it as a float, do

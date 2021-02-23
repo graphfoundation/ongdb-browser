@@ -27,7 +27,7 @@ export const scripts = [
   {
     folder: 'basics',
     content:
-      '// Hello World!\nCREATE (database:Database {name:"Neo4j"})-[r:SAYS]->(message:Message {name:"Hello World!"}) RETURN database, message, r',
+      '// Hello World!\nCREATE (database:Database {name:"ONgDB"})-[r:SAYS]->(message:Message {name:"Hello World!"}) RETURN database, message, r',
     versionRange: '>=3'
   },
   {

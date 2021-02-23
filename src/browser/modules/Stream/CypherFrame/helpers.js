@@ -224,7 +224,7 @@ export const initialView = (props, state = {}) => {
  * Takes an array of objects and stringifies it using a
  * modified version of JSON.stringify.
  * It takes a replacer without enforcing quoting rules to it.
- * Used so we can have Neo4j integers as string without quotes.
+ * Used so we can have ONgDB integers as string without quotes.
  */
 export const stringifyResultArray = (formatter = stringModifier, arr = []) => {
   return arr.map(col => {
@@ -238,7 +238,7 @@ export const stringifyResultArray = (formatter = stringModifier, arr = []) => {
 /**
  * Transforms an array of neo4j driver records to an array of objects.
  * Flattens graph items so only their props are left.
- * Leaves Neo4j Integers as they were.
+ * Leaves ONgDB Integers as they were.
  */
 export const transformResultRecordsToResultArray = (records, maxFieldItems) => {
   return records && records.length
@@ -352,7 +352,7 @@ const arrayifyPath = (types = neo4j.types, path) => {
 }
 
 /**
- * Converts a raw Neo4j record into a JSON friendly format, mimicking APOC output
+ * Converts a raw ONgDB record into a JSON friendly format, mimicking APOC output
  * @param     {Record}    record
  * @return    {*}
  */
@@ -374,7 +374,7 @@ export function recordToJSONMapper(record) {
 }
 
 /**
- * Recursively converts Neo4j values to plain values, leaving other types untouched
+ * Recursively converts ONgDB values to plain values, leaving other types untouched
  * @param     {*}     values
  * @return    {*}
  */
@@ -412,7 +412,7 @@ export function mapNeo4jValuesToPlainValues(values) {
 }
 
 /**
- * Recursively convert Neo4j value to plain value, leaving other types untouched
+ * Recursively convert ONgDB value to plain value, leaving other types untouched
  * @param     {*}   value
  * @return    {*}
  */

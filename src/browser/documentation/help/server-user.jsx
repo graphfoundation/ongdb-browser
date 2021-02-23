@@ -26,7 +26,7 @@ const content = (
   <>
     <p>
       The <code>:server user</code> command allows you to manage user access to
-      Neo4j such as creating/deleting users, suspending/activating users,
+      ONgDB such as creating/deleting users, suspending/activating users,
       managing user roles and resetting passwords.
     </p>
     <div className="links">
@@ -46,7 +46,7 @@ const content = (
       <div className="link">
         <p className="title">Notes:</p>
         <p className="content">
-          Only available in Neo4j Enterprise.
+          Only available in ONgDB Enterprise.
           <br />
           Only available to users with the admin role.
         </p>

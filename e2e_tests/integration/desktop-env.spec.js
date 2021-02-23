@@ -23,7 +23,7 @@ import { isAura, getDesktopContext } from '../support/utils'
 
 let appContextListener
 
-describe('Neo4j Desktop environment', () => {
+describe('ONgDB Desktop environment', () => {
   before(() => {
     cy.visit(Cypress.config('url'), {
       onBeforeLoad: win => {

@@ -31,15 +31,15 @@ const content = (
     <h5>Try:</h5>
     <ul>
       <li>
-        <a help-topic="help">:help</a> - for general help about using Neo4j
+        <a help-topic="help">:help</a> - for general help about using ONgDB
         Browser
       </li>
       <li>
         <a help-topic="commands">:help commands</a> - to see available commands
       </li>
       <li>
-        <a href="https://neo4j.com/docs/">Neo4j Documentation</a> - for detailed
-        information about Neo4j
+        <a href="https://neo4j.com/docs/">ONgDB Documentation</a> - for detailed
+        information about ONgDB
       </li>
     </ul>
   </>
