@@ -27,13 +27,13 @@ const slides = [
   <Slide key="s1">
     <div className="col-sm-3">
       <h3>Introduction</h3>
-      <p className="lead">Getting started with Neo4j Browser</p>
+      <p className="lead">Getting started with ONgDB Browser</p>
     </div>
     <div className="col-sm-6">
       <p>
-        Neo4j Browser is a command driven client, like a web-based shell
+        ONgDB Browser is a command driven client, like a web-based shell
         environment. It is perfect for running ad-hoc graph queries, with just
-        enough ability to prototype a Neo4j-based application.
+        enough ability to prototype a ONgDB-based application.
       </p>
       <ul className="big">
         <li>
@@ -44,7 +44,7 @@ const slides = [
           Graph visualization of query results containing nodes and
           relationships
         </li>
-        <li>Convenient exploration of Neo4j's REST API</li>
+        <li>Convenient exploration of ONgDB's REST API</li>
       </ul>
     </div>
   </Slide>,
@@ -102,7 +102,7 @@ const slides = [
     </div>
     <div className="col-sm-5">
       <p>
-        The code tab displays everything sent to and received from the Neo4j
+        The code tab displays everything sent to and received from the ONgDB
         server, including:
       </p>
       <ul>
@@ -146,7 +146,7 @@ const slides = [
     <div className="col-sm-4">
       <h3>Next steps</h3>
       <p className="lead">
-        Neo4j is like a mashup of a REPL + lightweight IDE + graph
+        ONgDB is like a mashup of a REPL + lightweight IDE + graph
         visualization.
       </p>
     </div>

@@ -34,7 +34,7 @@ const slides = [
     <div className="col-sm-9">
       <p>
         The <em>Northwind Graph</em> demonstrates how to migrate from a
-        relational database to Neo4j. The transformation is iterative and
+        relational database to ONgDB. The transformation is iterative and
         deliberate, emphasizing the conceptual shift from relational tables to
         the nodes and relationships of a graph.
       </p>
@@ -350,7 +350,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            Neo4j Cypher Manual
+            ONgDB Cypher Manual
           </ManualLink>
         </li>
       </ul>

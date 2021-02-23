@@ -33,13 +33,13 @@ const slides = [
     </div>
     <div className="col-sm-9">
       <p>
-        Neo4j is a graph database. You can store any data in Neo4j, then ask
+        ONgDB is a graph database. You can store any data in ONgDB, then ask
         questions about how that data is related.
       </p>
       <ol className="big">
         <li>What is a graph database?</li>
         <li>How can I query a graph?</li>
-        <li>What do people do with Neo4j?</li>
+        <li>What do people do with ONgDB?</li>
       </ol>
     </div>
   </Slide>,
@@ -50,13 +50,13 @@ const slides = [
         <em>Graph</em> Database
       </h3>
       <p className="lead">
-        Neo4j stores data in a Graph, with records called Nodes.
+        ONgDB stores data in a Graph, with records called Nodes.
       </p>
     </div>
     <div className="col-sm-5">
       <p>
         The simplest graph has just a single node with some named values called
-        Properties. Let's draw a social graph of our friends on the Neo4j team:
+        Properties. Let's draw a social graph of our friends on the ONgDB team:
       </p>
       <ol>
         <li>Start by drawing a circle for the node</li>
@@ -105,7 +105,7 @@ const slides = [
     </div>
     <div className="col-sm-5">
       <p>
-        Like any database, storing data in Neo4j can be as simple as adding more
+        Like any database, storing data in ONgDB can be as simple as adding more
         records. We'll add a few more nodes:
       </p>
       <ol>
@@ -118,7 +118,7 @@ const slides = [
       <ul>
         <li>Similar nodes can have different properties</li>
         <li>Properties can be strings, numbers, or booleans</li>
-        <li>Neo4j can store billions of nodes</li>
+        <li>ONgDB can store billions of nodes</li>
       </ul>
     </div>
     <div className="col-sm-4">
@@ -132,7 +132,7 @@ const slides = [
     </div>
     <div className="col-sm-5">
       <p className="summary">
-        The real power of Neo4j is in connected data. To associate any two
+        The real power of ONgDB is in connected data. To associate any two
         nodes, add a Relationship which describes how the records are related.
       </p>
       <p>In our social graph, we simply say who KNOWS whom:</p>
@@ -191,7 +191,7 @@ const slides = [
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            Neo4j Cypher Manual
+            ONgDB Cypher Manual
           </ManualLink>
         </li>
       </ul>

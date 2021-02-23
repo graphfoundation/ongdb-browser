@@ -831,7 +831,7 @@ RETURN tom, m, coActors, m2, cruise`}
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            Neo4j Cypher Manual
+            ONgDB Cypher Manual
           </ManualLink>
         </li>
       </ul>

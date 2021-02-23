@@ -19,13 +19,13 @@
  */
 
 import React from 'react'
-const title = 'Neo4j'
+const title = 'ONgDB'
 const subtitle = ''
 const content = (
   <>
     <div className="teasers">
       <div className="teaser teaser-3">
-        <h3>Learn about Neo4j</h3>
+        <h3>Learn about ONgDB</h3>
         <p className="lead">A graph epiphany awaits you.</p>
         <div className="icon-holder">
           <div className="icon sl green">
@@ -64,7 +64,7 @@ const content = (
           <ul className="topic-bullets">
             <li>What is a graph database?</li>
             <li>How can I query a graph?</li>
-            <li>What do people do with Neo4j?</li>
+            <li>What do people do with ONgDB?</li>
           </ul>
           <div className="clearfix" />
         </div>
@@ -164,9 +164,21 @@ const content = (
     <footer className="tight">
       <p className="text-muted">
         Copyright &copy;
+        <a
+          target="_blank"
+          href="https://graphfoundation.org/"
+          className="no-icon"
+        >
+          {' '}
+          Graph Foundation, Inc.
+        </a>
+        &nbsp;<span>2018-2020</span>
+      </p>
+      <p className="text-muted">
+        Copyright &copy;
         <a target="_blank" href="http://neo4j.com/" className="no-icon">
           {' '}
-          Neo4j, Inc
+          Neo4j, Inc.
         </a>
         &nbsp;<span>2002–2020</span>
       </p>

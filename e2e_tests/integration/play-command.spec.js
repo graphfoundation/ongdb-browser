@@ -37,7 +37,7 @@ describe('Play command', () => {
     let frame = cy.getFrames()
 
     // Make sure first loads
-    frame.should('have.length', 1).should('contain', 'Learn about Neo4j')
+    frame.should('have.length', 1).should('contain', 'Learn about ONgDB')
 
     // Click a guide button
     frame.contains('Start Learning').click()
@@ -52,7 +52,7 @@ describe('Play command', () => {
     frame = cy.getFrames()
 
     // Make sure we're back
-    frame.should('have.length', 1).should('contain', 'Learn about Neo4j')
+    frame.should('have.length', 1).should('contain', 'Learn about ONgDB')
 
     // Go to next again
     cy.getNextInFrameStackBtn().click()
