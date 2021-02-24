@@ -70,7 +70,7 @@ test('should print correct state for retaining credentials', async () => {
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
       isConnected={false}
-      allowedSchemes={['neo4j']}
+      allowedSchemes={['bolt']}
     />
   )
 
@@ -101,13 +101,13 @@ test('should print correct state for retaining credentials', async () => {
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
       isConnected={true}
-      allowedSchemes={['neo4j']}
+      allowedSchemes={['bolt']}
     />
   )
 
   // Then
   expect(getByText(/my-username/i)).toBeDefined()
-  expect(getByText(/neo4j:\/\/my-host/i)).toBeDefined()
+  expect(getByText(/bolt:\/\/my-host/i)).toBeDefined()
   expect(
     getByText(/Connection credentials are\sstored in your web browser./i)
   ).toBeDefined()
@@ -125,13 +125,13 @@ test('should print correct state for retaining credentials', async () => {
       setActiveConnection={setActiveConnection}
       executeInitCmd={executeInitCmd}
       isConnected={true}
-      allowedSchemes={['neo4j']}
+      allowedSchemes={['bolt']}
     />
   )
 
   // Then
   expect(getByText(/my-username/i)).toBeDefined()
-  expect(getByText(/neo4j:\/\/my-host/i)).toBeDefined()
+  expect(getByText(/bolt:\/\/my-host/i)).toBeDefined()
   expect(
     getByText(/Connection credentials are\snot\sstored in your web browser./i)
   ).toBeDefined()

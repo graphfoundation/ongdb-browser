@@ -78,7 +78,7 @@ describe('<DesktopApi>', () => {
               configuration: {
                 protocols: {
                   bolt: {
-                    username: 'neo4j'
+                    username: 'ongdb'
                   }
                 }
               }

@@ -48,7 +48,7 @@ describe('Viz rendering', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   it('shows legend with rel types + node labels on first render', () => {
     cy.executeCommand(':clear')

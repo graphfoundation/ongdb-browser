@@ -630,7 +630,7 @@ export const switchConnectionEpic = (action$, store) => {
             store.dispatch(setActiveConnection(null))
             store.dispatch(
               discovery.updateDiscoveryConnection({
-                username: 'neo4j',
+                username: 'ongdb',
                 password: ''
               })
             )

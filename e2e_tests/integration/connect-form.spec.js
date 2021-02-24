@@ -94,7 +94,7 @@ describe('Connect form', () => {
   it('can connect with bolt:// protocol', () => {
     cy.executeCommand(':clear')
     const boltUrl = 'bolt://' + stripScheme(Cypress.config('boltUrl'))
-    cy.connect('neo4j', Cypress.config('password'), boltUrl)
+    cy.connect('ongdb', Cypress.config('password'), boltUrl)
     cy.executeCommand(':server disconnect')
   })
   // Check auto switching protocols for non supporting neo4j://
@@ -102,7 +102,7 @@ describe('Connect form', () => {
     it('browser auto-connects with bolt:// protocol after neo4j:// failed with routing issues', () => {
       cy.executeCommand(':clear')
       const boltUrl = 'neo4j://' + stripScheme(Cypress.config('boltUrl'))
-      cy.connect('neo4j', Cypress.config('password'), boltUrl, false)
+      cy.connect('ongdb', Cypress.config('password'), boltUrl, false)
       getFirstFrameStatusbar().should(
         'contain',
         'Automatic retry using the "bolt://"'
@@ -117,7 +117,7 @@ describe('Connect form', () => {
     it('can connect with the neo4j:// scheme', () => {
       cy.executeCommand(':clear')
       const boltUrl = 'neo4j://' + stripScheme(Cypress.config('boltUrl'))
-      cy.connect('neo4j', Cypress.config('password'), boltUrl)
+      cy.connect('ongdb', Cypress.config('password'), boltUrl)
       cy.executeCommand(':server disconnect')
     })
   }

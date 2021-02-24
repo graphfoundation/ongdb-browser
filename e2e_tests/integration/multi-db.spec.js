@@ -64,7 +64,7 @@ describe('Multi database', () => {
   after(() => {})
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   if (Cypress.config('serverVersion') >= 4.0) {
     if (isEnterpriseEdition()) {
@@ -125,7 +125,7 @@ describe('Multi database', () => {
         cy.get('[data-testid="drawerDBMS"]').click()
         databaseOptionListOptions().should('have.length', 3)
         databaseOptionListOptions().contains('system')
-        databaseOptionListOptions().contains('neo4j')
+        databaseOptionListOptions().contains('ongdb')
         databaseOptionListOptions().contains('name-with-dash')
 
         // Select to use db, make sure backticked
@@ -163,7 +163,7 @@ describe('Multi database', () => {
 
       databaseList().should('have.length', 2)
       databaseList().contains('system')
-      databaseList().contains('neo4j')
+      databaseList().contains('ongdb')
 
       cy.executeCommand(':use system')
     })
@@ -177,7 +177,7 @@ describe('Multi database', () => {
         cy.executeCommand(':dbs')
         databaseList().should('have.length', 3)
         databaseList().contains('system')
-        databaseList().contains('neo4j')
+        databaseList().contains('ongdb')
         databaseList().contains('sidebartest')
 
         cy.executeCommand('DROP DATABASE sidebartest')
@@ -185,7 +185,7 @@ describe('Multi database', () => {
         cy.executeCommand(':dbs')
         databaseList().should('have.length', 2)
         databaseList().contains('system')
-        databaseList().contains('neo4j')
+        databaseList().contains('ongdb')
       })
     }
     it('shows error message when trying to set a parameter on system db', () => {

@@ -172,8 +172,8 @@ describe('connectionsDucks Epics', () => {
           [CONNECTION_ID]: {
             id: CONNECTION_ID,
             host: undefined,
-            username: 'neo4j',
-            password: 'neo4j'
+            username: 'ongdb',
+            password: 'ongdb'
           }
         },
         allConnectionIds: [CONNECTION_ID]
@@ -278,8 +278,8 @@ describe('startupConnectEpic', () => {
           [CONNECTION_ID]: {
             id: CONNECTION_ID,
             host: 'xxx',
-            username: 'neo4j',
-            password: 'neo4j'
+            username: 'ongdb',
+            password: 'ongdb'
           }
         },
         allConnectionIds: [CONNECTION_ID]
@@ -392,8 +392,8 @@ describe('switchConnectionEpic', () => {
           [CONNECTION_ID]: {
             id: CONNECTION_ID,
             host: 'xxx',
-            username: 'neo4j',
-            password: 'neo4j'
+            username: 'ongdb',
+            password: 'ongdb'
           }
         },
         allConnectionIds: [CONNECTION_ID]
@@ -408,7 +408,7 @@ describe('switchConnectionEpic', () => {
     // Given
     const action = {
       type: connections.SWITCH_CONNECTION,
-      username: 'neo4j',
+      username: 'ongdb',
       password: 'test',
       host: 'bolt://localhost:7687',
       encrypted: true
@@ -449,7 +449,7 @@ describe('switchConnectionEpic', () => {
     // Given
     const action = {
       type: connections.SWITCH_CONNECTION,
-      username: 'neo4j',
+      username: 'ongdb',
       password: 'test',
       host: 'bolt://localhost:7687',
       encrypted: true
@@ -468,7 +468,7 @@ describe('switchConnectionEpic', () => {
             connections.updateConnection(connectionInfo),
             connections.setActiveConnection(null),
             updateDiscoveryConnection({
-              username: 'neo4j',
+              username: 'ongdb',
               password: ''
             }),
             currentAction

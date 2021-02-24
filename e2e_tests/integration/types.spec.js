@@ -48,7 +48,7 @@ describe('Types in Browser', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   if (Cypress.config('serverVersion') >= 3.4) {
     it('presents the point type correctly', () => {

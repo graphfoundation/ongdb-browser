@@ -320,7 +320,7 @@ describe('injectDiscoveryEpic', () => {
     // Given
     const action = {
       type: discovery.INJECTED_DISCOVERY,
-      username: 'neo4j',
+      username: 'ongdb',
       password: 'test',
       host: 'bolt://localhost:7687',
       encrypted: true

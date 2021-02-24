@@ -131,10 +131,10 @@ describe('toggleSchemeRouting', () => {
 describe('generateBoltUrl', () => {
   const tests = [
     // wrong types
-    [null, undefined, undefined, 'neo4j://'],
-    [undefined, undefined, undefined, 'neo4j://'],
-    ['', undefined, undefined, 'neo4j://'],
-    [true, undefined, undefined, 'neo4j://'],
+    [null, undefined, undefined, 'bolt://'],
+    [undefined, undefined, undefined, 'bolt://'],
+    ['', undefined, undefined, 'bolt://'],
+    [true, undefined, undefined, 'bolt://'],
     // empty input, but fallback
     ['', ['bolt'], 'bolt', 'bolt://'],
     // loose values

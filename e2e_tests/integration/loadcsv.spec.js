@@ -48,7 +48,7 @@ describe('LOAD CSV', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   it('imports without periodic commit', () => {
     if (!Cypress.config('includeImportTests')) {

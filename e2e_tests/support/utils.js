@@ -22,7 +22,7 @@ export const getDesktopContext = (
                 bolt: getBoltConfig(config, connectionCredsType),
                 http: {
                   enabled: true,
-                  username: 'neo4j',
+                  username: 'ongdb',
                   password: config('password'),
                   host: 'localhost',
                   port: '7474'
@@ -39,7 +39,7 @@ export const getDesktopContext = (
 const getBoltConfig = (config, type) => {
   const obj = {
     enabled: true,
-    username: 'neo4j',
+    username: 'ongdb',
     password: config('password'),
     tlsLevel: config('baseUrl').startsWith('https') ? 'REQUIRED' : 'OPTIONAL'
   }

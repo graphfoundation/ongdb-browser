@@ -46,7 +46,7 @@ describe('User: ', () => {
     cy.visit(Cypress.config('url'))
     cy.get('input[data-testid="boltaddress"]', { timeout: 40000 })
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   it('Doesnt throw when listing users', () => {
     cy.executeCommand(':clear')

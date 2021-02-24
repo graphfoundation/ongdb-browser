@@ -161,7 +161,7 @@ export class ConnectionForm extends Component {
   onAuthenticationMethodChange(event) {
     const authenticationMethod = event.target.value
     const username =
-      authenticationMethod === NO_AUTH ? '' : this.state.username || 'neo4j'
+      authenticationMethod === NO_AUTH ? '' : this.state.username || 'ongdb'
     const password = authenticationMethod === NO_AUTH ? '' : this.state.password
     this.setState({ authenticationMethod, username, password })
     this.props.error({})

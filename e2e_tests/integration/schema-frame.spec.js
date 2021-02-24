@@ -48,7 +48,7 @@ describe('Schema Frame', () => {
   })
   it('can connect', () => {
     const password = Cypress.config('password')
-    cy.connect('neo4j', password)
+    cy.connect('ongdb', password)
   })
   describe('renders schema', () => {
     before(function() {
