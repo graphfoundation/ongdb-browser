@@ -34,5 +34,6 @@ module.exports = {
       functions: 35,
       lines: 45
     }
-  }
+  },
+  testResultsProcessor: 'jest-bamboo-reporter'
 }

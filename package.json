@@ -97,6 +97,7 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^0.14.3",
     "jest": "^25.2.4",
+    "jest-bamboo-reporter": "^1.2.1",
     "jest-canvas-mock": "^1.1.0",
     "js2xmlparser": "^3.0.0",
     "json-loader": "^0.5.7",

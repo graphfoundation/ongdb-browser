@@ -1,6 +1,7 @@
 node_modules/
 npm-debug.log
 coverage/
+test-report.json
 .DS_Store
 .vscode
 /yarn-error.log

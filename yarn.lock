@@ -6845,6 +6845,11 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
+jest-bamboo-reporter@^1.2.1:
+  version "1.2.1"
+  resolved "https://neo.jfrog.io/neo/api/npm/npm/jest-bamboo-reporter/-/jest-bamboo-reporter-1.2.1.tgz#b5e15918586c4939b57feb72a43b9f4db2cae3bf"
+  integrity sha1-teFZGFhsSTm1f+typDufTbLK478=
+
 jest-canvas-mock@^1.1.0:
   version "1.1.0"
   resolved "https://neo.jfrog.io/neo/api/npm/npm/jest-canvas-mock/-/jest-canvas-mock-1.1.0.tgz#f6ed0998b6be3ae2b7e095d7173441ae62cc831e"
