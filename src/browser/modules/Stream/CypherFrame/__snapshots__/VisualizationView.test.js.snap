@@ -5,35 +5,35 @@ exports[`Visualization renders 1`] = `<div />`;
 exports[`Visualization renders with result and escapes any HTML 1`] = `
 <div>
   <div
-    class="VisualizationViewstyled__StyledVisContainer-sc-1b47q51-0 dFbJTz"
+    class="VisualizationViewstyled__StyledVisContainer-dqhz7f-0 knbxot"
   >
     <div
-      class="styled__StyledFullSizeContainer-sc-13boxex-30 hrlJke one-legend-row"
+      class="styled__StyledFullSizeContainer-q3i85g-30 eTDSzT one-legend-row"
       id="svg-vis"
     >
       <div
-        class="styled__StyledLegend-sc-13boxex-23 epTuur one-row"
+        class="styled__StyledLegend-q3i85g-23 eImvqp one-row"
       >
         <div
-          class="styled__StyledLegendRow-sc-13boxex-22 btLVbI contracted"
+          class="styled__StyledLegendRow-q3i85g-22 bCzspR contracted"
         >
           <ul
-            class="styled__StyledInlineList-sc-13boxex-9 styled__StyledLegendInlineList-sc-13boxex-24 bXzLDX list-inline"
+            class="styled__StyledInlineList-q3i85g-9 styled__StyledLegendInlineList-q3i85g-24 kCMijz list-inline"
           >
             <li
-              class="styled__StyledInlineListItem-sc-13boxex-10 styled__StyledLegendInlineListItem-sc-13boxex-25 bKGCvD"
+              class="styled__StyledInlineListItem-q3i85g-10 styled__StyledLegendInlineListItem-q3i85g-25 hpwGes"
               data-testid="viz-legend-labels"
             >
               <ul
-                class="styled__StyledLegendContents-sc-13boxex-21 hvWlVe contents"
+                class="styled__StyledLegendContents-q3i85g-21 ezIKdj contents"
               >
                 <li
-                  class="styled__StyledInlineListItem-sc-13boxex-10 styled__StyledToken-sc-13boxex-15 styled__StyledLabelToken-sc-13boxex-16 jNYiQl token token-label"
+                  class="styled__StyledInlineListItem-q3i85g-10 styled__StyledToken-q3i85g-15 styled__StyledLabelToken-q3i85g-16 cqRwQj token token-label"
                   style="background-color: rgb(247, 151, 103); color: rgb(255, 255, 255);"
                 >
                   *
                   <span
-                    class="styled__StyledTokenCount-sc-13boxex-20 SIGMp count"
+                    class="styled__StyledTokenCount-q3i85g-20 kqgOqO count"
                   >
                     (1)
                   </span>
@@ -41,19 +41,19 @@ exports[`Visualization renders with result and escapes any HTML 1`] = `
               </ul>
             </li>
             <li
-              class="styled__StyledInlineListItem-sc-13boxex-10 styled__StyledLegendInlineListItem-sc-13boxex-25 bKGCvD"
+              class="styled__StyledInlineListItem-q3i85g-10 styled__StyledLegendInlineListItem-q3i85g-25 hpwGes"
               data-testid="viz-legend-labels"
             >
               <ul
-                class="styled__StyledLegendContents-sc-13boxex-21 hvWlVe contents"
+                class="styled__StyledLegendContents-q3i85g-21 ezIKdj contents"
               >
                 <li
-                  class="styled__StyledInlineListItem-sc-13boxex-10 styled__StyledToken-sc-13boxex-15 styled__StyledLabelToken-sc-13boxex-16 jNYiQl token token-label"
+                  class="styled__StyledInlineListItem-q3i85g-10 styled__StyledToken-q3i85g-15 styled__StyledLabelToken-q3i85g-16 cqRwQj token token-label"
                   style="background-color: rgb(201, 144, 192); color: rgb(255, 255, 255);"
                 >
                   Person
                   <span
-                    class="styled__StyledTokenCount-sc-13boxex-20 SIGMp count"
+                    class="styled__StyledTokenCount-q3i85g-20 kqgOqO count"
                   >
                     (1)
                   </span>
@@ -64,7 +64,7 @@ exports[`Visualization renders with result and escapes any HTML 1`] = `
         </div>
       </div>
       <div
-        class="styled__StyledSvgWrapper-sc-13boxex-0 emUVWV"
+        class="styled__StyledSvgWrapper-q3i85g-0 iFMXcJ"
       >
         <svg
           class="neod3viz"
@@ -131,26 +131,26 @@ exports[`Visualization renders with result and escapes any HTML 1`] = `
         </svg>
       </div>
       <div
-        class="styled__StyledStatusBar-sc-13boxex-12 fBQkwD status-bar"
+        class="styled__StyledStatusBar-q3i85g-12 iJTVCh status-bar"
       >
         <div
-          class="styled__StyledStatus-sc-13boxex-13 lfPraq status"
+          class="styled__StyledStatus-q3i85g-13 gNzArQ status"
         >
           <div
-            class="styled__StyledInspectorFooter-sc-13boxex-5 fLefTL contracted inspector-footer"
+            class="styled__StyledInspectorFooter-q3i85g-5 crZWfl contracted inspector-footer"
           >
             <ul
-              class="styled__StyledInspectorFooterRow-sc-13boxex-6 cjMrGU inspector-footer-row"
+              class="styled__StyledInspectorFooterRow-q3i85g-6 gpxRVr inspector-footer-row"
               data-testid="vizInspector"
             >
               <ul
-                class="styled__StyledInlineList-sc-13boxex-9 fWraRP list-inline"
+                class="styled__StyledInlineList-q3i85g-9 htPIJx list-inline"
               >
                 <li
-                  class="styled__StyledInlineListItem-sc-13boxex-10 styled__StyledInspectorFooterRowListPair-sc-13boxex-14 jeBqUF pair"
+                  class="styled__StyledInlineListItem-q3i85g-10 styled__StyledInspectorFooterRowListPair-q3i85g-14 emRQXn pair"
                 >
                   <div
-                    class="styled__StyledInspectorFooterRowListValue-sc-13boxex-8 huEFTy value"
+                    class="styled__StyledInspectorFooterRowListValue-q3i85g-8 hUWGOp value"
                   >
                     Displaying 1 nodes, 0 relationships.
                   </div>

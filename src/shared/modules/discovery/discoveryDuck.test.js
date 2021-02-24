@@ -167,7 +167,7 @@ describe('discoveryOnStartupEpic', () => {
   test('listens on APP_START and finds all of bolt_routing, bolt_direct and a bold host and dispatches an action with the found bolt_routing host', done => {
     // Given
     const action = { type: APP_START, env: WEB }
-    const expectedHost = 'neo4j://myhost:7777'
+    const expectedHost = 'bolt://myhost:7777'
     nock(getDiscoveryEndpoint())
       .get('/')
       .reply(200, {
@@ -233,7 +233,7 @@ describe('discoveryOnStartupEpic', () => {
     const action = {
       type: APP_START,
       url:
-        'http://localhost/?connectURL=bolt%2Brouting%3A%2F%2Fneo4j%3Aneo4j%40myhost%3A8889'
+        'http://localhost/?connectURL=bolt%2Brouting%3A%2F%2Fongdb%3Aongdb%40myhost%3A8889'
     }
     const expectedURL = 'bolt+routing://myhost:8889'
     bus.take(discovery.DONE, currentAction => {
@@ -242,8 +242,8 @@ describe('discoveryOnStartupEpic', () => {
         action,
         discovery.updateDiscoveryConnection({
           host: expectedURL,
-          username: 'neo4j',
-          password: 'neo4j'
+          username: 'ongdb',
+          password: 'ongdb'
         }),
         currentAction
       ])

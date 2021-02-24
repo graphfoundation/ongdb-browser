@@ -5,42 +5,42 @@ exports[`WarningsViews WarningsView displays nothing if no notifications 1`] = `
 exports[`WarningsViews WarningsView does displays a warning 1`] = `
 <div>
   <div
-    class="styled__StyledHelpFrame-sc-1dtvgs1-4 eyxhwb"
+    class="styled__StyledHelpFrame-sc-1urwgm2-4 ftFmVl"
   >
     <div
-      class="styled__StyledHelpContent-sc-1dtvgs1-5 efmbmX"
+      class="styled__StyledHelpContent-sc-1urwgm2-5 fyfXoD"
     >
       <div
-        class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+        class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
       >
         <div
-          class="styled__StyledCypherMessage-sc-1dtvgs1-10 gVDJxl"
+          class="styled__StyledCypherMessage-sc-1urwgm2-10 jKpeVf"
         >
           WARNING xx0
         </div>
         <h4
-          class="styled__StyledH4-sc-1dtvgs1-16 gHlNfv"
+          class="styled__StyledH4-sc-1urwgm2-16 hSsRmk"
         >
           My xx1 warning
         </h4>
       </div>
       <div
-        class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+        class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
       >
         <div
-          class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+          class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
         >
           This is xx2 warning
         </div>
         <div
-          class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+          class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
         >
           <pre
-            class="styled__StyledPreformattedArea-sc-1dtvgs1-19 bNiVzc"
+            class="styled__StyledPreformattedArea-sc-1urwgm2-19 kSFoGX"
           >
             EXPLAIN MATCH xx3
             <br
-              class="styled__StyledBr-sc-1dtvgs1-18 eMYrmQ"
+              class="styled__StyledBr-sc-1urwgm2-18 bkHHui"
             />
                    
             ^
@@ -55,42 +55,42 @@ exports[`WarningsViews WarningsView does displays a warning 1`] = `
 exports[`WarningsViews WarningsView does displays multiple warnings 1`] = `
 <div>
   <div
-    class="styled__StyledHelpFrame-sc-1dtvgs1-4 eyxhwb"
+    class="styled__StyledHelpFrame-sc-1urwgm2-4 ftFmVl"
   >
     <div
-      class="styled__StyledHelpContent-sc-1dtvgs1-5 efmbmX"
+      class="styled__StyledHelpContent-sc-1urwgm2-5 fyfXoD"
     >
       <div
-        class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+        class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
       >
         <div
-          class="styled__StyledCypherMessage-sc-1dtvgs1-10 gVDJxl"
+          class="styled__StyledCypherMessage-sc-1urwgm2-10 jKpeVf"
         >
           WARNING xx0
         </div>
         <h4
-          class="styled__StyledH4-sc-1dtvgs1-16 gHlNfv"
+          class="styled__StyledH4-sc-1urwgm2-16 hSsRmk"
         >
           My xx1 warning
         </h4>
       </div>
       <div
-        class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+        class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
       >
         <div
-          class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+          class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
         >
           This is xx2 warning
         </div>
         <div
-          class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+          class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
         >
           <pre
-            class="styled__StyledPreformattedArea-sc-1dtvgs1-19 bNiVzc"
+            class="styled__StyledPreformattedArea-sc-1urwgm2-19 kSFoGX"
           >
             EXPLAIN MATCH zz3
             <br
-              class="styled__StyledBr-sc-1dtvgs1-18 eMYrmQ"
+              class="styled__StyledBr-sc-1urwgm2-18 bkHHui"
             />
                    
             ^
@@ -99,39 +99,39 @@ exports[`WarningsViews WarningsView does displays multiple warnings 1`] = `
       </div>
     </div>
     <div
-      class="styled__StyledHelpContent-sc-1dtvgs1-5 efmbmX"
+      class="styled__StyledHelpContent-sc-1urwgm2-5 fyfXoD"
     >
       <div
-        class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+        class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
       >
         <div
-          class="styled__StyledCypherMessage-sc-1dtvgs1-10 gVDJxl"
+          class="styled__StyledCypherMessage-sc-1urwgm2-10 jKpeVf"
         >
           WARNING yy0
         </div>
         <h4
-          class="styled__StyledH4-sc-1dtvgs1-16 gHlNfv"
+          class="styled__StyledH4-sc-1urwgm2-16 hSsRmk"
         >
           My yy1 warning
         </h4>
       </div>
       <div
-        class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+        class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
       >
         <div
-          class="styled__StyledHelpDescription-sc-1dtvgs1-6 eUrIkF"
+          class="styled__StyledHelpDescription-sc-1urwgm2-6 iIqLCg"
         >
           This is yy2 warning
         </div>
         <div
-          class="styled__StyledDiv-sc-1dtvgs1-7 hvhkie"
+          class="styled__StyledDiv-sc-1urwgm2-7 bKVemz"
         >
           <pre
-            class="styled__StyledPreformattedArea-sc-1dtvgs1-19 bNiVzc"
+            class="styled__StyledPreformattedArea-sc-1urwgm2-19 kSFoGX"
           >
             EXPLAIN MATCH zz3
             <br
-              class="styled__StyledBr-sc-1dtvgs1-18 eMYrmQ"
+              class="styled__StyledBr-sc-1urwgm2-18 bkHHui"
             />
                
             ^

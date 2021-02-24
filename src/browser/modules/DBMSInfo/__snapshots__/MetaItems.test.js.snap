@@ -3,15 +3,15 @@
 exports[`LabelItems renders empty 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Node Labels
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <p>
         There are no labels in database
@@ -24,30 +24,30 @@ exports[`LabelItems renders empty 1`] = `
 exports[`LabelItems renders labels 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Node Labels
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <div
-        class="styled__chip-t72hk3-0 styled__StyledLabel-t72hk3-1 hThrTr"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledLabel-sc-1wi30ud-1 jFWThF"
         data-testid="sidebarMetaItem"
       >
         *
       </div>
       <div
-        class="styled__chip-t72hk3-0 styled__StyledLabel-t72hk3-1 hThrTr"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledLabel-sc-1wi30ud-1 jFWThF"
         data-testid="sidebarMetaItem"
       >
         MyLabel
       </div>
       <div
-        class="styled__chip-t72hk3-0 styled__StyledLabel-t72hk3-1 hThrTr"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledLabel-sc-1wi30ud-1 jFWThF"
         data-testid="sidebarMetaItem"
       >
         MyLabel2
@@ -60,15 +60,15 @@ exports[`LabelItems renders labels 1`] = `
 exports[`PropertyItems renders empty 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Property Keys
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <p>
         There are no properties in database
@@ -81,24 +81,24 @@ exports[`PropertyItems renders empty 1`] = `
 exports[`PropertyItems renders properties 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Property Keys
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <div
-        class="styled__chip-t72hk3-0 styled__StyledProperty-t72hk3-3 EbItw"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledProperty-sc-1wi30ud-3 VQQyY"
         data-testid="sidebarMetaItem"
       >
         prop1
       </div>
       <div
-        class="styled__chip-t72hk3-0 styled__StyledProperty-t72hk3-3 EbItw"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledProperty-sc-1wi30ud-3 VQQyY"
         data-testid="sidebarMetaItem"
       >
         prop2
@@ -111,15 +111,15 @@ exports[`PropertyItems renders properties 1`] = `
 exports[`RelationshipItems renders empty 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Relationship Types
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <p>
         No relationships in database
@@ -132,30 +132,30 @@ exports[`RelationshipItems renders empty 1`] = `
 exports[`RelationshipItems renders relationshipTypes 1`] = `
 <div>
   <div
-    class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+    class="Drawer__DrawerSection-z49atx-4 soBJE"
   >
     <h5
-      class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+      class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
     >
       Relationship Types
     </h5>
     <div
-      class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+      class="Drawer__DrawerSectionBody-z49atx-5 URTys"
     >
       <div
-        class="styled__chip-t72hk3-0 styled__StyledRelationship-t72hk3-2 jIILpR"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledRelationship-sc-1wi30ud-2 kJUWKe"
         data-testid="sidebarMetaItem"
       >
         *
       </div>
       <div
-        class="styled__chip-t72hk3-0 styled__StyledRelationship-t72hk3-2 jIILpR"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledRelationship-sc-1wi30ud-2 kJUWKe"
         data-testid="sidebarMetaItem"
       >
         MY_TYPE
       </div>
       <div
-        class="styled__chip-t72hk3-0 styled__StyledRelationship-t72hk3-2 jIILpR"
+        class="styled__chip-sc-1wi30ud-0 styled__StyledRelationship-sc-1wi30ud-2 kJUWKe"
         data-testid="sidebarMetaItem"
       >
         MY_TYPE2

@@ -3,10 +3,10 @@
 exports[`CodeViews CodeStatusbar displays no statusBarMessage 1`] = `
 <div>
   <div
-    class="styled__StyledStatsBar-sc-1dtvgs1-23 gWjkIU"
+    class="styled__StyledStatsBar-sc-1urwgm2-23 jNjdUz"
   >
     <div
-      class="Ellipsis-sc-1dn9bou-0 gzqRPC"
+      class="Ellipsis-jiq0k6-0 hkAFf"
     />
   </div>
 </div>
@@ -15,10 +15,10 @@ exports[`CodeViews CodeStatusbar displays no statusBarMessage 1`] = `
 exports[`CodeViews CodeStatusbar displays statusBarMessage 1`] = `
 <div>
   <div
-    class="styled__StyledStatsBar-sc-1dtvgs1-23 gWjkIU"
+    class="styled__StyledStatsBar-sc-1urwgm2-23 jNjdUz"
   >
     <div
-      class="Ellipsis-sc-1dn9bou-0 gzqRPC"
+      class="Ellipsis-jiq0k6-0 hkAFf"
     >
       Started streaming 1 records after 5 ms and completed after 10  ms.
     </div>
@@ -31,88 +31,88 @@ exports[`CodeViews CodeView displays nothing if not successful query 1`] = `<div
 exports[`CodeViews CodeView displays request and response info if successful query 1`] = `
 <div>
   <div
-    class="styled__PaddedDiv-sc-1dtvgs1-1 kyHRpW"
+    class="styled__PaddedDiv-sc-1urwgm2-1 dnoNRj"
   >
     <table
-      class="styled__StyledTable-sc-1dtvgs1-37 hQXYgT"
+      class="styled__StyledTable-sc-1urwgm2-37 dwBGyp"
     >
       <tbody
-        class="styled__StyledTBody-sc-1dtvgs1-38 kGUkAE"
+        class="styled__StyledTBody-sc-1urwgm2-38 gKLgJi"
       >
         <tr
-          class="styled__StyledAlteringTr-sc-1dtvgs1-40 iAVdiN"
+          class="styled__StyledAlteringTr-sc-1urwgm2-40 buiEwI"
         >
           <td
-            class="styled__StyledStrongTd-sc-1dtvgs1-41 gkKCBY"
+            class="styled__StyledStrongTd-sc-1urwgm2-41 dtYHNj"
           >
             Server version
           </td>
           <td
-            class="styled__StyledTd-sc-1dtvgs1-42 dGNdSM"
+            class="styled__StyledTd-sc-1urwgm2-42 diFYWW"
           >
             xx1
           </td>
         </tr>
         <tr
-          class="styled__StyledAlteringTr-sc-1dtvgs1-40 iAVdiN"
+          class="styled__StyledAlteringTr-sc-1urwgm2-40 buiEwI"
         >
           <td
-            class="styled__StyledStrongTd-sc-1dtvgs1-41 gkKCBY"
+            class="styled__StyledStrongTd-sc-1urwgm2-41 dtYHNj"
           >
             Server address
           </td>
           <td
-            class="styled__StyledTd-sc-1dtvgs1-42 dGNdSM"
+            class="styled__StyledTd-sc-1urwgm2-42 diFYWW"
           >
             xx2
           </td>
         </tr>
         <tr
-          class="styled__StyledAlteringTr-sc-1dtvgs1-40 iAVdiN"
+          class="styled__StyledAlteringTr-sc-1urwgm2-40 buiEwI"
         >
           <td
-            class="styled__StyledStrongTd-sc-1dtvgs1-41 gkKCBY"
+            class="styled__StyledStrongTd-sc-1urwgm2-41 dtYHNj"
           >
             Query
           </td>
           <td
-            class="styled__StyledTd-sc-1dtvgs1-42 dGNdSM"
+            class="styled__StyledTd-sc-1urwgm2-42 diFYWW"
           >
             MATCH xx0
           </td>
         </tr>
         <tr
-          class="styled__StyledAlteringTr-sc-1dtvgs1-40 iAVdiN"
+          class="styled__StyledAlteringTr-sc-1urwgm2-40 buiEwI"
         >
           <td
-            class="styled__StyledStrongTd-sc-1dtvgs1-41 gkKCBY"
+            class="styled__StyledStrongTd-sc-1urwgm2-41 dtYHNj"
           >
             Summary
             <div
-              class="styled__StyledExpandable-sc-1dtvgs1-39 dxftfv fa fa-caret-right"
+              class="styled__StyledExpandable-sc-1urwgm2-39 cbruOH fa fa-caret-right"
               title="Expand section"
             />
           </td>
           <td
-            class="styled__StyledTd-sc-1dtvgs1-42 dGNdSM"
+            class="styled__StyledTd-sc-1urwgm2-42 diFYWW"
           >
             {,  "server": {,    "version": "xx1", ...
           </td>
         </tr>
         <tr
-          class="styled__StyledAlteringTr-sc-1dtvgs1-40 iAVdiN"
+          class="styled__StyledAlteringTr-sc-1urwgm2-40 buiEwI"
         >
           <td
-            class="styled__StyledStrongTd-sc-1dtvgs1-41 gkKCBY"
+            class="styled__StyledStrongTd-sc-1urwgm2-41 dtYHNj"
           >
             Response
             <div
-              class="styled__StyledExpandable-sc-1dtvgs1-39 dxftfv fa fa-caret-right"
+              class="styled__StyledExpandable-sc-1urwgm2-39 cbruOH fa fa-caret-right"
               title="Expand section"
             />
           </td>
           <td
-            class="styled__StyledTd-sc-1dtvgs1-42 dGNdSM"
+            class="styled__StyledTd-sc-1urwgm2-42 diFYWW"
           >
             [,  {,    "res": "xx3" ...
           </td>

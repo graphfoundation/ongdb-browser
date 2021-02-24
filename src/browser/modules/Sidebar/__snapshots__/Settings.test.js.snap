@@ -3,46 +3,46 @@
 exports[`Settings renders with strange characters in display name 1`] = `
 <div>
   <div
-    class="Drawer-sc-5bct1g-0 kPghdL"
+    class="Drawer-z49atx-0 bLrPDw"
     id="db-settings"
   >
     <h4
-      class="Drawer__DrawerHeader-sc-5bct1g-1 bjmdEJ"
+      class="Drawer__DrawerHeader-z49atx-1 iHKREJ"
     >
       Browser Settings
     </h4>
     <div
-      class="Drawer__DrawerBody-sc-5bct1g-6 fhYbsO"
+      class="Drawer__DrawerBody-z49atx-6 bMGBdH"
     >
       <div
-        class="Drawer__DrawerSection-sc-5bct1g-4 bEhGCY"
+        class="Drawer__DrawerSection-z49atx-4 soBJE"
       >
         <div
-          class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+          class="Drawer__DrawerSectionBody-z49atx-5 URTys"
         >
           <h5
-            class="Drawer__DrawerSubHeader-sc-5bct1g-3 laKfsi"
+            class="Drawer__DrawerSubHeader-z49atx-3 dDZtjD"
           >
             Test åäö settings
           </h5>
           <div
-            class="styled__StyledSetting-xqaooh-0 dIwyQs"
+            class="styled__StyledSetting-sc-9zxths-0 eVmkmR"
           >
             <div
-              class="styled__StyledSettingLabel-xqaooh-1 bTUavI"
+              class="styled__StyledSettingLabel-sc-9zxths-1 eKVztk"
               title=""
             >
               åäö üüü
             </div>
             <input
-              class="styled__StyledSettingTextInput-xqaooh-2 coeKcS testSetting"
+              class="styled__StyledSettingTextInput-sc-9zxths-2 hFmosD testSetting"
               title=""
               value="true"
             />
           </div>
         </div>
         <div
-          class="Drawer__DrawerSectionBody-sc-5bct1g-5 RMcRs"
+          class="Drawer__DrawerSectionBody-z49atx-5 URTys"
         />
       </div>
     </div>

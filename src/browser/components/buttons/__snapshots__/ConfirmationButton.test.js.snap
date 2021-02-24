@@ -3,11 +3,11 @@
 exports[`ConfirmationButton renders changes state on clicks and finally calls the onConfirmed prop 1`] = `
 <div>
   <button
-    class="ConfirmationButton__IconButton-sc-1h0apyh-0 dvujiG"
+    class="ConfirmationButton__IconButton-sc-1kpymhy-0 ircZFn"
     data-testid="confirmation-button-initial"
   >
     <i
-      class="IconContainer__I-sc-16whwc5-0 iJwbeZ sl-minus-circle"
+      class="IconContainer__I-sc-17phkpj-0 jXBJSL sl-minus-circle"
     />
   </button>
 </div>
@@ -17,19 +17,19 @@ exports[`ConfirmationButton renders changes state on clicks and finally calls th
 <div>
   <span>
     <button
-      class="ConfirmationButton__IconButton-sc-1h0apyh-0 dvujiG"
+      class="ConfirmationButton__IconButton-sc-1kpymhy-0 ircZFn"
       data-testid="confirmation-button-confirm"
     >
       <i
-        class="IconContainer__I-sc-16whwc5-0 iJwbeZ sl-arrow-circle-right"
+        class="IconContainer__I-sc-17phkpj-0 jXBJSL sl-arrow-circle-right"
       />
     </button>
     <button
-      class="ConfirmationButton__IconButton-sc-1h0apyh-0 dvujiG"
+      class="ConfirmationButton__IconButton-sc-1kpymhy-0 ircZFn"
       data-testid="confirmation-button-cancel"
     >
       <i
-        class="IconContainer__I-sc-16whwc5-0 iJwbeZ sl-delete-circle"
+        class="IconContainer__I-sc-17phkpj-0 jXBJSL sl-delete-circle"
       />
     </button>
   </span>
@@ -39,11 +39,11 @@ exports[`ConfirmationButton renders changes state on clicks and finally calls th
 exports[`ConfirmationButton renders changes state on clicks and finally calls the onConfirmed prop 3`] = `
 <div>
   <button
-    class="ConfirmationButton__IconButton-sc-1h0apyh-0 dvujiG"
+    class="ConfirmationButton__IconButton-sc-1kpymhy-0 ircZFn"
     data-testid="confirmation-button-initial"
   >
     <i
-      class="IconContainer__I-sc-16whwc5-0 iJwbeZ sl-minus-circle"
+      class="IconContainer__I-sc-17phkpj-0 jXBJSL sl-minus-circle"
     />
   </button>
 </div>
@@ -52,11 +52,11 @@ exports[`ConfirmationButton renders changes state on clicks and finally calls th
 exports[`ConfirmationButton renders changes state on clicks and finally calls the onConfirmed prop 4`] = `
 <div>
   <button
-    class="ConfirmationButton__IconButton-sc-1h0apyh-0 dvujiG"
+    class="ConfirmationButton__IconButton-sc-1kpymhy-0 ircZFn"
     data-testid="confirmation-button-initial"
   >
     <i
-      class="IconContainer__I-sc-16whwc5-0 iJwbeZ sl-minus-circle"
+      class="IconContainer__I-sc-17phkpj-0 jXBJSL sl-minus-circle"
     />
   </button>
 </div>
