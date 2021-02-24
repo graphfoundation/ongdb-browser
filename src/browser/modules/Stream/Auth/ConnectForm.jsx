@@ -110,7 +110,7 @@ export default function ConnectForm(props) {
           return (
             <>
               <StyledConnectionFormEntry>
-                <StyledConnectionLabel title="Pick neo4j:// for a routed connection, bolt:// for a direct connection to a DBMS instance.">
+                <StyledConnectionLabel title="Pick bolt:// for a routed connection, bolt:// for a direct connection to a DBMS instance.">
                   Connect URL
                 </StyledConnectionLabel>
                 {props.allowedSchemes && props.allowedSchemes.length ? (
@@ -142,8 +142,8 @@ export default function ConnectForm(props) {
                       />
                     </StyledSegment>
                     <StyledBoltUrlHintText className="url-hint-text">
-                      Pick neo4j:// for a routed connection, bolt:// for a
-                      direct connection to a DBMS.
+                      Pick bolt:// for a routed connection, bolt:// for a direct
+                      connection to a DBMS.
                     </StyledBoltUrlHintText>
                   </div>
                 ) : (

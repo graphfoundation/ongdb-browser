@@ -49,8 +49,8 @@ export const DESKTOP = 'DESKTOP'
 export const WEB = 'WEB'
 export const CLOUD = 'CLOUD'
 
-const SECURE_SCHEMES = ['neo4j+s', 'bolt+s']
-const INSECURE_SCHEMES = ['neo4j', 'bolt']
+const SECURE_SCHEMES = ['bolt+s']
+const INSECURE_SCHEMES = ['bolt']
 
 // Selectors
 export const getHostedUrl = state => (state[NAME] || {}).hostedUrl || null

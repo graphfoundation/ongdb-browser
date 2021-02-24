@@ -114,7 +114,7 @@ export const getDefaultBoltScheme = serverVersion => {
     return pre4
   }
   if (semver.gte(serverVersion, NEO4J_4_0)) {
-    return 'neo4j://'
+    return 'bolt://'
   }
   return pre4
 }
