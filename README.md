@@ -1,5 +1,7 @@
 # ONgDB Browser
 
+![Build Status](https://bamboo.graphfoundation.org/plugins/servlet/wittified/build-status/BROWSER-ONGDBBROWSER)
+
 ONgDB Browser is the general purpose user interface for working with ONgDB to query, visualize, administrate and monitor the database
 with modern and easy-to-use tools.
 
