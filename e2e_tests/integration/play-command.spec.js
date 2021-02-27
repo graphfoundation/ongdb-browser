@@ -117,31 +117,31 @@ describe('Play command', () => {
   it('can execute remote types of `:play`', () => {
     cy.executeCommand(':clear')
 
-    // Existing guide
+    // Existing remote guide - currently unavailable
     cy.executeCommand(':play reco')
-    cy.getFrames().should(
-      'contain',
-      'Welcome to the ONgDB recommendations training'
-    )
+    // cy.getFrames()
+    //.should('contain', 'Welcome to the ONgDB recommendations training')
+    // .should(('contain', 'Not found')) // this will fail when remote guides added
 
     // Next slide
-    nextSlideBtn().click()
+    // nextSlideBtn().click()
 
     // Click link to new guide
-    cy.contains('Procedures').click()
+    // cy.contains('Procedures').click()
 
     // Assert
-    cy.getFrames()
-      .should('have.length', 1)
-      .should('contain', 'Procedures are a new feature in')
+    // cy.getFrames()
+    //  .should('have.length', 1)
+    //  .should('contain', 'Procedures are a new feature in')
 
     // Click back in stack
-    cy.getPrevInFrameStackBtn().click()
+    // cy.getPrevInFrameStackBtn().click()
 
     // Assert
     cy.getFrames()
       .should('have.length', 1)
-      .should('contain', 'Welcome to the ONgDB recommendations training')
+      //.should('contain', 'Welcome to the ONgDB recommendations training')
+      .should('contain', 'Not found') // this will fail when remote guides added
   })
   it('handles not found guides', () => {
     cy.executeCommand(':clear')

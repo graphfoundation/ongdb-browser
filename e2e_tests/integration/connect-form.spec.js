@@ -68,8 +68,8 @@ describe('Connect form', () => {
     getBoltSchemeSelect().should('have.value', scheme)
   })
   it('extracts the scheme from the bolt url entered with encryption flag', () => {
-    const scheme = 'neo4j+s://'
-    const nonSecureScheme = 'neo4j://'
+    const scheme = 'bolt+s://'
+    const nonSecureScheme = 'bolt://'
     const host = 'localhost:7687'
     getBoltUrlField()
       .clear()
@@ -81,7 +81,7 @@ describe('Connect form', () => {
   it('aliases bolt+routing:// to neo4j://', () => {
     getBoltSchemeSelect().select('bolt://')
     const scheme = 'bolt+routing://'
-    const aliasScheme = 'neo4j://'
+    const aliasScheme = 'bolt://' // there is not bolt+routing option right now but needs to be
     const host = 'localhost:7687'
     getBoltUrlField()
       .clear()
@@ -98,7 +98,11 @@ describe('Connect form', () => {
     cy.executeCommand(':server disconnect')
   })
   // Check auto switching protocols for non supporting neo4j://
-  if (Cypress.config('serverVersion') < 4.0) {
+  // There is no neo4j:// protocol option right now but this could be bolt+routing
+  if (
+    Cypress.config('serverVersion') > 3.4 &&
+    Cypress.config('serverVersion') < 4.0
+  ) {
     it('browser auto-connects with bolt:// protocol after neo4j:// failed with routing issues', () => {
       cy.executeCommand(':clear')
       const boltUrl = 'neo4j://' + stripScheme(Cypress.config('boltUrl'))

@@ -221,7 +221,8 @@ const initialState = {
   databases: [],
   settings: {
     'browser.allow_outgoing_connections': false,
-    'browser.remote_content_hostname_whitelist': 'guides.neo4j.com, localhost',
+    'browser.remote_content_hostname_whitelist':
+      'cdn.graphfoundation.org, localhost',
     'browser.retain_connection_credentials': true
   }
 }

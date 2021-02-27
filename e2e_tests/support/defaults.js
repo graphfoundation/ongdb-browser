@@ -1,6 +1,6 @@
 /* global Cypress */
 
-Cypress.config('serverVersion', parseFloat(Cypress.env('server')) || 3.5)
+Cypress.config('serverVersion', parseFloat(Cypress.env('server')) || 3.4)
 Cypress.config('serverEdition', Cypress.env('edition') || 'enterprise')
 
 Cypress.config(

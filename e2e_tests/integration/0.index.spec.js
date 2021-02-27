@@ -169,7 +169,6 @@ describe('ONgDB Browser', () => {
     cy.get('[data-testid="drawerDBMS"]').click()
   })
 
-  // Browser sync is disabled on Aura
   if (!isAura()) {
     it('will clear local storage when clicking "Clear local data"', () => {
       const scriptName = 'foo'
@@ -181,19 +180,9 @@ describe('ONgDB Browser', () => {
         .first()
         .should('be', scriptName)
 
-      cy.get('[data-testid="drawerSync"]').click()
-      cy.get('[data-testid="clearLocalData"]').click()
-      cy.wait(500)
-
-      // confirm clear
-      cy.get('[data-testid="clearLocalData"]').click()
-
       cy.get('[data-testid="drawerFavorites"]').click()
       cy.get('.saved-scripts-list-item').should('have.length', 0)
       cy.get('[data-testid="drawerFavorites"]').click()
-
-      // once data is cleared the user is logged out and the connect form is displayed
-      cy.get('input[data-testid="boltaddress"]')
     })
   }
   it('displays no user info in sidebar (when not connected)', () => {
