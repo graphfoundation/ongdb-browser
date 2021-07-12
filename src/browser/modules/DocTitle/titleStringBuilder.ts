@@ -34,7 +34,7 @@ const asTitleString = (connectionData: any) => {
     return null
   }
   const builtTitle = buildTitleFromConnectionData()
-  return `${builtTitle ? `${builtTitle} - ` : ''}Neo4j Browser`
+  return `${builtTitle ? `${builtTitle} - ` : ''}ONgDB Browser`
 }
 
 export default asTitleString

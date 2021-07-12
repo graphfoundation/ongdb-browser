@@ -47,7 +47,6 @@ import {
   DatabaseIcon,
   FavoritesIcon,
   DocumentsIcon,
-  CloudSyncIcon,
   SettingsIcon,
   AboutIcon,
   ProjectFilesIcon,
@@ -72,7 +71,7 @@ const Sidebar = ({
   onNavClick,
   neo4jConnectionState,
   showStaticScripts,
-  syncConnected,
+  // syncConnected,
   loadSync,
   isRelateAvailable,
   scriptDraft
@@ -143,20 +142,6 @@ const Sidebar = ({
       enableCannyBadge: true
     },
     {
-      name: 'Sync',
-      title: 'Browser Sync',
-      icon: function syncIcon(isOpen: boolean): JSX.Element {
-        return (
-          <CloudSyncIcon
-            isOpen={isOpen}
-            connected={syncConnected}
-            title="Browser Sync"
-          />
-        )
-      },
-      content: BrowserSync
-    },
-    {
       name: 'Settings',
       title: 'Settings',
       icon: function settingIcon(isOpen: boolean): JSX.Element {
@@ -166,9 +151,9 @@ const Sidebar = ({
     },
     {
       name: 'About',
-      title: 'About Neo4j',
+      title: 'About ONgDB',
       icon: function aboutIcon(isOpen: boolean): JSX.Element {
-        return <AboutIcon isOpen={isOpen} title="About Neo4j" />
+        return <AboutIcon isOpen={isOpen} title="About ONgDB" />
       },
       content: AboutDrawer
     }

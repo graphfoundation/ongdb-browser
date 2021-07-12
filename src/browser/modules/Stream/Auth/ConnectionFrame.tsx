@@ -61,12 +61,12 @@ export class ConnectionFrame extends Component<any, State> {
             <StyledConnectionAside>
               {this.state.success ? (
                 <>
-                  <H3>Connected to Neo4j</H3>
+                  <H3>Connected to ONgDB</H3>
                   <Lead>Nice to meet you.</Lead>
                 </>
               ) : (
                 <>
-                  <H3>Connect to Neo4j</H3>
+                  <H3>Connect to ONgDB</H3>
                   <Lead>
                     Database access might require an authenticated connection
                   </Lead>

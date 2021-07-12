@@ -57,7 +57,7 @@ export default [
       },
       {
         name: 'intro',
-        description: ' - getting started with Neo4j Browser'
+        description: ' - getting started with ONgDB Browser'
       },
       {
         name: 'concepts',

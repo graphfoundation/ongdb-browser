@@ -26,7 +26,7 @@ const Editor = '[data-testid="activeEditor"] textarea'
 const Carousel = '[data-testid="carousel"]'
 const SubmitQueryButton = '[data-testid="editor-Run"]'
 
-describe('Neo4j Browser', () => {
+describe('ONgDB Browser', () => {
   before(function() {
     cy.visit(Cypress.config('url'))
       .title()
