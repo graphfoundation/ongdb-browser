@@ -78,6 +78,7 @@ const content = (
         &nbsp;| Modifications Copyright &copy;
         <a
           target="_blank"
+          rel="noreferrer"
           href="http://graphfoundation.org/"
           className="no-icon"
         >

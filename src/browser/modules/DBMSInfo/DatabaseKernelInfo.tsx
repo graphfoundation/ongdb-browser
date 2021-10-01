@@ -85,7 +85,7 @@ export const DatabaseKernelInfo = ({
             <Render if={dbName}>
               <tr>
                 <StyledKey>Name: </StyledKey>
-                <StyledValue>{dbName}</StyledValue>
+                <StyledValue>ONgDB</StyledValue>
               </tr>
             </Render>
             <Render if={storeSize}>

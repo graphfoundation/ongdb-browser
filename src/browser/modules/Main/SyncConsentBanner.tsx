@@ -43,7 +43,7 @@ const SyncReminderBanner = React.memo(function SyncReminderBanner({
   dbConnectionState,
   syncConsent,
   optOutSync,
-  authStatus,
+  // authStatus,
   onGetstartedClicked
 }: any) {
   const dbConnected = dbConnectionState === CONNECTED_STATE
