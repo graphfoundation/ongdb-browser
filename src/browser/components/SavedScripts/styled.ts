@@ -82,10 +82,6 @@ export const SavedScriptsFolderHeader = styled.div`
   padding-bottom: 5px;
 `
 
-export const SavedScriptsFolderBody = styled.div`
-  margin-left: 15px;
-`
-
 export const SavedScriptsFolderLabel = styled.div`
   flex: 1;
   margin-right: 10px;
@@ -142,6 +138,7 @@ export const SavedScriptsInput = styled.input`
 
 export const ContextMenuContainer = styled.span`
   position: relative;
+  cursor: pointer;
 `
 
 export const ContextMenuHoverParent = styled.span<{ stayVisible?: boolean }>`
@@ -167,8 +164,7 @@ export const ContextMenu = styled.div`
   background-color: ${props => props.theme.secondaryBackground};
   border: ${props => props.theme.frameBorder};
 
-  box-shadow: 0px 0px 2px rgba(52, 58, 67, 0.1),
-    0px 1px 2px rgba(52, 58, 67, 0.08), 0px 1px 4px rgba(52, 58, 67, 0.08);
+  box-shadow: ${props => props.theme.standardShadow};
   border-radius: 2px;
 `
 export const ContextMenuItem = styled.div`

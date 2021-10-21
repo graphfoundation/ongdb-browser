@@ -20,7 +20,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { version } from 'project-root/package.json'
-import Render from 'browser-components/Render'
+
 import {
   Drawer,
   DrawerBody,
@@ -87,7 +87,7 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
               {version}
             </a>
           </p>
-          <Render if={serverVersion && serverEdition}>
+          {serverVersion && serverEdition && (
             <p>
               ONgDB Server version:{' '}
               <a
@@ -99,7 +99,7 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
               </a>{' '}
               ({serverEdition})
             </p>
-          </Render>
+          )}
           <p>
             <a
               href="https://github.com/graphfoundation/ongdb-browser/wiki/changelog"

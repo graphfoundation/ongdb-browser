@@ -443,7 +443,7 @@ const getEscapedObjectProp = (prop: any) => `\\${prop}`
 const getUnescapedObjectProp = (prop: any) =>
   prop.indexOf('\\') === 0 ? prop.substr(1) : prop // A bit weird because of escape chars
 
-export const hasReservedProp = (obj: any, propName: any) =>
+const hasReservedProp = (obj: any, propName: any) =>
   Object.prototype.hasOwnProperty.call(obj, propName)
 
 export const optionalToString = (v: any) =>
@@ -494,3 +494,5 @@ export function detectRuntimeEnv(win?: any, cloudDomains: string[] = []) {
 
   return WEB
 }
+
+export const isRunningE2ETest = (): boolean => !!window.Cypress

@@ -33,9 +33,15 @@ import {
 } from 'shared/modules/settings/settingsDuck'
 import { stringModifier } from 'services/bolt/cypherTypesFormatting'
 import ClickableUrls from '../../../components/ClickableUrls'
+import ClipboardCopier from '../../../components/ClipboardCopier'
 import { StyledStatsBar, StyledTruncatedMessage } from '../styled'
 import Ellipsis from '../../../components/Ellipsis'
-import { RelatableStyleWrapper, StyledJsonPre } from './relatable-view.styled'
+import {
+  CopyIconAbsolutePositioner,
+  RelatableStyleWrapper,
+  StyledJsonPre,
+  StyledPreSpan
+} from './relatable-view.styled'
 import { stringifyMod, unescapeDoubleQuotesForDisplay } from 'services/utils'
 import { GlobalState } from 'shared/globalState'
 
@@ -93,12 +99,12 @@ function CypherCell({ cell }: any) {
 const renderCell = (entry: any) => {
   if (Array.isArray(entry)) {
     const children = entry.map((item, index) => (
-      <span key={index}>
+      <StyledPreSpan key={index}>
         {renderCell(item)}
         {index === entry.length - 1 ? null : ', '}
-      </span>
+      </StyledPreSpan>
     ))
-    return <span>[{children}]</span>
+    return <StyledPreSpan>[{children}]</StyledPreSpan>
   } else if (typeof entry === 'object') {
     return renderObject(entry)
   } else {
@@ -107,24 +113,30 @@ const renderCell = (entry: any) => {
         text={unescapeDoubleQuotesForDisplay(
           stringifyMod(entry, stringModifier, true)
         )}
+        WrappingTag={StyledPreSpan}
       />
     )
   }
 }
+
 const renderObject = (entry: any) => {
   if (isInt(entry)) return entry.toString()
   if (entry === null) return <em>null</em>
+  const text = unescapeDoubleQuotesForDisplay(
+    stringifyMod(entry, stringModifier, true)
+  )
+
   return (
-    <ClickableUrls
-      text={unescapeDoubleQuotesForDisplay(
-        stringifyMod(entry, stringModifier, true)
-      )}
-      WrappingTag={StyledJsonPre as any}
-    />
+    <StyledJsonPre>
+      <CopyIconAbsolutePositioner>
+        <ClipboardCopier textToCopy={text} />
+      </CopyIconAbsolutePositioner>
+      <ClickableUrls text={text} />
+    </StyledJsonPre>
   )
 }
 
-export function RelatableBodyMessage({ maxRows, result }: any) {
+function RelatableBodyMessage({ maxRows, result }: any) {
   const { bodyMessage } = getBodyAndStatusBarMessages(result, maxRows)
 
   return (

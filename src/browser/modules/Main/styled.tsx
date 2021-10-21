@@ -42,17 +42,18 @@ export const StyledMain = styled.div`
   height: 100vh;
 `
 
-export const Banner = styled.div`
+const Banner = styled.div`
   line-height: 49px;
   min-height: 49px;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   color: white;
   padding: 0 24px;
   overflow: hidden;
   animation: ${grow('49px')} 0.3s ease-in;
   flex: 0 0 49px;
-  box-shadow: 0px 0px 2px rgba(52, 58, 67, 0.1),
-    0px 1px 2px rgba(52, 58, 67, 0.08), 0px 1px 4px rgba(52, 58, 67, 0.08);
+  box-shadow: ${props => props.theme.standardShadow};
 `
 
 export const ErrorBanner = styled(Banner)`
@@ -65,14 +66,6 @@ export const NotAuthedBanner = styled(Banner)`
   background-color: ${props => props.theme.auth};
 `
 
-export const StyledCodeBlockAuthBar = styled(StyledCodeBlock)`
-  background-color: white;
-  color: ${props => props.theme.auth};
-`
-export const StyledCodeBlockErrorBar = styled(StyledCodeBlock)`
-  background-color: white;
-  color: ${props => props.theme.error};
-`
 export const StyledCodeBlockFrame = styled(StyledCodeBlock)`
   white-space: nowrap;
   overflow: hidden;
@@ -82,13 +75,13 @@ export const StyledCodeBlockFrame = styled(StyledCodeBlock)`
   cursor: pointer;
 `
 
-export const SyncDisconnectedBanner: any = styled(Banner)`
+export const SyncDisconnectedBanner = styled(Banner)`
   background-color: ${props => props.theme.auth};
   display: flex;
   justify-content: space-between;
 `
 
-export const SyncSignInBarButton: any = styled(SyncSignInButton)`
+export const SyncSignInBarButton = styled(SyncSignInButton)`
   padding: 0 8px 0 8px;
   margin: 0 12px 0 12px;
   vertical-align: baseline;

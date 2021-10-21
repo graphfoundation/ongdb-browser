@@ -5,42 +5,42 @@ exports[`WarningsViews WarningsView displays nothing if no notifications 1`] = `
 exports[`WarningsViews WarningsView does displays a warning 1`] = `
 <div>
   <div
-    class="sc-EHOje cIIfFE"
+    class="sc-kpOJdX dcjZxn"
   >
     <div
-      class="sc-bZQynM gsCChu"
+      class="sc-dxgOiQ YDkMG"
     >
       <div
-        class="sc-gzVnrw esLgqb"
+        class="sc-ckVGcZ hWXbch"
       >
         <div
-          class="sc-gZMcBi PYRZg"
+          class="sc-kEYyzF bUysyJ"
         >
           WARNING xx0
         </div>
         <h4
-          class="sc-cSHVUG CAuLq"
+          class="sc-jWBwVP fDrbnp"
         >
           My xx1 warning
         </h4>
       </div>
       <div
-        class="sc-htoDjs bZzhDu"
+        class="sc-jKJlTe loXQau"
       >
         <div
-          class="sc-gzVnrw esLgqb"
+          class="sc-ckVGcZ hWXbch"
         >
           This is xx2 warning
         </div>
         <div
-          class="sc-htoDjs bZzhDu"
+          class="sc-jKJlTe loXQau"
         >
           <pre
-            class="sc-kgoBCf gihJwG"
+            class="sc-jAaTju jVGCzW"
           >
             EXPLAIN MATCH xx3
             <br
-              class="sc-chPdSV byfFmt"
+              class="sc-cMljjf eTbdzc"
             />
                    
             ^
@@ -55,42 +55,42 @@ exports[`WarningsViews WarningsView does displays a warning 1`] = `
 exports[`WarningsViews WarningsView does displays multiple warnings 1`] = `
 <div>
   <div
-    class="sc-EHOje cIIfFE"
+    class="sc-kpOJdX dcjZxn"
   >
     <div
-      class="sc-bZQynM gsCChu"
+      class="sc-dxgOiQ YDkMG"
     >
       <div
-        class="sc-gzVnrw esLgqb"
+        class="sc-ckVGcZ hWXbch"
       >
         <div
-          class="sc-gZMcBi PYRZg"
+          class="sc-kEYyzF bUysyJ"
         >
           WARNING xx0
         </div>
         <h4
-          class="sc-cSHVUG CAuLq"
+          class="sc-jWBwVP fDrbnp"
         >
           My xx1 warning
         </h4>
       </div>
       <div
-        class="sc-htoDjs bZzhDu"
+        class="sc-jKJlTe loXQau"
       >
         <div
-          class="sc-gzVnrw esLgqb"
+          class="sc-ckVGcZ hWXbch"
         >
           This is xx2 warning
         </div>
         <div
-          class="sc-htoDjs bZzhDu"
+          class="sc-jKJlTe loXQau"
         >
           <pre
-            class="sc-kgoBCf gihJwG"
+            class="sc-jAaTju jVGCzW"
           >
             EXPLAIN MATCH zz3
             <br
-              class="sc-chPdSV byfFmt"
+              class="sc-cMljjf eTbdzc"
             />
                    
             ^
@@ -99,39 +99,39 @@ exports[`WarningsViews WarningsView does displays multiple warnings 1`] = `
       </div>
     </div>
     <div
-      class="sc-bZQynM gsCChu"
+      class="sc-dxgOiQ YDkMG"
     >
       <div
-        class="sc-gzVnrw esLgqb"
+        class="sc-ckVGcZ hWXbch"
       >
         <div
-          class="sc-gZMcBi PYRZg"
+          class="sc-kEYyzF bUysyJ"
         >
           WARNING yy0
         </div>
         <h4
-          class="sc-cSHVUG CAuLq"
+          class="sc-jWBwVP fDrbnp"
         >
           My yy1 warning
         </h4>
       </div>
       <div
-        class="sc-htoDjs bZzhDu"
+        class="sc-jKJlTe loXQau"
       >
         <div
-          class="sc-gzVnrw esLgqb"
+          class="sc-ckVGcZ hWXbch"
         >
           This is yy2 warning
         </div>
         <div
-          class="sc-htoDjs bZzhDu"
+          class="sc-jKJlTe loXQau"
         >
           <pre
-            class="sc-kgoBCf gihJwG"
+            class="sc-jAaTju jVGCzW"
           >
             EXPLAIN MATCH zz3
             <br
-              class="sc-chPdSV byfFmt"
+              class="sc-cMljjf eTbdzc"
             />
                
             ^

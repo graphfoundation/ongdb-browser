@@ -48,7 +48,8 @@ import {
   getRemoteContentHostnameAllowlist,
   getDatabases,
   fetchMetaData,
-  getAvailableSettings
+  getAvailableSettings,
+  SYSTEM_DB
 } from 'shared/modules/dbMeta/dbMetaDuck'
 import { canSendTxMetadata } from 'shared/modules/features/versionedFeatures'
 import { fetchRemoteGuide } from 'shared/modules/commands/helpers/play'
@@ -103,6 +104,7 @@ import {
 import { unescapeCypherIdentifier } from './utils'
 import { getLatestFromFrameStack } from 'browser/modules/Stream/stream.utils'
 import { resolveGuide } from './guideResolverHelper'
+import { AUTH_STORAGE_LOGS } from 'shared/modules/auth/constants'
 
 const PLAY_FRAME_TYPES = ['play', 'play-remote']
 
@@ -259,54 +261,62 @@ const availableCommands = [
   {
     name: 'reset-db',
     match: (cmd: any) => new RegExp(`^${useDbCommand}$`).test(cmd),
-    async exec(action: any, put: any, store: any) {
-      const supportsMultiDb = await bolt.hasMultiDbSupport()
-      if (supportsMultiDb) {
-        put(useDb(null))
-        put(fetchMetaData())
-        put(
-          frames.add({
-            useDb: getUseDb(store.getState()),
-            ...action,
-            type: 'reset-db'
-          })
-        )
-      } else {
-        put(
-          frames.add({
-            useDb: getUseDb(store.getState()),
-            ...action,
-            type: 'error',
-            error: UnsupportedError('No multi db support detected.')
-          })
-        )
-      }
+    exec(action: any, put: any, store: any) {
+      return bolt
+        .hasMultiDbSupport()
+        .then(supportsMultiDb => {
+          if (supportsMultiDb) {
+            put(useDb(null))
+            put(fetchMetaData())
+            put(
+              frames.add({
+                useDb: getUseDb(store.getState()),
+                ...action,
+                type: 'reset-db'
+              })
+            )
+          } else {
+            put(
+              frames.add({
+                useDb: getUseDb(store.getState()),
+                ...action,
+                type: 'error',
+                error: UnsupportedError('No multi db support detected.')
+              })
+            )
+          }
+        })
+        .catch(() => undefined)
     }
   },
   {
     name: 'dbs',
     match: (cmd: any) => new RegExp(`^${listDbsCommand}$`).test(cmd),
-    async exec(action: any, put: any, store: any) {
-      const supportsMultiDb = await bolt.hasMultiDbSupport()
-      if (supportsMultiDb) {
-        put(
-          frames.add({
-            useDb: getUseDb(store.getState()),
-            ...action,
-            type: 'dbs',
-            dbs: getDatabases(store.getState())
-          })
-        )
-      } else {
-        put(
-          frames.add({
-            useDb: getUseDb(store.getState()),
-            ...action,
-            type: 'error',
-            error: UnsupportedError('No multi db support detected.')
-          })
-        )
-      }
+    exec(action: any, put: any, store: any) {
+      bolt
+        .hasMultiDbSupport()
+        .then(supportsMultiDb => {
+          if (supportsMultiDb) {
+            put(
+              frames.add({
+                useDb: getUseDb(store.getState()),
+                ...action,
+                type: 'dbs',
+                dbs: getDatabases(store.getState())
+              })
+            )
+          } else {
+            put(
+              frames.add({
+                useDb: getUseDb(store.getState()),
+                ...action,
+                type: 'error',
+                error: UnsupportedError('No multi db support detected.')
+              })
+            )
+          }
+        })
+        .catch(() => undefined)
     }
   },
   {
@@ -330,7 +340,11 @@ const availableCommands = [
       const out = {
         userCapabilities: getUserCapabilities(store.getState()),
         serverConfig: getAvailableSettings(store.getState()),
-        browserSettings: getSettings(store.getState())
+        browserSettings: getSettings(store.getState()),
+        ssoLogs: sessionStorage
+          .getItem(AUTH_STORAGE_LOGS)
+          ?.trim()
+          .split('\n')
       }
       put(
         frames.add({
@@ -346,13 +360,27 @@ const availableCommands = [
     name: 'sysinfo',
     match: (cmd: any) => /^sysinfo$/.test(cmd),
     exec(action: any, put: any, store: any) {
-      put(
-        frames.add({
-          useDb: getUseDb(store.getState()),
-          ...action,
-          type: 'sysinfo'
-        })
-      )
+      const useDb = getUseDb(store.getState())
+      if (useDb === SYSTEM_DB) {
+        put(
+          frames.add({
+            useDb,
+            ...action,
+            type: 'error',
+            error: UnsupportedError(
+              'The :sysinfo command is not supported while using the system database.'
+            )
+          })
+        )
+      } else {
+        put(
+          frames.add({
+            useDb,
+            ...action,
+            type: 'sysinfo'
+          })
+        )
+      }
     }
   },
   {
@@ -596,7 +624,10 @@ const availableCommands = [
     name: 'history',
     match: (cmd: any) => /^history(\s+clear)?/.test(cmd),
     exec(action: any, put: any, store: any) {
-      const match = action.cmd.match(/^:history(\s+clear)?/)
+      const match = action.cmd
+        .trim()
+        .toLowerCase()
+        .match(/^:history(\s+clear)?/)
       if (match[0] !== match.input) {
         return put(
           frames.add({
@@ -825,19 +856,6 @@ ${param}`)
     }
   },
   {
-    name: 'edit',
-    match: (cmd: any) => cmd.startsWith('edit'),
-    exec: (action: any, put: any) => {
-      put(
-        frames.add({
-          ...action,
-          query: action.cmd.split(':edit')[1].trim(),
-          type: 'edit'
-        })
-      )
-    }
-  },
-  {
     name: 'catch-all',
     match: () => true,
     exec: (action: any, put: any, store: any) => {
@@ -854,10 +872,10 @@ ${param}`)
 ]
 
 // First to match wins
-const interpret = (cmd: any) => {
+const interpret = (cmd: string) => {
   return availableCommands.reduce((match: any, candidate) => {
     if (match) return match
-    const isMatch = candidate.match(cmd.toLowerCase())
+    const isMatch = candidate.match(cmd.toLowerCase().trim())
     return isMatch ? candidate : null
   }, null)
 }

@@ -26,7 +26,7 @@ import {
   DARK_THEME
 } from 'shared/modules/settings/settingsDuck'
 
-export type BrowserTheme =
+type BrowserTheme =
   | typeof LIGHT_THEME
   | typeof OUTLINE_THEME
   | typeof DARK_THEME
@@ -350,7 +350,7 @@ export const monacoDarkTheme: editor.IStandaloneThemeData = {
   inherit: true,
   rules: darkThemeRules,
   colors: {
-    'editor.background': dark.frameCommandBackground,
+    'editor.background': dark.editorBackground,
     'editorCursor.foreground': '#585a61',
     'editorLineNumber.foreground': CypherColor.white,
     'editorLineNumber.activeForeground': CypherColor.white,
@@ -362,7 +362,7 @@ export const monacoLightTheme: editor.IStandaloneThemeData = {
   inherit: true,
   rules: lightThemeRules,
   colors: {
-    'editor.background': base.frameCommandBackground,
+    'editor.background': base.editorBackground,
     'editorCursor.foreground': '#d6d7db',
     'editorLineNumber.foreground': CypherColor.light_grey,
     'editorLineNumber.activeForeground': CypherColor.light_grey,

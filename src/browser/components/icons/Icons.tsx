@@ -27,32 +27,32 @@ import appWindowCode from 'icons/app-window-code.svg'
 import arrowLeft from 'icons/arrow-left.svg'
 import arrowRight from 'icons/arrow-right.svg'
 import backArrow from 'icons/back-arrow.svg'
-import buttonRefreshArrow from 'icons/button-refresh-arrow.svg'
 import cannyFeedback from 'icons/canny-feedback.svg'
+import upCaret from 'icons/frame-collapse.svg'
+import downCaret from 'icons/frame-expand.svg'
 import cannyNotifications from 'icons/canny-notifications.svg'
-import close from 'icons/close.svg'
+import close from 'icons/frame-close.svg'
 import cloudCheck from 'icons/cloud-check.svg'
 import cloudRemove from 'icons/cloud-remove.svg'
 import cog from 'icons/cog.svg'
+import copy from 'icons/copy.svg'
 import databaseCheck from 'icons/database-check.svg'
-import downloadBottom from 'icons/download-bottom.svg'
-import expand from 'icons/expand.svg'
+import download from 'icons/save.svg'
+import expand from 'icons/frame-fullscreen.svg'
+import shrink from 'icons/frame-shrink.svg'
 import file from 'icons/file.svg'
 import folderEmpty from 'icons/folder-empty.svg'
 import help from 'icons/help.svg'
 import monitorPlay from 'icons/monitor-play.svg'
 import navigationMenuVertical from 'icons/navigation-menu-vertical.svg'
 import neo4j from 'icons/neo4j-icon.svg'
-import newFolder from 'icons/folder-add.svg'
-import pin from 'icons/pin.svg'
+import pin from 'icons/frame-pin.svg'
 import ratingStar from 'icons/rating-star.svg'
-import runIcon from 'icons/run-icon.svg'
-import saveFavorite from 'icons/save-favorite.svg'
-import shrink from 'icons/shrink.svg'
+import saveFavorite from 'icons/favorite.svg'
 import skipPrev from 'icons/skip-prev.svg'
-import stopIcon from 'icons/stop-icon.svg'
 import table from 'icons/table.svg'
 import text from 'icons/text.svg'
+import vizIcon from 'icons/hierarchy-9.svg'
 
 const inactive = `
   color: #797979;
@@ -255,7 +255,7 @@ export const TableIcon = (): JSX.Element => (
   <IconContainer icon={table} text="Table" width={LARGE_SIZE} />
 )
 export const VisualizationIcon = (): JSX.Element => (
-  <IconContainer icon={neo4j} text="Graph" width={LARGE_SIZE} />
+  <IconContainer icon={vizIcon} text="Graph" width={LARGE_SIZE} />
 )
 export const AsciiIcon = (): JSX.Element => (
   <IconContainer icon={text} text="Text" width={18} />
@@ -278,24 +278,14 @@ export const ZoomInIcon = ({
 }: {
   regulateSize: 1 | 2
 }): JSX.Element => (
-  <IconContainer
-    activeStyle={inactive}
-    inactiveStyle={inactive}
-    regulateSize={regulateSize}
-    className="sl-zoom-in"
-  />
+  <IconContainer regulateSize={regulateSize} className="sl-zoom-in" />
 )
 export const ZoomOutIcon = ({
   regulateSize
 }: {
   regulateSize: 1 | 2
 }): JSX.Element => (
-  <IconContainer
-    activeStyle={inactive}
-    inactiveStyle={inactive}
-    regulateSize={regulateSize}
-    className="sl-zoom-out"
-  />
+  <IconContainer regulateSize={regulateSize} className="sl-zoom-out" />
 )
 
 export const BinIcon = (): JSX.Element => (
@@ -307,39 +297,31 @@ export const BinIcon = (): JSX.Element => (
   />
 )
 
-export const ExpandIcon = (): JSX.Element => (
-  <IconContainer icon={expand} width={SMALL_SIZE} />
+type WidthProps = { width?: number }
+export const CloseIcon = ({ width = SMALL_SIZE }: WidthProps): JSX.Element => (
+  <IconContainer icon={close} width={width} />
 )
-export const ContractIcon = (): JSX.Element => (
-  <IconContainer icon={shrink} width={SMALL_SIZE} />
+export const UpIcon = ({ width = SMALL_SIZE }: WidthProps): JSX.Element => (
+  <IconContainer icon={upCaret} width={width} />
 )
-export const RefreshIcon = (): JSX.Element => (
-  <IconContainer icon={buttonRefreshArrow} width={SMALL_SIZE} />
+export const DownIcon = ({ width = SMALL_SIZE }: WidthProps): JSX.Element => (
+  <IconContainer icon={downCaret} width={width} />
 )
-export const RunIcon = (): JSX.Element => (
-  <IconContainer icon={runIcon} width={SMALL_SIZE} />
+export const PinIcon = ({ width = SMALL_SIZE }: WidthProps): JSX.Element => (
+  <IconContainer icon={pin} width={width} />
 )
-export const StopIcon = (): JSX.Element => (
-  <IconContainer icon={stopIcon} width={SMALL_SIZE} />
+export const ExpandIcon = ({ width = SMALL_SIZE }: WidthProps): JSX.Element => (
+  <IconContainer icon={expand} width={width} />
 )
+export const ContractIcon = ({
+  width = SMALL_SIZE
+}: WidthProps): JSX.Element => <IconContainer icon={shrink} width={width} />
 
-export const CloseIcon = (): JSX.Element => (
-  <IconContainer icon={close} width={SMALL_SIZE} />
-)
-export const UpIcon = (): JSX.Element => (
-  <IconContainer className="sl-chevron-up" />
-)
-export const DownIcon = (): JSX.Element => (
-  <IconContainer className="sl-chevron-down" />
-)
 export const DoubleUpIcon = (): JSX.Element => (
   <IconContainer className="sl-double-up" />
 )
 export const DoubleDownIcon = (): JSX.Element => (
   <IconContainer className="sl-double-down" />
-)
-export const PinIcon = (): JSX.Element => (
-  <IconContainer icon={pin} width={SMALL_SIZE} />
 )
 export const SaveFavoriteIcon = (): JSX.Element => (
   <IconContainer icon={saveFavorite} width={SMALL_SIZE} />
@@ -368,13 +350,7 @@ export const CancelIcon = (): JSX.Element => (
   />
 )
 export const DownloadIcon = (): JSX.Element => (
-  <IconContainer icon={downloadBottom} width={SMALL_SIZE} />
-)
-export const ExpandMenuIcon = (): JSX.Element => (
-  <IconContainer activeStyle={blue} className="fa fa-caret-left" />
-)
-export const CollapseMenuIcon = (): JSX.Element => (
-  <IconContainer activeStyle={blue} className="fa fa-caret-down" />
+  <IconContainer icon={download} width={SMALL_SIZE} />
 )
 export const PlayIcon = (): JSX.Element => (
   <IconContainer
@@ -396,20 +372,6 @@ export const QuestionIcon = ({ title }: { title: string }): JSX.Element => (
   />
 )
 
-export const PlusIcon = (): JSX.Element => (
-  <IconContainer
-    activeStyle={white}
-    inactiveStyle={white}
-    className="fa fa-plus"
-  />
-)
-export const EditIcon = (): JSX.Element => (
-  <IconContainer
-    activeStyle={white}
-    inactiveStyle={white}
-    className="sl-pencil"
-  />
-)
 export const SpinnerIcon = (): JSX.Element => (
   <IconContainer
     data-testid="spinner"
@@ -438,9 +400,6 @@ export const FireExtinguisherIcon = ({
   <IconContainer className="fa fa-fire-extinguisher" title={title} />
 )
 
-export const NewFolderIcon = (): JSX.Element => (
-  <IconContainer icon={newFolder} width={SMALL_SIZE} />
-)
 export const NavIcon = (): JSX.Element => (
   <IconContainer icon={navigationMenuVertical} width={SMALL_SIZE} />
 )
@@ -449,9 +408,6 @@ export const AddIcon = (): JSX.Element => (
 )
 export const FolderIcon = (): JSX.Element => (
   <IconContainer icon={folderEmpty} width={SMALL_SIZE} />
-)
-export const SavedScriptsPlayIcon = (): JSX.Element => (
-  <IconContainer icon={runIcon} width={SMALL_SIZE} />
 )
 
 export const SavedScriptsExpandMenuRightIcon = (): JSX.Element => (
@@ -470,6 +426,15 @@ export const CannyNotificationsIcon = (): JSX.Element => (
   <IconContainer icon={cannyNotifications} />
 )
 
-export const BackIcon = ({ width }: { width: number }): JSX.Element => (
+export const BackIcon = ({ width }: WidthProps): JSX.Element => (
   <IconContainer width={width} icon={backArrow} />
+)
+
+type TitleAndWidthProps = WidthProps & { title: string }
+
+export const CopyIcon = ({
+  width = SMALL_SIZE,
+  title
+}: TitleAndWidthProps): JSX.Element => (
+  <IconContainer title={title} width={width} icon={copy} />
 )

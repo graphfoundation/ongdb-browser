@@ -22,7 +22,7 @@ import styled from 'styled-components'
 import { bounceRight } from 'browser-styles/animations'
 import { dark } from 'browser-styles/themes'
 
-export const StyledCarousel: any = styled.div`
+export const StyledCarousel = styled.div`
   padding-bottom: 20px;
   min-height: 100%;
   width: 100%;
@@ -437,6 +437,9 @@ export const StyledSidebarSlide = styled.div.attrs({
     list-style-position: inside;
     padding-left: 0;
     margin-top: 0.5em;
+    p {
+      display: inline-block;
+    }
   }
 
   &.slide input {

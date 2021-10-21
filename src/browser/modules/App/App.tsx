@@ -69,7 +69,7 @@ import asTitleString from '../DocTitle/titleStringBuilder'
 import Intercom from '../Intercom'
 import Segment, { MetricsData } from '../Segment'
 import { CannyLoader } from 'browser-services/canny'
-import Render from 'browser-components/Render'
+
 import BrowserSyncInit from '../Sync/BrowserSyncInit'
 import { getMetadata, getUserAuthStatus } from 'shared/modules/sync/syncDuck'
 import ErrorBoundary from 'browser-components/ErrorBoundary'
@@ -86,6 +86,9 @@ import {
 import { METRICS_EVENT, udcInit } from 'shared/modules/udc/udcDuck'
 import { useKeyboardShortcuts } from './keyboardShortcuts'
 import PerformanceOverlay from './PerformanceOverlay'
+import { isRunningE2ETest } from 'services/utils'
+import { version } from 'project-root/package.json'
+export const MAIN_WRAPPER_DOM_ID = 'MAIN_WRAPPER_DOM_ID'
 
 declare let SEGMENT_KEY: string
 
@@ -112,13 +115,19 @@ export function App(props: any) {
       props.bus &&
       props.bus.take(
         METRICS_EVENT,
-        ({ category, label, data }: MetricsData) => {
-          eventMetricsCallback &&
-            eventMetricsCallback.current &&
-            eventMetricsCallback.current({ category, label, data })
-          segmentTrackCallback &&
-            segmentTrackCallback.current &&
-            segmentTrackCallback.current({ category, label, data })
+        ({ category, label, data: originalData }: MetricsData) => {
+          if (!isRunningE2ETest()) {
+            const data = {
+              browserVersion: version,
+              ...originalData
+            }
+            eventMetricsCallback &&
+              eventMetricsCallback.current &&
+              eventMetricsCallback.current({ category, label, data })
+            segmentTrackCallback &&
+              segmentTrackCallback.current &&
+              segmentTrackCallback.current({ category, label, data })
+          }
         }
       )
     const initAction = udcInit()
@@ -191,27 +200,29 @@ export function App(props: any) {
             <StyledWrapper className={wrapperClassNames}>
               <DocTitle titleString={props.titleString} />
               <UserInteraction />
-              <Render if={loadExternalScripts}>
-                <Intercom appID="lq70afwx" />
-                <Segment
-                  segmentKey={SEGMENT_KEY}
-                  setTrackCallback={setTrackSegmentCallback}
-                />
-                <CannyLoader />
-              </Render>
-              <Render if={syncConsent && loadExternalScripts && loadSync}>
+              {loadExternalScripts && (
+                <>
+                  <Intercom appID="lq70afwx" />
+                  <Segment
+                    segmentKey={SEGMENT_KEY}
+                    setTrackCallback={setTrackSegmentCallback}
+                  />
+                  <CannyLoader />
+                </>
+              )}
+              {syncConsent && loadExternalScripts && loadSync && (
                 <BrowserSyncInit
                   authStatus={browserSyncAuthStatus}
                   authData={browserSyncMetadata}
                   config={browserSyncConfig}
                 />
-              </Render>
+              )}
               <StyledApp>
                 <StyledBody>
                   <ErrorBoundary>
                     <Sidebar openDrawer={drawer} onNavClick={handleNavClick} />
                   </ErrorBoundary>
-                  <StyledMainWrapper>
+                  <StyledMainWrapper id={MAIN_WRAPPER_DOM_ID}>
                     <Main
                       activeConnection={activeConnection}
                       connectionState={connectionState}

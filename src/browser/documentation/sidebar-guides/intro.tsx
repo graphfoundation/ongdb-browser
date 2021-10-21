@@ -19,12 +19,12 @@
  */
 
 import React from 'react'
-import { SidebarSlide } from '../../modules/Carousel/Slide'
+import { BuiltInGuideSidebarSlide } from '../../modules/Carousel/Slide'
 import { isMac } from 'browser/modules/App/keyboardShortcuts'
 
 const title = 'Introduction'
 const slides = [
-  <SidebarSlide key="s1">
+  <BuiltInGuideSidebarSlide key="s1">
     <p>
       Neo4j Browser is a command driven client, like a web-based shell
       environment. It is perfect for running ad-hoc graph queries, with just
@@ -39,8 +39,8 @@ const slides = [
         Graph visualization of query results containing nodes and relationships
       </li>
     </ul>
-  </SidebarSlide>,
-  <SidebarSlide key="s2">
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s2">
     <h3>Editor</h3>
     <p className="lead">Command editing and execution</p>
     <p>
@@ -83,12 +83,11 @@ const slides = [
       editor-specific keybindings.
     </p>
     <br />
-    <img
-      src="./assets/images/Keystrokes2.gif"
-      className="img-responsive  padding5"
-    />
-  </SidebarSlide>,
-  <SidebarSlide key="s3">
+    <video autoPlay loop muted playsInline>
+      <source src="./assets/images/Keystores.mp4" type="video/mp4" />
+    </video>
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s3">
     <h3>Result frame</h3>
     <p className="lead">Most recently executed command or Cypher query.</p>
     <p>
@@ -113,8 +112,8 @@ const slides = [
     </ul>
     <br />
     <img src="./assets/images/Stream.png" className="img-responsive padding5" />
-  </SidebarSlide>,
-  <SidebarSlide key="s4">
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s4">
     <h3>Reusable frame</h3>
     <p className="lead">Instead of the stream</p>
     <p>
@@ -123,12 +122,11 @@ const slides = [
     </p>
     <p>Adjust your preferences in the Settings sidebar tab.</p>
     <br />
-    <img
-      src="./assets/images/ReusableFrame2.gif"
-      className="img-responsive padding5"
-    />
-  </SidebarSlide>,
-  <SidebarSlide key="s5">
+    <video autoPlay loop muted playsInline>
+      <source src="./assets/images/ReusableFrame.mp4" type="video/mp4" />
+    </video>
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s5">
     <h3>Sidebar: Database information</h3>
     When Neo4j is installed, it is initiated with two databases - a{' '}
     <code>system</code> database and a default <code>neo4j</code> database.
@@ -140,8 +138,8 @@ const slides = [
       src="./assets/images/SidebarDB_Iinfo.png"
       className="img-responsive padding5"
     />
-  </SidebarSlide>,
-  <SidebarSlide key="s6">
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s6">
     <h3>Sidebar: Favorites</h3>
     <p>
       Favorite queries or commands can be saved in the local storage and
@@ -153,24 +151,22 @@ const slides = [
       databases, hosting platforms, and data sets.
     </p>
     <br />
-    <img
-      src="./assets/images/Favorites2.gif"
-      className="img-responsive padding5"
-    />
-  </SidebarSlide>,
-  <SidebarSlide key="s7">
+    <video autoPlay loop muted playsInline>
+      <source src="./assets/images/Favorites.mp4" type="video/mp4" />
+    </video>
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s7">
     <h3>Sidebar: Project files</h3>
     <p className="lead">Save cypher files to share with your colleagues</p>
     Queries and commands can also be saved as <b>Project files</b>. Project
     folder can be reached through Neo4j Desktop and your hard disk. Note this
     feature is only available when Neo4j Browser is run in Desktop.
     <br />
-    <img
-      src="./assets/images/ProjectFiles2.gif"
-      className="img-responsive padding5"
-    />
-  </SidebarSlide>,
-  <SidebarSlide key="s8">
+    <video autoPlay loop muted playsInline>
+      <source src="./assets/images/ProjectFiles.mp4" type="video/mp4" />
+    </video>
+  </BuiltInGuideSidebarSlide>,
+  <BuiltInGuideSidebarSlide key="s8">
     <h3>Next steps</h3>
     <ul className="undecorated">
       <li>
@@ -185,10 +181,10 @@ const slides = [
     <h3>Jump into code</h3>
     <ul className="undecorated">
       <li>
-        <a data-exec=":guide cypher">Cypher Guide</a> - Learn Cypher basics
+        <a data-exec="guide cypher">Cypher Guide</a> - Learn Cypher basics
       </li>
     </ul>
-  </SidebarSlide>
+  </BuiltInGuideSidebarSlide>
 ]
 
 export default { title, slides }

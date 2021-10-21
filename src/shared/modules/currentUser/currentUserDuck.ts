@@ -96,9 +96,9 @@ export const getCurrentUserEpic = (some$: any, store: any) =>
         if (!authEnabled) {
           return resolve(null)
         }
-        const supportsMultiDb = await bolt.hasMultiDbSupport()
-        bolt
-          .directTransaction(
+        try {
+          const supportsMultiDb = await bolt.hasMultiDbSupport()
+          const res = await bolt.directTransaction(
             getShowCurrentUserProcedure(
               supportsMultiDb
                 ? FIRST_MULTI_DB_SUPPORT
@@ -113,8 +113,11 @@ export const getCurrentUserEpic = (some$: any, store: any) =>
               useDb: supportsMultiDb ? SYSTEM_DB : ''
             }
           )
-          .then((res: any) => resolve(res))
-          .catch(() => resolve(null))
+
+          return resolve(res)
+        } catch (e) {
+          return resolve(null)
+        }
       })
     })
     .map((result: any) => {
@@ -131,5 +134,5 @@ export const getCurrentUserEpic = (some$: any, store: any) =>
       return updateCurrentUser(username, roles)
     })
 
-export const clearCurrentUserOnDisconnectEpic = (some$: any, _store: any) =>
+export const clearCurrentUserOnDisconnectEpic = (some$: any) =>
   some$.ofType(DISCONNECTION_SUCCESS).mapTo({ type: CLEAR })

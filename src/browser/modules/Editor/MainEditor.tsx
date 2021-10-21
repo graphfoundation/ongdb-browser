@@ -24,7 +24,6 @@ import SVGInline from 'react-svg-inline'
 import { connect } from 'react-redux'
 import { withBus } from 'react-suber'
 import { useMutation } from '@apollo/client'
-import { withTheme } from 'styled-components'
 import {
   commandSources,
   executeCommand
@@ -47,7 +46,7 @@ import {
   SET_CONTENT
 } from 'shared/modules/editor/editorDuck'
 import {
-  Frame,
+  MainEditorWrapper,
   Header,
   EditorContainer,
   FlexContainer,
@@ -77,6 +76,7 @@ import {
 import { getUseDb } from 'shared/modules/connections/connectionsDuck'
 import { getHistory } from 'shared/modules/history/historyDuck'
 import { defaultNameFromDisplayContent } from 'browser-components/SavedScripts'
+import { getParams } from 'shared/modules/params/paramsDuck'
 
 type EditorFrameProps = {
   bus: Bus
@@ -85,9 +85,9 @@ type EditorFrameProps = {
   executeCommand: (cmd: string, source: string) => void
   history: string[]
   projectId: string
-  theme: { linkHover: string }
   updateFavorite: (id: string, value: string) => void
   useDb: null | string
+  params: Record<string, unknown>
 }
 
 type SavedScript = {
@@ -99,16 +99,16 @@ type SavedScript = {
   name?: string
 }
 
-export function EditorFrame({
+export function MainEditor({
   bus,
   codeFontLigatures,
   enableMultiStatementMode,
   executeCommand,
   history,
   projectId,
-  theme,
   updateFavorite,
-  useDb
+  useDb,
+  params
 }: EditorFrameProps): JSX.Element {
   const [addFile] = useMutation(ADD_PROJECT_FILE)
   const [unsaved, setUnsaved] = useState(false)
@@ -238,7 +238,7 @@ export function EditorFrame({
   )
 
   return (
-    <Frame fullscreen={isFullscreen} data-testid="activeEditor">
+    <MainEditorWrapper fullscreen={isFullscreen} data-testid="activeEditor">
       {currentlyEditing && (
         <ScriptTitle data-testid="currentlyEditing" unsaved={showUnsaved}>
           <SVGInline
@@ -258,6 +258,7 @@ export function EditorFrame({
               bus={bus}
               enableMultiStatementMode={enableMultiStatementMode}
               history={history}
+              fullscreen={isFullscreen}
               toggleFullscreen={toggleFullscreen}
               id={'main-editor'}
               fontLigatures={codeFontLigatures}
@@ -270,6 +271,7 @@ export function EditorFrame({
               onExecute={createRunCommandFunction(commandSources.editor)}
               ref={editorRef}
               useDb={useDb}
+              params={params}
             />
           </EditorContainer>
           {currentlyEditing && !currentlyEditing.isStatic && (
@@ -313,7 +315,6 @@ export function EditorFrame({
             onClick={createRunCommandFunction(commandSources.playButton)}
             title={isMac ? 'Run (⌘↩)' : 'Run (ctrl+enter)'}
             icon={runIcon}
-            color={theme.linkHover}
             key="editor-Run"
             width={16}
           />
@@ -329,7 +330,7 @@ export function EditorFrame({
           </FrameButton>
         ))}
       </FlexContainer>
-    </Frame>
+    </MainEditorWrapper>
   )
 }
 
@@ -339,7 +340,8 @@ const mapStateToProps = (state: GlobalState) => {
     enableMultiStatementMode: shouldEnableMultiStatementMode(state),
     history: getHistory(state),
     projectId: getProjectId(state),
-    useDb: getUseDb(state)
+    useDb: getUseDb(state),
+    params: getParams(state)
   }
 }
 
@@ -354,6 +356,4 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
   }
 }
 
-export default withBus(
-  connect(mapStateToProps, mapDispatchToProps)(withTheme(EditorFrame))
-)
+export default withBus(connect(mapStateToProps, mapDispatchToProps)(MainEditor))

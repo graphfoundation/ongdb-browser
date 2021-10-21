@@ -4,12 +4,12 @@ import {
   DrawerExternalLink,
   DrawerSubHeader
 } from 'browser-components/drawer/drawer-styled'
-import { SidebarSlide } from 'browser/modules/Carousel/Slide'
+import { BuiltInGuideSidebarSlide } from 'browser/modules/Carousel/Slide'
 import { LinkContainer, MarginTop, MarginTopLi, NoBulletsUl } from './styled'
 
 const title = '--DEFAULT_INDEX_GUIDE--'
 const slides = [
-  <SidebarSlide key="first">
+  <BuiltInGuideSidebarSlide key="first">
     You can also access Browser guides by running
     <DrawerBrowserCommand data-populate=":guide [guide name]">
       :guide [guide name]
@@ -22,26 +22,26 @@ const slides = [
     </MarginTop>
     <NoBulletsUl>
       <li>
-        <DrawerBrowserCommand data-exec=":guide intro">
+        <DrawerBrowserCommand data-exec="guide intro">
           :guide intro
         </DrawerBrowserCommand>
         <MarginTop> Navigating Neo4j Browser </MarginTop>
       </li>
       <MarginTopLi>
-        <DrawerBrowserCommand data-exec=":guide concepts">
+        <DrawerBrowserCommand data-exec="guide concepts">
           :guide concepts
         </DrawerBrowserCommand>
         <MarginTop> Property graph model concepts </MarginTop>
       </MarginTopLi>
       <MarginTopLi>
-        <DrawerBrowserCommand data-exec=":guide cypher">
+        <DrawerBrowserCommand data-exec="guide cypher">
           :guide cypher
         </DrawerBrowserCommand>
         <MarginTop>Cypher basics - create, match, delete</MarginTop>
       </MarginTopLi>
 
       <MarginTopLi>
-        <DrawerBrowserCommand data-exec=":guide movie-graph">
+        <DrawerBrowserCommand data-exec="guide movie-graph">
           :guide movie-graph
         </DrawerBrowserCommand>
         <MarginTop>
@@ -50,7 +50,7 @@ const slides = [
       </MarginTopLi>
 
       <MarginTopLi>
-        <DrawerBrowserCommand data-exec=":guide northwind-graph">
+        <DrawerBrowserCommand data-exec="guide northwind-graph">
           :guide northwind-graph
         </DrawerBrowserCommand>
         <MarginTop>Translate and import relation data into graph</MarginTop>
@@ -61,7 +61,7 @@ const slides = [
         More guides
       </DrawerExternalLink>
     </LinkContainer>
-  </SidebarSlide>
+  </BuiltInGuideSidebarSlide>
 ]
 
 export default { title, slides }

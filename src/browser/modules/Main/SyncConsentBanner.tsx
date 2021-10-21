@@ -31,7 +31,7 @@ import {
   CONNECTED_STATE,
   getConnectionState
 } from 'shared/modules/connections/connectionsDuck'
-import Render from 'browser-components/Render'
+
 import { toggle } from 'shared/modules/sidebar/sidebarDuck'
 import {
   optOutSync,
@@ -57,21 +57,19 @@ const SyncReminderBanner = React.memo(function SyncReminderBanner({
     */
   const visible = false
 
-  return (
-    <Render if={visible}>
-      <SyncDisconnectedBanner height="100px">
-        <StyledSyncReminderSpan>
-          To enjoy the full ONgDB Browser experience, we advise you to use
-          <SyncSignInBarButton onClick={onGetstartedClicked}>
-            ONgDB Browser Sync
-          </SyncSignInBarButton>
-        </StyledSyncReminderSpan>
-        <StyledSyncReminderButtonContainer>
-          <StyledCancelLink onClick={() => optOutSync()}>X</StyledCancelLink>
-        </StyledSyncReminderButtonContainer>
-      </SyncDisconnectedBanner>
-    </Render>
-  )
+  return visible ? (
+    <SyncDisconnectedBanner>
+      <StyledSyncReminderSpan>
+        To enjoy the full ONgDB Browser experience, we advise you to use
+        <SyncSignInBarButton onClick={onGetstartedClicked}>
+          ONgDB Browser Sync
+        </SyncSignInBarButton>
+      </StyledSyncReminderSpan>
+      <StyledSyncReminderButtonContainer>
+        <StyledCancelLink onClick={() => optOutSync()}>X</StyledCancelLink>
+      </StyledSyncReminderButtonContainer>
+    </SyncDisconnectedBanner>
+  ) : null
 })
 
 const mapStateToProps = (state: any) => {

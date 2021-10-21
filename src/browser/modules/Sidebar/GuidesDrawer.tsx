@@ -35,7 +35,6 @@ import {
   StyledGuidesDrawer,
   GuideTitle,
   BackIconContainer,
-  CarouselWrapper,
   StyledGuidesDrawerHeader,
   StyledDrawerSeparator
 } from './styled'
@@ -54,10 +53,14 @@ function GuidesDrawer({
   const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
-    <StyledGuidesDrawer id="guide-drawer" ref={scrollRef}>
+    <StyledGuidesDrawer
+      id="guide-drawer"
+      data-testid="guideDrawer"
+      ref={scrollRef}
+    >
       <StyledGuidesDrawerHeader onClick={backToAllGuides}>
         {!isDefaultGuide(guide) && (
-          <BackIconContainer>
+          <BackIconContainer data-testid="guidesBackButton">
             <BackIcon width={16} />
           </BackIconContainer>
         )}
@@ -67,16 +70,14 @@ function GuidesDrawer({
       {!isDefaultGuide(guide) && (
         <GuideTitle title={guide.title}>{guide.title}</GuideTitle>
       )}
-      <CarouselWrapper>
-        <GuideCarousel
-          slides={guide.slides}
-          currentSlideIndex={guide.currentSlide}
-          gotoSlide={gotoSlide}
-          scrollToTop={() =>
-            scrollRef.current?.scrollIntoView({ block: 'start' })
-          }
-        />
-      </CarouselWrapper>
+      <GuideCarousel
+        slides={guide.slides}
+        currentSlideIndex={guide.currentSlide}
+        gotoSlide={gotoSlide}
+        scrollToTop={() =>
+          scrollRef.current?.scrollIntoView({ block: 'start' })
+        }
+      />
     </StyledGuidesDrawer>
   )
 }

@@ -31,7 +31,8 @@ const directives = [
   {
     selector: '[data-exec]',
     valueExtractor: (elem: any) => {
-      return `${elem.getAttribute('data-exec')}`
+      // we prepend the : to only autoexec browser commands and not cypher
+      return `:${elem.getAttribute('data-exec')}`
     },
     autoExec: true
   },
@@ -86,11 +87,11 @@ const directives = [
   }
 ]
 
-const prependPlayIcon = (element: any) => {
-  prependIcon(element, 'fa fa-play-circle-o')
+const prependPlayIcon = (element: any, onClick: () => void) => {
+  prependIcon(element, 'fa fa-play-circle-o', onClick)
 }
 
-const bindDynamicInputToDom = (element: any) => {
+const bindDynamicInputToTheDom = (element: any) => {
   const valueForElems = element.querySelectorAll('[value-for]')
   const valueKeyElems = element.querySelectorAll('[value-key]')
   if (valueForElems.length > 0 && valueKeyElems.length > 0) {
@@ -116,17 +117,22 @@ export const Directives = (props: any) => {
   const callback = (elem: HTMLDivElement | null) => {
     if (elem) {
       directives.forEach(directive => {
-        const elems = elem.querySelectorAll(directive.selector)
+        const elems = elem.querySelectorAll<HTMLElement>(directive.selector)
         Array.from(elems).forEach(e => {
           if (
             e.firstChild?.nodeName !== 'I' &&
             !e.classList.contains('remove-play-icon')
           ) {
-            prependPlayIcon(e)
+            prependPlayIcon(e, () => {
+              addClass(e, 'clicked')
+              props.onItemClick(
+                directive.valueExtractor(e),
+                true,
+                props.originFrameId
+              )
+            })
           }
 
-          // If we use add event listener we need to remove it afterwards
-          // @ts-expect-error
           e.onclick = () => {
             addClass(e, 'clicked')
             return props.onItemClick(
@@ -137,7 +143,7 @@ export const Directives = (props: any) => {
           }
         })
       })
-      bindDynamicInputToDom(elem)
+      bindDynamicInputToTheDom(elem)
     }
   }
   return <div ref={callback}>{props.content}</div>
@@ -147,7 +153,8 @@ const mapDispatchToProps = (_dispatch: any, ownProps: any) => {
   return {
     onItemClick: (cmd: string, autoExec: boolean, id: string) => {
       if (!cmd.endsWith(' null') && !cmd.endsWith(':null')) {
-        if (autoExec) {
+        // prevent autorunning cypher by prefixing w :auto hack
+        if (autoExec && !cmd.startsWith(':auto')) {
           const action = executeCommand(cmd, {
             id,
             source: commandSources.button

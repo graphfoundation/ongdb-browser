@@ -19,17 +19,13 @@
  */
 
 import React from 'react'
-import {
-  getTableDataFromRecords,
-  mapLegacySysInfoRecords,
-  buildTableData
-} from './sysinfo-utils'
-import { toHumanReadableBytes, toKeyString } from 'services/utils'
+import { getTableDataFromRecords, buildTableData } from './sysinfo-utils'
+import { toHumanReadableBytes } from 'services/utils'
 import arrayHasItems from 'shared/utils/array-has-items'
-import Render from 'browser-components/Render'
+
 import {
   SysInfoTableContainer,
-  SysInfoTable,
+  StyledSysInfoTable,
   SysInfoTableEntry
 } from 'browser-components/Tables'
 import { QuestionIcon } from 'browser-components/icons/Icons'
@@ -48,20 +44,20 @@ export const Sysinfo = ({
 }: any) => {
   return (
     <SysInfoTableContainer>
-      <SysInfoTable key="StoreSizes" header="Store Sizes">
+      <StyledSysInfoTable key="StoreSizes" header="Store Sizes">
         {buildTableData(storeSizes)}
-      </SysInfoTable>
-      <SysInfoTable key="IDAllocation" header="ID Allocation">
+      </StyledSysInfoTable>
+      <StyledSysInfoTable key="IDAllocation" header="ID Allocation">
         {buildTableData(idAllocation)}
-      </SysInfoTable>
-      <SysInfoTable key="PageCache" header="Page Cache">
+      </StyledSysInfoTable>
+      <StyledSysInfoTable key="PageCache" header="Page Cache">
         {buildTableData(pageCache)}
-      </SysInfoTable>
-      <SysInfoTable key="Transactionss" header="Transactions">
+      </StyledSysInfoTable>
+      <StyledSysInfoTable key="Transactionss" header="Transactions">
         {buildTableData(transactions)}
-      </SysInfoTable>
-      <Render if={isACausalCluster}>
-        <SysInfoTable
+      </StyledSysInfoTable>
+      {isACausalCluster && (
+        <StyledSysInfoTable
           key="cc-table"
           header={
             <span data-testid="sysinfo-casual-cluster-members-title">
@@ -69,29 +65,29 @@ export const Sysinfo = ({
               <QuestionIcon title="Values shown in `:sysinfo` may differ between cluster members" />
             </span>
           }
-          colspan="5"
+          colspan={5}
         >
           <SysInfoTableEntry
             key="cc-entry"
             headers={['Roles', 'Addresses', 'Groups', 'Database', 'Actions']}
           />
           {buildTableData(cc)}
-        </SysInfoTable>
-      </Render>
-      <Render if={arrayHasItems(ha)}>
-        <SysInfoTable key="ha-table" header="High Availability">
+        </StyledSysInfoTable>
+      )}
+      {arrayHasItems(ha) && (
+        <StyledSysInfoTable key="ha-table" header="High Availability">
           {buildTableData(ha)}
-        </SysInfoTable>
-      </Render>
-      <Render if={arrayHasItems(haInstances)}>
-        <SysInfoTable key="cluster-table" header="Cluster" colspan="4">
+        </StyledSysInfoTable>
+      )}
+      {arrayHasItems(haInstances) && (
+        <StyledSysInfoTable key="cluster-table" header="Cluster" colspan={4}>
           <SysInfoTableEntry
             key="ha-entry"
             headers={['Id', 'Alive', 'Available', 'Is Master']}
           />
           {buildTableData(haInstances)}
-        </SysInfoTable>
-      </Render>
+        </StyledSysInfoTable>
+      )}
     </SysInfoTableContainer>
   )
 }
@@ -235,42 +231,4 @@ export const responseHandler = (setState: any) =>
       ],
       success: true
     })
-  }
-
-export const clusterResponseHandler = (setState: any) =>
-  function(res: any) {
-    if (!res.success) {
-      setState({ error: 'No causal cluster results', success: false })
-      return
-    }
-    const mappedResult = mapLegacySysInfoRecords(res.result.records)
-    const mappedTableComponents = mappedResult.map((ccRecord: any) => {
-      const httpUrlForMember = ccRecord.addresses.filter((address: any) => {
-        return (
-          !address.includes(window.location.href) &&
-          (window.location.protocol.startsWith('file:')
-            ? address.startsWith('http://')
-            : address.startsWith(window.location.protocol))
-        )
-      })
-      return [
-        ccRecord.role,
-        ccRecord.addresses.join(', '),
-        (ccRecord.groups || []).join(', '),
-        ccRecord.database,
-        <Render
-          key={toKeyString(httpUrlForMember[0])}
-          if={httpUrlForMember.length !== 0}
-        >
-          <a
-            rel="noopener noreferrer"
-            target="_blank"
-            href={httpUrlForMember[0]}
-          >
-            Open
-          </a>
-        </Render>
-      ]
-    })
-    setState({ cc: [{ value: mappedTableComponents }], success: true })
   }

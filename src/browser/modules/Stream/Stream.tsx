@@ -21,7 +21,7 @@
 import { connect } from 'react-redux'
 import React, { memo, useRef, useEffect } from 'react'
 import { StyledStream, Padding, AnimationContainer } from './styled'
-import CypherFrame from './CypherFrame/index'
+import CypherFrame from './CypherFrame/CypherFrame'
 import HistoryFrame from './HistoryFrame'
 import PlayFrame from './PlayFrame'
 import DefaultFrame from '../Frame/DefaultFrame'
@@ -32,7 +32,7 @@ import HelpFrame from './HelpFrame'
 import CypherScriptFrame from './CypherScriptFrame/CypherScriptFrame'
 import SchemaFrame from './SchemaFrame'
 import StyleFrame from './StyleFrame'
-import SysInfoFrame from './SysInfoFrame'
+import SysInfoFrame from './SysInfoFrame/SysInfoFrame'
 import ConnectionFrame from './Auth/ConnectionFrame'
 import DisconnectFrame from './Auth/DisconnectFrame'
 import ServerStatusFrame from './Auth/ServerStatusFrame'
@@ -50,9 +50,8 @@ import {
 } from 'shared/modules/connections/connectionsDuck'
 import { getScrollToTop } from 'shared/modules/settings/settingsDuck'
 import DbsFrame from './Auth/DbsFrame'
-import EditFrame from './EditFrame'
 
-const trans = {
+const nameToFrame: Record<string, React.ComponentType<any>> = {
   error: ErrorFrame,
   cypher: CypherFrame,
   'cypher-script': CypherScriptFrame,
@@ -78,14 +77,13 @@ const trans = {
   'reset-db': UseDbFrame,
   dbs: DbsFrame,
   style: StyleFrame,
-  edit: EditFrame,
   default: DefaultFrame
 }
 
-type FrameType = keyof typeof trans
+type FrameType = keyof typeof nameToFrame
 
 const getFrame = (type: FrameType) => {
-  return trans[type] || trans.default
+  return nameToFrame[type] || nameToFrame.default
 }
 
 type StreamProps = {

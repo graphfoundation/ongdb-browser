@@ -46,13 +46,17 @@ import { CaptureConsole } from '@sentry/integrations'
 import { createReduxMiddleware, getAll, applyKeys } from 'services/localstorage'
 import { GlobalState } from 'shared/globalState'
 import { APP_START } from 'shared/modules/app/appDuck'
-import { detectRuntimeEnv } from 'services/utils'
+import { detectRuntimeEnv, isRunningE2ETest } from 'services/utils'
 import { NEO4J_CLOUD_DOMAINS } from 'shared/modules/settings/settingsDuck'
 import { version } from 'project-root/package.json'
 import { shouldAllowOutgoingConnections } from 'shared/modules/dbMeta/dbMetaDuck'
 import { getUuid } from 'shared/modules/udc/udcDuck'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import {
+  restoreSearchAndHashParams,
+  wasRedirectedBackFromSSOServer
+} from 'shared/modules/auth/common'
 
 // Configure localstorage sync
 applyKeys(
@@ -166,10 +170,15 @@ export function setupSentry(): void {
           return 0.2
         }
       },
-      beforeSend: event =>
-        shouldAllowOutgoingConnections(store.getState())
-          ? scrubQueryParamsAndUrl(event)
-          : null,
+      beforeSend: event => {
+        const allowsOutgoing = shouldAllowOutgoingConnections(store.getState())
+
+        if (allowsOutgoing && !isRunningE2ETest()) {
+          return scrubQueryParamsAndUrl(event)
+        } else {
+          return null
+        }
+      },
       environment: 'unset'
     })
     Sentry.setUser({ id: getUuid(store.getState()) })
@@ -193,6 +202,14 @@ export function setupSentry(): void {
 
 // Introduce environment to be able to fork functionality
 const env = detectRuntimeEnv(window, NEO4J_CLOUD_DOMAINS)
+
+// SSO requires a redirect that removes our search parameters
+// To work around this they are stored in sessionStorage before
+// we redirect to the server, and then restore them when we get
+// redirected back
+if (wasRedirectedBackFromSSOServer()) {
+  restoreSearchAndHashParams()
+}
 
 // URL we're on
 const url = window.location.href

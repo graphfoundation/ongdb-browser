@@ -117,7 +117,7 @@ export const credentialsTimeout = (state: any) =>
   getAvailableSettings(state)['browser.credential_timeout'] || 0
 export const getRemoteContentHostnameAllowlist = (state: any) =>
   getAvailableSettings(state)['browser.remote_content_hostname_allowlist']
-export const getDefaultRemoteContentHostnameAllowlist = (_state: any) =>
+export const getDefaultRemoteContentHostnameAllowlist = () =>
   initialState.settings['browser.remote_content_hostname_allowlist']
 export const getRetainConnectionCredentials = (state: any) => {
   const settings = getAvailableSettings(state)
@@ -131,7 +131,20 @@ export const getRetainEditorHistory = (state: any) => {
   if (conf === null || typeof conf === 'undefined') return false
   return !isConfigValFalsy(conf)
 }
-export const getDatabases = (state: any) =>
+
+export type Database = {
+  name: string
+  address: string
+  role: string
+  requestedStatus: string
+  currentStatus: string
+  error: string
+  default: boolean
+  home?: boolean
+  status: string
+}
+
+export const getDatabases = (state: any): Database[] =>
   (state[NAME] || initialState).databases
 export const getActiveDbName = (state: any) =>
   ((state[NAME] || {}).settings || {})['dbms.active_database']
@@ -370,12 +383,13 @@ export const serverInfoQuery =
 const databaseList = (store: any) =>
   Rx.Observable.fromPromise(
     new Promise(async (resolve, reject) => {
-      const supportsMultiDb = await bolt.hasMultiDbSupport()
-      if (!supportsMultiDb) {
-        return resolve(null)
-      }
-      bolt
-        .directTransaction(
+      try {
+        const supportsMultiDb = await bolt.hasMultiDbSupport()
+        if (!supportsMultiDb) {
+          return resolve(null)
+        }
+
+        const res = await bolt.directTransaction(
           'SHOW DATABASES',
           {},
           {
@@ -386,8 +400,10 @@ const databaseList = (store: any) =>
             useDb: SYSTEM_DB
           }
         )
-        .then(resolve)
-        .catch(reject)
+        resolve(res)
+      } catch (e) {
+        reject(e)
+      }
     })
   )
     .catch(() => {
@@ -567,7 +583,15 @@ export const serverConfigEpic = (some$: any, store: any) =>
       // Server configuration
       return Rx.Observable.fromPromise(
         new Promise(async (resolve, reject) => {
-          const supportsMultiDb = await bolt.hasMultiDbSupport()
+          let supportsMultiDb: boolean
+          try {
+            supportsMultiDb = await bolt.hasMultiDbSupport()
+          } catch (e) {
+            // if hasMultiDbSupport throws there's no instance of neo4j running anymore
+            onLostConnection(store.dispatch)(e)
+            return reject(e)
+          }
+
           bolt
             .directTransaction(
               `CALL ${

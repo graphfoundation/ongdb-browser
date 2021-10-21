@@ -22,10 +22,9 @@ import styled from 'styled-components'
 import { dim } from 'browser-styles/constants'
 
 type FullscreenProps = { fullscreen: boolean }
-
 export const StyledFrame = styled.article<FullscreenProps>`
   width: auto;
-  background-color: ${props => props.theme.secondaryBackground};
+  background-color: ${props => props.theme.frameBackground};
   border: ${props => props.theme.frameBorder};
 
   ${props =>
@@ -37,20 +36,21 @@ top: 0;
 bottom: 0;
 right: 0;
 z-index: 130;`
-      : 'margin 0 0 10px 0;'}
+      : 'margin 0;'}
 
   &:hover .carousel-intro-animation {
     opacity: 0;
   }
-  box-shadow: 0px 0px 2px rgba(52, 58, 67, 0.1),
-    0px 1px 2px rgba(52, 58, 67, 0.08), 0px 1px 4px rgba(52, 58, 67, 0.08);
+  box-shadow: ${props => props.theme.standardShadow};
   border-radius: 2px;
+  padding-bottom: 3px;
 `
 
 export const StyledFrameBody = styled.div<
-  FullscreenProps & { collapsed: boolean }
+  FullscreenProps & { collapsed: boolean; preventOverflow?: boolean }
 >`
-  overflow: auto;
+  flex: 1;
+  overflow: ${props => (props.preventOverflow ? 'hidden' : 'auto')};
   min-height: ${dim.frameBodyHeight / 2}px;
   max-height: ${props => {
     if (props.collapsed) {
@@ -64,7 +64,7 @@ export const StyledFrameBody = styled.div<
   display: ${props => (props.collapsed ? 'none' : 'flex')};
   flex-direction: row;
   width: 100%;
-  padding: 30px;
+  padding: 30px 30px 10px 30px;
 
   .has-carousel &,
   .has-stack & {
@@ -124,7 +124,6 @@ export const StyledFrameContents = styled.div<FullscreenProps>`
 export const StyledFrameStatusbar = styled.div<FullscreenProps>`
   border-top: ${props => props.theme.inFrameBorder};
   height: ${dim.frameStatusbarHeight - 1}px;
-  ${props => (props.fullscreen ? 'margin-top: -78px;' : '')};
   display: flex;
   flex-direction: row;
   flex: none;
@@ -143,8 +142,11 @@ export const StyledFrameSidebar = styled.ul`
   list-style: none;
   padding-left: 0;
   margin: 0;
+  border-radius: 2px;
   flex: 0 0 auto;
   background-color: ${props => props.theme.frameSidebarBackground};
+  box-shadow: ${props => props.theme.standardShadow};
+  z-index: 1;
 `
 
 export const StyledFrameTitlebarButtonSection = styled.ul`
@@ -158,50 +160,23 @@ export const StyledFrameTitlebarButtonSection = styled.ul`
   color: ${props => props.theme.secondaryButtonText};
 `
 
-export const StyledFrameTitleBar = styled.div`
+export const StyledFrameEditorContainer = styled.div`
   border-bottom: transparent;
-  line-height: ${dim.frameTitlebarHeight}px;
+  line-height: 9px;
   color: ${props => props.theme.frameTitlebarText};
   display: flex;
+  margin-bottom: 2px;
 `
 
-export const StyledFrameStatusbarText = styled.label`
-  flex: 1 1 auto;
-`
-
-export const CurrentDbText = styled.div`
-  color: ${props => props.theme.promptText};
-`
-
-export const FrameTitleEditorContainer = styled.div`
-  border-radius: 2px;
-  padding-left: 6px;
-  padding-top: 3px;
-  margin: 3px 5px 3px 3px;
-
-  width: 0; // Prevents the editor from growing past flex-grow: 1
-  flex-grow: 1;
-  display: flex;
-
-  font-family: ${props => props.theme.editorFont};
-  line-height: 2.2em;
-  font-size: 1.2em;
-  color: ${props => props.theme.secondaryButtonText};
-  background-color: ${props => props.theme.frameSidebarBackground};
-  .disable-font-ligatures & {
-    font-variant-ligatures: none !important;
-  }
-`
-
-export const StyledFrameCommand = styled.label<{ selectedDb: string }>`
+export const StyledFrameCommand = styled.label<{ selectedDb: string | null }>`
   font-family: ${props => props.theme.editorFont};
   color: ${props => props.theme.secondaryButtonText};
-  background-color: ${props => props.theme.frameSidebarBackground};
+  background-color: ${props => props.theme.editorBackground};
   border-radius: 2px;
   padding-left: 6px;
-  font-size: 1.2em;
-  line-height: 2.2em;
-  margin: 3px 5px 3px 3px;
+  font-size: 17px;
+  line-height: 1.8em;
+  margin: 4px 0px 4px 4px;
   flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
@@ -215,4 +190,20 @@ export const StyledFrameCommand = styled.label<{ selectedDb: string }>`
   .disable-font-ligatures & {
     font-variant-ligatures: none !important;
   } 
+`
+
+export const ContentContainer = styled.div`
+  margin: 0px 3px;
+  padding: 2px 2px 0 2px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 23px);
+`
+
+export const TitleBarHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 2px 2px 0 0;
+  padding-top: 3px;
+  padding-right: 7px;
 `

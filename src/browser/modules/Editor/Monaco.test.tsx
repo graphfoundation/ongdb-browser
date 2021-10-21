@@ -23,14 +23,22 @@ import { fireEvent, render } from '@testing-library/react'
 
 import Monaco from './Monaco'
 
+const noOp = () => undefined
+
 describe('Monaco', () => {
   it('renders a component that functions as a textbox', () => {
     const { getByRole, queryByDisplayValue } = render(
       <Monaco
-        toggleFullscreen={() => {
-          /*noop */
-        }}
-        bus={{ self: () => {} } as any}
+        enableMultiStatementMode={true}
+        fontLigatures={true}
+        useDb={null}
+        history={[]}
+        onChange={noOp}
+        onExecute={noOp}
+        fullscreen={false}
+        toggleFullscreen={noOp}
+        bus={{ self: noOp } as any}
+        params={{}}
         id="id"
       />
     )

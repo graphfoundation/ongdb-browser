@@ -2,16 +2,21 @@
 = Browser operations
 :description: This section describes how to administer and use Neo4j Browser.
 
-
 [[dbms-connection]]
 == Connect to a Neo4j DBMS
 
-By default, Neo4j Browser communicates with a Neo4j DBMS via the link:https://7687.org/[Bolt Protocol] using the link:https://neo4j.com/docs/javascript-manual/current/[Neo4j JavaScript Driver] to execute Cypher queries.
-However, it is possible to turn off Bolt and use xref:#http-rest-requests[HTTP(S)] instead, as in older versions of Neo4j Browser.
+Neo4j Browser is the easiest way to access a Neo4j database.
+To establish a connection, you enter the DBMS URL, the name of the database you want to connect, and the user credentials.
+You can also use the `:server` command to manage the connection to Neo4j.
+For more information, see <<manage-connection>>.
 
+image:home-screen.png[]
 
 [[uri-schema]]
 === Connection URI schemas
+
+By default, Neo4j Browser communicates with a Neo4j DBMS via the link:https://7687.org/[Bolt Protocol] using the link:https://neo4j.com/docs/javascript-manual/current/[Neo4j JavaScript Driver] to execute Cypher queries.
+However, it is possible to turn off Bolt and use xref:#http-rest-requests[HTTP(S)] instead, as in older versions of Neo4j Browser.
 
 Neo4j Browser supports the following connection URI schemas:
 
@@ -308,9 +313,9 @@ For example, if a node has 1000 labels, the list will be cut off to the value se
 | `autoComplete`
 | `true`
 | Automatic completion of missing relationships. +
-When you execute a query, any relationships not explicitly returned by the query, but that exist between the nodes will be shown in the graph. 
+When you execute a query, any relationships not explicitly returned by the query, but that exist between the nodes will be shown in the graph.
 You can disable for queries where it is important to see only the relationships the query returns.
-This behavior is controlled by the `Connect result nodes` in *Browser Settings*. 
+This behavior is controlled by the `Connect result nodes` in *Browser Settings*.
 | yes
 
 | `scrollToTop`
@@ -513,7 +518,7 @@ Double-clicking a node expands its child relationships.
 You can see all the properties of that element if you click any node or relationship.
 Properties appear below the visualization.
 * Larger property sets might be collapsed into a subset, and there is a little triangle on the right to unfold them.
-For example, if you click one of the `Movie` nodes in the MovieGraph (`:play movie graph`), you can see its properties below the graph visualization.
+For example, if you click one of the `Movie` nodes in the MovieGraph (`:guide movie graph`), you can see its properties below the graph visualization.
 The same applies to `Actor` nodes and the `ACTED_IN` relationships.
 ====
 
@@ -586,14 +591,14 @@ Neo4j Browser also provides functionality for styling with color and size, based
 
 If you click any label or relationship above the graph visualization, you can choose its styling in the area below the graph.
 Colors, sizes, and captions are selectable from there.
-To see this for yourself, you can click the `Person` label above the graph and change the color, size, and captions of all nodes labeled with `Person`.
+To see this for yourself, you can click the `Movie` label above the graph and change the color, size, and captions of all nodes labeled with `Movie`.
 The same applies to the relationship `ACTED_IN`.
 
 
-.Changes to nodes labeled `Person`
-[#style_person_node]
-[caption="Changes to nodes labeled `Person`"]
-image:style_person_node.png[]
+.Changes to nodes labeled `Movie`
+[#style_movie_node]
+[caption="Changes to nodes labeled `Movie`"]
+image:style_movie_node.png[]
 
 
 .Changes to relationships labeled `ACTED_IN`
@@ -1096,11 +1101,12 @@ http://localhost:7474/browser?dbms=neo4j://alice@localhost:7687&db=neo4j123
 Pre-populate the editor with a command when Neo4j Browser starts.
 Supported browser commands are:
 
+* `guide`
 * `param`
 * `params`
 * `play`
 
-The `:play` command runs automatically. +
+The `:play` and `:guide` commands run automatically. +
 
 The syntax is:
 
@@ -1108,6 +1114,20 @@ The syntax is:
 ----
 http://localhost:7474/browser?cmd=[command]&arg=[argument]
 ----
+
+
+.Guide intro
+====
+[source, browser command, role=noheader]
+----
+:guide intro
+----
+
+[source, browser URL, role=noheader]
+----
+http://localhost:7474/browser?cmd=guide&arg=intro
+----
+====
 
 
 .Play movies

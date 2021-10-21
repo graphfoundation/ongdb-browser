@@ -35,7 +35,7 @@ export class GraphComponent extends Component<any, State> {
   graphView: any
   svgElement: any
   state = {
-    zoomInLimitReached: true,
+    zoomInLimitReached: false,
     zoomOutLimitReached: false
   }
 
@@ -134,7 +134,7 @@ export class GraphComponent extends Component<any, State> {
 
   zoomButtons() {
     return (
-      <StyledZoomHolder>
+      <StyledZoomHolder fullscreen={this.props.fullscreen}>
         <StyledZoomButton
           className={
             this.state.zoomInLimitReached ? 'faded zoom-in' : 'zoom-in'
