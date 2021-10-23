@@ -95,7 +95,7 @@ export const initialState = {
   browserSyncDebugServer: null,
   maxRows: 1000,
   maxFieldItems: 500,
-  shouldReportUdc: true,
+  shouldReportUdc: false, // We do not want any stats to go out. This is a privacy concern.
   autoComplete: true,
   scrollToTop: true,
   maxFrames: 30,

@@ -31,49 +31,16 @@ export class Intercom extends Component<any> {
       children, // eslint-disable-line
       ...otherProps
     } = this.props
-    if (!appID || !canUseDOM()) {
+
+    // Disabling for privacy concerns.  ONgDB does not want to sent out any information like neo4j does.
+    if (true) {
       return
     }
-    if (!(window as any).Intercom) {
-      ;(function(w: any, d: Document, id: string, s?: any, x?: any) {
-        function i() {
-          i.c(arguments)
-        }
-        i.q = [] as any[]
-        i.c = function(args: any) {
-          i.q.push(args)
-        }
-        w.Intercom = i
-        s = d.createElement('script')
-        s.async = 1
-        s.src = 'https://widget.intercom.io/widget/' + id
-        x = d.getElementsByTagName('script')[0]
-        x.parentNode.insertBefore(s, x)
-      })(window, document, appID)
-    }
-    updateData({ ...otherProps, app_id: appID })
-  }
-
-  componentDidUpdate() {
-    const {
-      appID,
-      updateData,
-      children, // eslint-disable-line
-      ...otherProps
-    } = this.props
-    if (!canUseDOM()) return
-    updateData({ ...otherProps, app_id: appID })
+    // Enbd disabling UDC / Intercom.
   }
 
   shouldComponentUpdate() {
     return false
-  }
-
-  componentWillUnmount() {
-    if (canUseDOM()) {
-      ;(window as any).Intercom('shutdown')
-      delete (window as any).Intercom
-    }
   }
 
   render() {
