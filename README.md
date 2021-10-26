@@ -66,6 +66,6 @@ Redux and React have useful devtools, the chrome versions are linked below:
 Install yarn globally (not homebrew if using osx)
 npm install -g yarn
 yarn
-yarn jar
+yarn build
 yarn prepare-jar
 mvn -o -Duser.name=graphfoundation install # Don't clean install.
