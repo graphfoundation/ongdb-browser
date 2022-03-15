@@ -147,7 +147,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsonic": "^0.3.0",
     "jszip": "^3.2.2",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "mockdate": "^2.0.5",
     "neo4j-driver": "^4.0.2",
     "prop-types": "^15.7.2",
