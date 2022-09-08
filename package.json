@@ -146,7 +146,7 @@
     "firebase": "^7.13.1",
     "isomorphic-fetch": "^2.2.1",
     "jsonic": "^0.3.0",
-    "jszip": "^3.2.2",
+    "jszip": "^3.7.0",
     "lodash-es": "^4.17.15",
     "mockdate": "^2.0.5",
     "neo4j-driver": "^4.0.2",
