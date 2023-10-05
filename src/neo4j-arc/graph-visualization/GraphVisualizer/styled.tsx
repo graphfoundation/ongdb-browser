@@ -43,10 +43,10 @@ export const StyledNodeInspectorContainer = styled.div<{
   box-shadow: ${props => props.theme.standardShadow};
   overflow: hidden;
 `
-export const StyledNodeInspectorTopMenuChevron = styled.div<{
+export const StyledNodeInspectorTopMenuChevron = styled.button<{
   expanded: boolean
 }>`
-  background-color: #fff;
+  background-color: ${props => props.theme.frameSidebarBackground};
   cursor: pointer;
   position: absolute;
   right: 8px;
@@ -68,7 +68,6 @@ export const PaneContainer = styled.div<{
   paneWidth: number
 }>`
   width: ${props => props.paneWidth}px;
-  padding: 0 14px;
   height: 100%;
   display: flex;
   flex-direction: column;

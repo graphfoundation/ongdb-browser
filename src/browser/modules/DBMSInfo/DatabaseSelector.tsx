@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import { uniqBy } from 'lodash'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -41,16 +40,16 @@ const HOUSE_EMOJI = '\u{1F3E0}'
 const NBSP_CHAR = '\u{00A0}'
 
 type DatabaseSelectorProps = {
-  databases?: Database[]
-  selectedDb?: string
+  uniqueDatabases?: Database[]
+  selectedDb: string
   onChange?: (dbName: string) => void
 }
 export const DatabaseSelector = ({
-  databases = [],
-  selectedDb = '',
+  uniqueDatabases = [],
+  selectedDb,
   onChange = () => undefined
 }: DatabaseSelectorProps): JSX.Element | null => {
-  if (databases.length === 0) {
+  if (uniqueDatabases.length === 0) {
     return null
   }
   const selectionChange = ({
@@ -61,15 +60,23 @@ export const DatabaseSelector = ({
     }
   }
 
-  const databasesList: (Partial<Database> & {
-    name: string
-  })[] = selectedDb ? databases : [{ name: EMPTY_OPTION }, ...databases]
-
-  // When connected to a cluster, we get duplicate dbs for each member
-  const uniqDatabases = uniqBy(databasesList, 'name')
-
   const homeDb =
-    uniqDatabases.find(db => db.home) || uniqDatabases.find(db => db.default)
+    uniqueDatabases.find(db => db.home) ||
+    uniqueDatabases.find(db => db.default)
+
+  const aliasList = uniqueDatabases.flatMap(db =>
+    db.aliases
+      ? db.aliases.map(alias => ({
+          databaseName: db.name,
+          name: alias,
+          status: db.status
+        }))
+      : []
+  )
+
+  const databasesAndAliases = [...aliasList, ...uniqueDatabases].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
 
   return (
     <DrawerSection>
@@ -80,11 +87,29 @@ export const DatabaseSelector = ({
           data-testid="database-selection-list"
           onChange={selectionChange}
         >
-          {uniqDatabases.map(db => {
+          {!Boolean(selectedDb) && (
+            <option value={EMPTY_OPTION}>{EMPTY_OPTION}</option>
+          )}
+
+          {databasesAndAliases.map(dbOrAlias => {
+            /* When deduplicating the list of databases and aliases on clusters
+             we prefer to find ones that are "online". If our deduplicated
+             db is not online, it means none of the databases on the cluster with
+             that name is online, so we should disable it in the list and show 
+             one of the statuses as a simplification (even though they could 
+              technically be different)
+             */
+            const dbNotOnline = dbOrAlias.status !== 'online'
+
             return (
-              <option key={db.name} value={db.name}>
-                {db.name}
-                {db === homeDb ? NBSP_CHAR + HOUSE_EMOJI : ''}
+              <option
+                key={dbOrAlias.name}
+                value={dbOrAlias.name}
+                disabled={dbNotOnline}
+              >
+                {dbOrAlias.name}
+                {dbOrAlias === homeDb ? NBSP_CHAR + HOUSE_EMOJI : ''}
+                {dbNotOnline && ` [${dbOrAlias.status}]`}
               </option>
             )
           })}

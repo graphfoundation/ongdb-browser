@@ -67,6 +67,7 @@ import { base, stopIconColor } from 'browser-styles/themes'
 import { NEO4J_BROWSER_USER_ACTION_QUERY } from 'services/bolt/txMetadata'
 import { QueryResult } from 'neo4j-driver'
 import { CypherEditor } from 'neo4j-arc/cypher-language-support'
+import { KeyCode } from 'monaco-editor'
 
 type FrameEditorBaseProps = {
   frame: Frame
@@ -97,7 +98,6 @@ function FrameEditor({
   newProjectFile,
   cancelQuery,
   reRun,
-  onTitlebarCmdClick,
   frame,
   fullscreenToggle,
   exportItems,
@@ -116,13 +116,16 @@ function FrameEditor({
   function run(cmd: string) {
     reRun(frame, cmd)
   }
-
   function onPreviewClick(e: React.MouseEvent) {
     if (e.ctrlKey || e.metaKey) {
       onTitlebarCmdClick(editorValue)
     } else {
       setRenderEditor(true)
     }
+  }
+
+  function onTitlebarCmdClick(cmd: string) {
+    bus.send(editor.SET_CONTENT, editor.setContent(cmd))
   }
 
   const titleBarRef = useRef<HTMLDivElement>(null)
@@ -193,7 +196,12 @@ function FrameEditor({
               onChange={setEditorValue}
               onExecute={run}
               ref={editorRef}
-              toggleFullscreen={fullscreenToggle}
+              additionalCommands={{
+                [KeyCode.Escape]: {
+                  handler: fullscreenToggle,
+                  context: '!suggestWidgetVisible && !findWidgetVisible'
+                }
+              }}
               useDb={frame.useDb}
               value={editorValue}
               sendCypherQuery={(text: string) =>
@@ -252,7 +260,7 @@ function FrameEditor({
           title="Save as Favorite"
           dataTestId="frame-Favorite"
           onClick={() => {
-            newFavorite(frame.cmd)
+            newFavorite(editorValue)
           }}
         >
           <SaveFavoriteIcon />
@@ -285,10 +293,7 @@ const mapStateToProps = (
   }
 }
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<Action>,
-  ownProps: FrameEditorBaseProps
-) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
   return {
     newFavorite: (cmd: string) => {
       dispatch(addFavorite(cmd))
@@ -314,9 +319,6 @@ const mapDispatchToProps = (
           source: commands.commandSources.rerunFrame
         })
       )
-    },
-    onTitlebarCmdClick: (cmd: string) => {
-      ownProps.bus.send(editor.SET_CONTENT, editor.setContent(cmd))
     }
   }
 }

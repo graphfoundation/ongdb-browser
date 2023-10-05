@@ -23,7 +23,6 @@ import { connect } from 'react-redux'
 import { withBus } from 'react-suber'
 import { ThemeProvider } from 'styled-components'
 
-import DocTitle from '../DocTitle'
 import asTitleString from '../DocTitle/titleStringBuilder'
 import FeatureToggleProvider from '../FeatureToggle/FeatureToggleProvider'
 import Main from '../Main/Main'
@@ -71,6 +70,7 @@ import {
 import {
   findDatabaseByNameOrAlias,
   getEdition,
+  getTrialStatus,
   isServerConfigDone,
   shouldAllowOutgoingConnections
 } from 'shared/modules/dbMeta/dbMetaDuck'
@@ -176,8 +176,11 @@ export function App(props: any) {
     updateDesktopUDCSettings
   } = props
 
-  const wrapperClassNames = codeFontLigatures ? '' : 'disable-font-ligatures'
+  useEffect(() => {
+    document.title = titleString
+  }, [titleString])
 
+  const wrapperClassNames = codeFontLigatures ? '' : 'disable-font-ligatures'
   return (
     <ErrorBoundary>
       <DesktopApi
@@ -236,7 +239,6 @@ export function App(props: any) {
         <FeatureToggleProvider features={experimentalFeatures}>
           <FileDrop store={store}>
             <StyledWrapper className={wrapperClassNames}>
-              <DocTitle titleString={titleString} />
               <UserInteraction />
               {loadExternalScripts && (
                 <>
@@ -280,6 +282,7 @@ export function App(props: any) {
                         setConsentBannerShownCount(consentBannerShownCount + 1)
                       }
                       openSettingsDrawer={openSettingsDrawer}
+                      trialStatus={props.trialStatus}
                     />
                   </StyledMainWrapper>
                 </StyledBody>
@@ -327,7 +330,8 @@ const mapStateToProps = (state: GlobalState) => {
       ? isConnectedAuraHost(state)
         ? 'AURA HOST'
         : 'NON-AURA HOST'
-      : 'NOT CONNECTED'
+      : 'NOT CONNECTED',
+    trialStatus: getTrialStatus(state)
   }
 }
 type DesktopTrackingSettings = {

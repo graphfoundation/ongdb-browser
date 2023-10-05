@@ -26,6 +26,16 @@ export {
   initalizeCypherSupport,
   getText
 } from './cypher-editor/editorSupport'
+export {
+  parse as parseQueryOrCommand,
+  createCypherLexer
+} from '@neo4j-cypher/editor-support'
+export { extractStatements } from '@neo4j-cypher/extract-statements'
+
+export type {
+  QueryOrCommand,
+  ConsoleCommand
+} from '@neo4j-cypher/editor-support'
 
 export {
   toFunction,

@@ -35,10 +35,22 @@ import {
   DB_META_DONE,
   FORCE_FETCH,
   SYSTEM_DB,
-  metaQuery,
+  metaTypesQuery,
   serverInfoQuery,
   VERSION_FOR_CLUSTER_ROLE_IN_SHOW_DB,
-  isOnCluster
+  isOnCluster,
+  updateCountAutomaticRefresh,
+  getCountAutomaticRefreshEnabled,
+  DB_META_FORCE_COUNT,
+  DB_META_COUNT_DONE,
+  metaCountQuery,
+  trialStatusQuery,
+  updateTrialStatus,
+  oldTrialStatusQuery,
+  updateTrialStatusOld,
+  isEnterprise,
+  SERVER_VERSION_READ,
+  supportsMultiDb
 } from './dbMetaDuck'
 import {
   ClientSettings,
@@ -62,7 +74,6 @@ import {
   LOST_CONNECTION,
   SILENT_DISCONNECT,
   UPDATE_CONNECTION_STATE,
-  connectionLossFilter,
   getActiveConnectionData,
   getLastUseDb,
   getUseDb,
@@ -78,24 +89,34 @@ import {
   getListFunctionQuery,
   getListProcedureQuery
 } from '../cypher/functionsAndProceduresHelper'
-import { isInt, Record } from 'neo4j-driver'
-import { gte } from 'semver'
+import { isInt, Record, ResultSummary } from 'neo4j-driver'
+import semver, { gte, SemVer } from 'semver'
 import { triggerCredentialsTimeout } from '../credentialsPolicy/credentialsPolicyDuck'
+import {
+  isSystemOrCompositeDb,
+  getCurrentDatabase
+} from 'shared/utils/selectors'
+import { isBoltConnectionErrorCode } from 'services/bolt/boltConnectionErrors'
+
+function handleConnectionError(store: any, e: any) {
+  if (!e.code || isBoltConnectionErrorCode(e.code)) {
+    onLostConnection(store.dispatch)(e)
+  }
+}
 
 async function databaseList(store: any) {
   try {
-    const supportsMultiDb = await bolt.hasMultiDbSupport()
-    if (!supportsMultiDb) {
+    const hasMultidb = supportsMultiDb(store.getState())
+    if (!hasMultidb) {
       return
     }
 
-    const res = await bolt.directTransaction(
+    const res = await bolt.backgroundWorkerlessRoutedRead(
       'SHOW DATABASES',
-      {},
       {
-        ...backgroundTxMetadata,
         useDb: SYSTEM_DB
-      }
+      },
+      store
     )
 
     if (!res) return
@@ -115,36 +136,68 @@ async function databaseList(store: any) {
 }
 
 async function getLabelsAndTypes(store: any) {
-  const db = getUseDb(store.getState())
+  const db = getCurrentDatabase(store.getState())
 
-  // System db, do nothing
-  if (db === SYSTEM_DB) {
+  // System or composite db, do nothing
+  if (db && isSystemOrCompositeDb(db)) {
     return
   }
 
   // Not system db, try and fetch meta data
   try {
-    const res = await bolt.routedReadTransaction(
-      metaQuery,
-      {},
+    const res = await bolt.backgroundWorkerlessRoutedRead(
+      metaTypesQuery,
       {
-        onLostConnection: onLostConnection(store.dispatch),
-        ...backgroundTxMetadata
-      }
+        useDb: db?.name
+      },
+      store
     )
     if (res && res.records && res.records.length !== 0) {
-      const [
-        rawLabels,
-        rawRelTypes,
-        rawProperties,
-        rawNodeCount,
-        rawRelationshipCount
-      ] = res.records.map((r: Record) => r.get(0).data)
+      const [rawLabels, rawRelTypes, rawProperties] = res.records.map(
+        (r: Record) => r.get(0).data
+      )
 
       const compareMetaItems = (a: any, b: any) => (a < b ? -1 : a > b ? 1 : 0)
       const labels = rawLabels.sort(compareMetaItems)
       const relationshipTypes = rawRelTypes.sort(compareMetaItems)
       const properties = rawProperties.sort(compareMetaItems)
+
+      store.dispatch(
+        update({
+          labels,
+          properties,
+          relationshipTypes
+        })
+      )
+    }
+  } catch {}
+}
+
+async function getNodeAndRelationshipCounts(
+  store: any
+): Promise<
+  { requestSucceeded: false } | { requestSucceeded: true; timeTaken: number }
+> {
+  const db = getCurrentDatabase(store.getState())
+
+  // System or composite db, do nothing
+  if (db && isSystemOrCompositeDb(db)) {
+    return { requestSucceeded: false }
+  }
+
+  // Not system db, try and fetch meta data
+  try {
+    const res = await bolt.backgroundWorkerlessRoutedRead(
+      metaCountQuery,
+      {
+        useDb: db?.name
+      },
+      store
+    )
+    if (res && res.records && res.records.length !== 0) {
+      const [rawNodeCount, rawRelationshipCount] = res.records.map(
+        (r: Record) => r.get(0).data
+      )
 
       const neo4jIntegerToNumber = (r: any) =>
         isInt(r) ? r.toNumber() || 0 : r || 0
@@ -153,29 +206,35 @@ async function getLabelsAndTypes(store: any) {
       const relationships = neo4jIntegerToNumber(rawRelationshipCount)
       store.dispatch(
         update({
-          labels,
           nodes,
-          properties,
-          relationshipTypes,
           relationships
         })
       )
+      const summary = res.summary as ResultSummary
+      return {
+        requestSucceeded: true,
+        timeTaken:
+          summary.resultAvailableAfter.toNumber() +
+          summary.resultConsumedAfter.toNumber()
+      }
     }
   } catch {}
+  return { requestSucceeded: false }
 }
 
 async function getFunctionsAndProcedures(store: any) {
   const version = getSemanticVersion(store.getState())
   try {
-    const procedurePromise = bolt.routedReadTransaction(
+    const useDb = supportsMultiDb(store.getState()) ? SYSTEM_DB : undefined
+    const procedurePromise = bolt.backgroundWorkerlessRoutedRead(
       getListProcedureQuery(version),
-      {},
-      backgroundTxMetadata
+      { useDb },
+      store
     )
-    const functionPromise = bolt.routedReadTransaction(
+    const functionPromise = bolt.backgroundWorkerlessRoutedRead(
       getListFunctionQuery(version),
-      {},
-      backgroundTxMetadata
+      { useDb },
+      store
     )
     const [procedures, functions] = await Promise.all([
       procedurePromise,
@@ -188,7 +247,7 @@ async function getFunctionsAndProcedures(store: any) {
         functions: functions.records.map(f => f.toObject())
       })
     )
-  } catch (e) {}
+  } catch {}
 }
 
 async function clusterRole(store: any) {
@@ -202,27 +261,62 @@ async function clusterRole(store: any) {
     return
   }
 
-  const res = await bolt.directTransaction(
-    getDbClusterRole(store.getState()),
-    {},
-    backgroundTxMetadata
-  )
+  try {
+    const res = await bolt.directTransaction(
+      getDbClusterRole(store.getState()),
+      {},
+      backgroundTxMetadata
+    )
+    if (!res) return
 
-  if (!res) return
-
-  const role = res.records[0].get(0)
-  store.dispatch(update({ role }))
+    const role = res.records[0].get(0)
+    store.dispatch(update({ role }))
+  } catch (e) {
+    handleConnectionError(store, e)
+  }
 }
 
 async function fetchServerInfo(store: any) {
   try {
-    const serverInfo = await bolt.directTransaction(
+    const serverInfo = await bolt.backgroundWorkerlessRoutedRead(
       serverInfoQuery,
-      {},
-      backgroundTxMetadata
+      // We use the bolt method for multi db support, since don't have the version in redux yet
+      { useDb: (await bolt.hasMultiDbSupport()) ? SYSTEM_DB : undefined },
+      store
     )
     store.dispatch(updateServerInfo(serverInfo))
   } catch {}
+}
+
+async function fetchTrialStatus(store: any) {
+  const version = getSemanticVersion(store.getState())
+  const enterprise = isEnterprise(store.getState())
+
+  const VERSION_FOR_TRIAL_STATUS = '5.7.0'
+  const VERSION_FOR_TRIAL_STATUS_OLD = '5.3.0'
+
+  if (version && enterprise) {
+    if (gte(version, VERSION_FOR_TRIAL_STATUS)) {
+      try {
+        const trialStatus = await bolt.backgroundWorkerlessRoutedRead(
+          trialStatusQuery,
+          // System database is available from v4
+          { useDb: SYSTEM_DB },
+          store
+        )
+        store.dispatch(updateTrialStatus(trialStatus))
+      } catch {}
+    } else if (gte(version, VERSION_FOR_TRIAL_STATUS_OLD)) {
+      try {
+        const oldTrialStatus = await bolt.backgroundWorkerlessRoutedRead(
+          oldTrialStatusQuery,
+          { useDb: SYSTEM_DB },
+          store
+        )
+        store.dispatch(updateTrialStatusOld(oldTrialStatus))
+      } catch {}
+    }
+  }
 }
 
 const switchToRequestedDb = (store: any) => {
@@ -285,36 +379,49 @@ const switchToRequestedDb = (store: any) => {
   }
 }
 
+async function pollDbMeta(store: any) {
+  try {
+    await bolt.quickVerifyConnectivity()
+  } catch (e) {
+    onLostConnection(store.dispatch)(e)
+    return
+  }
+
+  // Cluster setups where the default database is unavailable,
+  // get labels and types takes a long time to finish and it shouldn't
+  // be blocking the rest of the bootup process, so we don't await the promise
+  getLabelsAndTypes(store)
+
+  await Promise.all([
+    getFunctionsAndProcedures(store),
+    clusterRole(store),
+    databaseList(store)
+  ])
+}
+
 export const dbMetaEpic = (some$: any, store: any) =>
   some$
     .ofType(UPDATE_CONNECTION_STATE)
     .filter((s: any) => s.state === CONNECTED_STATE)
     .merge(some$.ofType(CONNECTION_SUCCESS))
     .mergeMap(() =>
-      Rx.Observable.fromPromise(
-        // Server version and edition
-        fetchServerInfo(store)
-      )
+      // Server version and edition
+      Rx.Observable.fromPromise(fetchServerInfo(store))
     )
+    // we don't need to block bootup on fetching trial status, dispatch as side effect
+    .do(() => {
+      fetchTrialStatus(store)
+      store.dispatch({ type: SERVER_VERSION_READ })
+    })
     .mergeMap(() =>
       Rx.Observable.timer(1, 20000)
         .merge(some$.ofType(FORCE_FETCH))
         // Throw away newly initiated calls until done
         .throttle(() => some$.ofType(DB_META_DONE))
-        .mergeMap(() =>
-          Rx.Observable.fromPromise(
-            Promise.all([
-              getLabelsAndTypes(store),
-              getFunctionsAndProcedures(store),
-              clusterRole(store),
-              databaseList(store)
-            ])
-          )
-        )
+        .mergeMap(() => Rx.Observable.fromPromise(pollDbMeta(store)))
         .takeUntil(
           some$
             .ofType(LOST_CONNECTION)
-            .filter(connectionLossFilter)
             .merge(some$.ofType(DISCONNECTION_SUCCESS))
             .merge(some$.ofType(SILENT_DISCONNECT))
         )
@@ -322,34 +429,56 @@ export const dbMetaEpic = (some$: any, store: any) =>
         .mapTo({ type: DB_META_DONE })
     )
 
-export const serverConfigEpic = (some$: any, store: any) =>
+export const dbCountEpic = (some$: any, store: any) =>
   some$
     .ofType(DB_META_DONE)
+    .filter(() => getCountAutomaticRefreshEnabled(store.getState()))
+    .merge(some$.ofType(DB_META_FORCE_COUNT))
+    .throttle(() => some$.ofType(DB_META_COUNT_DONE))
+    .mergeMap(() =>
+      Rx.Observable.fromPromise<void>(
+        (async () => {
+          store.dispatch(updateCountAutomaticRefresh({ loading: true }))
+
+          const res = await getNodeAndRelationshipCounts(store)
+
+          const notAlreadyDisabled = getCountAutomaticRefreshEnabled(
+            store.getState()
+          )
+          if (
+            res.requestSucceeded &&
+            res.timeTaken > 1000 &&
+            notAlreadyDisabled
+          ) {
+            store.dispatch(updateCountAutomaticRefresh({ enabled: false }))
+          }
+
+          store.dispatch(updateCountAutomaticRefresh({ loading: false }))
+        })()
+      )
+    )
+    .mapTo({ type: DB_META_COUNT_DONE })
+
+export const serverConfigEpic = (some$: any, store: any) =>
+  some$
+    .ofType(SERVER_VERSION_READ)
     .mergeMap(() => {
       // Server configuration
       return Rx.Observable.fromPromise(
         new Promise(async (resolve, reject) => {
-          let supportsMultiDb: boolean
-          try {
-            supportsMultiDb = await bolt.hasMultiDbSupport()
-          } catch (e) {
-            // if hasMultiDbSupport throws there's no instance of neo4j running anymore
-            onLostConnection(store.dispatch)(e)
-            return reject(e)
-          }
+          const useDb = supportsMultiDb(store.getState())
+            ? SYSTEM_DB
+            : undefined
 
           bolt
-            .directTransaction(
+            .backgroundWorkerlessRoutedRead(
               `CALL ${
                 hasClientConfig(store.getState()) !== false
                   ? 'dbms.clientConfig()'
                   : 'dbms.listConfig()'
               }`,
-              {},
-              {
-                useDb: supportsMultiDb ? SYSTEM_DB : '',
-                ...backgroundTxMetadata
-              }
+              { useDb },
+              store
             )
             .then((r: any) => {
               // This is not set yet
@@ -365,13 +494,12 @@ export const serverConfigEpic = (some$: any, store: any) =>
                 store.dispatch(setClientConfig(false))
 
                 bolt
-                  .directTransaction(
+                  .backgroundWorkerlessRoutedRead(
                     `CALL dbms.listConfig()`,
-                    {},
                     {
-                      useDb: supportsMultiDb ? SYSTEM_DB : '',
-                      ...backgroundTxMetadata
-                    }
+                      useDb
+                    },
+                    store
                   )
                   .then(resolve)
                   .catch(reject)
@@ -390,13 +518,18 @@ export const serverConfigEpic = (some$: any, store: any) =>
         .do((res: any) => {
           if (!res) return Rx.Observable.of(null)
 
+          const neo4jVersion = getSemanticVersion(store.getState())
+
           const rawSettings = res.records.reduce((all: any, record: any) => {
             const name = record.get('name')
             all[name] = record.get('value')
             return all
           }, {})
 
-          const settings: ClientSettings = cleanupSettings(rawSettings)
+          const settings: ClientSettings = cleanupSettings(
+            rawSettings,
+            neo4jVersion
+          )
 
           // side-effects
           store.dispatch(
@@ -419,7 +552,10 @@ export const serverConfigEpic = (some$: any, store: any) =>
     .do(() => store.dispatch(update({ serverConfigDone: true })))
     .mapTo({ type: 'SERVER_CONFIG_DONE' })
 
-export const cleanupSettings = (rawSettings: any) => {
+export const cleanupSettings = (
+  rawSettings: any,
+  neo4jVersion: SemVer | null
+) => {
   const settings: ClientSettings = {
     allowOutgoingConnections: !isConfigValFalsy(
       rawSettings['browser.allow_outgoing_connections']
@@ -441,10 +577,11 @@ export const cleanupSettings = (rawSettings: any) => {
       isConfigValFalsy(rawSettings['client.allow_telemetry'])
     ), // default true
     authEnabled: !isConfigValFalsy(rawSettings['dbms.security.auth_enabled']), // default true
-    // Info: metrics... in versions < 5.0, server.metrics... in versions >= 5.0
+    // Info: in versions < 5.0 exists and defaults to false, in versions >= 5.0 is removed and always true
     metricsNamespacesEnabled:
-      isConfigValTruthy(rawSettings['metrics.namespaces.enabled']) ||
-      isConfigValTruthy(rawSettings['server.metrics.namespaces.enabled']), // default false
+      neo4jVersion && semver.satisfies(neo4jVersion, '<5.0.0')
+        ? isConfigValTruthy(rawSettings['metrics.namespaces.enabled'])
+        : true,
     metricsPrefix:
       rawSettings['metrics.prefix'] ??
       rawSettings['server.metrics.prefix'] ??

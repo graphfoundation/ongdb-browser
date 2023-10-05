@@ -39,16 +39,25 @@ const StyledAutoExecButton = styled.button`
   outline: transparent;
 `
 
-export function AutoExecButtonComponent({ bus, cmd, ...rest }: any) {
+export function AutoExecButtonComponent({
+  bus,
+  cmd,
+  displayText,
+  isCypher = false,
+  ...rest
+}: any) {
   const onClick = useCallback(() => {
-    const action = executeCommand(`:${cmd}`, { source: commandSources.button })
+    const action = executeCommand(isCypher ? cmd : `:${cmd}`, {
+      source: commandSources.button
+    })
 
     bus.send(action.type, action)
   }, [cmd])
 
   return (
     <StyledAutoExecButton type="button" onClick={onClick} {...rest}>
-      <i className="fa fa-play-circle-o" /> :{cmd}
+      <i className="fa fa-play-circle-o" />{' '}
+      {displayText ?? (isCypher ? cmd : `:${cmd}`)}
     </StyledAutoExecButton>
   )
 }

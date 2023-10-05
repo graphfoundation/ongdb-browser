@@ -48,10 +48,12 @@ import SysInfoFrame from './SysInfoFrame/SysInfoFrame'
 import { Connection } from 'shared/modules/connections/connectionsDuck'
 import { FrameStack } from 'shared/modules/frames/framesDuck'
 import extras from './Extras/index'
+import DebugConnectivityFrame from './DebugConnectivityFrame'
 
 const nameToFrame: Record<string, React.ComponentType<any>> = {
   error: ErrorFrame,
   cypher: CypherFrame,
+  'debug-connectivity': DebugConnectivityFrame,
   'cypher-script': CypherScriptFrame,
   'user-list': UserList,
   'user-add': UserAdd,
@@ -107,7 +109,7 @@ export function FrameContainer(props: FrameContainerProps): JSX.Element {
   const frame = props.frameData.stack[0]
   const [exportItems, setExportItems] = useState<ExportItem[]>([])
   const frameProps: BaseFrameProps = {
-    frame: { ...frame, isPinned: props.frameData.isPinned },
+    frame,
     activeConnectionData: props.activeConnectionData,
     stack: props.frameData.stack,
     isFullscreen,

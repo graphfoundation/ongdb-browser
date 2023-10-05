@@ -81,7 +81,10 @@ export class Visualization extends Component<
   VisualizationProps,
   VisualizationState
 > {
-  autoCompleteCallback: ((rels: BasicRelationship[]) => void) | undefined
+  autoCompleteCallback?: (
+    rels: BasicRelationship[],
+    initialRun: boolean
+  ) => void
   graph: GraphModel | undefined
   state: VisualizationState = {
     nodes: [],
@@ -158,20 +161,19 @@ export class Visualization extends Component<
 
   autoCompleteRelationships(
     existingNodes: { id: string }[],
-    newNodes: { id: string }[]
+    newNodes: { id: string }[],
+    initialRun: boolean
   ): void {
     if (this.props.autoComplete) {
       const existingNodeIds = existingNodes.map(node => parseInt(node.id))
       const newNodeIds = newNodes.map(node => parseInt(node.id))
 
-      this.getInternalRelationships(existingNodeIds, newNodeIds)
-        .then(graph => {
-          this.autoCompleteCallback &&
-            this.autoCompleteCallback(graph.relationships)
-        })
-        .catch(() => undefined)
+      this.getInternalRelationships(existingNodeIds, newNodeIds).then(graph => {
+        this.autoCompleteCallback &&
+          this.autoCompleteCallback(graph.relationships, initialRun)
+      })
     } else {
-      this.autoCompleteCallback && this.autoCompleteCallback([])
+      this.autoCompleteCallback && this.autoCompleteCallback([], initialRun)
     }
   }
 
@@ -217,7 +219,8 @@ LIMIT ${maxNewNeighbours}`
                 )
               this.autoCompleteRelationships(
                 this.graph?.nodes() || [],
-                resultGraph.nodes
+                resultGraph.nodes,
+                false
               )
               resolve({ ...resultGraph, allNeighboursCount })
             }
@@ -230,11 +233,13 @@ LIMIT ${maxNewNeighbours}`
     rawExistingNodeIds: number[],
     rawNewNodeIds: number[]
   ): Promise<BasicNodesAndRels> {
-    const newNodeIds = rawNewNodeIds.map(neo4j.int)
-    const existingNodeIds = rawExistingNodeIds.map(neo4j.int).concat(newNodeIds)
+    const newNodeIds = rawNewNodeIds.map(n => neo4j.int(n))
+    const existingNodeIds = rawExistingNodeIds
+      .map(n => neo4j.int(n))
+      .concat(newNodeIds)
     const query =
       'MATCH (a)-[r]->(b) WHERE id(a) IN $existingNodeIds AND id(b) IN $newNodeIds RETURN r;'
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.props.bus &&
         this.props.bus.self(
           CYPHER_REQUEST,
@@ -245,7 +250,8 @@ LIMIT ${maxNewNeighbours}`
           },
           (response: any) => {
             if (!response.success) {
-              reject(new Error())
+              console.error(response.error)
+              resolve({ nodes: [], relationships: [] })
             } else {
               resolve({
                 ...bolt.extractNodesAndRelationshipsFromRecordsForOldVis(
@@ -262,7 +268,7 @@ LIMIT ${maxNewNeighbours}`
 
   setGraph(graph: GraphModel): void {
     this.graph = graph
-    this.autoCompleteRelationships([], this.graph.nodes())
+    this.autoCompleteRelationships([], this.graph.nodes(), true)
   }
 
   render(): React.ReactNode {
@@ -283,7 +289,7 @@ LIMIT ${maxNewNeighbours}`
           assignVisElement={this.props.assignVisElement}
           nodeLimitHit={this.state.nodeLimitHit}
           getAutoCompleteCallback={(
-            callback: (rels: BasicRelationship[]) => void
+            callback: (rels: BasicRelationship[], initialRun: boolean) => void
           ) => {
             this.autoCompleteCallback = callback
           }}
