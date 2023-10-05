@@ -27,6 +27,7 @@ Cypress.Commands.add(
       // We assume pw already set on local
       return
     }
+
     cy.title().should('include', 'ONgDB Browser')
     cy.wait(3000)
 

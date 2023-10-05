@@ -72,7 +72,6 @@ const Sidebar = ({
   onNavClick,
   neo4jConnectionState,
   showStaticScripts,
-  // syncConnected,
   loadSync,
   isRelateAvailable,
   scriptDraft

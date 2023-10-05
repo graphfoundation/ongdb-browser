@@ -62,13 +62,13 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
     <DrawerBody>
       <DrawerSection>
         <DrawerSubHeader>
-          Originally created by{' '}
+          Made originally by{' '}
           <DrawerExternalLink href="http://neo4j.com/">
-            Neo4j, Inc.
+            Neo4j, Inc
           </DrawerExternalLink>
           <br />
           ensured to stay free and open source by the{' '}
-          <DrawerExternalLink href="http://graphfoundation.org/">
+          <DrawerExternalLink href="https://graphfoundation.org/">
             Graph Foundation, Inc.
           </DrawerExternalLink>
         </DrawerSubHeader>
@@ -169,7 +169,7 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
       <DrawerSection>
         <DrawerSubHeader>Thanks</DrawerSubHeader>
         <DrawerSectionBody>
-          {`Neo4j and ONgDB wouldn't be possible without a fantastic community. Thanks for all the feedback, discussions and contributions.`}
+          {`ONgDB wouldn't be possible without a fantastic community. Thanks for all the feedback, discussions and contributions.`}
         </DrawerSectionBody>
         <DrawerFooter>
           <DrawerSectionBody>

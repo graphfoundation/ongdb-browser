@@ -1,7 +1,7 @@
 {
   "name": "ongdb-browser",
   "version": "2.0.0-SNAPSHOT",
-  "description": "ONgDB Browser is a fork of Neo4j Browser which is the general purpose graphical user interface for working with Neo4j. Query, visualize, administrate and monitor the database.",
+  "description": "ONgDB Browser is a fork of Neo4j Browser which is the general purpose graphical user interface for working with Neo4j. Query, visualize, administer and monitor the database.",
   "neo4jDesktop": {
     "apiVersion": "^1.4.0"
   },
@@ -16,7 +16,7 @@
     "url": "https://github.com/graphfoundation/ongdb-browser.git"
   },
   "keywords": [],
-  "author": "Neo4j Inc. and GraphFoundation",
+  "author": "Neo4j Inc. and Graph Foundation, Inc.",
   "license": "GPL-3.0",
   "homepage": "https://neo4j.com/developer/guide-neo4j-browser/",
   "main": "dist/index.html",

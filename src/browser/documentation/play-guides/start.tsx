@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react'
-const title = 'ONgDB'
 
+const title = 'ONgDB'
 const subtitle = ''
 const content = (
   <>
@@ -79,7 +79,7 @@ const content = (
         <a
           target="_blank"
           rel="noreferrer"
-          href="http://graphfoundation.org/"
+          href="https://graphfoundation.org/"
           className="no-icon"
         >
           {' '}

@@ -19,3 +19,8 @@ release-notes.md
 /stats.json
 signature.pem
 *.iml
+HEAD
+ongdb-enterprise-*/
+
+./src/neo4j-arc/dist
+./src/neo4j-arc/node_modules

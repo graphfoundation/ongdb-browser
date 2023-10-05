@@ -94,7 +94,7 @@ export const DatabaseKernelInfo = ({
             {dbName && (
               <tr>
                 <StyledKey>Name: </StyledKey>
-                <StyledValue>ONgDB</StyledValue>
+                <StyledValue>{dbName}</StyledValue>
               </tr>
             )}
             {storeSize && (
