@@ -17,31 +17,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import Rx from 'rxjs'
 import neo4j from 'neo4j-driver'
+import Rx from 'rxjs'
+
+import {
+  getRawVersion,
+  serverInfoQuery,
+  updateServerInfo
+} from '../dbMeta/dbMetaDuck'
+import {
+  FIRST_MULTI_DB_SUPPORT,
+  FIRST_NO_MULTI_DB_SUPPORT,
+  changeUserPasswordQuery,
+  driverDatabaseSelection
+} from '../features/versionedFeatures'
+import { getClusterAddresses } from './queriesProcedureHelper'
 import bolt from 'services/bolt/bolt'
+import { buildTxFunctionByMode } from 'services/bolt/boltHelpers'
+import {
+  getUserTxMetadata,
+  userActionTxMetadata
+} from 'services/bolt/txMetadata'
+import { flatten } from 'services/utils'
 import {
   Connection,
   getActiveConnectionData
 } from 'shared/modules/connections/connectionsDuck'
-import { getCausalClusterAddresses } from './queriesProcedureHelper'
-import { buildTxFunctionByMode } from 'services/bolt/boltHelpers'
-import { flatten } from 'services/utils'
-import { shouldUseCypherThread } from 'shared/modules/settings/settingsDuck'
-import { getUserTxMetadata } from 'services/bolt/txMetadata'
-import {
-  canSendTxMetadata,
-  changeUserPasswordQuery,
-  driverDatabaseSelection,
-  FIRST_MULTI_DB_SUPPORT,
-  FIRST_NO_MULTI_DB_SUPPORT
-} from '../features/versionedFeatures'
-import {
-  updateServerInfo,
-  serverInfoQuery,
-  getVersion
-} from '../dbMeta/dbMetaDuck'
 
 const NAME = 'cypher'
 export const CYPHER_REQUEST = `${NAME}/REQUEST`
@@ -55,6 +56,7 @@ const queryAndResolve = async (
   driver: any,
   action: any,
   host: any,
+  metadata: { type: string; app: string },
   useDb = {}
 ) => {
   return new Promise(resolve => {
@@ -64,7 +66,7 @@ const queryAndResolve = async (
     })
     const txFn = buildTxFunctionByMode(session)
     txFn &&
-      txFn((tx: any) => tx.run(action.query, action.parameters))
+      txFn((tx: any) => tx.run(action.query, action.parameters), { metadata })
         .then((r: any) => {
           session.close()
           resolve({
@@ -92,7 +94,12 @@ const callClusterMember = async (connection: any, action: any) => {
     bolt
       .directConnect(connection, undefined, undefined, false) // Ignore validation errors
       .then(async driver => {
-        const res = await queryAndResolve(driver, action, connection.host)
+        const res = await queryAndResolve(
+          driver,
+          action,
+          connection.host,
+          userActionTxMetadata.txMetadata
+        )
         driver.close()
         resolve(res)
       })
@@ -108,15 +115,12 @@ const callClusterMember = async (connection: any, action: any) => {
 }
 
 // Epics
-export const cypherRequestEpic = (some$: any, store: any) =>
+export const cypherRequestEpic = (some$: any) =>
   some$.ofType(CYPHER_REQUEST).mergeMap((action: any) => {
     if (!action.$$responseChannel) return Rx.Observable.of(null)
     return bolt
       .directTransaction(action.query, action.params || undefined, {
-        useCypherThread: shouldUseCypherThread(store.getState()),
-        ...getUserTxMetadata(action.queryType || null)({
-          hasServerSupport: canSendTxMetadata(store.getState())
-        }),
+        ...getUserTxMetadata(action.queryType),
         useDb: action.useDb
       })
       .then((r: any) => ({
@@ -131,18 +135,15 @@ export const cypherRequestEpic = (some$: any, store: any) =>
       }))
   })
 
-export const routedCypherRequestEpic = (some$: any, store: any) =>
+export const routedCypherRequestEpic = (some$: any) =>
   some$.ofType(ROUTED_CYPHER_WRITE_REQUEST).mergeMap((action: any) => {
     if (!action.$$responseChannel) return Rx.Observable.of(null)
 
-    const [id, promise] = bolt.routedWriteTransaction(
+    const [_id, promise] = bolt.routedWriteTransaction(
       action.query,
       action.params,
       {
-        useCypherThread: shouldUseCypherThread(store.getState()),
-        ...getUserTxMetadata(action.queryType || null)({
-          hasServerSupport: canSendTxMetadata(store.getState())
-        }),
+        ...getUserTxMetadata(action.queryType || null),
         cancelable: true,
         useDb: action.useDb
       }
@@ -176,11 +177,7 @@ export const clusterCypherRequestEpic = (some$: any, store: any) =>
     .mergeMap((action: any) => {
       if (!action.$$responseChannel) return Rx.Observable.of(null)
       return bolt
-        .directTransaction(
-          getCausalClusterAddresses,
-          {},
-          { useCypherThread: shouldUseCypherThread(store.getState()) }
-        )
+        .directTransaction(getClusterAddresses, {}, userActionTxMetadata)
         .then((res: any) => {
           const addresses = flatten(
             res.records.map((record: any) => record.get('addresses'))
@@ -266,11 +263,12 @@ export const handleForcePasswordChangeEpic = (some$: any, store: any) =>
             )
             .then(async driver => {
               // Let's establish what server version we're connected to if not in state
-              if (!getVersion(store.getState())) {
+              if (!getRawVersion(store.getState())) {
                 const versionRes: any = await queryAndResolve(
                   driver,
                   { ...action, query: serverInfoQuery, parameters: {} },
-                  undefined
+                  undefined,
+                  userActionTxMetadata.txMetadata
                 )
                 // What does the driver say, does the server support multidb?
                 const supportsMultiDb = await driver.supportsMultiDb()
@@ -301,6 +299,7 @@ export const handleForcePasswordChangeEpic = (some$: any, store: any) =>
                 driver,
                 { ...action, ...queryObj },
                 undefined,
+                userActionTxMetadata.txMetadata,
                 driverDatabaseSelection(store.getState(), 'system') // target system db if it has multi-db support
               )
               driver.close()

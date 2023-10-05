@@ -17,11 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import nock from 'nock'
+
 import * as config from './config'
-import { update, replace } from 'shared/modules/settings/settingsDuck'
-import dbMetaReducer, { updateSettings } from 'shared/modules/dbMeta/dbMetaDuck'
+import dbMetaReducer, {
+  ClientSettings,
+  initialClientSettings,
+  updateSettings
+} from 'shared/modules/dbMeta/dbMetaDuck'
+import { replace, update } from 'shared/modules/settings/settingsDuck'
 
 function FetchError(message: any) {
   // @ts-expect-error ts-migrate(2683) FIXME: 'this' implicitly has type 'any' because it does n... Remove this comment to see the full error message
@@ -33,13 +37,15 @@ FetchError.prototype = Object.create(Error.prototype)
 FetchError.prototype.constructor = FetchError
 
 describe('commandsDuck config helper', () => {
+  const metaSettings: ClientSettings = {
+    ...initialClientSettings,
+    remoteContentHostnameAllowlist: 'okurl.com'
+  }
   const store = {
     getState: () => {
       return {
         meta: {
-          settings: {
-            'browser.remote_content_hostname_allowlist': 'okurl.com'
-          }
+          settings: metaSettings
         }
       }
     }
@@ -75,7 +81,7 @@ describe('commandsDuck config helper', () => {
     // Then
     return p.then(res => {
       expect(res).toEqual({ x: 2 })
-      expect(put).toHaveBeenCalledWith(update({ x: 2 }))
+      expect(put).toHaveBeenCalledWith(update({ x: 2 } as any))
     })
   })
   test('handles :config x: 2 and calls the update action creator', () => {
@@ -89,7 +95,7 @@ describe('commandsDuck config helper', () => {
     // Then
     return p.then(res => {
       expect(res).toEqual({ x: 2 })
-      expect(put).toHaveBeenCalledWith(update({ x: 2 }))
+      expect(put).toHaveBeenCalledWith(update({ x: 2 } as any))
     })
   })
   test('handles :config "x y": 2 and calls the update action creator', () => {
@@ -103,7 +109,7 @@ describe('commandsDuck config helper', () => {
     // Then
     return p.then(res => {
       expect(res).toEqual({ 'x y': 2 })
-      expect(put).toHaveBeenCalledWith(update({ 'x y': 2 }))
+      expect(put).toHaveBeenCalledWith(update({ 'x y': 2 } as any))
     })
   })
   test('handles :config {"hej": "ho", "let\'s": "go"} and calls the replace action creator', () => {
@@ -117,7 +123,9 @@ describe('commandsDuck config helper', () => {
     // Then
     return p.then(res => {
       expect(res).toEqual({ hej: 'ho', "let's": 'go' })
-      expect(put).toHaveBeenCalledWith(replace({ hej: 'ho', "let's": 'go' }))
+      expect(put).toHaveBeenCalledWith(
+        replace({ hej: 'ho', "let's": 'go' } as any)
+      )
     })
   })
   test('handles :config {x: 1, y: 2} and calls the replace action creator', () => {
@@ -131,7 +139,7 @@ describe('commandsDuck config helper', () => {
     // Then
     return p.then(res => {
       expect(res).toEqual({ x: 1, y: 2 })
-      expect(put).toHaveBeenCalledWith(replace({ x: 1, y: 2 }))
+      expect(put).toHaveBeenCalledWith(replace({ x: 1, y: 2 } as any))
     })
   })
   test('rejects hostnames not in allowlist', () => {
@@ -149,37 +157,10 @@ describe('commandsDuck config helper', () => {
       )
       .then(() => expect(put).not.toHaveBeenCalled())
   })
-  test('allowlist and whitelist both update allowlist', () => {
-    // Given
-    const action = { cmd: ':config https://okurl.com/cnf.json' }
-    const put = jest.fn()
-
-    const updatedStore = {
-      getState: () => ({
-        meta: dbMetaReducer(
-          store.getState() as any,
-          updateSettings({
-            'browser.remote_content_hostname_whitelist': 'replaceUrl.com'
-          })
-        )
-      })
-    }
-    // When
-    const p = config.handleUpdateConfigCommand(action, put, updatedStore)
-
-    // Then
-    return expect(p)
-      .rejects.toEqual(
-        new Error('Hostname is not allowed according to server allowlist')
-      )
-      .then(() => expect(put).not.toHaveBeenCalled())
-  })
   test('handles :config https://okurl.com/cnf.json and calls the replace action creator', () => {
     // Given
     const json = JSON.stringify({ x: 1, y: 'hello' })
-    nock('https://okurl.com')
-      .get('/cnf.json')
-      .reply(200, json)
+    nock('https://okurl.com').get('/cnf.json').reply(200, json)
     const action = { cmd: ':config https://okurl.com/cnf.json' }
     const put = jest.fn()
 
@@ -195,9 +176,7 @@ describe('commandsDuck config helper', () => {
   test('indicates error parsing remote content', () => {
     // Given
     const json = 'no json'
-    nock('https://okurl.com')
-      .get('/cnf.json')
-      .reply(200, json)
+    nock('https://okurl.com').get('/cnf.json').reply(200, json)
     const action = { cmd: ':config https://okurl.com/cnf.json' }
     const put = jest.fn()
 

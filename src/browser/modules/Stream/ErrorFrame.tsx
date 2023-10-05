@@ -18,19 +18,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react'
-import FrameTemplate from '../Frame/FrameTemplate'
-import { createErrorObject, UnknownCommandError } from 'services/exceptions'
+
+import FrameBodyTemplate from '../Frame/FrameBodyTemplate'
+import AutoExecButton from './auto-exec-button'
 import { errorMessageFormater } from './errorMessageFormater'
 import {
   StyledCypherErrorMessage,
-  StyledHelpContent,
-  StyledErrorH4,
-  StyledPreformattedArea,
-  StyledHelpDescription,
   StyledDiv,
-  StyledHelpFrame
+  StyledErrorH4,
+  StyledHelpContent,
+  StyledHelpDescription,
+  StyledHelpFrame,
+  StyledPreformattedArea
 } from './styled'
-import AutoExecButton from './auto-exec-button'
+import { UnknownCommandError, createErrorObject } from 'services/exceptions'
 
 export const ErrorView = ({ frame }: any) => {
   if (!frame) return null
@@ -72,7 +73,13 @@ export const ErrorView = ({ frame }: any) => {
   )
 }
 
-const ErrorFrame = ({ frame }: any) => {
-  return <FrameTemplate header={frame} contents={<ErrorView frame={frame} />} />
+const ErrorFrame = ({ frame, isFullscreen, isCollapsed }: any) => {
+  return (
+    <FrameBodyTemplate
+      isCollapsed={isCollapsed}
+      isFullscreen={isFullscreen}
+      contents={<ErrorView frame={frame} />}
+    />
+  )
 }
 export default ErrorFrame

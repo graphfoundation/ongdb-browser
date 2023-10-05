@@ -17,23 +17,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import canvg from 'canvg'
+import FileSaver from 'file-saver'
 
 import { prepareForExport } from './svgUtils'
-import FileSaver from 'file-saver'
 
 export const downloadPNGFromSVG = (svg: any, graph: any, type: any) => {
   const svgObj = prepareForExport(svg, graph, type)
+  const svgDefaultWidth = parseInt(svgObj.attr('width'), 10)
+  const svgDefaultHeight = parseInt(svgObj.attr('height'), 10)
+
+  // Make PNGs a bit bigger than the default zoom (to lose less quality when resizing)
+  const EXTRA_SIZE = 1.5
+  // also adjust for screen resolutions (to avoid blurry text)
+  svgObj.attr('width', svgDefaultWidth * window.devicePixelRatio * EXTRA_SIZE)
+  svgObj.attr('height', svgDefaultHeight * window.devicePixelRatio * EXTRA_SIZE)
   const svgData = htmlCharacterRefToNumericalRef(svgObj.node())
 
   const canvas = document.createElement('canvas')
-  canvas.width = svgObj.attr('width') as any
-  canvas.height = svgObj.attr('height') as any
+  canvas.width = parseInt(svgObj.attr('width'), 10)
+  canvas.height = parseInt(svgObj.attr('height'), 10)
   const ctx = canvas.getContext('2d')
 
   if (ctx) {
     const v = canvg.fromString(ctx, svgData)
+    // Resize down to smaller canvas, but higher resolution
+    v.resize(canvas.width / devicePixelRatio, canvas.width / devicePixelRatio)
     v.render()
       .then(() =>
         downloadWithDataURI(`${type}.png`, canvas.toDataURL('image/png'))
@@ -71,10 +80,7 @@ const downloadWithDataURI = (filename: any, dataURI: any) => {
   } else {
     byteString = unescape(dataURI.split(',')[1])
   }
-  const mimeString = dataURI
-    .split(',')[0]
-    .split(':')[1]
-    .split(';')[0]
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
   const ia = new Uint8Array(byteString.length)
   for (
     i = j = 0, ref = byteString.length;

@@ -17,18 +17,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import neo4j, { Driver } from 'neo4j-driver'
-import { buildTxFunctionByMode } from 'services/bolt/boltHelpers'
-import { Connection } from 'shared/modules/connections/connectionsDuck'
+
+import { isBoltConnectionErrorCode } from './boltConnectionErrors'
 import { createDriverOrFailFn } from './driverFactory'
 import {
-  setGlobalDrivers,
-  getGlobalDrivers,
-  unsetGlobalDrivers,
+  buildAuthObj,
   buildGlobalDriversObject,
-  buildAuthObj
+  getGlobalDrivers,
+  setGlobalDrivers,
+  unsetGlobalDrivers
 } from './globalDrivers'
+import { buildTxFunctionByMode } from 'services/bolt/boltHelpers'
+import { Connection } from 'shared/modules/connections/connectionsDuck'
+import { backgroundTxMetadata } from './txMetadata'
 
 export const DIRECT_CONNECTION = 'DIRECT_CONNECTION'
 export const ROUTED_WRITE_CONNECTION = 'ROUTED_WRITE_CONNECTION'
@@ -45,6 +47,37 @@ export const hasMultiDbSupport = async (): Promise<boolean> => {
   }
   const supportsMultiDb = await tmpDriver.supportsMultiDb()
   return supportsMultiDb
+}
+
+const validateConnectionFallback = (
+  driver: Driver,
+  res: (driver: Driver) => void,
+  rej: (error?: any) => void,
+  multiDbSupport: boolean
+): void => {
+  const session = driver.session({
+    defaultAccessMode: neo4j.session.READ,
+    database: multiDbSupport ? 'system' : undefined
+  })
+  session
+    .readTransaction(tx => tx.run('CALL db.indexes()'), {
+      metadata: backgroundTxMetadata.txMetadata
+    })
+    .then(() => {
+      session.close()
+      res(driver)
+    })
+    .catch((e: { code: string; message: string }) => {
+      session.close()
+      // Only invalidate the connection if not available
+      // or not authed
+      // or credentials have expired
+      if (!e.code || isBoltConnectionErrorCode(e.code)) {
+        rej(e)
+      } else {
+        res(driver)
+      }
+    })
 }
 
 export const validateConnection = (
@@ -65,32 +98,29 @@ export const validateConnection = (
         defaultAccessMode: neo4j.session.READ,
         database: multiDbSupport ? 'system' : undefined
       })
-      const txFn = buildTxFunctionByMode(session)
-      txFn &&
-        txFn((tx: { run: (query: string) => void }) =>
-          tx.run('CALL db.indexes()')
-        )
-          .then(() => {
-            session.close()
-            res(driver)
-          })
-          .catch((e: { code: string; message: string }) => {
-            session.close()
-            // Only invalidate the connection if not available
-            // or not authed
-            // or credentials have expired
-            const invalidStates = [
-              'ServiceUnavailable',
-              'Neo.ClientError.Security.AuthenticationRateLimit',
-              'Neo.ClientError.Security.Unauthorized',
-              'Neo.ClientError.Security.CredentialsExpired'
-            ]
-            if (!e.code || invalidStates.includes(e.code)) {
-              rej(e)
-            } else {
-              res(driver)
-            }
-          })
+      //Can be any query, is used use to validate the connection and to get an error code if user has expired crdentails for example.
+      //This query works for version 4.3 and above. For older versions, use the fallback function.
+      session
+        .readTransaction(tx => tx.run('SHOW DATABASES'), {
+          metadata: backgroundTxMetadata.txMetadata
+        })
+        .then(() => {
+          session.close()
+          res(driver)
+        })
+        .catch((e: { code: string; message: string }) => {
+          session.close()
+          // Only invalidate the connection if not available
+          // or not authed
+          // or credentials have expired
+          if (!e.code || isBoltConnectionErrorCode(e.code)) {
+            rej(e)
+          } else {
+            // if connection could not be validated using SHOW PROCEDURES then try using CALL db.indexes()
+            //Remove this fallback function when we drop support for older versions and replace with "res(driver)".
+            validateConnectionFallback(driver, res, rej, multiDbSupport)
+          }
+        })
     })
     .catch(rej)
 }
@@ -148,7 +178,7 @@ export function openConnection(
   return p
 }
 
-export const closeConnection = (): void => {
+export const closeGlobalConnection = (): void => {
   const globalDrivers = getGlobalDrivers()
   if (globalDrivers) {
     globalDrivers.close()

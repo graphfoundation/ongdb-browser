@@ -20,34 +20,44 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withBus } from 'react-suber'
-import {
-  getVersion,
-  getEdition,
-  getStoreSize,
-  getClusterRole,
-  getDatabases
-} from 'shared/modules/dbMeta/dbMetaDuck'
-import {
-  executeCommand,
-  commandSources,
-  listDbsCommand
-} from 'shared/modules/commands/commandsDuck'
-import { toHumanReadableBytes } from 'services/utils'
 
+import {
+  Link,
+  StyledKey,
+  StyledTable,
+  StyledValue,
+  StyledValueUCFirst
+} from './styled'
 import {
   DrawerSection,
   DrawerSectionBody,
   DrawerSubHeader
 } from 'browser-components/drawer/drawer-styled'
+import { toHumanReadableBytes } from 'services/utils'
 import {
-  StyledTable,
-  StyledKey,
-  StyledValue,
-  StyledValueUCFirst,
-  Link
-} from './styled'
+  commandSources,
+  executeCommand,
+  listDbsCommand
+} from 'shared/modules/commands/commandsDuck'
+import {
+  Database,
+  getClusterRoleForDb,
+  getDatabases,
+  getEdition,
+  getStoreSize,
+  getRawVersion
+} from 'shared/modules/dbMeta/dbMetaDuck'
 import { getUsedDbName } from 'shared/modules/features/versionedFeatures'
 
+type DatabaseKernelInfo = {
+  role: any
+  version: string | null
+  edition: string | null
+  dbName: any
+  storeSize: any
+  onItemClick: any
+  databases: Database[]
+}
 export const DatabaseKernelInfo = ({
   role,
   version,
@@ -56,7 +66,7 @@ export const DatabaseKernelInfo = ({
   storeSize,
   onItemClick,
   databases
-}: any) => {
+}: DatabaseKernelInfo) => {
   return (
     <DrawerSection className="database-kernel-info">
       <DrawerSubHeader>DBMS</DrawerSubHeader>
@@ -123,12 +133,13 @@ export const DatabaseKernelInfo = ({
 }
 
 const mapStateToProps = (state: any) => {
+  const dbName = getUsedDbName(state)
   return {
-    version: getVersion(state),
+    version: getRawVersion(state),
     edition: getEdition(state),
-    dbName: getUsedDbName(state),
+    dbName,
     storeSize: getStoreSize(state),
-    role: getClusterRole(state),
+    role: getClusterRoleForDb(state, dbName),
     databases: getDatabases(state)
   }
 }

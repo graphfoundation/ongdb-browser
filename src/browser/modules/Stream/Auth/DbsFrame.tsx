@@ -17,28 +17,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import { uniqBy } from 'lodash-es'
 import React from 'react'
-import FrameTemplate from 'browser/modules/Frame/FrameTemplate'
+
+import { toKeyString } from 'neo4j-arc/common'
+
+import { BaseFrameProps } from '../Stream'
+import { AliasText, UnstyledList } from '../styled'
 import {
   StyledConnectionAside,
-  StyledConnectionBodyContainer,
   StyledConnectionBody,
+  StyledConnectionBodyContainer,
   StyledDbsRow
 } from './styled'
 import { H3 } from 'browser-components/headers'
-import { toKeyString, escapeCypherIdentifier } from 'services/utils'
-import { UnstyledList } from '../styled'
-import { useDbCommand } from 'shared/modules/commands/commandsDuck'
-import TextCommand from 'browser/modules/DecoratedText/TextCommand'
 import ClickToCode from 'browser/modules/ClickToCode/index'
+import TextCommand from 'browser/modules/DecoratedText/TextCommand'
+import FrameBodyTemplate from 'browser/modules/Frame/FrameBodyTemplate'
 import { StyledCodeBlockFrame } from 'browser/modules/Main/styled'
-import { uniqBy } from 'lodash-es'
+import { escapeCypherIdentifier } from 'services/utils'
+import { useDbCommand } from 'shared/modules/commands/commandsDuck'
 
-const DbsFrame = (props: any) => {
+const DbsFrame = (props: BaseFrameProps) => {
   const { frame } = props
   const { dbs = [] } = frame
-  const dbsToShow: any[] = uniqBy(dbs, 'name')
+  const dbsToShow = uniqBy(dbs, 'name')
 
   return (
     <>
@@ -52,7 +55,7 @@ const DbsFrame = (props: any) => {
       </StyledConnectionAside>
       <StyledConnectionBodyContainer>
         <StyledConnectionBody>
-          {Array.isArray(dbsToShow) && dbsToShow.length ? (
+          {dbsToShow.length ? (
             <>
               Click on one to start using it:
               <UnstyledList data-testid="dbs-command-list">
@@ -64,6 +67,19 @@ const DbsFrame = (props: any) => {
                           db.name
                         )}`}
                       />
+                      {db.aliases && db.aliases.length > 0 && (
+                        <AliasText>
+                          Configured aliases:{' '}
+                          {db.aliases.map(name => (
+                            <TextCommand
+                              key={name}
+                              command={`${useDbCommand} ${escapeCypherIdentifier(
+                                name
+                              )}`}
+                            />
+                          ))}
+                        </AliasText>
+                      )}
                     </StyledDbsRow>
                   )
                 })}
@@ -91,9 +107,13 @@ const DbsFrame = (props: any) => {
   )
 }
 
-const Frame = (props: any) => {
+const Frame = (props: BaseFrameProps): JSX.Element => {
   return (
-    <FrameTemplate header={props.frame} contents={<DbsFrame {...props} />} />
+    <FrameBodyTemplate
+      isCollapsed={props.isCollapsed}
+      isFullscreen={props.isFullscreen}
+      contents={<DbsFrame {...props} />}
+    />
   )
 }
 

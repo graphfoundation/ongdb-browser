@@ -17,18 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import configureMockStore from 'redux-mock-store'
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus, createReduxMiddleware } from 'suber'
+
 import reducer, * as connections from './connectionsDuck'
+import bolt from 'services/bolt/bolt'
 import {
-  DONE as DISCOVERY_DONE,
   CONNECTION_ID,
+  DONE as DISCOVERY_DONE,
   updateDiscoveryConnection
 } from 'shared/modules/discovery/discoveryDuck'
 
-import bolt from 'services/bolt/bolt'
 jest.mock('services/bolt/bolt', () => {
   return {
     closeConnection: jest.fn(),
@@ -324,7 +324,7 @@ describe('retainCredentialsSettingsEpic', () => {
   test('Dispatches an action to remove credentials from localstorage', done => {
     // Given
     const action = connections.setRetainCredentials(false)
-    bus.take('NOOP', currentAction => {
+    bus.take(connections.MERGE, () => {
       // Then
       expect(store.getActions()).toEqual([
         action,
@@ -332,8 +332,7 @@ describe('retainCredentialsSettingsEpic', () => {
           id: 'xxx',
           username: '',
           password: ''
-        }),
-        currentAction
+        })
       ])
       done()
     })

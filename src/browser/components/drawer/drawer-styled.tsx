@@ -17,9 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import styled from 'styled-components'
-import linkIcon from 'icons/external-link.svg'
+import { primaryLightColor } from 'browser-styles/themes'
 
 export const Drawer = styled.div`
   width: 290px;
@@ -49,7 +48,7 @@ export const DrawerSubHeader = styled.h5`
   color: ${props => props.theme.primaryHeaderText};
   border-bottom: 1px solid #424650;
   font-size: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   line-height: 39px;
   position: relative;
   font-weight: bold;
@@ -59,7 +58,9 @@ export const DrawerSubHeader = styled.h5`
 `
 
 export const DrawerSection = styled.div`
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `
 
 export const DrawerSectionBody = styled.div`
@@ -69,8 +70,11 @@ export const DrawerSectionBody = styled.div`
 `
 
 export const DrawerBody = styled.div`
-  padding: 0 24px;
+  padding: 0 24px 12px 24px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `
 
 export const DrawerFooter = styled.div`
@@ -84,19 +88,10 @@ export const DrawerExternalLink = styled.a.attrs({
 })`
   cursor: pointer;
   text-decoration: none;
-  color: #68bdf4;
+  color: ${primaryLightColor};
 
   &:active {
     text-decoration: none;
-  }
-
-  &:before {
-    display: inline-block;
-    content: ' ';
-    background-image: url("data:image/svg+xml;utf8,${linkIcon}");
-    height: 12px;
-    width: 12px;
-    margin-right: 7px;
   }
 `
 

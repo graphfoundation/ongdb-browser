@@ -17,42 +17,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { withBus } from 'react-suber'
-import {
-  commandSources,
-  executeCommand,
-  useDbCommand
-} from 'shared/modules/commands/commandsDuck'
-import { getCurrentUser } from 'shared/modules/currentUser/currentUserDuck'
-import { getGraphStyleData } from 'shared/modules/grass/grassDuck'
-import { LabelItems, RelationshipItems, PropertyItems } from './MetaItems'
-import { UserDetails } from './UserDetails'
+
 import DatabaseKernelInfo from './DatabaseKernelInfo'
+import { DatabaseSelector } from './DatabaseSelector'
+import { LabelItems, PropertyItems, RelationshipItems } from './MetaItems'
+import { UserDetails } from './UserDetails'
 import {
   Drawer,
   DrawerBody,
   DrawerHeader
 } from 'browser-components/drawer/drawer-styled'
-import { DatabaseSelector } from './DatabaseSelector'
+import {
+  commandSources,
+  executeCommand,
+  useDbCommand
+} from 'shared/modules/commands/commandsDuck'
 import { getUseDb } from 'shared/modules/connections/connectionsDuck'
+import { getCurrentUser } from 'shared/modules/currentUser/currentUserDuck'
 import { getDatabases } from 'shared/modules/dbMeta/dbMetaDuck'
+import { getGraphStyleData } from 'shared/modules/grass/grassDuck'
 
 export function DBMSInfo(props: any): JSX.Element {
   const moreStep = 50
-  const [labelsMax, setLabelsMax] = useState(moreStep)
-  const [relationshipsMax, setRelationshipsMax] = useState(moreStep)
-  const [propertiesMax, setPropertiesMax] = useState(moreStep)
+  const [maxLabelsCount, setMaxLabelsCount] = useState(moreStep)
+  const [maxRelationshipsCount, setMaxRelationshipsCount] = useState(moreStep)
+  const [maxPropertiesCount, setMaxPropertiesCount] = useState(moreStep)
 
-  function onMoreClick(type: any, currentMax: any) {
-    const map: any = {
-      labels: setLabelsMax,
-      relationships: setRelationshipsMax,
-      properties: setPropertiesMax
-    }
-    return (num: any) => map[type](currentMax + num)
+  const onMoreLabelsClick = (numMore: number) => {
+    setMaxLabelsCount(maxLabelsCount + numMore)
+  }
+
+  const onMoreRelationshipsClick = (numMore: number) => {
+    setMaxRelationshipsCount(maxRelationshipsCount + numMore)
+  }
+
+  const onMorePropertiesClick = (numMore: number) => {
+    setMaxPropertiesCount(maxPropertiesCount + numMore)
   }
 
   const {
@@ -76,29 +79,27 @@ export function DBMSInfo(props: any): JSX.Element {
         />
         <LabelItems
           count={nodes}
-          labels={labels.slice(0, labelsMax).map((l: any) => l.val)}
+          labels={labels.slice(0, maxLabelsCount)}
           totalNumItems={labels.length}
           onItemClick={onItemClick}
-          onMoreClick={onMoreClick('labels', labelsMax)}
+          onMoreClick={onMoreLabelsClick}
           moreStep={moreStep}
           graphStyleData={props.graphStyleData}
         />
         <RelationshipItems
           count={relationships}
-          relationshipTypes={relationshipTypes
-            .slice(0, relationshipsMax)
-            .map((l: any) => l.val)}
+          relationshipTypes={relationshipTypes.slice(0, maxRelationshipsCount)}
           onItemClick={onItemClick}
           totalNumItems={relationshipTypes.length}
-          onMoreClick={onMoreClick('relationships', relationshipsMax)}
+          onMoreClick={onMoreRelationshipsClick}
           moreStep={moreStep}
           graphStyleData={props.graphStyleData}
         />
         <PropertyItems
-          properties={properties.slice(0, propertiesMax).map((l: any) => l.val)}
+          properties={properties.slice(0, maxPropertiesCount)}
           onItemClick={onItemClick}
           totalNumItems={properties.length}
-          onMoreClick={onMoreClick('properties', propertiesMax)}
+          onMoreClick={onMorePropertiesClick}
           moreStep={moreStep}
         />
         <UserDetails user={user} onItemClick={onItemClick} />

@@ -17,51 +17,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import deepmerge from 'deepmerge'
 import React from 'react'
-import { escapeCypherIdentifier } from 'services/utils'
+import { ThemeProvider } from 'styled-components'
+
+import {
+  numberToUSLocale,
+  StyledLabelChip,
+  StyledPropertyChip,
+  StyledRelationshipChip,
+  ShowMoreOrAll
+} from 'neo4j-arc/common'
+import { GraphStyleModel } from 'neo4j-arc/graph-visualization'
+
 import styles from './style_meta.css'
 import {
-  DrawerSubHeader,
   DrawerSection,
-  DrawerSectionBody
+  DrawerSectionBody,
+  DrawerSubHeader
 } from 'browser-components/drawer/drawer-styled'
-import {
-  StyledLabel,
-  StyledRelationship,
-  StyledProperty,
-  StyledShowMoreContainer,
-  StyledShowMoreLink
-} from './styled'
-
-import numberToUSLocale from 'shared/utils/number-to-US-locale'
-import neoGraphStyle from 'browser/modules/D3Visualization/graphStyle'
-import deepmerge from 'deepmerge'
+import { dark } from 'browser-styles/themes'
+import { escapeCypherIdentifier } from 'services/utils'
 
 const wrapperStyle = (styles && styles.wrapper) || ''
 
-const ShowMore = ({ total, shown, moreStep, onMore }: any) => {
-  const numMore = total - shown > moreStep ? moreStep : total - shown
-  return shown < total ? (
-    <StyledShowMoreContainer>
-      <StyledShowMoreLink onClick={() => onMore(numMore)}>
-        Show {numMore} more
-      </StyledShowMoreLink>
-      &nbsp;|&nbsp;
-      <StyledShowMoreLink onClick={() => onMore(total)}>
-        Show all
-      </StyledShowMoreLink>
-    </StyledShowMoreContainer>
-  ) : null
-}
-
 function createStyleGetter(graphStyleData: any, kind: string) {
-  const graphStyle = neoGraphStyle()
+  const graphStyle = new GraphStyleModel()
   if (graphStyleData) {
     graphStyle.loadRules(deepmerge(graphStyle.toSheet(), graphStyleData || {}))
   }
 
   if (kind === 'node') {
-    return function(text: string) {
+    return function (text: string) {
       if (graphStyleData) {
         const styleForItem = graphStyle.forNode({
           labels: [text]
@@ -75,7 +62,7 @@ function createStyleGetter(graphStyleData: any, kind: string) {
     }
   }
   if (kind === 'relationship') {
-    return function(text: string) {
+    return function (text: string) {
       if (graphStyleData) {
         const styleForItem = graphStyle.forRelationship({
           type: text
@@ -130,6 +117,15 @@ const createItems = (
   })
 }
 
+type LabelItemsProps = {
+  labels: string[]
+  totalNumItems: number
+  onItemClick: () => void
+  moreStep: number
+  onMoreClick: (num: number) => void
+  count: number
+  graphStyleData: any
+}
 const LabelItems = ({
   labels = [],
   totalNumItems,
@@ -138,7 +134,7 @@ const LabelItems = ({
   onMoreClick,
   count,
   graphStyleData
-}: any) => {
+}: LabelItemsProps) => {
   let labelItems: any = <p>There are no labels in database</p>
   if (labels.length) {
     const editorCommandTemplate = (text: any, i: any) => {
@@ -150,7 +146,7 @@ const LabelItems = ({
     labelItems = createItems(
       labels,
       onItemClick,
-      { component: StyledLabel },
+      { component: StyledLabelChip },
       editorCommandTemplate,
       true,
       count,
@@ -159,18 +155,30 @@ const LabelItems = ({
   }
   return (
     <DrawerSection>
-      <DrawerSubHeader>Node Labels</DrawerSubHeader>
+      <DrawerSubHeader>Node labels</DrawerSubHeader>
       <DrawerSectionBody className={wrapperStyle}>
         {labelItems}
       </DrawerSectionBody>
-      <ShowMore
-        total={totalNumItems}
-        shown={labels.length}
-        moreStep={moreStep}
-        onMore={onMoreClick}
-      />
+      <ThemeProvider theme={dark}>
+        <ShowMoreOrAll
+          total={totalNumItems}
+          shown={labels.length}
+          moreStep={moreStep}
+          onMore={onMoreClick}
+        />
+      </ThemeProvider>
     </DrawerSection>
   )
+}
+
+type RelationshipItemsProps = {
+  relationshipTypes: string[]
+  totalNumItems: number
+  onItemClick: () => void
+  moreStep: number
+  onMoreClick: (num: number) => any
+  count: number
+  graphStyleData: any
 }
 const RelationshipItems = ({
   relationshipTypes = [],
@@ -180,7 +188,7 @@ const RelationshipItems = ({
   onMoreClick,
   count,
   graphStyleData
-}: any) => {
+}: RelationshipItemsProps) => {
   let relationshipItems: any = <p>No relationships in database</p>
   if (relationshipTypes.length > 0) {
     const editorCommandTemplate = (text: any, i: any) => {
@@ -194,7 +202,7 @@ const RelationshipItems = ({
     relationshipItems = createItems(
       relationshipTypes,
       onItemClick,
-      { component: StyledRelationship },
+      { component: StyledRelationshipChip },
       editorCommandTemplate,
       true,
       count,
@@ -203,11 +211,11 @@ const RelationshipItems = ({
   }
   return (
     <DrawerSection>
-      <DrawerSubHeader>Relationship Types</DrawerSubHeader>
+      <DrawerSubHeader>Relationship types</DrawerSubHeader>
       <DrawerSectionBody className={wrapperStyle}>
         {relationshipItems}
       </DrawerSectionBody>
-      <ShowMore
+      <ShowMoreOrAll
         total={totalNumItems}
         shown={relationshipTypes.length}
         moreStep={moreStep}
@@ -216,43 +224,49 @@ const RelationshipItems = ({
     </DrawerSection>
   )
 }
+
+type PropertyItemsProps = {
+  properties: string[]
+  totalNumItems: number
+  onItemClick: () => void
+  moreStep: number
+  onMoreClick: (num: number) => any
+}
 const PropertyItems = ({
   properties,
   totalNumItems,
   onItemClick,
   moreStep,
   onMoreClick
-}: any) => {
+}: PropertyItemsProps) => {
   let propertyItems: any = <p>There are no properties in database</p>
   if (properties.length > 0) {
     const editorCommandTemplate = (text: any) => {
-      return `MATCH (n) WHERE EXISTS(n.${escapeCypherIdentifier(
+      return `MATCH (n) WHERE (n.${escapeCypherIdentifier(text)}) IS NOT NULL 
+RETURN DISTINCT "node" as entity, n.${escapeCypherIdentifier(
         text
-      )}) RETURN DISTINCT "node" as entity, n.${escapeCypherIdentifier(
-        text
-      )} AS ${escapeCypherIdentifier(
-        text
-      )} LIMIT 25 UNION ALL MATCH ()-[r]-() WHERE EXISTS(r.${escapeCypherIdentifier(
-        text
-      )}) RETURN DISTINCT "relationship" AS entity, r.${escapeCypherIdentifier(
+      )} AS ${escapeCypherIdentifier(text)} LIMIT 25 
+UNION ALL 
+MATCH ()-[r]-() WHERE (r.${escapeCypherIdentifier(text)}) IS NOT NULL 
+RETURN DISTINCT "relationship" AS entity, r.${escapeCypherIdentifier(
         text
       )} AS ${escapeCypherIdentifier(text)} LIMIT 25`
     }
     propertyItems = createItems(
       properties,
       onItemClick,
-      { component: StyledProperty },
+      { component: StyledPropertyChip },
       editorCommandTemplate,
       false
     )
   }
   return (
     <DrawerSection>
-      <DrawerSubHeader>Property Keys</DrawerSubHeader>
+      <DrawerSubHeader>Property keys</DrawerSubHeader>
       <DrawerSectionBody className={wrapperStyle}>
         {propertyItems}
       </DrawerSectionBody>
-      <ShowMore
+      <ShowMoreOrAll
         total={totalNumItems}
         shown={properties.length}
         moreStep={moreStep}

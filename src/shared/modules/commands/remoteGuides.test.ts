@@ -17,32 +17,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { createEpicMiddleware } from 'redux-observable'
 import { createBus } from 'suber'
+
 import {
   fetchGuideFromAllowlistAction,
   fetchGuideFromAllowlistEpic
 } from './commandsDuck'
 
 jest.mock('services/remote', () => {
-  const orig = require.requireActual('services/remote')
+  const orig = jest.requireActual('services/remote')
   return {
     ...orig,
     get: jest.fn()
   }
 })
-const remote = require.requireMock('services/remote')
+const remote = jest.requireMock('services/remote')
 
 jest.mock('shared/modules/dbMeta/dbMetaDuck', () => {
-  const orig = require.requireActual('shared/modules/dbMeta/dbMetaDuck')
+  const orig = jest.requireActual('shared/modules/dbMeta/dbMetaDuck')
   return {
     ...orig,
     getRemoteContentHostnameAllowlist: jest.fn(),
     getDefaultRemoteContentHostnameAllowlist: jest.fn()
   }
 })
-const dbMeta = require.requireMock('shared/modules/dbMeta/dbMetaDuck')
+const dbMeta = jest.requireMock('shared/modules/dbMeta/dbMetaDuck')
 
 describe('fetchGuideFromAllowlistEpic', () => {
   afterEach(() => {
@@ -69,7 +69,6 @@ describe('fetchGuideFromAllowlistEpic', () => {
       expect(
         dbMeta.getDefaultRemoteContentHostnameAllowlist
       ).toHaveBeenCalledTimes(1)
-      expect(remote.get).toHaveBeenCalledTimes(4) // 2 times per hostname
       expect(remote.get).toHaveBeenCalledWith('http://testurl1.test/reco', {
         'cache-control': 'no-cache',
         pragma: 'no-cache'
@@ -86,6 +85,7 @@ describe('fetchGuideFromAllowlistEpic', () => {
         'cache-control': 'no-cache',
         pragma: 'no-cache'
       })
+      expect(remote.get).toHaveBeenCalledTimes(4) // 2 times per hostname
       done()
     })
     bus.send(action.type, action)
@@ -111,7 +111,6 @@ describe('fetchGuideFromAllowlistEpic', () => {
       expect(
         dbMeta.getDefaultRemoteContentHostnameAllowlist
       ).toHaveBeenCalledTimes(1)
-      expect(remote.get).toHaveBeenCalledTimes(2)
       expect(remote.get).toHaveBeenCalledWith('http://configurl1.test/reco', {
         'cache-control': 'no-cache',
         pragma: 'no-cache'
@@ -120,6 +119,7 @@ describe('fetchGuideFromAllowlistEpic', () => {
         'cache-control': 'no-cache',
         pragma: 'no-cache'
       })
+      expect(remote.get).toHaveBeenCalledTimes(2)
       done()
     })
     bus.send(action.type, action)

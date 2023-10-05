@@ -18,13 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-import { NATIVE, KERBEROS } from 'services/bolt/boltHelpers'
+import { KERBEROS, NATIVE } from 'services/bolt/boltHelpers'
+import { upperFirst } from 'neo4j-arc/common'
 
 const notEmpty = (str: any) => str.length > 0
 const splitOnUnderscore = (str: any) => str.split('_')
 const toLower = (str: any) => str.toLowerCase()
-const upperFirst = (str: any) => str[0].toUpperCase() + str.substring(1)
 
 // XXX_YYY -> onXxxYyy
 export const eventToHandler = (type: any) => {

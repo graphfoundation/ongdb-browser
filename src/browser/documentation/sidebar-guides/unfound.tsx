@@ -17,14 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import React from 'react'
 
 import { BuiltInGuideSidebarSlide } from 'browser/modules/Carousel/Slide'
-import React from 'react'
-const title = 'Not found'
 
+const title = 'Not found'
+const identifier = 'unfound'
 const slides = [
   <BuiltInGuideSidebarSlide key="first">
-    <p>Apologies, but there doesn't seem to be any content about that.</p>
+    <p>{`Apologies, but there doesn't seem to be any content about that.`}</p>
     <h5>Try:</h5>
     <ul className="undecorated">
       <li>
@@ -43,4 +44,4 @@ const slides = [
   </BuiltInGuideSidebarSlide>
 ]
 
-export default { title, slides }
+export default { title, slides, identifier, isError: true }

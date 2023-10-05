@@ -17,22 +17,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import { authLog, handleRefreshingToken } from 'neo4j-client-sso'
 import Rx from 'rxjs/Rx'
+
 import bolt from 'services/bolt/bolt'
-import * as discovery from 'shared/modules/discovery/discoveryDuck'
-import { NATIVE, NO_AUTH } from 'services/bolt/boltHelpers'
-import { fetchMetaData } from 'shared/modules/dbMeta/dbMetaDuck'
-import { executeSystemCommand } from 'shared/modules/commands/commandsDuck'
 import {
-  getInitCmd,
-  getPlayImplicitInitCommands,
-  getConnectionTimeout
-} from 'shared/modules/settings/settingsDuck'
-import { inWebEnv, USER_CLEAR, APP_START } from 'shared/modules/app/appDuck'
+  TokenExpiredDriverError,
+  UnauthorizedDriverError
+} from 'services/bolt/boltConnectionErrors'
+import { NATIVE, NO_AUTH, SSO } from 'services/bolt/boltHelpers'
 import { GlobalState } from 'shared/globalState'
-import { isCloudHost } from 'shared/services/utils'
+import { APP_START, USER_CLEAR, inWebEnv } from 'shared/modules/app/appDuck'
+import { executeSystemCommand } from 'shared/modules/commands/commandsDuck'
+import * as discovery from 'shared/modules/discovery/discoveryDuck'
+import {
+  getConnectionTimeout,
+  getInitCmd,
+  getPlayImplicitInitCommands
+} from 'shared/modules/settings/settingsDuck'
 import { NEO4J_CLOUD_DOMAINS } from 'shared/modules/settings/settingsDuck'
+import { isCloudHost } from 'shared/services/utils'
+import { fetchMetaData } from '../dbMeta/dbMetaDuck'
 
 export const NAME = 'connections'
 export const SET_ACTIVE = 'connections/SET_ACTIVE'
@@ -72,14 +77,14 @@ export type ConnectionReduxState = {
   useDb: string | null
   lastUseDb: string | null
 }
-type ConnectionState =
+export type ConnectionState =
   | typeof DISCONNECTED_STATE
   | typeof CONNECTED_STATE
   | typeof PENDING_STATE
   | typeof CONNECTING_STATE
 
-export type AuthenticationMethod = typeof NATIVE | typeof NO_AUTH
-const onlyValidConnId = '$$discovery'
+export type AuthenticationMethod = typeof NATIVE | typeof NO_AUTH | typeof SSO
+const onlyValidConnId = discovery.CONNECTION_ID
 // we only use one connection, but can't update the redux state
 // to match that fact until we've merged proper single sign on
 // and sandbox can use that instead of their fork
@@ -94,9 +99,10 @@ export type Connection = {
   requestedUseDb?: string
   restApi?: string
   SSOError?: string
+  SSOProviders?: SSOProvider[]
 }
 
-const initialState: ConnectionReduxState = {
+export const initialState: ConnectionReduxState = {
   allConnectionIds: [],
   connectionsById: {},
   activeConnection: null,
@@ -154,7 +160,7 @@ export function getActiveConnectionData(state: GlobalState): Connection | null {
 
 export function getAuthEnabled(state: GlobalState): boolean {
   const data = getConnectionData(state, state[NAME].activeConnection)
-  return data?.authEnabled ?? false
+  return data?.authEnabled ?? true
 }
 
 export function getConnectedHost(state: GlobalState): string | null {
@@ -213,7 +219,11 @@ const mergeConnectionHelper = (
   return {
     ...state,
     connectionsById: {
-      $$discovery: { ...currentConnection, ...connection, id: onlyValidConnId }
+      [onlyValidConnId]: {
+        ...currentConnection,
+        ...connection,
+        id: onlyValidConnId
+      }
     },
     allConnectionIds: [onlyValidConnId]
   }
@@ -252,7 +262,7 @@ let memoryUsername = ''
 let memoryPassword = ''
 
 // Reducer
-export default function(state = initialState, action: any) {
+export default function (state = initialState, action: any) {
   switch (action.type) {
     case APP_START:
       return {
@@ -368,19 +378,16 @@ export const useDb = (db: any = null) => ({ type: USE_DB, useDb: db })
 export const resetUseDb = () => ({ type: USE_DB, useDb: null })
 
 // Epics
-export const useDbEpic = (action$: any) => {
-  return action$
+export const useDbEpic = (action$: any, store: any) =>
+  action$
     .ofType(USE_DB)
     .do((action: any) => {
       bolt.useDb(action.useDb)
-    })
-    .map((action: any) => {
-      if (!action.useDb) {
-        return { type: 'NOOP' }
+      if (action.useDb) {
+        store.dispatch(fetchMetaData())
       }
-      return fetchMetaData()
     })
-}
+    .ignoreElements()
 
 export const connectEpic = (action$: any, store: any) =>
   action$.ofType(CONNECT).mergeMap(async (action: any) => {
@@ -433,7 +440,6 @@ export const verifyConnectionCredentialsEpic = (action$: any) => {
       })
   })
 }
-
 export type DiscoverableData = {
   username?: string
   password?: string
@@ -513,6 +519,11 @@ export const startupConnectEpic = (action$: any, store: any) => {
       // merge with discovery data if we have any and try again
       if (discovered) {
         store.dispatch(discovery.updateDiscoveryConnection(discovered))
+        authLog(
+          `discovered these SSO providers: ${JSON.stringify(
+            discovered.SSOProviders
+          )}`
+        )
         const connUpdatedWithDiscovery = getConnection(
           store.getState(),
           discovery.CONNECTION_ID
@@ -549,12 +560,20 @@ export const startupConnectEpic = (action$: any, store: any) => {
         }
       }
 
+      const currentConn = getConnection(
+        store.getState(),
+        discovery.CONNECTION_ID
+      )
       // Otherwise fail autoconnect
       store.dispatch(setActiveConnection(null))
       store.dispatch(
         discovery.updateDiscoveryConnection({
           password: '',
-          SSOError: discovered?.SSOError
+          SSOError: discovered?.SSOError,
+          authenticationMethod:
+            (currentConn?.SSOProviders?.length ?? 0) > 1
+              ? SSO
+              : currentConn?.authenticationMethod
         })
       )
       return Promise.resolve({ type: STARTUP_CONNECTION_FAILED })
@@ -570,17 +589,15 @@ export const startupConnectionSuccessEpic = (action$: any, store: any) => {
         store.dispatch(executeSystemCommand(getInitCmd(store.getState())))
       }
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 }
 export const startupConnectionFailEpic = (action$: any, store: any) => {
   return action$
     .ofType(STARTUP_CONNECTION_FAILED)
     .do(() => {
-      if (getPlayImplicitInitCommands(store.getState())) {
-        store.dispatch(executeSystemCommand(`:server connect`))
-      }
+      store.dispatch(executeSystemCommand(`:server connect`))
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 }
 
 let lastActiveConnectionId: string | null = null
@@ -632,13 +649,40 @@ export const connectionLostEpic = (action$: any, store: any) =>
     .filter(() => inWebEnv(store.getState()) && isConnected(store.getState()))
     .throttleTime(5000)
     .do(() => store.dispatch(updateConnectionState(PENDING_STATE)))
-    .mergeMap(() => {
-      const connection = getActiveConnectionData(store.getState())
-      if (!connection) return Rx.Observable.of(1)
+    .mergeMap((action: any) => {
       return (
         Rx.Observable.of(1)
           .mergeMap(() => {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
+              let connection: Connection | null = null
+              if (action.error.code === TokenExpiredDriverError) {
+                authLog(
+                  'Detected access token expiry, starting refresh attempt'
+                )
+                const SSOProviders = getActiveConnectionData(
+                  store.getState()
+                )?.SSOProviders
+                if (SSOProviders) {
+                  try {
+                    const credentials = await handleRefreshingToken(
+                      SSOProviders
+                    )
+                    store.dispatch(
+                      discovery.updateDiscoveryConnection(credentials)
+                    )
+                    connection = getActiveConnectionData(store.getState())
+                    authLog(
+                      'Successfully refreshed token, attempting to reconnect'
+                    )
+                  } catch (e) {
+                    authLog(`Failed to refresh token: ${e}`)
+                  }
+                }
+              } else {
+                connection = getActiveConnectionData(store.getState())
+              }
+              if (!connection) return reject('No connection object found')
+
               bolt
                 .directConnect(
                   connection,
@@ -655,7 +699,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
                   bolt.closeConnection()
                   bolt
                     .openConnection(
-                      connection,
+                      connection!,
                       {
                         connectionTimeout: getConnectionTimeout(
                           store.getState()
@@ -671,7 +715,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
                 })
                 .catch(e => {
                   // Don't retry if auth failed
-                  if (e.code === 'Neo.ClientError.Security.Unauthorized') {
+                  if (e.code === UnauthorizedDriverError) {
                     resolve({ type: e.code })
                   } else {
                     setTimeout(
@@ -696,7 +740,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
               return
             }
             // If no connection because of auth failure, close and unset active connection
-            if (res.type === 'Neo.ClientError.Security.Unauthorized') {
+            if (res.type === UnauthorizedDriverError) {
               bolt.closeConnection()
               store.dispatch(setActiveConnection(null))
             }
@@ -704,7 +748,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
           .map(() => Rx.Observable.of(null))
       )
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 
 export const switchConnectionEpic = (action$: any, store: any) => {
   return action$
@@ -761,7 +805,7 @@ export const initialSwitchConnectionFailEpic = (action$: any, store: any) => {
         store.dispatch(executeSystemCommand(`:server switch fail`))
       }
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 }
 
 export const retainCredentialsSettingsEpic = (action$: any, store: any) => {
@@ -797,5 +841,5 @@ export const retainCredentialsSettingsEpic = (action$: any, store: any) => {
         return store.dispatch(updateConnection(connection))
       }
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 }

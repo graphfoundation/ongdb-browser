@@ -17,20 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React from 'react'
-import FrameTemplate from 'browser/modules/Frame/FrameTemplate'
+
+import { BaseFrameProps } from '../Stream'
 import {
+  StyledCode,
   StyledConnectionAside,
-  StyledConnectionBodyContainer,
   StyledConnectionBody,
-  StyledCode
+  StyledConnectionBodyContainer
 } from './styled'
 import { H3 } from 'browser-components/headers'
 import TextCommand from 'browser/modules/DecoratedText/TextCommand'
+import FrameBodyTemplate from 'browser/modules/Frame/FrameBodyTemplate'
 import { listDbsCommand } from 'shared/modules/commands/commandsDuck'
 
-const UseDbFrame = (props: any) => {
+const UseDbFrame = (props: BaseFrameProps) => {
   const { frame } = props
   const { useDb } = frame
   return (
@@ -63,9 +64,13 @@ const UseDbFrame = (props: any) => {
   )
 }
 
-const Frame = (props: any) => {
+const Frame = (props: BaseFrameProps): JSX.Element => {
   return (
-    <FrameTemplate header={props.frame} contents={<UseDbFrame {...props} />} />
+    <FrameBodyTemplate
+      isCollapsed={props.isCollapsed}
+      isFullscreen={props.isFullscreen}
+      contents={<UseDbFrame {...props} />}
+    />
   )
 }
 

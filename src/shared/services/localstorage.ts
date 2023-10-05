@@ -17,19 +17,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import { debounce } from 'lodash-es'
 import { Middleware } from 'redux'
-import { GlobalState } from 'shared/globalState'
+
 import {
   shouldRetainConnectionCredentials,
   shouldRetainEditorHistory
 } from '../modules/dbMeta/dbMetaDuck'
 import { initialState as settingsInitialState } from '../modules/settings/settingsDuck'
+import { GlobalState } from 'shared/globalState'
 
 export const keyPrefix = 'neo4j.'
 let storage = window.localStorage
 
-export type key =
+export type LocalStorageKey =
   | 'connections'
   | 'settings'
   | 'history'
@@ -39,9 +40,12 @@ export type key =
   | 'syncConsent'
   | 'udc'
   | 'experimentalFeatures'
-const keys: key[] = []
+  | 'guides'
+const keys: LocalStorageKey[] = []
 
-export function getItem(key: key): GlobalState[key] | undefined {
+export function getItem(
+  key: LocalStorageKey
+): GlobalState[LocalStorageKey] | undefined {
   try {
     const serializedVal = storage.getItem(keyPrefix + key)
     if (serializedVal === null) return undefined
@@ -73,46 +77,57 @@ export function getAll(): Partial<GlobalState> {
           playImplicitInitCommands: true
         }
       } else {
-        out[key] = current as any
+        Object.assign(out, { [key]: current })
       }
     }
   })
   return out
 }
 
+function storeReduxInLocalStorage(state: GlobalState) {
+  keys.forEach(key => {
+    if (key === 'connections' && !shouldRetainConnectionCredentials(state)) {
+      // if browser.retain_connection_credentials is not true, overwrite password value on all connections
+      setItem(key, {
+        ...state[key],
+        connectionsById: Object.assign(
+          {},
+          ...Object.entries(state[key].connectionsById).map(
+            ([id, connection]) => ({
+              [id]: {
+                ...(connection as Record<string, unknown>),
+                password: ''
+              }
+            })
+          )
+        )
+      })
+    } else if (key === 'history' && !shouldRetainEditorHistory(state)) {
+      setItem(key, [])
+    } else if (key === 'guides') {
+      setItem(key, { ...state[key], currentGuide: null })
+    } else {
+      setItem(key, state[key])
+    }
+  })
+}
+
+const debouncedStore = debounce(storeReduxInLocalStorage, 500, {
+  trailing: true,
+  maxWait: 1000
+})
+
 export function createReduxMiddleware(): Middleware {
   return store => next => action => {
     const result = next(action)
-    const state = (store.getState() as unknown) as GlobalState
+    const state = store.getState() as unknown as GlobalState
+    debouncedStore(state)
 
-    keys.forEach(key => {
-      if (key === 'connections' && !shouldRetainConnectionCredentials(state)) {
-        // if browser.retain_connection_credentials is not true, overwrite password value on all connections
-        setItem(key, {
-          ...state[key],
-          connectionsById: Object.assign(
-            {},
-            ...Object.entries(state[key].connectionsById).map(
-              ([id, connection]) => ({
-                [id]: {
-                  ...(connection as Record<string, unknown>),
-                  password: ''
-                }
-              })
-            )
-          )
-        })
-      } else if (key === 'history' && !shouldRetainEditorHistory(state)) {
-        setItem(key, [])
-      } else {
-        setItem(key, state[key])
-      }
-    })
     return result
   }
 }
 
-export function applyKeys(...newKeys: key[]): void {
+export function applyKeys(...newKeys: LocalStorageKey[]): void {
   keys.push(...newKeys)
 }
 export const setStorage = (s: Storage): void => {

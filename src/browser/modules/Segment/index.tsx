@@ -17,12 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { Component } from 'react'
 import { connect } from 'react-redux'
+
 import { canUseDOM } from 'services/utils'
 import { inDesktop } from 'shared/modules/app/appDuck'
-import { getUuid, updateData } from 'shared/modules/udc/udcDuck'
+import {
+  getAuraNtId,
+  getDesktopTrackingId,
+  updateUdcData
+} from 'shared/modules/udc/udcDuck'
 
 export interface MetricsProperties {
   [key: string]: string | number | Date | boolean
@@ -41,7 +45,8 @@ export class Segment extends Component<any> {
       setTrackCallback,
       inDesktop,
       updateData,
-      uuid,
+      auraNtId,
+      desktopTrackingId,
       children, // eslint-disable-line
       ...otherProps
     } = this.props
@@ -49,7 +54,12 @@ export class Segment extends Component<any> {
       return
     }
     if (!(window as any).analytics) {
-      ;(function(window: any, document: Document, segmentKey: string, a?: any) {
+      ;(function (
+        window: any,
+        document: Document,
+        segmentKey: string,
+        a?: any
+      ) {
         const analytics = (window.analytics = window.analytics || [])
         if (!analytics.initialize) {
           if (analytics.invoked) {
@@ -80,8 +90,8 @@ export class Segment extends Component<any> {
               'setAnonymousId',
               'addDestinationMiddleware'
             ]
-            analytics.factory = function(t: any) {
-              return function() {
+            analytics.factory = function (t: any) {
+              return function () {
                 const e = Array.prototype.slice.call(arguments)
                 e.unshift(t)
                 analytics.push(e)
@@ -92,7 +102,7 @@ export class Segment extends Component<any> {
               const e = analytics.methods[t]
               analytics[e] = analytics.factory(e)
             }
-            analytics.load = function(t: any, e: any) {
+            analytics.load = function (t: any, e: any) {
               const n = document.createElement('script')
               n.type = 'text/javascript'
               n.async = !0
@@ -114,7 +124,13 @@ export class Segment extends Component<any> {
                 desktop: inDesktop
               })
             }
-            window.analytics.identify(uuid)
+
+            if (auraNtId) {
+              window.analytics.identify(auraNtId)
+            } else if (inDesktop && desktopTrackingId) {
+              window.analytics.identify(desktopTrackingId)
+            }
+
             setTrackCallback(doTrack)
           }
         }
@@ -153,12 +169,13 @@ export class Segment extends Component<any> {
 
 const mapStateToProps = (state: any) => ({
   inDesktop: inDesktop(state),
-  uuid: getUuid(state)
+  auraNtId: getAuraNtId(state),
+  desktopTrackingId: getDesktopTrackingId(state)
 })
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateData: (data: any) => dispatch(updateData(data))
+    updateData: (data: any) => dispatch(updateUdcData(data))
   }
 }
 export default connect<any, any, any, any>(

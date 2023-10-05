@@ -17,14 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import d3 from 'd3'
+import { select as d3Select } from 'd3-selection'
+
 export const prepareForExport = (
-  svgElement: any,
+  svgElement: SVGElement,
   graphElement: any,
   type: any
 ) => {
   const dimensions = getSvgDimensions(graphElement)
-  let svg = d3.select(
+  let svg = d3Select(
     document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   )
 
@@ -43,7 +44,9 @@ export const prepareForExport = (
 
   svg.selectAll('.overlay, .ring').remove()
   svg.selectAll('.context-menu-item').remove()
-  svg.selectAll('text').attr('font-family', 'sans-serif')
+  svg
+    .selectAll('text')
+    .attr('font-family', 'Helvetica Neue, Helvetica, Arial, sans-serif')
 
   svg.attr('width', dimensions.width)
   svg.attr('height', dimensions.height)
@@ -67,32 +70,26 @@ const getSvgDimensions = (view: any) => {
   return dimensions
 }
 
-const appendGraphLayers = (svgElement: any, svg: any) => {
-  window.d3
-    .select(svgElement)
+const appendGraphLayers = (svgElement: SVGElement, svg: any) => {
+  d3Select(svgElement)
     .selectAll('g.layer')
-    .each(function() {
+    .each(function () {
       svg.node().appendChild(
-        window.d3
-          // @ts-expect-error ts-migrate(2683) FIXME: 'this' implicitly has type 'any' because it does n... Remove this comment to see the full error message
-          .select(this)
+        d3Select<SVGGElement, unknown>(this as SVGGElement)
           .node()
-          .cloneNode(true)
+          ?.cloneNode(true)
       )
     })
   return svg
 }
-const appendPlanLayers = (svgElement: any, svg: any) => {
-  window.d3
-    .select(svgElement)
+const appendPlanLayers = (svgElement: SVGElement, svg: any) => {
+  d3Select(svgElement)
     .selectAll('g.layer')
-    .each(function() {
+    .each(function () {
       svg.node().appendChild(
-        window.d3
-          // @ts-expect-error ts-migrate(2683) FIXME: 'this' implicitly has type 'any' because it does n... Remove this comment to see the full error message
-          .select(this)
+        d3Select<SVGGElement, unknown>(this as SVGGElement)
           .node()
-          .cloneNode(true)
+          ?.cloneNode(true)
       )
     })
   return svg

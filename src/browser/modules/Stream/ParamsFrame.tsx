@@ -19,16 +19,17 @@
  */
 import React from 'react'
 
-import { ExclamationTriangleIcon } from 'browser-components/icons/Icons'
+import { ExclamationTriangleIcon } from 'browser-components/icons/LegacyIcons'
+
+import FrameBodyTemplate from '../Frame/FrameBodyTemplate'
+import AutoExecButton from './auto-exec-button'
+import { ErrorText, PaddedDiv, StyledStatsBar, SuccessText } from './styled'
 import Ellipsis from 'browser-components/Ellipsis'
+import { applyGraphTypes } from 'services/bolt/boltMappings'
 import { stringModifier } from 'services/bolt/cypherTypesFormatting'
 import { stringifyMod } from 'services/utils'
-import FrameTemplate from '../Frame/FrameTemplate'
-import { PaddedDiv, ErrorText, SuccessText, StyledStatsBar } from './styled'
-import { applyGraphTypes } from 'services/bolt/boltMappings'
-import AutoExecButton from './auto-exec-button'
 
-const ParamsFrame = ({ frame }: any) => {
+const ParamsFrame = ({ frame, isCollapsed, isFullscreen }: any) => {
   const params = applyGraphTypes(frame.params)
   const contents = (
     <PaddedDiv>
@@ -39,11 +40,15 @@ const ParamsFrame = ({ frame }: any) => {
       )}
       <div style={{ marginTop: '20px' }}>
         See <AutoExecButton cmd="help param" /> for usage of the{' '}
-        <code>:param</code> command.
+        <code>:param</code> command (setting one parameter).
+      </div>
+      <div style={{ marginTop: '5px' }}>
+        See <AutoExecButton cmd="help params" /> for usage of the{' '}
+        <code>:params</code> command (setting multiple parameters).
       </div>
     </PaddedDiv>
   )
-  const statusbar =
+  const statusBar =
     typeof frame.success === 'undefined' ? null : (
       <StyledStatsBar>
         <Ellipsis>
@@ -59,7 +64,12 @@ const ParamsFrame = ({ frame }: any) => {
       </StyledStatsBar>
     )
   return (
-    <FrameTemplate header={frame} contents={contents} statusbar={statusbar} />
+    <FrameBodyTemplate
+      isCollapsed={isCollapsed}
+      isFullscreen={isFullscreen}
+      contents={contents}
+      statusBar={statusBar}
+    />
   )
 }
 export default ParamsFrame

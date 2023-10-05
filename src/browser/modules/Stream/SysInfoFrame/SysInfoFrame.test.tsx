@@ -17,45 +17,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react'
 import { render } from '@testing-library/react'
-import { SysInfoFrame } from './SysInfoFrame'
-import { Frame } from 'shared/modules/stream/streamDuck'
+import React from 'react'
+import { Provider } from 'react-redux'
+import { combineReducers, createStore } from 'redux'
 import { Bus } from 'suber'
+
+import { SysInfoFrame, SysInfoFrameProps } from './SysInfoFrame'
+import reducers from 'project-root/src/shared/rootReducer'
 import { Database } from 'shared/modules/dbMeta/dbMetaDuck'
+import { Frame } from 'shared/modules/frames/framesDuck'
 
 const baseProps = {
   databases: [],
-  bus: ({ self: () => undefined } as unknown) as Bus,
+  bus: { self: () => undefined } as unknown as Bus,
   frame: {} as Frame,
   hasMultiDbSupport: true,
   isConnected: true,
   isEnterprise: true,
-  useDb: 'neo4j'
+  useDb: 'neo4j',
+  isFullscreen: false,
+  isCollapsed: false,
+  isOnCluster: true,
+  namespacesEnabled: false,
+  metricsPrefix: 'neo4j'
 }
 
-jest.mock(
-  'browser/modules/Frame/FrameTemplate',
-  // eslint-disable-next-line
-  () => ({ contents, children }: any) => (
-    <div>
-      {contents}
-      {children}
-    </div>
+const mountWithStore = (props: Partial<SysInfoFrameProps>) => {
+  const reducer = combineReducers({ ...(reducers as any) })
+  const store: any = createStore(reducer)
+  return render(
+    <Provider store={store}>
+      <SysInfoFrame {...baseProps} {...props} />
+    </Provider>
   )
-)
+}
 
 describe('sysinfo component', () => {
-  test('should not render causal cluster table', () => {
+  test('should not render cluster table', () => {
     // Given
-    const props = { isACausalCluster: false, isConnected: true }
+    const props = { isOnCluster: false, isConnected: true }
 
     // When
     const { queryByTestId } = render(<SysInfoFrame {...baseProps} {...props} />)
 
     // Then
-    expect(queryByTestId('sysinfo-casual-cluster-members-title')).toBeNull()
+    expect(queryByTestId('sysinfo-cluster-members-title')).toBeNull()
   })
 
   test('should display error when there is no connection', () => {
@@ -63,7 +70,7 @@ describe('sysinfo component', () => {
     const props = { isConnected: false }
 
     // When
-    const { getByText } = render(<SysInfoFrame {...baseProps} {...props} />)
+    const { getByText } = mountWithStore(props)
 
     // Then
     expect(getByText(/No connection available/i)).not.toBeNull()

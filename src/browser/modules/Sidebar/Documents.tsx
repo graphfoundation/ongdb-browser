@@ -22,37 +22,29 @@ import { connect } from 'react-redux'
 import { Action } from 'redux'
 import semver from 'semver'
 
-import { cannyOptions, CANNY_FEATURE_REQUEST_URL } from 'browser-services/canny'
-import { GlobalState } from 'shared/globalState'
-import { getVersion } from 'shared/modules/dbMeta/dbMetaDuck'
-import {
-  TRACK_CANNY_CHANGELOG,
-  TRACK_CANNY_FEATURE_REQUEST
-} from 'shared/modules/sidebar/sidebarDuck'
-import DocumentItems from './DocumentItems'
-import { Drawer, DrawerHeader } from 'browser-components/drawer/drawer-styled'
 import {
   CannyFeedbackIcon,
   CannyNotificationsIcon
-} from 'browser-components/icons/Icons'
+} from 'browser-components/icons/LegacyIcons'
+
+import DocumentItems from './DocumentItems'
+import { formatDocVersion } from './docsUtils'
 import {
   StyledFeedbackButton,
   StyledFullSizeDrawerBody,
   StyledHeaderContainer
 } from './styled'
+import { Drawer, DrawerHeader } from 'browser-components/drawer/drawer-styled'
+import { CANNY_FEATURE_REQUEST_URL, cannyOptions } from 'browser-services/canny'
+import { GlobalState } from 'shared/globalState'
+import { getRawVersion } from 'shared/modules/dbMeta/dbMetaDuck'
+import {
+  TRACK_CANNY_CHANGELOG,
+  TRACK_CANNY_FEATURE_REQUEST
+} from 'shared/modules/sidebar/sidebarDuck'
 
-export const formatDocVersion = (v = ''): string => {
-  if (!semver.valid(v)) {
-    // All non-strings return
-    return 'current'
-  }
-  if (semver.prerelease(v)) {
-    return `${semver.major(v)}.${semver.minor(v)}-preview`
-  }
-  return `${semver.major(v)}.${semver.minor(v)}` || 'current'
-}
 export const shouldLinkToNewRefs = (v: string): boolean => {
-  if (!semver.valid(v)) return false
+  if (!semver.valid(v)) return true
   return semver.gte(v, '3.5.0-alpha01')
 }
 
@@ -64,7 +56,7 @@ const getReferences = (version: string, v: string) => {
     },
     {
       name: 'Neo4j Browser Manual',
-      url: 'https://neo4j.com/docs/browser-manual/current'
+      url: 'https://neo4j.com/docs/browser-manual/current/'
     },
     {
       name: 'Cypher Introduction',
@@ -89,10 +81,6 @@ const getReferences = (version: string, v: string) => {
     {
       name: 'Cypher Refcard',
       url: `https://neo4j.com/docs/cypher-refcard/${v}/`
-    },
-    {
-      name: 'Drivers Manual',
-      url: `https://neo4j.com/docs/driver-manual/current/`
     }
   ]
 
@@ -100,6 +88,34 @@ const getReferences = (version: string, v: string) => {
     ...(shouldLinkToNewRefs(version) ? newRefs : oldRefs),
     ...common
   ]
+
+  const graphAcademy = [
+    {
+      name: 'Neo4j Fundamentals',
+      url: `https://graphacademy.neo4j.com/courses/neo4j-fundamentals/`
+    },
+    {
+      name: 'Cypher Fundamentals',
+      url: `https://graphacademy.neo4j.com/courses/cypher-fundamentals/`
+    },
+    {
+      name: 'Graph Data Modeling Fundamentals',
+      url: `https://graphacademy.neo4j.com/courses/modeling-fundamentals/`
+    },
+    {
+      name: 'Importing CSV Data',
+      url: `https://graphacademy.neo4j.com/courses/importing-data/`
+    },
+    {
+      name: 'Courses for Developers',
+      url: `https://graphacademy.neo4j.com/category/developer/`
+    },
+    {
+      name: 'Courses for Data Scientists',
+      url: `https://graphacademy.neo4j.com/category/data-scientist/`
+    }
+  ]
+
   const other = [
     {
       name: 'Operations Manual',
@@ -118,7 +134,7 @@ const getReferences = (version: string, v: string) => {
       url: 'https://neo4j.com/developer/neo4j-browser/'
     }
   ]
-  return { docs, other }
+  return { docs, other, graphAcademy }
 }
 const useful = [
   { name: 'Help by topic', command: ':help' },
@@ -146,33 +162,40 @@ const Documents = (props: DocumentsProps) => {
     }
   }, [])
 
-  const { docs, other } = getReferences(props.version, props.urlVersion)
+  const { docs, other, graphAcademy } = getReferences(
+    props.version,
+    props.urlVersion
+  )
   return (
     <Drawer id="db-documents">
       <StyledHeaderContainer>
         <DrawerHeader>Help &amp; Learn</DrawerHeader>
         {window.Canny && (
-          <a data-canny-changelog onClick={props.trackCannyChangelog}>
+          <a
+            data-canny-changelog
+            data-testid="documentDrawerCanny"
+            onClick={props.trackCannyChangelog}
+          >
             <CannyNotificationsIcon />
           </a>
         )}
       </StyledHeaderContainer>
       <StyledFeedbackButton
-        color="twitter"
-        content={
-          <>
-            <CannyFeedbackIcon />
-            &nbsp; Send Feedback
-          </>
-        }
         onClick={() => {
           props.trackCannyFeatureRequest()
           window.open(CANNY_FEATURE_REQUEST_URL, '_blank')
         }}
-      ></StyledFeedbackButton>
+      >
+        <CannyFeedbackIcon />
+        &nbsp; Send Feedback
+      </StyledFeedbackButton>
       <StyledFullSizeDrawerBody>
         <DocumentItems header="Useful commands" items={useful} />
         <DocumentItems header="Documentation links" items={docs} />
+        <DocumentItems
+          header="Free training from GraphAcademy"
+          items={graphAcademy}
+        />
         <DocumentItems header="Other Resources" items={other} />
       </StyledFullSizeDrawerBody>
     </Drawer>
@@ -180,7 +203,7 @@ const Documents = (props: DocumentsProps) => {
 }
 
 const mapStateToProps = (state: GlobalState) => {
-  const version = getVersion(state)
+  const version = getRawVersion(state) || 'current'
   return {
     version,
     urlVersion: formatDocVersion(version)

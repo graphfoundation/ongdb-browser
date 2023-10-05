@@ -17,14 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react'
 import { render } from '@testing-library/react'
 import neo4j from 'neo4j-driver'
+import React from 'react'
 
 import {
-  CodeViewComponent as CodeView,
-  CodeStatusbarComponent as CodeStatusbar
+  CodeStatusbarComponent as CodeStatusbar,
+  CodeViewComponent as CodeView
 } from './CodeView'
 
 describe('CodeViews', () => {
@@ -67,7 +66,7 @@ describe('CodeViews', () => {
   describe('CodeStatusbar', () => {
     test('displays no statusBarMessage', () => {
       // Given
-      const props = { result: {}, maxRows: 0 }
+      const props = { result: null, maxRows: 0, maxFieldItems: 0 }
 
       // When
       const { container } = render(<CodeStatusbar {...props} />)
@@ -84,10 +83,11 @@ describe('CodeViews', () => {
           summary: {
             resultAvailableAfter: neo4j.int(5),
             resultConsumedAfter: neo4j.int(5)
-          },
-          maxRows: 100,
-          records: [{ res: 'xx3' }]
-        }
+          } as any,
+          records: [{ res: 'xx3' }] as any
+        },
+        maxRows: 100,
+        maxFieldItems: 0
       }
 
       // When

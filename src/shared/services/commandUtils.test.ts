@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import * as utils from './commandUtils'
 
 describe('commandutils', () => {
@@ -75,6 +74,21 @@ RETURN 2
         str: 'test:"hello :space"',
         delimiter: ':',
         expect: ['test', '"hello :space"']
+      },
+      {
+        str: 'test:"hello :space"',
+        delimiter: /\s/,
+        expect: ['test:"hello', ':space"']
+      },
+      {
+        str: ' :config test:"hello :space"',
+        delimiter: /\s/,
+        expect: ['', ':config test:"hello :space"']
+      },
+      {
+        str: ':config',
+        delimiter: /\s/,
+        expect: [':config', '']
       }
     ]
     testStrs.forEach(obj => {
@@ -95,6 +109,26 @@ RETURN 2
         str: 'test:"hello :space"',
         delimiter: ':',
         expect: ['test:"hello ', 'space"']
+      },
+      {
+        str: ' test:hello',
+        delimiter: ' ',
+        expect: ['', 'test:hello']
+      },
+      {
+        str: 'test:hello ',
+        delimiter: ' ',
+        expect: ['test:hello', '']
+      },
+      {
+        str: 'test:hello',
+        delimiter: ' ',
+        expect: ['', 'test:hello']
+      },
+      {
+        str: 'test:"hello :space"',
+        delimiter: /\s/,
+        expect: ['test:"hello', ':space"']
       }
     ]
     testStrs.forEach(obj => {
@@ -253,31 +287,6 @@ RETURN n`
       statements.forEach(s => {
         expect(utils.extractStatementsFromString(s.stmt)).toEqual(s.expect)
       })
-    })
-  })
-
-  describe('tryGetRemoteInitialSlideFromUrl', () => {
-    it('extracts initial slide hashbangs from a string', () => {
-      expect(utils.tryGetRemoteInitialSlideFromUrl('foo#slide-1')).toEqual(1)
-      expect(
-        utils.tryGetRemoteInitialSlideFromUrl('http://foo.com#slide-2')
-      ).toEqual(2)
-      expect(
-        utils.tryGetRemoteInitialSlideFromUrl(
-          'http://www.google.com/yarr/#slide-21'
-        )
-      ).toEqual(21)
-    })
-    it('returns 0 when no valid hashbang found', () => {
-      expect(utils.tryGetRemoteInitialSlideFromUrl('foo')).toEqual(0)
-      expect(
-        utils.tryGetRemoteInitialSlideFromUrl('http://foo.com#sloide-2')
-      ).toEqual(0)
-      expect(
-        utils.tryGetRemoteInitialSlideFromUrl(
-          'http://www.google.com/yarr/#slide-fooo'
-        )
-      ).toEqual(0)
     })
   })
 })

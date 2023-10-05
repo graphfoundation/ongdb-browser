@@ -52,7 +52,7 @@ const commandDelays: Record<string, number> = {
 const getCommandDelay = (command: string) => commandDelays[command] || 300
 
 describe('Commands', () => {
-  before(function() {
+  before(function () {
     cy.visit(Cypress.config('url'))
     cy.get('input[data-testid="boltaddress"]', { timeout: 40000 })
   })
@@ -60,17 +60,15 @@ describe('Commands', () => {
     cy.executeCommand(':help help')
     cy.get('[data-testid="frameCommand"]').contains(':help help')
     // lose focus
-    cy.get('[data-testid=drawerFavorites]').click()
-    cy.get('[data-testid=drawerFavorites]').click()
+    cy.get('[data-testid=navigationFavorites]').click()
+    cy.get('[data-testid=navigationFavorites]').click()
     cy.get('#monaco-main-editor > .monaco-editor').should(
       'not.have.class',
       'focused'
     )
 
     // we now have 2 cards, and some hidden padding
-    cy.get('[data-testid="stream"]')
-      .children()
-      .should('have.length', 3)
+    cy.get('[data-testid="stream"]').children().should('have.length', 3)
 
     // focus editor
     cy.get('body').type('/')
@@ -83,9 +81,7 @@ describe('Commands', () => {
     // we can run command with ctrl enter
     cy.get('[data-testid="activeEditor"] textarea').type('{ctrl}{enter}')
     // editor is now cleared
-    cy.get('[data-testid="stream"]')
-      .children()
-      .should('have.length', 1)
+    cy.get('[data-testid="stream"]').children().should('have.length', 1)
   })
   it('can run all simple commands not connected without blowing up', () => {
     commands.forEach(cmd => {
@@ -110,9 +106,7 @@ describe('Commands', () => {
     const password = Cypress.config('password')
     cy.connect('neo4j', password)
     cy.executeCommand('return 1')
-    cy.get('[data-testid="frameCommand"]')
-      .contains('return 1')
-      .click()
+    cy.get('[data-testid="frameCommand"]').contains('return 1').click()
     commands.forEach(cmd => {
       cy.typeInFrame(`${cmd}{enter}`)
       cy.wait(getCommandDelay(cmd))
@@ -122,9 +116,7 @@ describe('Commands', () => {
   it('can ctrl+click to re-populate the main editor', () => {
     cy.executeCommand(':clear')
     cy.executeCommand('return 1')
-    cy.get('[data-testid="frameCommand"]')
-      .contains('return 1')
-      .click()
+    cy.get('[data-testid="frameCommand"]').contains('return 1').click()
 
     cy.typeInFrame('Vermilion')
 

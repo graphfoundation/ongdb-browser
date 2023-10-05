@@ -17,11 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/* global btoa */
 
-import parseUrl from 'url-parse'
-import { DESKTOP, CLOUD, WEB } from 'shared/modules/app/appDuck'
-import { trimStart, trimEnd } from 'lodash-es'
+/* global btoa */
+import { isNumber, trimEnd, trimStart } from 'lodash-es'
+import { URL } from 'whatwg-url' // Firefox & Chrome builtin URL doesn't handle bolt:// protocol properly https://bugs.chromium.org/p/chromium/issues/detail?id=869291
+
+import { CLOUD, DESKTOP, WEB } from 'shared/modules/app/appDuck'
 
 /**
  * The work objects expected shape:
@@ -47,6 +48,9 @@ export const serialExecution = (...args: any[]) => {
   })
   return out
 }
+
+export const AUTH_STORAGE_PREFIX = '/browser-auth#'
+export const AUTH_STORAGE_CONNECT_HOST = `${AUTH_STORAGE_PREFIX}connect_host`
 
 const linkPromises = (next: any) => {
   if (!next || !next.workFn) {
@@ -89,17 +93,6 @@ const linkPromises = (next: any) => {
   )
 }
 
-export const deepEquals = (x: any, y: any): any => {
-  if (x && y && typeof x === 'object' && typeof y === 'object') {
-    if (Object.keys(x).length !== Object.keys(y).length) return false
-    return Object.keys(x).every(key => deepEquals(x[key], y[key]))
-  }
-  if (typeof x === 'function' && typeof y === 'function') {
-    return x.toString() === y.toString()
-  }
-  return x === y
-}
-
 export const shallowEquals = (a: any, b: any) => {
   for (const key in a) if (a[key] !== b[key]) return false
   for (const key in b) if (!(key in a)) return false
@@ -139,69 +132,64 @@ export const firstSuccessPromise = (list: any, fn: any) => {
   }, Promise.reject(new Error()))
 }
 
-export const hostIsAllowed = (uri: any, allowlist: any = null) => {
-  if (allowlist === '*') return true
-  const urlInfo = getUrlInfo(uri)
+export const hostIsAllowed = (url: string, allowlistStr?: string): boolean => {
+  if (allowlistStr === '*') return true
+  const urlInfo = parseURLWithDefaultProtocol(url)
+  if (!urlInfo) return false
+
   const hostname = urlInfo.hostname
   const hostnamePlusProtocol = `${urlInfo.protocol}//${hostname}`
-  const allowlistedHosts =
-    allowlist && allowlist !== ''
-      ? extractAllowlistFromConfigString(allowlist)
-      : []
+  const allowlistHostsList = allowlistStr
+    ? extractAllowlistFromConfigString(allowlistStr)
+    : []
   return (
-    allowlistedHosts.indexOf(hostname) > -1 ||
-    allowlistedHosts.indexOf(hostnamePlusProtocol) > -1
+    allowlistHostsList.indexOf(hostname) > -1 ||
+    allowlistHostsList.indexOf(hostnamePlusProtocol) > -1
   )
 }
 
-export const extractAllowlistFromConfigString = (str: any) =>
-  str.split(',').map((s: any) => s.trim().replace(/\/$/, ''))
+export const extractAllowlistFromConfigString = (str: string): string[] =>
+  str.split(',').map((s: string) => s.trim().replace(/\/$/, ''))
 
-export const addProtocolsToUrlList = (list: any) => {
-  return list.reduce((all: any, uri: any) => {
+export const addProtocolsToUrlList = (urlList: (string | null)[]): string[] =>
+  urlList.reduce((all: string[], uri: string | null) => {
     if (!uri || uri === '*') return all
-    const urlInfo = getUrlInfo(uri)
-    if (urlInfo.protocol) return all.concat(uri)
-    return all.concat([`https://${uri}`, `http://${uri}`])
+
+    if (isValidURL(uri)) {
+      return all.concat(uri)
+    } else {
+      const withProtocols = [`https://${uri}`, `http://${uri}`]
+      return all.concat(withProtocols.filter(isValidURL))
+    }
   }, [])
-}
 
 export const resolveAllowlistWildcard = (
-  list: any,
+  allowlist: (string | null)[],
   resolveTo: string[] = []
-) => {
-  return list.reduce((all: any, entry: any) => {
+): (string | null)[] => {
+  return allowlist.reduce((all: (string | null)[], entry: string | null) => {
     return all.concat(entry && entry.trim() === '*' ? resolveTo : entry)
   }, [])
 }
 
-export const getUrlInfo = (url: any) => {
-  const protocolMissing = url.match(/^(.+:\/\/)?/)[1] === undefined
+function isValidURL(url: string): boolean {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+export const parseURLWithDefaultProtocol = (url: string): null | URL => {
+  const matcher = url.match(/^(.+:\/\/)?/)
+  const protocolMissing = matcher === null || matcher[1] === undefined
   // prepend a default protocol, if none was found
   const urlWithProtocol = protocolMissing ? `http://${url}` : url
 
-  const {
-    protocol,
-    username,
-    password,
-    host,
-    hostname,
-    port,
-    pathname,
-    query: search,
-    hash
-  } = parseUrl(urlWithProtocol, {})
-
-  return {
-    protocol: protocolMissing ? '' : protocol,
-    username,
-    password,
-    host,
-    hostname,
-    port,
-    pathname,
-    search,
-    hash
+  try {
+    return new URL(urlWithProtocol)
+  } catch {
+    return null
   }
 }
 
@@ -240,7 +228,7 @@ export const toHumanReadableBytes = (input: any) => {
   return `${number.toFixed(2)} PiB`
 }
 
-export const getBrowserName = function() {
+export const getBrowserName = function () {
   if (!!(window as any).opera || navigator.userAgent.indexOf(' OPR/') >= 0) {
     return 'Opera'
   }
@@ -257,13 +245,14 @@ export const getBrowserName = function() {
   if ((document as any).documentMode) {
     return 'Internet Explorer'
   }
+  //@ts-ignore
   if (window.StyleMedia) {
     return 'Edge'
   }
   return 'Unknown'
 }
 
-export const canUseDOM = () =>
+export const canUseDOM = (): boolean =>
   !!(
     typeof window !== 'undefined' &&
     window.document &&
@@ -287,12 +276,20 @@ export const parseTimeMillis = (timeWithOrWithoutUnit: any) => {
   const unit = readUnit === null ? 's' : readUnit[0] // Assume seconds
 
   switch (unit) {
+    case 'ns':
+      return Math.round(value / (1000 * 1000))
+    case 'μs':
+      return Math.round(value / 1000)
     case 'ms':
       return value
     case 's':
       return value * 1000
     case 'm':
       return value * 60 * 1000
+    case 'h':
+      return value * 60 * 60 * 1000
+    case 'd':
+      return value * 24 * 60 * 60 * 1000
     default:
       return 0
   }
@@ -309,10 +306,10 @@ export const arrayToObject = (array: any) =>
 export const stringifyMod = (
   value: any,
   modFn: any = null,
-  pretty: any = false,
+  pretty: boolean | number = false,
   skipOpeningIndentation = false
-): any => {
-  const prettyLevel = !pretty ? false : pretty === true ? 1 : parseInt(pretty)
+): string => {
+  const prettyLevel = isNumber(pretty) ? pretty : +pretty
   const nextPrettyLevel = prettyLevel ? prettyLevel + 1 : false
   const newLine = prettyLevel ? '\n' : ''
   const indentation =
@@ -326,7 +323,7 @@ export const stringifyMod = (
   const toString = Object.prototype.toString
   const isArray =
     Array.isArray ||
-    function(a) {
+    function (a) {
       return toString.call(a) === '[object Array]'
     }
   const escMap: any = {
@@ -338,7 +335,7 @@ export const stringifyMod = (
     '\r': '\r',
     '\t': '\t'
   }
-  const escFunc = function(m: any) {
+  const escFunc = function (m: any) {
     return (
       escMap[m] || `\\u${(m.charCodeAt(0) + 0x10000).toString(16).substr(1)}`
     )
@@ -451,8 +448,6 @@ export const optionalToString = (v: any) =>
     ? v.toString()
     : v
 
-export const toKeyString = (str: any) => btoa(encodeURIComponent(str))
-
 export function flushPromises() {
   return new Promise(resolve => setImmediate(resolve))
 }
@@ -462,15 +457,12 @@ export async function sleep(ms: any) {
 }
 
 export function isCloudHost(host: string, cloudDomains: string[]): boolean {
-  return isCloudParsedUrl(parseUrl(host), cloudDomains)
-}
-
-function isCloudParsedUrl(
-  parsedUrl: parseUrl,
-  cloudDomains: string[]
-): boolean {
-  const { hostname } = parsedUrl
-  return cloudDomains.some(cloudDomain => hostname.endsWith(cloudDomain))
+  try {
+    const { hostname } = new URL(host)
+    return cloudDomains.some(cloudDomain => hostname.endsWith(cloudDomain))
+  } catch {
+    return false
+  }
 }
 
 export function detectRuntimeEnv(win?: any, cloudDomains: string[] = []) {
@@ -478,17 +470,18 @@ export function detectRuntimeEnv(win?: any, cloudDomains: string[] = []) {
     return DESKTOP
   }
 
-  const parsedUrl =
-    win && win.location && win.location.href
-      ? parseUrl(win.location.href, true)
-      : parseUrl('')
-  if (
-    parsedUrl.query.neo4jDesktopApiUrl &&
-    parsedUrl.query.neo4jDesktopGraphAppClientId
-  ) {
-    return DESKTOP
-  }
-  if (isCloudParsedUrl(parsedUrl, cloudDomains)) {
+  try {
+    const { searchParams } = new URL(win?.location?.href || '')
+
+    if (
+      searchParams.get('neo4jDesktopApiUrl') &&
+      searchParams.get('neo4jDesktopGraphAppClientId')
+    ) {
+      return DESKTOP
+    }
+  } catch {}
+
+  if (isCloudHost(win?.location?.href ?? '', cloudDomains)) {
     return CLOUD
   }
 

@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import styled from 'styled-components'
 
 export const H3 = styled.h3`
@@ -25,11 +24,4 @@ export const H3 = styled.h3`
   font-size: 24px;
   font-family: ${props => props.theme.primaryFontFamily};
   color: ${props => props.theme.headerText};
-`
-export const H4 = styled.h3`
-  font-weight: 500;
-  font-size: 18px;
-  font-family: ${props => props.theme.primaryFontFamily};
-  color: ${props => props.theme.headerText};
-  margin-bottom: 32px;
 `

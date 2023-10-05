@@ -17,94 +17,91 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import * as Sentry from '@sentry/react'
-import bolt from 'services/bolt/bolt'
-import * as frames from 'shared/modules/stream/streamDuck'
-import { getHostedUrl } from 'shared/modules/app/appDuck'
-import { getHistory, clearHistory } from 'shared/modules/history/historyDuck'
+import { AUTH_STORAGE_LOGS } from 'neo4j-client-sso'
+import { Action, Dispatch } from 'redux'
 import { v4 } from 'uuid'
+
+import { getCommandAndParam } from './commandUtils'
+import { tryGetRemoteInitialSlideFromUrl } from './guideResolverHelper'
+import { unescapeCypherIdentifier } from './utils'
+import { getLatestFromFrameStack } from 'browser/modules/Stream/stream.utils'
+import bolt from 'services/bolt/bolt'
 import {
-  update as updateQueryResult,
-  REQUEST_STATUS_SUCCESS,
-  REQUEST_STATUS_ERROR,
-  getRequest,
-  REQUEST_STATUS_PENDING
-} from 'shared/modules/requests/requestsDuck'
-import {
-  getActiveConnectionData,
-  useDb,
-  getUseDb
-} from 'shared/modules/connections/connectionsDuck'
-import { open } from 'shared/modules/sidebar/sidebarDuck'
-import { startGuide } from 'shared/modules/guides/guidesDuck'
-import { getParams } from 'shared/modules/params/paramsDuck'
-import { getUserCapabilities } from 'shared/modules/features/featuresDuck'
-import {
-  updateGraphStyleData,
-  getGraphStyleData
-} from 'shared/modules/grass/grassDuck'
-import {
-  getRemoteContentHostnameAllowlist,
-  getDatabases,
-  fetchMetaData,
-  getAvailableSettings,
-  SYSTEM_DB
-} from 'shared/modules/dbMeta/dbMetaDuck'
-import { canSendTxMetadata } from 'shared/modules/features/versionedFeatures'
-import { fetchRemoteGuide } from 'shared/modules/commands/helpers/play'
+  CouldNotFetchRemoteGuideError,
+  DatabaseNotFoundError,
+  DatabaseUnavailableError,
+  FetchUrlError,
+  InvalidGrassError,
+  UnknownCommandError,
+  UnsupportedError
+} from 'services/exceptions'
 import remote from 'services/remote'
-import { isLocalRequest, authHeaderFromCredentials } from 'services/remoteUtils'
-import { handleServerCommand } from 'shared/modules/commands/helpers/server'
-import { handleCypherCommand } from 'shared/modules/commands/helpers/cypher'
+import { authHeaderFromCredentials, isLocalRequest } from 'services/remoteUtils'
+import { getHostedUrl } from 'shared/modules/app/appDuck'
 import {
+  ExecuteSingleCommandAction,
+  SINGLE_COMMAND_QUEUED,
+  autoCommitTxCommand,
+  listDbsCommand,
   showErrorMessage,
   successfulCypher,
   unsuccessfulCypher,
-  SINGLE_COMMAND_QUEUED,
-  listDbsCommand,
-  useDbCommand,
-  autoCommitTxCommand
+  useDbCommand
 } from 'shared/modules/commands/commandsDuck'
-import {
-  getParamName,
-  handleParamsCommand
-} from 'shared/modules/commands/helpers/params'
 import {
   handleGetConfigCommand,
   handleUpdateConfigCommand
 } from 'shared/modules/commands/helpers/config'
-import {
-  UnknownCommandError,
-  CouldNotFetchRemoteGuideError,
-  FetchURLError,
-  InvalidGrassError,
-  UnsupportedError,
-  DatabaseUnavailableError,
-  DatabaseNotFoundError
-} from 'services/exceptions'
-import {
-  parseHttpVerbCommand,
-  isValidURL
-} from 'shared/modules/commands/helpers/http'
+import { handleCypherCommand } from 'shared/modules/commands/helpers/cypher'
 import { fetchRemoteGrass } from 'shared/modules/commands/helpers/grass'
-import { parseGrass, objToCss } from 'shared/services/grassUtils'
 import {
-  shouldUseCypherThread,
-  getSettings
-} from 'shared/modules/settings/settingsDuck'
+  isValidUrl,
+  parseHttpVerbCommand
+} from 'shared/modules/commands/helpers/http'
 import {
-  getUserDirectTxMetadata,
-  getBackgroundTxMetadata
+  getParamName,
+  handleParamsCommand
+} from 'shared/modules/commands/helpers/params'
+import { fetchRemoteGuideAsync } from 'shared/modules/commands/helpers/playAndGuides'
+import { handleServerCommand } from 'shared/modules/commands/helpers/server'
+import {
+  getActiveConnectionData,
+  getUseDb,
+  useDb
+} from 'shared/modules/connections/connectionsDuck'
+import {
+  fetchMetaData,
+  findDatabaseByNameOrAlias,
+  getAvailableSettings,
+  getDatabases,
+  getRemoteContentHostnameAllowlist,
+  SYSTEM_DB
+} from 'shared/modules/dbMeta/dbMetaDuck'
+import { getUserCapabilities } from 'shared/modules/features/featuresDuck'
+import * as frames from 'shared/modules/frames/framesDuck'
+import {
+  getGraphStyleData,
+  updateGraphStyleData
+} from 'shared/modules/grass/grassDuck'
+import { fetchRemoteGuide, resetGuide } from 'shared/modules/guides/guidesDuck'
+import { clearHistory, getHistory } from 'shared/modules/history/historyDuck'
+import { getParams } from 'shared/modules/params/paramsDuck'
+import {
+  REQUEST_STATUS_ERROR,
+  REQUEST_STATUS_PENDING,
+  REQUEST_STATUS_SUCCESS,
+  getRequest,
+  update as updateQueryResult
+} from 'shared/modules/requests/requestsDuck'
+import { getSettings } from 'shared/modules/settings/settingsDuck'
+import { open } from 'shared/modules/sidebar/sidebarDuck'
+import {
+  backgroundTxMetadata,
+  userDirectTxMetadata
 } from 'shared/services/bolt/txMetadata'
-import {
-  getCommandAndParam,
-  tryGetRemoteInitialSlideFromUrl
-} from './commandUtils'
-import { unescapeCypherIdentifier } from './utils'
-import { getLatestFromFrameStack } from 'browser/modules/Stream/stream.utils'
-import { resolveGuide } from './guideResolverHelper'
-import { AUTH_STORAGE_LOGS } from 'shared/modules/auth/constants'
+import { objToCss, parseGrass } from 'shared/services/grassUtils'
+import { URL } from 'whatwg-url'
 
 const PLAY_FRAME_TYPES = ['play', 'play-remote']
 
@@ -217,24 +214,20 @@ const availableCommands = [
 
         const normalizedName = dbName.toLowerCase()
         const cleanDbName = unescapeCypherIdentifier(normalizedName)
+        const dbMeta = findDatabaseByNameOrAlias(store.getState(), cleanDbName)
 
-        const dbMeta = getDatabases(store.getState()).find(
-          (db: any) => db.name.toLowerCase() === cleanDbName
-        )
-
-        // Do we have a db with that name?
         if (!dbMeta) {
           throw DatabaseNotFoundError({ dbName })
         }
         if (dbMeta.status !== 'online') {
-          throw DatabaseUnavailableError({ dbName, dbMeta })
+          throw DatabaseUnavailableError({ dbName: dbMeta.name, dbMeta })
         }
-        put(useDb(cleanDbName))
+        put(useDb(dbMeta.name))
         put(
           frames.add({
             ...action,
             type: 'use-db',
-            useDb: cleanDbName
+            useDb: dbMeta.name
           })
         )
         if (action.requestId) {
@@ -336,15 +329,12 @@ const availableCommands = [
   {
     name: 'client-debug',
     match: (cmd: any) => /^debug$/.test(cmd),
-    exec: function(action: any, put: any, store: any) {
+    exec: function (action: any, put: any, store: any) {
       const out = {
         userCapabilities: getUserCapabilities(store.getState()),
         serverConfig: getAvailableSettings(store.getState()),
         browserSettings: getSettings(store.getState()),
-        ssoLogs: sessionStorage
-          .getItem(AUTH_STORAGE_LOGS)
-          ?.trim()
-          .split('\n')
+        ssoLogs: sessionStorage.getItem(AUTH_STORAGE_LOGS)?.trim().split('\n')
       }
       put(
         frames.add({
@@ -422,14 +412,9 @@ const availableCommands = [
         action,
         put,
         getParams(state),
-        shouldUseCypherThread(state),
         action.type === SINGLE_COMMAND_QUEUED
-          ? getUserDirectTxMetadata({
-              hasServerSupport: canSendTxMetadata(store.getState())
-            })
-          : getBackgroundTxMetadata({
-              hasServerSupport: canSendTxMetadata(store.getState())
-            }),
+          ? userDirectTxMetadata
+          : backgroundTxMetadata,
         isAutocommit
       )
       put(
@@ -501,27 +486,16 @@ const availableCommands = [
   },
   {
     name: 'guide',
-    match: (cmd: any) => /^guide(\s|$)/.test(cmd),
-    exec(action: any, put: any, store: any) {
-      const guideName = action.cmd.substr(':guide'.length).trim()
-      if (!guideName) {
-        put(startGuide())
-        put(open('guides'))
+    match: (cmd: string) => /^guide(\s|$)/.test(cmd),
+    exec(action: ExecuteSingleCommandAction, dispatch: Dispatch<Action>) {
+      const guideIdentifier = action.cmd.substr(':guide'.length).trim()
+      if (!guideIdentifier) {
+        dispatch(resetGuide())
+        dispatch(open('guides'))
         return
       }
 
-      const initialSlide = tryGetRemoteInitialSlideFromUrl(action.cmd)
-      resolveGuide(guideName, store.getState()).then(({ slides, title }) => {
-        put(
-          startGuide({
-            currentSlide: initialSlide,
-            title,
-            slides
-          })
-        )
-
-        put(open('guides'))
-      })
+      dispatch(fetchRemoteGuide(guideIdentifier))
     }
   },
   {
@@ -554,7 +528,7 @@ const availableCommands = [
         ? urlObject.pathname.split('.').pop()
         : 'html'
       const allowlist = getRemoteContentHostnameAllowlist(store.getState())
-      fetchRemoteGuide(url, allowlist)
+      fetchRemoteGuideAsync(url, allowlist)
         .then(r => {
           put(
             frames.add({
@@ -590,6 +564,29 @@ const availableCommands = [
     name: 'play',
     match: (cmd: any) => /^play(\s|$)/.test(cmd),
     exec(action: any, put: any, store: any) {
+      /* Un pause when tests are fixed
+      // Built in play guides where migrated to
+      // use the guide command instead
+      const legacyBuiltInGuides: GuideChapter[] = [
+        'concepts',
+        'cypher',
+        'intro',
+        'movies',
+        'movieGraph',
+        'movie-graph',
+        'northwind',
+        'northwindGraph',
+        'northwind-graph'
+      ]
+
+      const guideName = (action.cmd.split(' ')[1] || '').trim()
+
+      if (legacyBuiltInGuides.includes(guideName)) {
+        put(executeCommand(`:guide ${guideName}`))
+        return
+      }
+      */
+
       let id
       // We have a frame that generated this command
       if (action.id) {
@@ -722,7 +719,7 @@ const availableCommands = [
             }
           )
           const url =
-            !isValidURL(r.url) && connectionData.restApi
+            !isValidUrl(r.url) && connectionData.restApi
               ? `${connectionData.restApi}${r.url}`
               : r.url
           let authHeaders = {}
@@ -750,7 +747,7 @@ const availableCommands = [
               )
             })
             .catch(e => {
-              const error = FetchURLError({ error: e.message })
+              const error = FetchUrlError({ error: e.message })
               put(
                 frames.add({
                   useDb: getUseDb(store.getState()),
@@ -777,10 +774,7 @@ const availableCommands = [
     name: 'style',
     match: (cmd: any) => /^style(\s|$)/.test(cmd),
     exec(action: any, put: any, store: any) {
-      const param = action.cmd
-        .trim()
-        .split(':style')[1]
-        .trim()
+      const param = action.cmd.trim().split(':style')[1].trim()
 
       function showGrass() {
         const grassData = getGraphStyleData(store.getState())
@@ -821,7 +815,7 @@ const availableCommands = [
       }
 
       if (
-        isValidURL(param) &&
+        isValidUrl(param) &&
         param.includes('.') /* isValid url considers words like rest an url*/
       ) {
         const url = param.startsWith('http') ? param : `http://${param}`
@@ -834,7 +828,7 @@ const availableCommands = [
               updateAndShowGrass(parsedGrass)
             } else {
               putGrassErrorFrame(
-                `Could not parse grass file containing: 
+                `Could not parse grass file containing:
 ${response}`
               )
             }

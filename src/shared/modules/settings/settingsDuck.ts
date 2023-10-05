@@ -17,8 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import { get } from 'lodash-es'
-
 import { GlobalState } from 'shared/globalState'
 import { APP_START, USER_CLEAR } from 'shared/modules/app/appDuck'
 
@@ -27,6 +25,9 @@ export const UPDATE = 'settings/UPDATE'
 export const REPLACE = 'settings/REPLACE'
 export const DISABLE_IMPLICIT_INIT_COMMANDS =
   'settings/DISABLE_IMPLICIT_INIT_COMMANDS'
+export const TRACK_OPT_OUT_USER_STATS = 'settings/TRACK_OPT_OUT_USER_STATS'
+export const TRACK_OPT_OUT_CRASH_REPORTS =
+  'settings/TRACK_OPT_OUT_CRASH_REPORTS'
 
 export const AUTO_THEME = 'auto'
 export const LIGHT_THEME = 'normal'
@@ -35,7 +36,10 @@ export const DARK_THEME = 'dark'
 
 export const NEO4J_CLOUD_DOMAINS = ['neo4j.io']
 
-export const getSettings = (state: any) => state[NAME]
+const toNumber = (num: number | string): number =>
+  typeof num === 'number' ? num : parseInt(num, 10)
+
+export const getSettings = (state: any): SettingsState => state[NAME]
 export const getMaxHistory = (state: any) =>
   state[NAME].maxHistory || initialState.maxHistory
 export const getInitCmd = (state: any) => (state[NAME].initCmd || '').trim()
@@ -49,22 +53,22 @@ export const getBrowserSyncConfig = (
   host = getSettings(state).browserSyncDebugServer
 ) => browserSyncConfig(host || undefined)
 export const getMaxNeighbours = (state: GlobalState): number =>
-  state[NAME].maxNeighbours || initialState.maxNeighbours
+  toNumber(state[NAME].maxNeighbours ?? initialState.maxNeighbours)
 export const getMaxRows = (state: GlobalState): number =>
-  state[NAME].maxRows || initialState.maxRows
+  toNumber(state[NAME].maxRows ?? initialState.maxRows)
 export const getMaxFieldItems = (state: GlobalState): number =>
-  get(state, [NAME, 'maxFieldItems'], initialState.maxFieldItems)
+  toNumber(state[NAME].maxFieldItems ?? initialState.maxFieldItems)
+export const getMaxFrames = (state: GlobalState): number =>
+  toNumber(state[NAME].maxFrames ?? initialState.maxFrames)
 export const getInitialNodeDisplay = (state: GlobalState): number =>
-  state[NAME].initialNodeDisplay || initialState.initialNodeDisplay
+  toNumber(state[NAME].initialNodeDisplay ?? initialState.initialNodeDisplay)
 export const getScrollToTop = (state: any) => state[NAME].scrollToTop
-export const shouldReportUdc = (state: any) =>
-  state[NAME].shouldReportUdc !== false
 export const shouldAutoComplete = (state: any) =>
   state[NAME].autoComplete !== false
 export const shouldEditorLint = (state: any) => state[NAME].editorLint === true
 export const shouldEnableMultiStatementMode = (state: any) =>
   state[NAME].enableMultiStatementMode
-export const shouldshowPerformanceOverlay = (state: any): boolean =>
+export const shouldShowPerformanceOverlay = (state: any): boolean =>
   state[NAME].showPerformanceOverlay === true
 
 const browserSyncConfig = (host = 'https://auth.neo4j.com') => ({
@@ -79,12 +83,48 @@ const browserSyncConfig = (host = 'https://auth.neo4j.com') => ({
   }
 })
 export const getUseNewVisualization = (state: any) => state[NAME].useNewVis
-export const shouldUseCypherThread = (state: any) => state[NAME].useCypherThread
 export const getConnectionTimeout = (state: any) =>
   state[NAME].connectionTimeout || initialState.connectionTimeout
 export const codeFontLigatures = (state: any) => state[NAME].codeFontLigatures
+export const getAllowCrashReports = (state: GlobalState): boolean =>
+  state[NAME].allowCrashReports ?? initialState.allowCrashReports
+export const getAllowUserStats = (state: GlobalState): boolean =>
+  state[NAME].allowUserStats ?? initialState.allowUserStats
+export const shouldShowWheelZoomInfo = (state: GlobalState) =>
+  state[NAME].showWheelZoomInfo
 
-export const initialState = {
+// Ideally the string | number types would be only numbers
+// but they're saved as strings in the settings component
+export type SettingsState = {
+  maxHistory: string | number
+  theme:
+    | typeof AUTO_THEME
+    | typeof LIGHT_THEME
+    | typeof OUTLINE_THEME
+    | typeof DARK_THEME
+  initCmd: string
+  playImplicitInitCommands: boolean
+  initialNodeDisplay: string | number
+  maxNeighbours: string | number
+  showSampleScripts: boolean
+  browserSyncDebugServer: any
+  maxRows: string | number
+  maxFieldItems: string | number
+  autoComplete: boolean
+  scrollToTop: boolean
+  maxFrames: string | number
+  codeFontLigatures: boolean
+  useBoltRouting: boolean
+  editorLint: boolean
+  enableMultiStatementMode: boolean
+  connectionTimeout: string | number
+  showPerformanceOverlay: boolean
+  allowCrashReports: boolean
+  allowUserStats: boolean
+  showWheelZoomInfo: boolean
+}
+
+export const initialState: SettingsState = {
   maxHistory: 30,
   theme: AUTO_THEME,
   initCmd: ':play start',
@@ -95,17 +135,18 @@ export const initialState = {
   browserSyncDebugServer: null,
   maxRows: 1000,
   maxFieldItems: 500,
-  shouldReportUdc: false, // We do not want any stats to go out. This is a privacy concern.
   autoComplete: true,
   scrollToTop: true,
-  maxFrames: 30,
+  maxFrames: 15,
   codeFontLigatures: true,
   useBoltRouting: false,
   editorLint: false,
-  useCypherThread: true,
   enableMultiStatementMode: true,
   connectionTimeout: 30 * 1000, // 30 seconds
-  showPerformanceOverlay: false
+  showPerformanceOverlay: false,
+  allowCrashReports: true,
+  allowUserStats: true,
+  showWheelZoomInfo: true
 }
 
 export default function settings(state = initialState, action: any) {
@@ -131,14 +172,14 @@ export default function settings(state = initialState, action: any) {
   }
 }
 
-export const update = (settings: any) => {
+export const update = (settings: Partial<SettingsState>) => {
   return {
     type: UPDATE,
     state: settings
   }
 }
 
-export const replace = (settings: any) => {
+export const replace = (settings: Partial<SettingsState>) => {
   return {
     type: REPLACE,
     state: settings

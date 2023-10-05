@@ -17,17 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import { Button } from 'semantic-ui-react'
 import styled from 'styled-components'
+
+import { LARGE_DRAWER_WIDTH } from 'browser-components/TabNavigation/Navigation'
 import {
   DrawerBody,
   DrawerBrowserCommand
 } from 'browser-components/drawer/drawer-styled'
 import { dark } from 'browser-styles/themes'
-import { LARGE_DRAWER_WIDTH } from 'browser-components/TabNavigation/Navigation'
 
 export const StyledSetting = styled.div`
-  padding-bottom: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
 `
 
 export const StyledSettingLabel = styled.label`
@@ -64,31 +65,43 @@ export const StyledCommandListItem = styled.li`
 
   &:hover {
     background-color: ${props => props.theme.hoverBackground};
+  }
+`
 
-    &:after {
-      content: ' ';
-      position: absolute;
-      top: 15px;
-      right: 5px;
-      background-image: url("data:image/svg+xml;utf8,<svg fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M12.7791 6.65634C13.3966 7.04929 13.3966 7.95071 12.7791 8.34366L4.64174 13.522C3.97601 13.9456 3.10486 13.4674 3.10486 12.6783L3.10486 2.32167C3.10486 1.53258 3.97601 1.05437 4.64173 1.47801L12.7791 6.65634Z'  stroke='%2368BDF4' stroke-linejoin='round' /></svg>");
-      height: 15px;
-      width: 15px;
-    }
+export const StyledCommandRowWrapper = styled.div`
+  display: flex;
+`
+
+export const FlexSpacer = styled.div`
+  flex: 1 1 auto;
+`
+
+export const StyledCommandRunButton = styled.button<{ hidden?: boolean }>`
+  color: ${props => props.theme.primary};
+  background-color: transparent;
+  border: none;
+  display: ${props => (props.hidden ? 'none' : 'block')};
+
+  svg {
+    display: inline-block;
+    vertical-align: middle;
   }
 `
 
 export const StyledCommandNamePair = styled.div`
-  margin: 0px 24px;
+  flex: 0 0 auto;
+  margin: 0px 0px 0px 24px;
   padding: 10px 0;
   display: flex;
+  width: 85%;
 `
 export const StyledName = styled.div`
   width: 50%;
-  margin-right: 5%;
+  margin-right: 5px;
 `
 
 export const StyledFullSizeDrawerBody = styled(DrawerBody)`
-  padding: 0;
+  padding: 0 0 12px 0;
 `
 
 export const StyledHeaderContainer = styled.div`
@@ -112,14 +125,30 @@ export const StyledHeaderContainer = styled.div`
   }
 `
 
-// important to override semantic UI styles
-export const StyledFeedbackButton = styled(Button)`
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  max-width: fit-content !important;
-  margin: 0 0 25px 25px !important;
-  min-height: fit-content !important;
+export const StyledFeedbackButton = styled.button`
+  background: #55acee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: fit-content;
+  margin: 0 0 25px 25px;
+  min-height: fit-content;
+  outline: 0;
+  border: none;
+  vertical-align: baseline;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding: 0.78571429em 1.5em 0.78571429em;
+  font-size: 1rem;
+  line-height: 1em;
+  border-radius: 0.28571429rem;
+
+  :hover {
+    background-color: #35a2f4;
+  }
+
+  :active {
+    background-color: #2795e9;
+  }
 `
 
 export const StyledCommand = styled(DrawerBrowserCommand)`
@@ -127,14 +156,63 @@ export const StyledCommand = styled(DrawerBrowserCommand)`
 `
 
 export const StyledCarousel = styled.div`
-  height: 100%;
-  padding-bottom: 50px;
   width: 100%;
   outline: none;
+  flex: 1;
+  overflow: auto;
+
+  div:first-child {
+    overflow: auto;
+    max-height: calc(100% - 50px);
+  }
 
   .row {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .paragraph {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  img {
+    background-color: #fff;
+  }
+
+  ul {
+    margin: 16px 0 16px 16px;
+    list-style: initial;
+  }
+
+  li > p {
+    display: inline !important;
+  }
+
+  ol > p {
+    display: inline !important;
+  }
+
+  ol {
+    margin: 16px 0 16px 16px;
+    list-style: numeric;
+  }
+
+  .imageblock {
+    padding: 3px;
+  }
+
+  pre.code.runnable {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 22px !important; /* counteracts another important.. */
+  }
+
+  pre > .fa.fa-play-circle-o {
+    margin-left: -15px;
+  }
+
+  .content img {
+    max-width: 100%;
   }
 `
 
@@ -147,14 +225,15 @@ export const GuideUl = styled.ul`
   padding-left: 0 !important;
 `
 
-export const StyledGuidesDrawer = styled.div`
+export const StyledGuideDrawer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   min-height: 100vh;
   position: relative;
-  width: ${LARGE_DRAWER_WIDTH}px;
-  /* width is set to avoid squashing during opening animation */
 `
 
-export const StyledGuidesDrawerHeader = styled.h4`
+export const StyledGuideDrawerHeader = styled.h4`
   color: ${props => props.theme.primaryHeaderText};
   background-color: ${props => props.theme.drawerBackground};
   font-size: 18px;
@@ -163,7 +242,6 @@ export const StyledGuidesDrawerHeader = styled.h4`
   -webkit-font-smoothing: antialiased;
   text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;
   font-family: ${props => props.theme.drawerHeaderFontFamily};
-  cursor: pointer;
 `
 
 export const GuideTitle = styled.div`
@@ -182,9 +260,10 @@ export const BackIconContainer = styled.span`
 `
 
 export const GuideNavContainer = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  left: 60px;
+  left: 0;
+  right: 0;
 
   color: ${props => props.theme.secondaryButtonText};
   background-color: ${dark.secondaryBackground};
@@ -194,8 +273,6 @@ export const GuideNavContainer = styled.div`
   justify-content: space-between;
 
   height: 40px;
-  width: 500px;
-  max-width: 500px;
   padding: 0 18px;
 
   z-index: 10;

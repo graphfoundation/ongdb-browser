@@ -25,13 +25,17 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const manifestGeneration = require('./generate-manifest-helpers')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+
+const builtAt = new Date().toISOString()
+const buildNumber = process.env.BUILD_NUMBER
+const gitHash = process.env.GIT_HASH
 
 module.exports = () => {
   const plugins = [
@@ -60,10 +64,14 @@ module.exports = () => {
               packageJsonData,
               'propertiesToCopyToManifest'
             )
-            const mergedData = manifestGeneration.mergeObjects(
-              wantedData,
-              JSON.parse(content)
-            )
+
+            const mergedData = {
+              ...JSON.parse(content),
+              ...wantedData,
+              builtAt,
+              buildNumber,
+              gitHash
+            }
             return JSON.stringify(mergedData, null, 2)
           }
         },
@@ -72,6 +80,11 @@ module.exports = () => {
           to: helpers.assetsPath + '/images'
         }
       ]
+    }),
+    new webpack.DefinePlugin({
+      __BUILT_AT__: JSON.stringify(builtAt),
+      __BUILD_NUMBER__: JSON.stringify(buildNumber),
+      __GIT_HASH__: JSON.stringify(gitHash)
     }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output

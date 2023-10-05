@@ -17,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import styled from 'styled-components'
-import { StyledInput, StyledSelect } from 'browser-components/Form'
+
 import { StyledFrameAside } from '../../Frame/styled'
+import { StyledInput, StyledSelect } from 'browser-components/Form'
 
 export const StyledConnectionForm = styled.form`
   padding: 0 15px;
@@ -103,19 +103,17 @@ export const StyledRevealablePasswordWrapper = styled.div`
   > input {
     width: calc(100% - 30px);
   }
+`
 
-  > .icon {
-    display: inline-block;
-    width: 25px;
-    color: ${props => props.theme.primaryText};
-    position: absolute;
-    user-select: none;
-    right: 0;
-    top: 5px;
-    height: auto;
-    padding: 3px;
-    cursor: pointer;
-  }
+export const StyledRevealIconWrapper = styled.div`
+  width: 25px;
+  color: ${props => props.theme.primaryText};
+  position: absolute;
+  user-select: none;
+  right: 0;
+  top: 5px;
+  height: auto;
+  padding: 3px;
 `
 
 export const StyledConnectionSelect = styled(StyledSelect)`
@@ -154,15 +152,6 @@ export const StyledDbsRow = styled.li``
 export const StyledFormContainer = styled.div`
   display: flex;
 `
-
-export const StyledSSOOptions = styled.div`
-  border-right: 1px solid rgb(77, 74, 87, 0.3);
-  padding-right: 60px;
-  margin-right: 60px;
-  margin-left: 30px;
-  max-width: 300px;
-`
-
 export const StyledSSOLogDownload = styled.a`
   cursor: pointer;
 `

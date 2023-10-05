@@ -17,87 +17,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { combineEpics } from 'redux-observable'
+
 import {
+  fetchGuideFromAllowlistEpic,
   handleCommandEpic,
   handleSingleCommandEpic,
-  postConnectCmdEpic,
-  fetchGuideFromAllowlistEpic
+  postConnectCmdEpic
 } from './modules/commands/commandsDuck'
 import {
-  retainCredentialsSettingsEpic,
   connectEpic,
-  disconnectEpic,
-  startupConnectEpic,
-  disconnectSuccessEpic,
-  verifyConnectionCredentialsEpic,
-  startupConnectionSuccessEpic,
-  startupConnectionFailEpic,
-  detectActiveConnectionChangeEpic,
   connectionLostEpic,
-  switchConnectionEpic,
-  switchConnectionSuccessEpic,
-  switchConnectionFailEpic,
+  detectActiveConnectionChangeEpic,
+  disconnectEpic,
+  disconnectSuccessEpic,
   initialSwitchConnectionFailEpic,
+  retainCredentialsSettingsEpic,
   silentDisconnectEpic,
-  useDbEpic
+  startupConnectEpic,
+  startupConnectionFailEpic,
+  startupConnectionSuccessEpic,
+  switchConnectionEpic,
+  switchConnectionFailEpic,
+  switchConnectionSuccessEpic,
+  useDbEpic,
+  verifyConnectionCredentialsEpic
 } from './modules/connections/connectionsDuck'
+import { credentialsTimeoutEpic } from './modules/credentialsPolicy/credentialsPolicyDuck'
 import {
+  clearCurrentUserOnDisconnectEpic,
+  getCurrentUserEpic
+} from './modules/currentUser/currentUserDuck'
+import {
+  adHocCypherRequestEpic,
+  clusterCypherRequestEpic,
+  cypherRequestEpic,
+  handleForcePasswordChangeEpic,
+  routedCypherRequestEpic
+} from './modules/cypher/cypherDuck'
+import {
+  clearMetaOnDisconnectEpic,
   dbMetaEpic,
-  serverConfigEpic,
-  serverInfoEpic,
-  clearMetaOnDisconnectEpic
-} from './modules/dbMeta/dbMetaDuck'
-import { cancelRequestEpic } from './modules/requests/requestsDuck'
+  serverConfigEpic
+} from './modules/dbMeta/dbMetaEpics'
 import {
   discoveryOnStartupEpic,
   injectDiscoveryEpic
 } from './modules/discovery/discoveryDuck'
-import { clearLocalstorageEpic } from './modules/localstorage/localstorageDuck'
 import {
   initializeCypherEditorEpic,
   populateEditorFromUrlEpic,
   updateEditorSupportSchemaEpic
 } from './modules/editor/editorDuck'
+import { clearOnDisconnectEpic } from './modules/features/featuresDuck'
+import { ensureMaxFramesEpic } from './modules/frames/framesDuck'
+import { fetchRemoteGuideEpic } from './modules/guides/guidesDuck'
+import { clearLocalstorageEpic } from './modules/localstorage/localstorageDuck'
+import { cancelRequestEpic } from './modules/requests/requestsDuck'
 import {
-  adHocCypherRequestEpic,
-  routedCypherRequestEpic,
-  cypherRequestEpic,
-  clusterCypherRequestEpic,
-  handleForcePasswordChangeEpic
-} from './modules/cypher/cypherDuck'
-import {
-  featuresDiscoveryEpic,
-  clearOnDisconnectEpic
-} from './modules/features/featuresDuck'
-import {
-  syncItemsEpic,
   clearSyncEpic,
-  syncFavoritesEpic,
   loadFavoritesFromSyncEpic,
-  loadGrassFromSyncEpic,
   loadFoldersFromSyncEpic,
+  loadGrassFromSyncEpic,
+  syncFavoritesEpic,
   syncFoldersEpic,
-  syncGrassEpic
+  syncGrassEpic,
+  syncItemsEpic
 } from './modules/sync/syncDuck'
-import { credentialsTimeoutEpic } from './modules/credentialsPolicy/credentialsPolicyDuck'
 import {
-  bootEpic,
-  incrementEventEpic,
-  udcStartupEpic,
-  trackSyncLogoutEpic,
-  trackConnectsEpic,
-  eventFiredEpic,
   trackCommandUsageEpic,
   trackErrorFramesEpic,
-  trackReduxActionsEpic
+  trackReduxActionsEpic,
+  udcStartupEpic
 } from './modules/udc/udcDuck'
-import { maxFramesConfigEpic } from './modules/stream/streamDuck'
-import {
-  getCurrentUserEpic,
-  clearCurrentUserOnDisconnectEpic
-} from './modules/currentUser/currentUserDuck'
 
 export default combineEpics(
   handleCommandEpic,
@@ -122,7 +114,6 @@ export default combineEpics(
   detectActiveConnectionChangeEpic,
   dbMetaEpic,
   serverConfigEpic,
-  serverInfoEpic,
   clearMetaOnDisconnectEpic,
   cancelRequestEpic,
   discoveryOnStartupEpic,
@@ -134,7 +125,6 @@ export default combineEpics(
   clusterCypherRequestEpic,
   clearLocalstorageEpic,
   handleForcePasswordChangeEpic,
-  featuresDiscoveryEpic,
   clearOnDisconnectEpic,
   syncFavoritesEpic,
   loadFavoritesFromSyncEpic,
@@ -145,18 +135,14 @@ export default combineEpics(
   syncFoldersEpic,
   syncGrassEpic,
   credentialsTimeoutEpic,
-  bootEpic,
   udcStartupEpic,
-  incrementEventEpic,
-  trackSyncLogoutEpic,
-  trackConnectsEpic,
-  eventFiredEpic,
-  maxFramesConfigEpic,
+  ensureMaxFramesEpic,
   getCurrentUserEpic,
   clearCurrentUserOnDisconnectEpic,
   trackCommandUsageEpic,
   trackErrorFramesEpic,
   trackReduxActionsEpic,
   initializeCypherEditorEpic,
-  updateEditorSupportSchemaEpic
+  updateEditorSupportSchemaEpic,
+  fetchRemoteGuideEpic
 )

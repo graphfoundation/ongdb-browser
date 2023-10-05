@@ -17,29 +17,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 // Help
+import helpBolt from './dynamic/bolt'
+// Dynamic Help
+import helpCommands from './dynamic/commands'
+import helpCypher from './dynamic/cypher'
+import helpHelp from './dynamic/help'
+import helpPlay from './dynamic/play'
 import helpAlterUser from './help/alter-user'
 import helpAuto from './help/auto'
-import helpBolt from './dynamic/bolt'
 import helpBoltEncryption from './help/bolt-encryption'
 import helpBoltRouting from './help/bolt-routing'
 import helpClear from './help/clear'
 import helpContains from './help/contains'
-import helpCreateConstraintOn from './help/create-constraint-on'
+import helpCreate from './help/create'
+import helpCreateConstraint from './help/create-constraint'
 import helpCreateDatabase from './help/create-database'
-import helpCreateIndexOn from './help/create-index-on'
+import helpCreateIndex from './help/create-index'
 import helpCreateRole from './help/create-role'
 import helpCreateUser from './help/create-user'
-import helpCreate from './help/create'
 import helpDelete from './help/delete'
 import helpDeny from './help/deny'
-import helpDropConstraintOn from './help/drop-constraint-on'
+import helpDetachDelete from './help/detach-delete'
+import helpDropConstraint from './help/drop-constraint'
 import helpDropDatabase from './help/drop-database'
-import helpDropIndexOn from './help/drop-index-on'
+import helpDropIndex from './help/drop-index'
 import helpDropRole from './help/drop-role'
 import helpDropUser from './help/drop-user'
-import helpDetachDelete from './help/detach-delete'
 import helpEndsWith from './help/ends-with'
 import helpExplain from './help/explain'
 import helpForeach from './help/foreach'
@@ -81,30 +85,21 @@ import helpUnknown from './help/unknown'
 import helpUnwind from './help/unwind'
 import helpWhere from './help/where'
 import helpWith from './help/with'
-
-// Dynamic Help
-import helpCommands from './dynamic/commands'
-import helpCypher from './dynamic/cypher'
-import helpHelp from './dynamic/help'
-import helpPlay from './dynamic/play'
-
 // Play guides
 import playConcepts from './play-guides/concepts'
 import playCypher from './play-guides/cypher'
+import playIconography from './play-guides/iconography'
 import playIntro from './play-guides/intro'
 import playLearn from './play-guides/learn'
 import playMovieGraph from './play-guides/movie-graph'
 import playNorthwindGraph from './play-guides/northwind-graph'
-import playIconography from './play-guides/iconography'
 import playStart from './play-guides/start'
 import playTypography from './play-guides/typography'
 import playUnfound from './play-guides/unfound'
 import playWritecode from './play-guides/write-code'
-
 // Migrated sidebar guides
 import guideConcepts from './sidebar-guides/concepts'
 import guideCypher from './sidebar-guides/cypher'
-import guideIndex from './sidebar-guides/guideIndex'
 import guideIntro from './sidebar-guides/intro'
 import guideMovieGraph from './sidebar-guides/movie-graph'
 import guideNorthwindGraph from './sidebar-guides/northwind-graph'
@@ -117,7 +112,7 @@ type AllDocumentation = {
   play: PlayDocs
   guide: GuideDocs
 }
-type DocItem = {
+export type DocItem = {
   title: string
   subtitle?: string
   category?: string
@@ -126,20 +121,22 @@ type DocItem = {
   slides?: JSX.Element[]
 }
 
-type GuideItem = {
+export type Guide = {
+  currentSlide: number
   title: string
+  identifier: string
   slides: JSX.Element[]
+  isError?: boolean
 }
 
 type GuideDocs = {
   title: 'Built-in Browser guides'
-  chapters: Record<GuideChapter, GuideItem>
+  chapters: Record<BuiltInGuideIdentifier, Omit<Guide, 'currentSlide'>>
 }
 
-type GuideChapter =
+export type BuiltInGuideIdentifier =
   | 'concepts'
   | 'cypher'
-  | 'index'
   | 'intro'
   | 'movie-graph'
   | 'movieGraph'
@@ -150,9 +147,8 @@ type GuideChapter =
   | 'unfound'
 
 // TypeGuard function to ts to understand that a string is a valid key
-export function isGuideChapter(name: string): name is GuideChapter {
-  return name in docs.guide.chapters
-}
+export const isBuiltInGuide = (name: string): name is BuiltInGuideIdentifier =>
+  name in docs.guide.chapters
 
 type PlayDocs = {
   title: 'Guides & Examples'
@@ -187,17 +183,17 @@ type CypherChapter =
   | 'alterUser'
   | 'contains'
   | 'create'
-  | 'createConstraintOn'
+  | 'createConstraint'
   | 'createDatabase'
-  | 'createIndexOn'
+  | 'createIndex'
   | 'createRole'
   | 'createUser'
   | 'delete'
   | 'deny'
   | 'detachDelete'
-  | 'dropConstraintOn'
+  | 'dropConstraint'
   | 'dropDatabase'
-  | 'dropIndexOn'
+  | 'dropIndex'
   | 'dropRole'
   | 'dropUser'
   | 'endsWith'
@@ -282,17 +278,17 @@ const docs: AllDocumentation = {
       alterUser: helpAlterUser,
       contains: helpContains,
       create: helpCreate,
-      createConstraintOn: helpCreateConstraintOn,
+      createConstraint: helpCreateConstraint,
       createDatabase: helpCreateDatabase,
-      createIndexOn: helpCreateIndexOn,
+      createIndex: helpCreateIndex,
       createRole: helpCreateRole,
       createUser: helpCreateUser,
       delete: helpDelete,
       deny: helpDeny,
       detachDelete: helpDetachDelete,
-      dropConstraintOn: helpDropConstraintOn,
+      dropConstraint: helpDropConstraint,
       dropDatabase: helpDropDatabase,
-      dropIndexOn: helpDropIndexOn,
+      dropIndex: helpDropIndex,
       dropRole: helpDropRole,
       dropUser: helpDropUser,
       endsWith: helpEndsWith,
@@ -362,7 +358,6 @@ const docs: AllDocumentation = {
     chapters: {
       concepts: guideConcepts,
       cypher: guideCypher,
-      index: guideIndex,
       intro: guideIntro,
       movies: guideMovieGraph,
       movieGraph: guideMovieGraph,

@@ -21,15 +21,14 @@
 /* global Cypress, cy, before */
 
 describe('Saved Scripts', () => {
-  before(function() {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+  before(function () {
+    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
     cy.wait(3000)
     cy.connect('neo4j', Cypress.config('password'))
   })
 
   it('can save a result as favorite', () => {
+    cy.executeCommand(':clear')
     cy.executeCommand('RETURN 1')
     cy.get('[data-testid=frame-Favorite]').click()
 
@@ -46,7 +45,7 @@ describe('Saved Scripts', () => {
           : '{ctrl}a {backspace}'
       )
       .type('// Guide{shift}{enter}:play movies', { force: true })
-    cy.get('[title="Update favorite"]').click()
+    cy.get('[data-testid=editor-Favorite]').click()
 
     cy.get('[data-testid="scriptTitle-Guide"]').should('exist')
     cy.get('[data-testid="currentlyEditing"]').contains('Guide')
@@ -87,15 +86,12 @@ describe('Saved Scripts', () => {
     cy.get('[data-testid=navicon-fldr]').click({ force: true })
     cy.get('[data-testid=contextMenuRename]').click()
     cy.get('[data-testid=expandFolder-fldr]').should('not.exist')
-    cy.get('[data-testid=drawerFavorites]').click()
+    cy.get('[data-testid=navigationFavorites]').click()
   })
 
   it('it can use bulk delete', () => {
-    cy.get('[data-testid=drawerFavorites]').click()
-    cy.get('[data-testid=createNewFavorite]')
-      .click()
-      .click()
-      .click()
+    cy.get('[data-testid=navigationFavorites]').click()
+    cy.get('[data-testid=createNewFavorite]').click().click().click()
 
     const mod = Cypress.platform === 'darwin' ? '{cmd}' : '{ctrl}'
     // workaround to get meta clicks

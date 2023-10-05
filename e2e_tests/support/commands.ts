@@ -1,7 +1,9 @@
-const SubmitQueryButton = '[data-testid="editor-Run"]'
+export const SubmitQueryButton = '[data-testid="editor-Run"]'
 const EditorTextField = '[data-testid="activeEditor"] textarea'
 const VisibleEditor = '#monaco-main-editor'
 /* global Cypress, cy */
+export const selectAllAndDelete =
+  Cypress.platform === 'darwin' ? '{cmd}a {backspace}' : '{ctrl}a {backspace}'
 
 Cypress.Commands.add('getEditor', () => cy.get(VisibleEditor))
 Cypress.Commands.add('getFrames', () => cy.get('[data-testid="frame"]'))
@@ -28,13 +30,9 @@ Cypress.Commands.add(
     cy.title().should('include', 'ONgDB Browser')
     cy.wait(3000)
 
-    cy.get('input[data-testid="boltaddress"]')
-      .clear()
-      .type(boltUrl)
+    cy.get('input[data-testid="boltaddress"]').clear().type(boltUrl)
 
-    cy.get('input[data-testid="username"]')
-      .clear()
-      .type(username)
+    cy.get('input[data-testid="username"]').clear().type(username)
     cy.get('input[data-testid="password"]').type(initialPassword)
 
     cy.get('button[data-testid="connect"]').click()
@@ -70,16 +68,10 @@ Cypress.Commands.add(
     cy.executeCommand(':clear')
     cy.executeCommand(':server connect')
 
-    cy.get('input[data-testid="boltaddress"]')
-      .clear()
-      .type(boltUrl)
+    cy.get('input[data-testid="boltaddress"]').clear().type(boltUrl)
 
-    cy.get('input[data-testid="username"]')
-      .clear()
-      .type(username)
-    cy.get('input[data-testid="password"]')
-      .clear()
-      .type(password)
+    cy.get('input[data-testid="username"]').clear().type(username)
+    cy.get('input[data-testid="password"]').clear().type(password)
 
     cy.get('button[data-testid="connect"]').click()
     if (makeAssertions) {
@@ -132,9 +124,7 @@ Cypress.Commands.add('resultContains', str => {
 Cypress.Commands.add('addUser', (userName, password, role, force) => {
   cy.get('[id*=username]')
   cy.get('[id*=username]').type(userName)
-  cy.get('[id*=password]')
-    .first()
-    .type(password)
+  cy.get('[id*=password]').first().type(password)
   cy.get('[id*=password-confirm]').type(password)
   cy.get('[id*=roles-selector]').select(role)
   if (force === true) {
@@ -143,18 +133,20 @@ Cypress.Commands.add('addUser', (userName, password, role, force) => {
   cy.get('[data-testid="Add User"]').click()
 })
 Cypress.Commands.add('enableMultiStatement', () => {
-  cy.get('[data-testid="drawerSettings"]').click()
-  cy.get('[data-testid="enableMultiStatementMode"]', { timeout: 30000 }).check({
+  cy.get('[data-testid="navigationSettings"]').click()
+  cy.get('[data-testid="setting-enableMultiStatementMode"]', {
+    timeout: 30000
+  }).check({
     force: true
   })
-  cy.get('[data-testid="drawerSettings"]').click()
+  cy.get('[data-testid="navigationSettings"]').click()
 })
 Cypress.Commands.add('disableMultiStatement', () => {
-  cy.get('[data-testid="drawerSettings"]').click()
-  cy.get('[data-testid="enableMultiStatementMode"]', {
+  cy.get('[data-testid="navigationSettings"]').click()
+  cy.get('[data-testid="setting-enableMultiStatementMode"]', {
     timeout: 30000
   }).uncheck({ force: true })
-  cy.get('[data-testid="drawerSettings"]').click()
+  cy.get('[data-testid="navigationSettings"]').click()
 })
 Cypress.Commands.add('createUser', (username, password, forceChangePw) => {
   cy.dropUser(username)
@@ -183,5 +175,45 @@ Cypress.Commands.add('dropUser', username => {
   } else {
     cy.executeCommand(`CALL dbms.security.deleteUser("${username}")`)
     cy.executeCommand(':clear')
+  }
+})
+
+Cypress.Commands.add(
+  'ensureConnection',
+  (creds = { username: 'neo4j', password: Cypress.config('password') }) => {
+    cy.contains('Database access not available').then(res => {
+      if (res) {
+        cy.connect(creds.username, creds.password)
+      }
+    })
+  }
+)
+
+Cypress.Commands.add('createDatabase', (dbName: string) => {
+  cy.executeCommand(`DROP DATABASE ${dbName} IF EXISTS;`)
+  cy.executeCommand(':clear')
+  cy.executeCommand(`CREATE DATABASE ${dbName}`)
+  cy.contains('1 system update, no records')
+
+  pollForDbOnline()
+
+  function pollForDbOnline(totalWaitMs = 0) {
+    if (totalWaitMs > 6000) {
+      throw new Error('Database did not come online')
+    }
+
+    cy.get('[data-testid="frameCommand"]').click()
+    cy.typeInFrame(`SHOW DATABASE ${dbName} YIELD currentStatus{enter}`)
+    cy.get('[data-testid="frameContents"] [role="cell"] span').then(
+      statusSpan => {
+        if (statusSpan.text().includes('online')) {
+          // started properly, clear stream & carry on.
+          cy.executeCommand(':clear')
+        } else {
+          cy.wait(500)
+          pollForDbOnline(totalWaitMs + 500)
+        }
+      }
+    )
   }
 })

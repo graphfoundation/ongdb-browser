@@ -17,29 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { isEnterpriseEdition } from '../support/utils'
 
 describe('Bolt connections', () => {
-  before(function() {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+  before(function () {
+    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
     cy.wait(3000)
   })
   it('can show connection error', () => {
     const password = 'unlikely password'
     cy.connect('neo4j', password, undefined, false)
   })
-  it('show "no connection" error when not using web workers', () => {
+  it('show "no connection" error', () => {
     cy.executeCommand(':clear')
-    cy.executeCommand(':config useCypherThread: false')
-    cy.executeCommand('RETURN 1')
-    cy.resultContains('No connection found, did you connect to Neo4j')
-  })
-  it('show "no connection" error when using web workers', () => {
-    cy.executeCommand(':clear')
-    cy.executeCommand(':config useCypherThread: true')
     cy.executeCommand('RETURN 1')
     cy.resultContains('No connection found, did you connect to Neo4j')
   })
@@ -59,7 +49,11 @@ describe('Bolt connections', () => {
       cy.connect('neo4j', password)
 
       cy.executeCommand(':queries')
-      cy.resultContains('dbms.listQueries')
+      if (Cypress.config('serverVersion') < 5.0) {
+        cy.resultContains('dbms.listQueries')
+      } else {
+        cy.resultContains('SHOW TRANSACTIONS')
+      }
     })
   }
 
@@ -88,7 +82,7 @@ describe('Bolt connections', () => {
       cy.connect('noroles', '.')
 
       // Check sidebar
-      cy.get('[data-testid="drawerDBMS"]').click()
+      cy.get('[data-testid="navigationDBMS"]').click()
       cy.get('[data-testid="user-details-username"]').should(
         'contain',
         'noroles'
@@ -99,7 +93,7 @@ describe('Bolt connections', () => {
       if (Cypress.config('serverVersion') === 4.1) {
         cy.get('[data-testid="user-details-roles"]').should('contain', 'PUBLIC')
       }
-      cy.get('[data-testid="drawerDBMS"]').click()
+      cy.get('[data-testid="navigationDBMS"]').click()
 
       cy.executeCommand(':server disconnect')
       cy.executeCommand(':server connect')

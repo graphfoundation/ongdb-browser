@@ -17,19 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React, { Component } from 'react'
-import { getRandomWords } from './utils'
-import { FormButton } from 'browser-components/buttons'
-import {
-  StyledConnectionTextInput,
-  StyledConnectionLabel,
-  StyledConnectionFormEntry,
-  StyledChangePasswordForm
-} from './styled'
 
-import InputEnterStepping from 'browser-components/InputEnterStepping/InputEnterStepping'
 import RevealablePasswordInput from './revealable-password-input'
+import {
+  StyledChangePasswordForm,
+  StyledConnectionFormEntry,
+  StyledConnectionLabel,
+  StyledConnectionTextInput
+} from './styled'
+import { getRandomWords } from './utils'
+import InputEnterStepping from 'browser-components/InputEnterStepping/InputEnterStepping'
+import { FormButton } from 'browser-components/buttons'
 
 type State = any
 
@@ -137,7 +136,8 @@ export default class ChangePasswordForm extends Component<any, State> {
                         onChange: this.onExistingPasswordChange,
                         value: this.state.password,
                         ref: (ref: any) => setRefForIndex(0, ref),
-                        disabled: isLoading
+                        disabled: isLoading,
+                        autoComplete: 'off'
                       })}
                     />
                   </StyledConnectionFormEntry>
@@ -154,7 +154,8 @@ export default class ChangePasswordForm extends Component<any, State> {
                       setRef: (ref: any) => setRefForIndex(indexStart, ref),
                       disabled: isLoading,
                       isRevealed: this.state.revealNewPassword,
-                      toggleReveal: this.togglePasswordRevealed
+                      toggleReveal: this.togglePasswordRevealed,
+                      autoComplete: 'new-password'
                     })}
                   />
                   &nbsp;OR&nbsp;&nbsp;
@@ -175,7 +176,8 @@ export default class ChangePasswordForm extends Component<any, State> {
                       setRef: (ref: any) => setRefForIndex(indexStart + 1, ref),
                       disabled: isLoading,
                       isRevealed: this.state.revealNewPassword,
-                      toggleReveal: this.togglePasswordRevealed
+                      toggleReveal: this.togglePasswordRevealed,
+                      autoComplete: 'new-password'
                     })}
                   />
                 </StyledConnectionFormEntry>

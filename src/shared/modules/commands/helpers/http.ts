@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import { URL } from 'whatwg-url'
 export const parseHttpVerbCommand = (input: any) => {
   const p = new Promise((resolve, reject) => {
     const re = /^[^\w]*(get|post|put|delete|head)\s+(\S+)?\s*([\S\s]+)?$/i
@@ -49,14 +49,14 @@ export const parseHttpVerbCommand = (input: any) => {
 }
 
 // Check if valid url, from http://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
-export function isValidURL(string: any) {
-  let url
+export function isValidUrl(url: string): boolean {
+  let urlObject
 
   try {
-    url = new URL(string)
+    urlObject = new URL(url)
   } catch (_) {
     return false
   }
 
-  return url.protocol.startsWith('http')
+  return urlObject.protocol.startsWith('http')
 }

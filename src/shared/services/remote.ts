@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import 'isomorphic-fetch'
 
 function request(method: any, url: any, data = null, extraHeaders = {}) {
@@ -34,7 +33,7 @@ function request(method: any, url: any, data = null, extraHeaders = {}) {
   }).then(checkStatus)
 }
 
-function get(url: any, headers = {}) {
+function get(url: string, headers: HeadersInit = {}): Promise<string> {
   return fetch(url, {
     method: 'get',
     headers
@@ -58,13 +57,14 @@ export function getJSON(url: any) {
     })
 }
 
-function checkStatus(response: any) {
+function checkStatus(response: Response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
-    const error: any = new Error(`${response.status} ${response.statusText}`)
-    error.response = response
-    throw error
+    throw {
+      ...new Error(`${response.status} ${response.statusText}`),
+      response
+    }
   }
 }
 

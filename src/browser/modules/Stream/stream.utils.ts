@@ -17,8 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import { Frame, FrameStack } from 'shared/modules/stream/streamDuck'
+import { Frame, FrameStack } from 'shared/modules/frames/framesDuck'
 
 export function getLatestFromFrameStack(frameObj: FrameStack): Frame | null {
   if (!frameObj.stack) {

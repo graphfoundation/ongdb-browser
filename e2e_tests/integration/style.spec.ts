@@ -21,10 +21,8 @@
 /* global Cypress, cy, before */
 
 describe(':style', () => {
-  before(function() {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+  before(function () {
+    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
     cy.wait(3000)
   })
   it('can connect', () => {
@@ -50,7 +48,7 @@ describe(':style', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(':style')
     // can't trigger hover with cypress so we can't know it's visible
-    cy.get('[data-testid="exportGrassButton"]').should('exist')
+    cy.get('[data-testid="exportGraSSButton"]').should('exist')
     cy.get('[data-testid="styleResetButton"]', { timeout: 10000 })
       .first()
       .click()

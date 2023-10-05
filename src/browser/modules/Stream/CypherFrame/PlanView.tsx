@@ -17,24 +17,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React, { Component } from 'react'
 import memoize from 'memoize-one'
-import { PlanSVG } from './PlanView.styled'
-import { dim } from 'browser-styles/constants'
-import { deepEquals, shallowEquals } from 'services/utils'
-import bolt from 'services/bolt/bolt'
-import { FrameButton } from 'browser-components/buttons'
-import { DoubleUpIcon, DoubleDownIcon } from 'browser-components/icons/Icons'
+import React, { Component } from 'react'
+
 import {
+  DoubleDownIcon,
+  DoubleUpIcon
+} from 'browser-components/icons/LegacyIcons'
+
+import queryPlan from '../../D3Visualization/queryPlan/queryPlan'
+import {
+  StyledLeftPartial,
   StyledOneRowStatsBar,
-  StyledRightPartial,
-  StyledLeftPartial
+  StyledRightPartial
 } from '../styled'
-import { StyledFrameTitlebarButtonSection } from 'browser/modules/Frame/styled'
-import Ellipsis from 'browser-components/Ellipsis'
-import queryPlan from '../../D3Visualization/lib/visualization/components/queryPlan'
 import { PlanExpand } from './CypherFrame'
+import { PlanSVG } from './PlanView.styled'
+import Ellipsis from 'browser-components/Ellipsis'
+import { FrameButton } from 'browser-components/buttons'
+import { dim } from 'browser-styles/constants'
+import { StyledFrameTitlebarButtonSection } from 'browser/modules/Frame/styled'
+import bolt from 'services/bolt/bolt'
+import { deepEquals } from 'neo4j-arc/common'
+import { shallowEquals } from 'services/utils'
 
 type PlanViewState = { extractedPlan: any }
 export type PlanViewProps = {
@@ -43,7 +48,7 @@ export type PlanViewProps = {
   result: any
   updated: any
   assignVisElement: (a: any, b: any) => void
-  fullscreen: boolean
+  isFullscreen: boolean
 }
 
 export class PlanView extends Component<PlanViewProps, PlanViewState> {
@@ -58,7 +63,10 @@ export class PlanView extends Component<PlanViewProps, PlanViewState> {
 
   componentDidMount() {
     this.extractPlan(this.props.result)
-      .then(() => this.props.setPlanExpand('EXPAND'))
+      .then(() => {
+        this.props.setPlanExpand('EXPAND')
+        this.toggleExpanded(true)
+      })
       .catch(() => {})
   }
 
@@ -77,10 +85,10 @@ export class PlanView extends Component<PlanViewProps, PlanViewState> {
       this.props.assignVisElement(this.el, this.plan)
   }
 
-  shouldComponentUpdate(props: any, state: PlanViewState) {
+  shouldComponentUpdate(props: PlanViewProps, state: PlanViewState) {
     if (this.props.result === undefined) return true
     return (
-      props.fullscreen !== this.props.fullscreen ||
+      props.isFullscreen !== this.props.isFullscreen ||
       !deepEquals(props.result.summary, this.props.result.summary) ||
       !shallowEquals(state, this.state) ||
       props.planExpand !== this.props.planExpand
@@ -150,7 +158,7 @@ export class PlanView extends Component<PlanViewProps, PlanViewState> {
       <PlanSVG
         data-testid="planSvg"
         style={
-          this.props.fullscreen
+          this.props.isFullscreen
             ? // @ts-expect-error ts-migrate(2769) FIXME: Object literal may only specify known properties, ... Remove this comment to see the full error message
               { 'padding-bottom': dim.frameStatusbarHeight + 'px' }
             : {}
@@ -186,11 +194,11 @@ export function PlanStatusbar(props: PlanStatusbarProps) {
           Cypher version: {plan.root.version}, planner: {plan.root.planner},
           runtime: {plan.root.runtime}.
           {plan.root.totalDbHits
-            ? ` ${
-                plan.root.totalDbHits
-              } total db hits in ${result.summary.resultAvailableAfter
-                .add(result.summary.resultConsumedAfter)
-                .toNumber() || 0} ms.`
+            ? ` ${plan.root.totalDbHits} total db hits in ${
+                result.summary.resultAvailableAfter
+                  .add(result.summary.resultConsumedAfter)
+                  .toNumber() || 0
+              } ms.`
             : ''}
         </Ellipsis>
       </StyledLeftPartial>
@@ -198,13 +206,13 @@ export function PlanStatusbar(props: PlanStatusbarProps) {
         <StyledFrameTitlebarButtonSection>
           <FrameButton
             title="Collapse Plan"
-            data-testid="planCollapseButton"
+            dataTestId="planCollapseButton"
             onClick={() => props.setPlanExpand('COLLAPSE')}
           >
             <DoubleUpIcon />
           </FrameButton>
           <FrameButton
-            data-testid="planExpandButton"
+            dataTestId="planExpandButton"
             title="Expand Plan"
             onClick={() => props.setPlanExpand('EXPAND')}
           >

@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { isEnterpriseEdition } from '../support/utils'
 
 /* global Cypress, cy, before, after */
@@ -26,9 +25,7 @@ describe('Multi statements', () => {
   const validQuery = 'RETURN 1; :config; RETURN 2;'
 
   before(() => {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
     cy.wait(3000)
     cy.enableMultiStatement()
   })
@@ -57,9 +54,9 @@ describe('Multi statements', () => {
   it('can force run multiple statements to be executed as one statement', () => {
     // Given
     cy.executeCommand(':clear')
-    cy.get('[data-testid="drawerSettings"]').click()
-    cy.get('[data-testid="enableMultiStatementMode"]').click()
-    cy.get('[data-testid="drawerSettings"]').click()
+    cy.get('[data-testid="navigationSettings"]').click()
+    cy.get('[data-testid="setting-enableMultiStatementMode"]').click()
+    cy.get('[data-testid="navigationSettings"]').click()
 
     // When
     cy.executeCommand(validQuery)
@@ -74,9 +71,9 @@ describe('Multi statements', () => {
       .first()
       .should('contain', 'Error')
 
-    cy.get('[data-testid="drawerSettings"]').click()
-    cy.get('[data-testid="enableMultiStatementMode"]').click()
-    cy.get('[data-testid="drawerSettings"]').click()
+    cy.get('[data-testid="navigationSettings"]').click()
+    cy.get('[data-testid="setting-enableMultiStatementMode"]').click()
+    cy.get('[data-testid="navigationSettings"]').click()
   })
 
   it('can run multiple statements with error open', () => {
@@ -115,8 +112,7 @@ describe('Multi statements', () => {
       .first()
       .should('contain', 'ERROR')
   })
-
-  if (Cypress.config('serverVersion') >= 4.0) {
+  if (Cypress.config('serverVersion') >= 4.1) {
     if (isEnterpriseEdition()) {
       it('Can use :use command in multi-statements', () => {
         cy.executeCommand(':clear')
@@ -126,25 +122,9 @@ describe('Multi statements', () => {
           'have.length',
           1
         )
-        cy.executeCommand('DROP DATABASE test1')
-        cy.executeCommand('DROP DATABASE test2')
-        cy.get('[data-testid="frame"]', { timeout: 10000 }).should(
-          'have.length',
-          3
-        )
-        cy.executeCommand(':clear')
 
-        cy.executeCommand('CREATE DATABASE test1')
-        cy.get('[data-testid="frame"]', { timeout: 10000 }).should(
-          'have.length',
-          1
-        )
-        cy.executeCommand('CREATE DATABASE test2')
-        cy.get('[data-testid="frame"]', { timeout: 10000 }).should(
-          'have.length',
-          2
-        )
-        cy.executeCommand(':clear')
+        cy.createDatabase('test1')
+        cy.createDatabase('test2')
 
         // Time to try it
         const query = ':use test1; CREATE(:Test1); :use test2; CREATE(:Test2);'
@@ -180,9 +160,9 @@ describe('Multi statements', () => {
           .contains('Test1')
 
         // Check sidebar for test1
-        cy.get('[data-testid="drawerDBMS"]').click()
+        cy.get('[data-testid="navigationDBMS"]').click()
         cy.get('[data-testid="sidebarMetaItem"]').contains('Test1')
-        cy.get('[data-testid="drawerDBMS"]').click()
+        cy.get('[data-testid="navigationDBMS"]').click()
 
         cy.executeCommand(':use test2')
         cy.executeCommand('MATCH (n) RETURN distinct labels(n);')
@@ -190,10 +170,10 @@ describe('Multi statements', () => {
           .first()
           .contains('Test2')
 
-        cy.get('[data-testid="drawerDBMS"]').click()
+        cy.get('[data-testid="navigationDBMS"]').click()
 
         cy.get('[data-testid="sidebarMetaItem"]').contains('Test2')
-        cy.get('[data-testid="drawerDBMS"]').click()
+        cy.get('[data-testid="navigationDBMS"]').click()
 
         cy.executeCommand(':use system')
         cy.executeCommand('DROP DATABASE test1')

@@ -17,28 +17,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import neo4j from 'neo4j-driver'
 import {
   entries,
-  flatten,
   filter,
+  flatten,
   get,
   includes,
   isObjectLike,
   lowerCase,
   map,
-  some,
   reduce,
+  some,
   take
 } from 'lodash-es'
+import neo4j from 'neo4j-driver'
 
 import bolt from 'services/bolt/bolt'
-
-import * as viewTypes from 'shared/modules/stream/frameViewTypes'
 import { recursivelyExtractGraphItems } from 'services/bolt/boltMappings'
+import {
+  durationFormat,
+  stringModifier
+} from 'services/bolt/cypherTypesFormatting'
 import { stringifyMod, unescapeDoubleQuotesForDisplay } from 'services/utils'
-import { stringModifier } from 'services/bolt/cypherTypesFormatting'
+import * as viewTypes from 'shared/modules/frames/frameViewTypes'
 
 /**
  * Checks if a results has records which fields will be truncated when displayed
@@ -61,7 +62,10 @@ export const resultHasTruncatedFields = (result: any, maxFieldItems: any) => {
   )
 }
 
-export function getBodyAndStatusBarMessages(result: any, maxRows: any) {
+export function getBodyAndStatusBarMessages(
+  result: any,
+  maxRows: any
+): { statusBarMessage?: string; bodyMessage?: string } {
   if (!result || !result.summary || !result.summary.resultAvailableAfter) {
     return {}
   }
@@ -88,8 +92,9 @@ export function getBodyAndStatusBarMessages(result: any, maxRows: any) {
       : `completed ${totalTimeString} ${streamMessageTail}`
 
   if (updateMessages && updateMessages.length > 0) {
-    updateMessages = `${updateMessages[0].toUpperCase() +
-      updateMessages.slice(1)}, `
+    updateMessages = `${
+      updateMessages[0].toUpperCase() + updateMessages.slice(1)
+    }, `
   } else {
     streamMessage = streamMessage[0].toUpperCase() + streamMessage.slice(1)
   }
@@ -98,11 +103,13 @@ export function getBodyAndStatusBarMessages(result: any, maxRows: any) {
   const bodyMessage =
     (!updateMessages || updateMessages.length === 0) &&
     result.records.length === 0
-      ? `(${(systemUpdatesValue > 0 &&
-          `${systemUpdatesValue} system update${(systemUpdatesValue > 1 &&
-            's') ||
-            ''}`) ||
-          'no changes'}, no records)`
+      ? `(${
+          (systemUpdatesValue > 0 &&
+            `${systemUpdatesValue} system update${
+              (systemUpdatesValue > 1 && 's') || ''
+            }`) ||
+          'no changes'
+        }, no records)`
       : `${updateMessages}completed ${totalTimeString} ms.`
 
   return {
@@ -128,12 +135,6 @@ export const flattenArrayDeep = (arr: any) => {
   }
 
   return result
-}
-
-const VIS_MAX_SAFE_LIMIT = 1000
-
-export const requestExceedsVisLimits = ({ result }: any = {}) => {
-  return resultHasTruncatedFields(result, VIS_MAX_SAFE_LIMIT)
 }
 
 export const resultHasNodes = (request: any, types = neo4j.types) => {
@@ -217,8 +218,7 @@ export const initialView = (props: any, state: any = {}) => {
   }
   // No we don't care about the recentView
   // If the response have viz elements, we show the viz
-  if (!requestExceedsVisLimits(props.request) && resultHasNodes(props.request))
-    return viewTypes.VISUALIZATION
+  if (resultHasNodes(props.request)) return viewTypes.VISUALIZATION
   return viewTypes.TABLE
 }
 
@@ -443,9 +443,10 @@ export function mapNeo4jValuesToPlainValues(values: any): any {
  */
 function neo4jValueToPlainValue(value: any) {
   switch (get(value, 'constructor')) {
+    case neo4j.types.Duration:
+      return durationFormat(value)
     case neo4j.types.Date:
     case neo4j.types.DateTime:
-    case neo4j.types.Duration:
     case neo4j.types.LocalDateTime:
     case neo4j.types.LocalTime:
     case neo4j.types.Time:

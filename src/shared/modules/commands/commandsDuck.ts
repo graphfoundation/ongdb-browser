@@ -17,39 +17,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import Rx from 'rxjs'
 import { v4 } from 'uuid'
+
+import { CONNECTION_SUCCESS } from '../connections/connectionsDuck'
 import {
-  cleanCommand,
-  extractPostConnectCommandsFromServerConfig,
-  buildCommandObject,
-  extractStatementsFromString
-} from 'services/commandUtils'
-import {
-  extractAllowlistFromConfigString,
-  addProtocolsToUrlList,
-  firstSuccessPromise,
-  serialExecution,
-  resolveAllowlistWildcard
-} from 'services/utils'
-import helper from 'services/commandInterpreterHelper'
+  getAvailableSettings,
+  getDefaultRemoteContentHostnameAllowlist,
+  getRemoteContentHostnameAllowlist,
+  UPDATE_SETTINGS
+} from '../dbMeta/dbMetaDuck'
 import { addHistory } from '../history/historyDuck'
 import {
   getMaxHistory,
   getPlayImplicitInitCommands,
   shouldEnableMultiStatementMode
 } from '../settings/settingsDuck'
-import { fetchRemoteGuide } from './helpers/play'
-import { CONNECTION_SUCCESS } from '../connections/connectionsDuck'
+import { fetchRemoteGuideAsync } from './helpers/playAndGuides'
+import helper from 'services/commandInterpreterHelper'
 import {
-  UPDATE_SETTINGS,
-  getAvailableSettings,
-  getRemoteContentHostnameAllowlist,
-  getDefaultRemoteContentHostnameAllowlist
-} from '../dbMeta/dbMetaDuck'
+  buildCommandObject,
+  cleanCommand,
+  extractPostConnectCommandsFromServerConfig,
+  extractStatementsFromString
+} from 'services/commandUtils'
+import {
+  addProtocolsToUrlList,
+  extractAllowlistFromConfigString,
+  firstSuccessPromise,
+  resolveAllowlistWildcard,
+  serialExecution
+} from 'services/utils'
 import { APP_START, USER_CLEAR } from 'shared/modules/app/appDuck'
-import { add as addFrame } from 'shared/modules/stream/streamDuck'
+import { add as addFrame } from 'shared/modules/frames/framesDuck'
 import { update as updateQueryResult } from 'shared/modules/requests/requestsDuck'
 
 export const NAME = 'commands'
@@ -59,9 +59,9 @@ export const SYSTEM_COMMAND_QUEUED = `${NAME}/SYSTEM_COMMAND_QUEUED`
 export const UNKNOWN_COMMAND = `${NAME}/UNKNOWN_COMMAND`
 export const SHOW_ERROR_MESSAGE = `${NAME}/SHOW_ERROR_MESSAGE`
 export const CLEAR_ERROR_MESSAGE = `${NAME}/CLEAR_ERROR_MESSAGE`
-export const CYPHER_SUCCEEDED = `${NAME}/CYPHER_SUCCEEDED`
-export const CYPHER_FAILED = `${NAME}/CYPHER_FAILED`
 export const FETCH_GUIDE_FROM_ALLOWLIST = `${NAME}FETCH_GUIDE_FROM_ALLOWLIST`
+export const CYPHER_SUCCEEDED = `cypher/CYPHER_SUCCEEDED`
+export const CYPHER_FAILED = `cypher/CYPHER_FAILED`
 
 export const useDbCommand = 'use'
 export const listDbsCommand = 'dbs'
@@ -69,7 +69,7 @@ export const autoCommitTxCommand = 'auto'
 
 const initialState = {}
 export const getErrorMessage = (state: any) => state[NAME].errorMessage
-export const allowlistedMultiCommands = () => [':param', ':use']
+export const allowlistedMultiCommands = () => [':param', ':use', ':auto']
 
 export default function reducer(state = initialState, action: any) {
   switch (action.type) {
@@ -88,6 +88,21 @@ export default function reducer(state = initialState, action: any) {
 
 // Action creators
 
+export interface ExecuteSingleCommandAction {
+  type: typeof SINGLE_COMMAND_QUEUED
+  cmd: string
+  id?: number | string
+  requestId?: string
+  useDb?: string | null
+  isRerun?: boolean
+}
+
+export interface ExecuteCommandAction extends ExecuteSingleCommandAction {
+  type: typeof COMMAND_QUEUED
+  parentId?: string
+  source?: string
+}
+
 export const commandSources = {
   button: 'BUTTON',
   playButton: 'PLAY-BUTTON',
@@ -99,8 +114,33 @@ export const commandSources = {
   sidebar: 'SIDEBAR',
   url: 'URL'
 }
+
+export const executeSingleCommand = (
+  cmd: string,
+  {
+    id,
+    requestId,
+    useDb,
+    isRerun = false
+  }: {
+    id?: number | string
+    requestId?: string
+    useDb?: string | null
+    isRerun?: boolean
+  } = {}
+): ExecuteSingleCommandAction => {
+  return {
+    type: SINGLE_COMMAND_QUEUED,
+    cmd,
+    id,
+    requestId,
+    useDb,
+    isRerun
+  }
+}
+
 export const executeCommand = (
-  cmd: any,
+  cmd: string,
   {
     id = undefined,
     requestId = undefined,
@@ -108,8 +148,15 @@ export const executeCommand = (
     useDb = undefined,
     isRerun = false,
     source = undefined
-  }: any = {}
-) => {
+  }: {
+    id?: number | string
+    requestId?: string
+    parentId?: string
+    useDb?: string | null
+    isRerun?: boolean
+    source?: string
+  } = {}
+): ExecuteCommandAction => {
   return {
     type: COMMAND_QUEUED,
     cmd,
@@ -119,20 +166,6 @@ export const executeCommand = (
     useDb,
     isRerun,
     source
-  }
-}
-
-export const executeSingleCommand = (
-  cmd: any,
-  { id, requestId, useDb, isRerun = false }: any = {}
-) => {
-  return {
-    type: SINGLE_COMMAND_QUEUED,
-    cmd,
-    id,
-    requestId,
-    useDb,
-    isRerun
   }
 }
 
@@ -244,7 +277,7 @@ export const handleCommandEpic = (action$: any, store: any) =>
 
       serialExecution(...jobs).catch(() => {})
     })
-    .mapTo({ type: 'NOOP' })
+    .ignoreElements()
 
 export const handleSingleCommandEpic = (action$: any, store: any) =>
   action$
@@ -281,9 +314,9 @@ export const postConnectCmdEpic = (some$: any, store: any) =>
       .ofType(UPDATE_SETTINGS)
       .map(() => {
         const serverSettings = getAvailableSettings(store.getState())
-        if (serverSettings && serverSettings['browser.post_connect_cmd']) {
+        if (serverSettings && serverSettings.postConnectCmd) {
           const cmds = extractPostConnectCommandsFromServerConfig(
-            serverSettings['browser.post_connect_cmd']
+            serverSettings.postConnectCmd
           )
           const playImplicitInitCommands = getPlayImplicitInitCommands(
             store.getState()
@@ -318,7 +351,7 @@ export const fetchGuideFromAllowlistEpic = (some$: any, store: any) =>
 
     return firstSuccessPromise(guidesUrls, (url: any) => {
       // Get first successful fetch
-      return fetchRemoteGuide(url, allowlistStr).then(r => ({
+      return fetchRemoteGuideAsync(url, allowlistStr).then(r => ({
         type: action.$$responseChannel,
         success: true,
         result: r

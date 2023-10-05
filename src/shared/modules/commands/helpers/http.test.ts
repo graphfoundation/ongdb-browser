@@ -17,13 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import { isValidURL, parseHttpVerbCommand } from './http'
+import { isValidUrl, parseHttpVerbCommand } from './http'
 
 describe('isValidUrl', () => {
   it('finishes within a second when called with "EnableMultiStatement:true"', () => {
     const start = Date.now()
-    const result = isValidURL('EnableMultiStatement:true')
+    const result = isValidUrl('EnableMultiStatement:true')
     const end = Date.now()
 
     expect(result).toBe(false)

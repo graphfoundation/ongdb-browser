@@ -17,17 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import updateStatsFields from './updateStatisticsFields'
 import { flatten, map, take } from 'lodash-es'
 import neo4j from 'neo4j-driver'
-import { stringModifier } from 'services/bolt/cypherTypesFormatting'
+
+import { upperFirst, BasicNodesAndRels } from 'neo4j-arc/common'
+
 import {
-  safelyRemoveObjectProp,
-  safelyAddObjectProp,
   escapeReservedProps,
+  safelyAddObjectProp,
+  safelyRemoveObjectProp,
   unEscapeReservedProps
 } from '../utils'
+import updateStatsFields from './updateStatisticsFields'
+import { stringModifier } from 'services/bolt/cypherTypesFormatting'
 
 export const reservedTypePropertyName = 'transport-class'
 
@@ -159,7 +161,7 @@ const transformPlanArguments = (args: any) => {
   return res
 }
 
-const collectHits = function(operator: any) {
+const collectHits = function (operator: any) {
   let hits = operator.DbHits || 0
   if (operator.children) {
     hits = operator.children.reduce((acc: any, subOperator: any) => {
@@ -187,13 +189,47 @@ export function extractNodesAndRelationshipsFromRecords(
   return { nodes: rawNodes, relationships: rawRels }
 }
 
+const getDriverTypeName = (val: any) => {
+  const driverTypeMap = neo4j.types as any
+  const driverTypes = Object.keys(neo4j.types)
+  for (const type of driverTypes) {
+    if (val instanceof driverTypeMap[type]) {
+      return type
+    }
+  }
+  return undefined
+}
+
+const getTypeDisplayName = (val: any): string => {
+  const jsType = typeof val
+  const complexType = jsType === 'object'
+
+  if (jsType === 'number') {
+    return 'Float'
+  }
+
+  if (!complexType) {
+    return upperFirst(jsType)
+  }
+
+  if (val instanceof Array) {
+    return `Array(${val.length})`
+  }
+
+  if (val === null) {
+    return 'null'
+  }
+
+  return getDriverTypeName(val) || 'Unknown'
+}
+
 export function extractNodesAndRelationshipsFromRecordsForOldVis(
   records: typeof neo4j.types.Record[],
   types: any,
   filterRels: any,
   converters: Converters,
   maxFieldItems?: any
-) {
+): BasicNodesAndRels {
   if (records.length === 0) {
     return { nodes: [], relationships: [] }
   }
@@ -207,7 +243,11 @@ export function extractNodesAndRelationshipsFromRecordsForOldVis(
     return {
       id: item.identity.toString(),
       labels: item.labels,
-      properties: itemIntToString(item.properties, converters)
+      properties: itemIntToString(item.properties, converters),
+      propertyTypes: Object.entries(item.properties).reduce(
+        (acc, [key, val]) => ({ ...acc, [key]: getTypeDisplayName(val) }),
+        {}
+      )
     }
   })
   let relationships = rawRels
@@ -227,7 +267,11 @@ export function extractNodesAndRelationshipsFromRecordsForOldVis(
       startNodeId: item.start.toString(),
       endNodeId: item.end.toString(),
       type: item.type,
-      properties: itemIntToString(item.properties, converters)
+      properties: itemIntToString(item.properties, converters),
+      propertyTypes: Object.entries(item.properties).reduce(
+        (acc, [key, val]) => ({ ...acc, [key]: getTypeDisplayName(val) }),
+        {}
+      )
     }
   })
   return { nodes, relationships }

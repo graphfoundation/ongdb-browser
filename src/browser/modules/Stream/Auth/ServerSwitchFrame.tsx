@@ -17,18 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React from 'react'
-import FrameTemplate from '../../Frame/FrameTemplate'
-import {
-  StyledConnectionAside,
-  StyledConnectionBodyContainer,
-  StyledConnectionBody
-} from './styled'
-import ConnectedView from './ConnectedView'
-import { H3 } from 'browser-components/headers'
 
 import ClickToCode from '../../ClickToCode'
+import FrameBodyTemplate from '../../Frame/FrameBodyTemplate'
+import ConnectedView from './ConnectedView'
+import {
+  StyledConnectionAside,
+  StyledConnectionBody,
+  StyledConnectionBodyContainer
+} from './styled'
+import { H3 } from 'browser-components/headers'
 
 const connectionFailed = (frame: any) => {
   return frame.type === 'switch-fail'
@@ -116,8 +115,9 @@ export const ServerSwitchFrame = (props: any) => {
 
 const Frame = (props: any) => {
   return (
-    <FrameTemplate
-      header={props.frame}
+    <FrameBodyTemplate
+      isCollapsed={props.isCollapsed}
+      isFullscreen={props.isFullscreen}
       contents={<ServerSwitchFrame {...props} />}
     />
   )

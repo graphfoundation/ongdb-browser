@@ -17,23 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import neo4j from 'neo4j-driver'
-import * as viewTypes from 'shared/modules/stream/frameViewTypes'
+
 import {
-  resultHasNodes,
-  resultHasRows,
-  resultHasWarnings,
-  resultHasPlan,
-  resultIsError,
-  getRecordsToDisplayInTable,
-  initialView,
   extractRecordsToResultArray,
   flattenGraphItemsInResultArray,
-  stringifyResultArray,
-  recordToJSONMapper
+  getRecordsToDisplayInTable,
+  initialView,
+  recordToJSONMapper,
+  resultHasNodes,
+  resultHasPlan,
+  resultHasRows,
+  resultHasWarnings,
+  resultIsError,
+  stringifyResultArray
 } from './helpers'
-import { stringModifier, csvFormat } from 'services/bolt/cypherTypesFormatting'
+import { csvFormat, stringModifier } from 'services/bolt/cypherTypesFormatting'
+import * as viewTypes from 'shared/modules/frames/frameViewTypes'
 
 describe('helpers', () => {
   test('getRecordsToDisplayInTable should report if there are rows or not in the result', () => {
@@ -921,6 +921,44 @@ describe('helpers', () => {
             labels: ['foo'],
             properties: {
               bar: 'P10M5DT1S'
+            }
+          }
+        }
+
+        expect(recordToJSONMapper(record)).toEqual(expected)
+      })
+
+      test('handles long duration values', () => {
+        const node = new (neo4j.types.Node as any)(1, ['foo'], {
+          bar: new neo4j.types.Duration(24146, 2, 52641, 545000000)
+        })
+        const record = new (neo4j.types.Record as any)(['n'], [node])
+        const expected = {
+          n: {
+            identity: 1,
+            elementType: 'node',
+            labels: ['foo'],
+            properties: {
+              bar: 'P2012Y2M2DT14H37M21.545S'
+            }
+          }
+        }
+
+        expect(recordToJSONMapper(record)).toEqual(expected)
+      })
+
+      test('handles smaller duration values', () => {
+        const node = new (neo4j.types.Node as any)(1, ['foo'], {
+          bar: new neo4j.types.Duration(0, 0, 100, 0)
+        })
+        const record = new (neo4j.types.Record as any)(['n'], [node])
+        const expected = {
+          n: {
+            identity: 1,
+            elementType: 'node',
+            labels: ['foo'],
+            properties: {
+              bar: 'PT1M40S'
             }
           }
         }

@@ -17,74 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import React, { memo, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import React, { memo, useRef, useEffect } from 'react'
-import { StyledStream, Padding, AnimationContainer } from './styled'
-import CypherFrame from './CypherFrame/CypherFrame'
-import HistoryFrame from './HistoryFrame'
-import PlayFrame from './PlayFrame'
-import DefaultFrame from '../Frame/DefaultFrame'
-import PreFrame from './PreFrame'
-import ParamsFrame from './ParamsFrame'
-import ErrorFrame from './ErrorFrame'
-import HelpFrame from './HelpFrame'
-import CypherScriptFrame from './CypherScriptFrame/CypherScriptFrame'
-import SchemaFrame from './SchemaFrame'
-import StyleFrame from './StyleFrame'
-import SysInfoFrame from './SysInfoFrame/SysInfoFrame'
-import ConnectionFrame from './Auth/ConnectionFrame'
-import DisconnectFrame from './Auth/DisconnectFrame'
-import ServerStatusFrame from './Auth/ServerStatusFrame'
-import ServerSwitchFrame from './Auth/ServerSwitchFrame'
-import UseDbFrame from './Auth/UseDbFrame'
-import ChangePasswordFrame from './Auth/ChangePasswordFrame'
-import QueriesFrame from './Queries/QueriesFrame'
-import UserList from '../User/UserList'
-import UserAdd from '../User/UserAdd'
+
+import { ExportItem } from '../Frame/ExportButton'
+import { FrameContainer } from './FrameContainer'
+import { AnimationContainer, Padding, StyledStream } from './styled'
 import { GlobalState } from 'shared/globalState'
-import { FrameStack, Frame, getFrames } from 'shared/modules/stream/streamDuck'
 import {
-  getActiveConnectionData,
-  Connection
+  Connection,
+  getActiveConnectionData
 } from 'shared/modules/connections/connectionsDuck'
+import { Frame, FrameStack, getFrames } from 'shared/modules/frames/framesDuck'
 import { getScrollToTop } from 'shared/modules/settings/settingsDuck'
-import DbsFrame from './Auth/DbsFrame'
-
-const nameToFrame: Record<string, React.ComponentType<any>> = {
-  error: ErrorFrame,
-  cypher: CypherFrame,
-  'cypher-script': CypherScriptFrame,
-  'user-list': UserList,
-  'user-add': UserAdd,
-  'change-password': ChangePasswordFrame,
-  pre: PreFrame,
-  play: PlayFrame,
-  'play-remote': PlayFrame,
-  history: HistoryFrame,
-  param: ParamsFrame,
-  params: ParamsFrame,
-  connection: ConnectionFrame,
-  disconnect: DisconnectFrame,
-  schema: SchemaFrame,
-  help: HelpFrame,
-  queries: QueriesFrame,
-  sysinfo: SysInfoFrame,
-  status: ServerStatusFrame,
-  'switch-success': ServerSwitchFrame,
-  'switch-fail': ServerSwitchFrame,
-  'use-db': UseDbFrame,
-  'reset-db': UseDbFrame,
-  dbs: DbsFrame,
-  style: StyleFrame,
-  default: DefaultFrame
-}
-
-type FrameType = keyof typeof nameToFrame
-
-const getFrame = (type: FrameType) => {
-  return nameToFrame[type] || nameToFrame.default
-}
 
 type StreamProps = {
   frames: FrameStack[]
@@ -96,6 +41,9 @@ export interface BaseFrameProps {
   frame: Frame & { isPinned: boolean }
   activeConnectionData: Connection | null
   stack: Frame[]
+  isFullscreen: boolean
+  isCollapsed: boolean
+  setExportItems: (exportItems: ExportItem[]) => void
 }
 
 function Stream(props: StreamProps): JSX.Element {
@@ -117,32 +65,14 @@ function Stream(props: StreamProps): JSX.Element {
 
   return (
     <StyledStream ref={base} data-testid="stream">
-      {props.frames.map(frameObject => {
-        const frame = frameObject.stack[0]
-
-        const frameProps: BaseFrameProps = {
-          frame: { ...frame, isPinned: frameObject.isPinned },
-          activeConnectionData: props.activeConnectionData,
-          stack: frameObject.stack
-        }
-
-        let MyFrame = getFrame(frame.type as FrameType)
-        if (frame.type === 'error') {
-          try {
-            const cmd = frame.cmd.replace(/^:/, '')
-            const Frame = cmd[0].toUpperCase() + cmd.slice(1) + 'Frame'
-            MyFrame = require('./Extras/index')[Frame]
-            if (!MyFrame) {
-              MyFrame = getFrame(frame.type)
-            }
-          } catch (e) {}
-        }
-        return (
-          <AnimationContainer key={frame.id}>
-            <MyFrame {...frameProps} />
-          </AnimationContainer>
-        )
-      })}
+      {props.frames.map((frameObject: FrameStack) => (
+        <AnimationContainer key={frameObject.stack[0].id}>
+          <FrameContainer
+            frameData={frameObject}
+            activeConnectionData={props.activeConnectionData}
+          />
+        </AnimationContainer>
+      ))}
       <Padding />
     </StyledStream>
   )

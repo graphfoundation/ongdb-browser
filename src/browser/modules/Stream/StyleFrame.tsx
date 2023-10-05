@@ -17,22 +17,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import FrameTemplate from '../Frame/FrameTemplate'
+
+import { FireExtinguisherIcon } from 'browser-components/icons/LegacyIcons'
+
+import FrameBodyTemplate from '../Frame/FrameBodyTemplate'
+import { InfoView } from './InfoView'
 import { PaddedDiv, StyledOneRowStatsBar, StyledRightPartial } from './styled'
-import { StyledFrameTitlebarButtonSection } from 'browser/modules/Frame/styled'
 import { FrameButton } from 'browser-components/buttons'
+import { StyledFrameTitlebarButtonSection } from 'browser/modules/Frame/styled'
 import { objToCss } from 'services/grassUtils'
 import {
-  executeSystemCommand,
+  commandSources,
   executeCommand,
-  commandSources
+  executeSystemCommand
 } from 'shared/modules/commands/commandsDuck'
-import { FireExtinguisherIcon } from 'browser-components/icons/Icons'
-import { InfoView } from './InfoView'
 
-const StyleFrame = ({ frame }: any) => {
+const StyleFrame = ({
+  frame,
+  isCollapsed,
+  isFullscreen,
+  setExportItems
+}: any) => {
   let grass: string | false = ''
   let contents = (
     <InfoView
@@ -52,13 +59,28 @@ const StyleFrame = ({ frame }: any) => {
       </PaddedDiv>
     )
   }
+
+  useEffect(() => {
+    setExportItems([
+      {
+        name: 'GraSS',
+        download: () => {
+          const blob = new Blob([grass || ''], {
+            type: 'text/plain;charset=utf-8'
+          })
+          saveAs(blob, 'style.grass')
+        }
+      }
+    ])
+    return () => setExportItems([])
+  }, [setExportItems, grass])
+
   return (
-    <FrameTemplate
-      header={frame}
-      numRecords={1}
-      getRecords={() => grass}
+    <FrameBodyTemplate
+      isCollapsed={isCollapsed}
+      isFullscreen={isFullscreen}
       contents={contents}
-      statusbar={<Statusbar frame={frame} />}
+      statusBar={<Statusbar frame={frame} />}
     />
   )
 }
@@ -74,7 +96,7 @@ const StyleStatusbar = ({
         <StyledFrameTitlebarButtonSection>
           <FrameButton
             title="Reset style"
-            data-testid="styleResetButton"
+            dataTestId="styleResetButton"
             onClick={() => onResetClick(resetStyleAction, rerunAction)}
           >
             <FireExtinguisherIcon title="Reset style" />

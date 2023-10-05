@@ -14,6 +14,13 @@ declare global {
         makeAssertions?: boolean
       ): Cypress.Chainable<void>
       /**
+       * Custom command to run cy.connect if needed
+       */
+      ensureConnection(creds?: {
+        username: string
+        password: string
+      }): Cypress.Chainable<void>
+      /**
        * Custom command to disconnect from neo4j database
        */
       disconnect(): Cypress.Chainable<void>
@@ -37,6 +44,10 @@ declare global {
         options?: Partial<Cypress.TypeOptions>
       ): Cypress.Chainable<void>
       waitForCommandResult(): Cypress.Chainable<void>
+      /**
+       * Custom command to create a database and wait for it to come online
+       */
+      createDatabase(dbName: string): Cypress.Chainable<void>
       /**
        * Custom command for testing content of frame
        */
@@ -105,6 +116,9 @@ declare global {
     }
   }
   interface Window {
-    neo4jDesktopApi: any
+    neo4jDesktopApi: unknown
+    Canny?: { (command: string, options?: unknown): void }
+    IsCannyLoaded?: boolean
+    attachEvent?: typeof window.addEventListener
   }
 }

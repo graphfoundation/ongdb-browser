@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import { buildTxFunctionByMode } from './boltHelpers'
 
 const WRITE = 'WRITE'
@@ -34,7 +33,7 @@ describe('buildTxFunctionByMode', () => {
 
     // When
     const txFn = buildTxFunctionByMode(fakeSession)
-    txFn()
+    txFn!(() => {})
 
     // Then
     expect(fakeSession.readTransaction).toHaveBeenCalledTimes(0)
@@ -50,7 +49,7 @@ describe('buildTxFunctionByMode', () => {
 
     // When
     const txFn = buildTxFunctionByMode(fakeSession)
-    txFn()
+    txFn!(() => {})
 
     // Then
     expect(fakeSession.readTransaction).toHaveBeenCalledTimes(1)
@@ -65,7 +64,7 @@ describe('buildTxFunctionByMode', () => {
 
     // When
     const txFn = buildTxFunctionByMode(fakeSession)
-    txFn()
+    txFn!(() => {})
 
     // Then
     expect(fakeSession.readTransaction).toHaveBeenCalledTimes(0)

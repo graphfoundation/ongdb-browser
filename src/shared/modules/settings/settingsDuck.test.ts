@@ -17,13 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import reducer, {
   DISABLE_IMPLICIT_INIT_COMMANDS,
   NAME,
-  UPDATE,
   REPLACE,
-  shouldReportUdc,
+  UPDATE,
   getInitCmd
 } from './settingsDuck'
 import { dehydrate } from 'services/duckUtils'
@@ -81,26 +79,6 @@ describe('settings reducer', () => {
 })
 
 describe('Selectors', () => {
-  test('shouldReportUdc casts to true for anything not false', () => {
-    // Given
-    const tests = [
-      { test: true, expect: true },
-      { test: 1, expect: true },
-      { test: '1', expect: true },
-      { test: 'on', expect: true },
-      { test: null, expect: true },
-      { test: undefined, expect: true },
-      { test: false, expect: false }
-    ]
-
-    // When && Then
-    tests.forEach(t => {
-      const state = {
-        [NAME]: { shouldReportUdc: t.test }
-      }
-      expect(shouldReportUdc(state)).toEqual(t.expect)
-    })
-  })
   test("let getInitCmd be falsy and cast to empty string if that's the case", () => {
     // Given
     const tests = [

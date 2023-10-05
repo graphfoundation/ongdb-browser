@@ -17,9 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React from 'react'
+
 import ManualLink from 'browser-components/ManualLink'
+
 const title = 'SCHEMA'
 const subtitle = 'Database schema indexes'
 const category = 'schemaClauses'
@@ -38,10 +39,10 @@ const content = (
       <div className="link">
         <p className="title">Related</p>
         <p className="content">
-          <a help-topic="create-index-on">:help CREATE INDEX ON</a>
-          <a help-topic="drop-index-on">:help DROP INDEX ON</a>
-          <a help-topic="create-constraint-on">:help CREATE CONSTRAINT ON</a>
-          <a help-topic="drop-constraint-on">:help DROP CONSTRAINT ON</a>
+          <a help-topic="create-index">:help CREATE INDEX</a>
+          <a help-topic="drop-index">:help DROP INDEX</a>
+          <a help-topic="create-constraint">:help CREATE CONSTRAINT</a>
+          <a help-topic="drop-constraint">:help DROP CONSTRAINT</a>
         </p>
       </div>
     </div>

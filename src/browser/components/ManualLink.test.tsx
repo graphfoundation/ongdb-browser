@@ -17,12 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { render } from '@testing-library/react'
-import { ManualLink } from 'browser-components/ManualLink'
 
-const tests: [Record<string, string | null>, string][] = [
+import { ManualLink, ManualLinkProps } from 'browser-components/ManualLink'
+
+const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
   [
     { neo4jVersion: null, chapter: 'graph-algorithms', page: '/' },
     'https://neo4j.com/docs/graph-algorithms/current/'
@@ -58,21 +58,27 @@ const tests: [Record<string, string | null>, string][] = [
     'https://neo4j.com/docs/driver-manual/4.0-preview/'
   ],
   [
-    { chapter: 'driver-manual', page: '/', minVersion: '3.5.0' },
+    {
+      chapter: 'driver-manual',
+      page: '/',
+      neo4jVersion: null,
+      minVersion: '3.5.0'
+    },
     'https://neo4j.com/docs/driver-manual/3.5/'
   ]
 ]
 
 test.each(tests)('Render correct url for props %o', (props, expected) => {
-  const { getByText } = render(
-    <ManualLink {...props}>link to manual</ManualLink>
-  )
+  render(<ManualLink {...props}>link to manual</ManualLink>)
 
-  const url = getByText('link to manual').getAttribute('href')
+  const url = screen.getByText('link to manual').getAttribute('href')
   expect(url).toEqual(expected)
 })
 
-const movedPages: [Record<string, string>, Record<string, string>][] = [
+const movedPages: [
+  Omit<ManualLinkProps, 'children' | 'chapter'>,
+  Record<string, string>
+][] = [
   [
     { neo4jVersion: '3.5.0', page: '/administration/' },
     {
@@ -88,10 +94,20 @@ const movedPages: [Record<string, string>, Record<string, string>][] = [
     }
   ],
   [
-    { page: '/administration/' },
+    { neo4jVersion: null, page: '/administration/' },
     {
-      text: 'link to manual',
-      url: 'https://neo4j.com/docs/cypher-manual/current/administration/'
+      text: 'Cypher Manual',
+      url: 'https://neo4j.com/docs/cypher-manual/current/'
+    }
+  ],
+  [
+    {
+      neo4jVersion: '4.3.0',
+      page: '/administration/indexes-for-search-performance/'
+    },
+    {
+      text: 'Indexes',
+      url: 'https://neo4j.com/docs/cypher-manual/4.3/indexes-for-search-performance/'
     }
   ]
 ]
@@ -99,12 +115,12 @@ const movedPages: [Record<string, string>, Record<string, string>][] = [
 test.each(movedPages)(
   'Render correct url for moved page %o',
   (props, expected) => {
-    const { getByText } = render(
+    render(
       <ManualLink chapter="cypher-manual" {...props}>
         link to manual
       </ManualLink>
     )
-    const url = getByText(expected.text).getAttribute('href')
+    const url = screen.getByText(expected.text).getAttribute('href')
     expect(url).toEqual(expected.url)
   }
 )

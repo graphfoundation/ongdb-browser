@@ -17,10 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import semver from 'semver'
 
-export const guessSemverVersion = (versionString: any) => {
+export const guessSemverVersion = (versionString: string | null) => {
   if (!versionString) {
     return null
   }

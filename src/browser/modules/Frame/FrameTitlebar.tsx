@@ -17,26 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import { connect } from 'react-redux'
 import React from 'react'
+import { connect } from 'react-redux'
+import { Action, Dispatch } from 'redux'
 
-import {
-  cancel as cancelRequest,
-  getRequest,
-  BrowserRequest,
-  REQUEST_STATUS_PENDING
-} from 'shared/modules/requests/requestsDuck'
-import {
-  Frame,
-  pin,
-  remove,
-  TRACK_COLLAPSE_TOGGLE,
-  TRACK_FULLSCREEN_TOGGLE,
-  unpin
-} from 'shared/modules/stream/streamDuck'
-import { sleep } from 'shared/services/utils'
-import { FrameControlButton } from 'browser-components/buttons'
 import {
   CloseIcon,
   ContractIcon,
@@ -44,16 +28,32 @@ import {
   ExpandIcon,
   PinIcon,
   UpIcon
-} from 'browser-components/icons/Icons'
-import { GlobalState } from 'shared/globalState'
-import { Action, Dispatch } from 'redux'
+} from 'browser-components/icons/LegacyIcons'
+
 import { TitleBarHeader } from './styled'
+import { FrameControlButton } from 'browser-components/buttons'
+import { GlobalState } from 'shared/globalState'
+import {
+  Frame,
+  TRACK_COLLAPSE_TOGGLE,
+  TRACK_FULLSCREEN_TOGGLE,
+  pin,
+  remove,
+  unpin
+} from 'shared/modules/frames/framesDuck'
+import {
+  BrowserRequest,
+  REQUEST_STATUS_PENDING,
+  cancel as cancelRequest,
+  getRequest
+} from 'shared/modules/requests/requestsDuck'
+import { sleep } from 'shared/services/utils'
 
 type FrameTitleBarBaseProps = {
   frame: Frame
-  fullscreen: boolean
+  isFullscreen: boolean
   fullscreenToggle: () => void
-  collapse: boolean
+  isCollapsed: boolean
   collapseToggle: () => void
   pinned: boolean
   togglePin: () => void
@@ -68,9 +68,9 @@ type FrameTitleBarProps = FrameTitleBarBaseProps & {
 
 function FrameTitlebar({
   frame,
-  fullscreen,
+  isFullscreen,
   fullscreenToggle,
-  collapse,
+  isCollapsed,
   collapseToggle,
   pinned,
   togglePin,
@@ -79,12 +79,12 @@ function FrameTitlebar({
   trackFullscreenToggle,
   trackCollapseToggle
 }: FrameTitleBarProps) {
-  const fullscreenIcon = fullscreen ? (
+  const fullscreenIcon = isFullscreen ? (
     <ContractIcon width={10} />
   ) : (
     <ExpandIcon width={10} />
   )
-  const expandCollapseIcon = collapse ? (
+  const expandCollapseIcon = isCollapsed ? (
     <DownIcon width={10} />
   ) : (
     <UpIcon width={10} />
@@ -104,7 +104,7 @@ function FrameTitlebar({
         <PinIcon width={10} />
       </FrameControlButton>
       <FrameControlButton
-        title={collapse ? 'Expand' : 'Collapse'}
+        title={isCollapsed ? 'Expand' : 'Collapse'}
         onClick={() => {
           collapseToggle()
           trackCollapseToggle()
@@ -113,7 +113,7 @@ function FrameTitlebar({
         {expandCollapseIcon}
       </FrameControlButton>
       <FrameControlButton
-        title={fullscreen ? 'Close fullscreen' : 'Fullscreen'}
+        title={isFullscreen ? 'Close fullscreen' : 'Fullscreen'}
         onClick={() => {
           fullscreenToggle()
           trackFullscreenToggle()
