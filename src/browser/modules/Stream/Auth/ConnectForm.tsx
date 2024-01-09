@@ -175,7 +175,7 @@ export default function ConnectForm(props: ConnectFormProps): JSX.Element {
 
   async function reachabilityCheck(url: string) {
     setReachablityState('loading')
-    const res = await httpReachabilityCheck(`http://${stripScheme(url)}`)
+    const res = await httpReachabilityCheck(`//${stripScheme(url)}`)
 
     // Being reachable by http is not a requirement (you could have some really odd network setup)
     // But if it doesn't work though, it is likely the connection will time out which can take a while
@@ -372,7 +372,9 @@ export default function ConnectForm(props: ConnectFormProps): JSX.Element {
 
         {props.authenticationMethod === SSO &&
           !SSOLoading &&
-          SSOProviders.map((provider: SSOProvider) => (
+          SSOProviders.filter(provider => {
+            return 'visible' in provider ? provider.visible : true
+          }).map((provider: SSOProvider) => (
             <StyledSSOButtonContainer key={provider.id}>
               <FormButton
                 onClick={() => {
