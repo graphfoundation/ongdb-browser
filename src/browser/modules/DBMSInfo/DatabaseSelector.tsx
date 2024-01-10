@@ -1,4 +1,23 @@
 /*
+ * Copyright (c) "Graph Foundation"
+ * Graph Foundation, Inc. [https://graphfoundation.org]
+ *
+ * This file is part of ONgDB.
+ *
+ * ONgDB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * Copyright (c) "Neo4j"
  * Neo4j Sweden AB [http://neo4j.com]
  *
@@ -105,8 +124,8 @@ export const DatabaseSelector = ({
             /* When deduplicating the list of databases and aliases on clusters
              we prefer to find ones that are "online". If our deduplicated
              db is not online, it means none of the databases on the cluster with
-             that name is online, so we should disable it in the list and show 
-             one of the statuses as a simplification (even though they could 
+             that name is online, so we should disable it in the list and show
+             one of the statuses as a simplification (even though they could
               technically be different)
              */
             const dbNotOnline = dbOrAlias.status !== 'online'

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023 "Graph Foundation"
+ * Copyright (c) "Graph Foundation"
  * Graph Foundation, Inc. [https://graphfoundation.org]
  *
  * This file is part of ONgDB.
