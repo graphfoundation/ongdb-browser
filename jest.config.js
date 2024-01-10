@@ -51,5 +51,6 @@ module.exports = {
   },
   globals: {
     SEGMENT_KEY: 'a-segment-key'
-  }
+  },
+  testResultsProcessor: 'jest-bamboo-reporter'
 }

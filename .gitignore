@@ -24,3 +24,5 @@ ongdb-enterprise-*/
 
 ./src/neo4j-arc/dist
 ./src/neo4j-arc/node_modules
+
+test-report.json
