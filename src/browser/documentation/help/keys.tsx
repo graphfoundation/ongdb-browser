@@ -225,7 +225,7 @@ const content = (
       <h3>Next steps </h3>
       <ul>
         <li>
-          <a help-topic="commands">Help commands</a> - Useful Neo4j Browser
+          <a help-topic="commands">Help commands</a> - Useful ONgDB Browser
           commands
         </li>
         <li>

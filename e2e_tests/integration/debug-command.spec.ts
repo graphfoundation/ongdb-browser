@@ -24,7 +24,7 @@ import { isAura } from '../support/utils'
 
 describe(':debug command', () => {
   before(function () {
-    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
+    cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('can `:debug` command when not connected', () => {

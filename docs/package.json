@@ -1,7 +1,7 @@
 {
   "name": "browser-manual",
   "version": "1.0.0",
-  "description": "= Neo4j Browser Manual",
+  "description": "= ONgDB Browser Manual",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neo4j/neo4j-browser/.git"
+    "url": "git+https://github.com/graphfoundation/ongdb-browser/.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/neo4j/neo4j-browser/issues"
+    "url": "https://github.com/graphfoundation/ongdb-browser/issues"
   },
-  "homepage": "https://github.com/neo4j/neo4j-browser/docs#readme",
+  "homepage": "https://github.com/graphfoundation/ongdb-browser/docs#readme",
   "dependencies": {
     "@antora/cli": "^3.0.0",
     "@antora/site-generator-default": "^3.0.0",

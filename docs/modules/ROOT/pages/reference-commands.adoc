@@ -5,13 +5,13 @@
 [[reference-commands]]
 = Command reference
 
-The editor in Neo4j Browser understands a few client-side commands, which begin with a colon (`:`).
+The editor in ONgDB Browser understands a few client-side commands, which begin with a colon (`:`).
 
 
 [[browser-commands]]
 == Browser commands
 
-//neo4j-browser/src/browser/modules/Stream/Stream.tsx
+//ongdb-browser/src/browser/modules/Stream/Stream.tsx
 
 //Frames:
 
@@ -66,7 +66,7 @@ m| :clear
 a| Remove all frames from the stream.
 
 m| :config
-a| Show the configuration settings. 
+a| Show the configuration settings.
 
 m| +:config <key-value>+
 a|
@@ -93,20 +93,20 @@ a| REST command, send an HTTP GET request.
 m| :guide
 a|
 Show the guide drawer.
-The guide drawer contains interactive Neo4j Browser guides for learning concepts and tools with Neo4j.
+The guide drawer contains interactive ONgDB Browser guides for learning concepts and tools with Neo4j.
 
 m| +:guide <guide-name>+
 a|
-Show the guide drawer with a specific Neo4j Browser guide.
+Show the guide drawer with a specific ONgDB Browser guide.
 The name can be specified with or without the Hyphen (`-`) character, e.g, `:guide movie-graph` or `:guide movie graph`.
 
 m| +:guide <URL>+
 a|
-Show the guide drawer with a custom Neo4j Browser guide from the specified URL.
+Show the guide drawer with a custom ONgDB Browser guide from the specified URL.
 
 [NOTE]
 ====
-There are also other Neo4j Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
+There are also other ONgDB Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
 You can check out the currently published list on the link:https://portal.graphgist.org/graph_guides[GraphGist Portal (Graph Guides section)^]. +
 For more information on how to create a custom Browser guide, see link:https://neo4j.com/developer/guide-create-neo4j-browser-guide/[creating a custom Browser guide^].
 ====
@@ -118,29 +118,29 @@ m| +:head <request>+
 a| REST command, send an HTTP HEAD request.
 
 m| :history
-a| Display Neo4j Browser history of your executed commands.
+a| Display ONgDB Browser history of your executed commands.
 
 m| :history clear
-a| Remove all commands from Neo4j Browser history.
+a| Remove all commands from ONgDB Browser history.
 
 m| +:put <request>+
 a| REST command, send an HTTP PUT request.
 
 m| :play
-a| Play Neo4j Browser guides.
+a| Play ONgDB Browser guides.
 
 m| +:play <guide-name>+
 a|
-Play a specific Neo4j Browser guide.
+Play a specific ONgDB Browser guide.
 The name can be specified with or without the Hyphen (`-`) character, e.g, `:play movie-graph` or `:play movie graph`.
 
 m| +:play <URL>+
 a|
-Play a custom Neo4j Browser guide from the specified URL.
+Play a custom ONgDB Browser guide from the specified URL.
 
 [NOTE]
 ====
-There are also other Neo4j Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
+There are also other ONgDB Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
 You can check out the currently published list on the link:https://portal.graphgist.org/graph_guides[GraphGist Portal (Graph Guides section)^]. +
 For more information on how to create a custom Browser guide, see link:https://neo4j.com/developer/guide-create-neo4j-browser-guide/[creating a custom Browser guide^].
 ====

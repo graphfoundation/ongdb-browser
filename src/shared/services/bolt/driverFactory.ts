@@ -29,7 +29,7 @@ export const createDriverOrFailFn = (
 ): Driver | null => {
   // This is needed, I haven't figured out why. I don't find any mutations to
   // the object, so not sure what's going on.
-  const spreadOpts = { ...opts, userAgent: `neo4j-browser/v${version}` }
+  const spreadOpts = { ...opts, userAgent: `ongdb-browser/v${version}` }
   try {
     const res = neo4j.driver(url, auth, spreadOpts)
     return res

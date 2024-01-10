@@ -22,7 +22,7 @@
 
 describe('Saved Scripts', () => {
   before(function () {
-    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
+    cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
     cy.wait(3000)
     cy.connect('neo4j', Cypress.config('password'))
   })

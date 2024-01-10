@@ -1,6 +1,6 @@
 # Neo4j Arc - Browser Component Library
 
-This project currently contains all the components in common between Neo4j Browser and NX. Arc is a recursive backronym for Arc React Components.
+This project currently contains all the components in common between ONgDB Browser and NX. Arc is a recursive backronym for Arc React Components.
 
 ## Development
 

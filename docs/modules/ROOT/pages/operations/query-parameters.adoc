@@ -6,7 +6,7 @@
 
 //https://dzone.com/articles/neo4jcypher-getting-hang-query - a blog post by Mark Needham
 
-Neo4j Browser supports querying based on parameters.
+ONgDB Browser supports querying based on parameters.
 It allows the Cypher query planner to re-use your queries instead of parse and build new execution plans.
 
 Parameters can be used for:
@@ -132,7 +132,7 @@ RETURN n
 ====
 To run this example, in the *Browser Settings* drawer, check *Enable multi statement query editor*.
 Note that the results are displayed in a different way when you run multiple statements.
-In Neo4j Browser, the current state of multi-statement is to set up your environment with multiple statements so that you can execute queries and examine the results, one by one.
+In ONgDB Browser, the current state of multi-statement is to set up your environment with multiple statements so that you can execute queries and examine the results, one by one.
 Alternatively, you can run the `:param` command separately from the `MATCH` query.
 ====
 
@@ -316,7 +316,7 @@ $example = {"identity": 4, "labels": [], "properties": {"name": "Example"}}}
 [[clear-params]]
 === Clear parameters
 
-You can clear all currently set parameters from Neo4j Browser by running:
+You can clear all currently set parameters from ONgDB Browser by running:
 
 
 [source, browser command, role=noheader]

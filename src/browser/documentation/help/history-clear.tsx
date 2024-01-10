@@ -26,7 +26,7 @@ const content = (
   <>
     <p>
       The <code>:history clear</code> command will remove all previously
-      executed commands from Neo4j Browser history
+      executed commands from ONgDB Browser history
     </p>
     <table className="table-condensed table-help">
       <tbody>

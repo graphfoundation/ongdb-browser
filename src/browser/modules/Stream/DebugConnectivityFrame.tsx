@@ -211,7 +211,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
           title={'Debug connectivity'}
           subtitle={
             <>
-              Neo4j Browser requires a{' '}
+              ONgDB Browser requires a{' '}
               <span style={{ fontWeight: 500 }}>WebSocket connection</span> to
               the bolt connector port on the Neo4j Server.{' '}
             </>
@@ -234,7 +234,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
               <div style={{ marginTop: '10px' }}>
                 {secureHostingUnencryptedBolt && (
                   <div>
-                    Neo4j Browser is hosted on https, but only an unencrypted
+                    ONgDB Browser is hosted on https, but only an unencrypted
                     bolt connector was detected. To connect you will need to
                     either:
                     <ul>
@@ -245,7 +245,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
                 )}
                 {unsecureHostingEncyptedBolt && (
                   <div>
-                    Neo4j Browser is hosted on http but an encrypted bolt
+                    ONgDB Browser is hosted on http but an encrypted bolt
                     connector was detected. It is recommended that you either:
                     <ul>
                       <ListItem>
@@ -490,7 +490,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
               ))}
             </div>
             <pre>
-              <div>Neo4j Browser Version: {browserVersion}</div>
+              <div>ONgDB Browser Version: {browserVersion}</div>
               <div>User Agent: {navigator?.userAgent}</div>
               <div>Current time: {new Date().toISOString()} </div>
             </pre>

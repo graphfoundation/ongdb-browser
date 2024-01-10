@@ -14,8 +14,8 @@ const manifest = loadDataFromFile(manifestPath)
 const canaryManifest = {
   ...manifest,
   ...{
-    name: 'Neo4j Browser Canary',
-    short_name: 'Neo4j Browser Canary',
+    name: 'ONgDB Browser Canary',
+    short_name: 'ONgDB Browser Canary',
     icons: [
       {
         src: './assets/images/device-icons/neo4j-browser-canary.svg',

@@ -4,7 +4,7 @@
 [[http-rest-requests]]
 = HTTP REST requests
 
-Neo4j Browser supports the following HTTP REST commands:
+ONgDB Browser supports the following HTTP REST commands:
 
 * `:delete` -- HTTP DELETE.
 * `:get`  -- HTTP GET.

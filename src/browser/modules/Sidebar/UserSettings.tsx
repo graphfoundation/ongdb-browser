@@ -58,7 +58,7 @@ const visualSettings = [
       {
         theme: {
           tooltip:
-            'Use "Auto" to have neo4j-browser detect system dark vs. light mode if available.',
+            'Use "Auto" to have ongdb-browser detect system dark vs. light mode if available.',
           displayName: 'Theme',
           type: 'radio',
           options: [

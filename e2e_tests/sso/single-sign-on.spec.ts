@@ -20,7 +20,7 @@
 
 describe('Sign in with keycloak', () => {
   before(function () {
-    cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
+    cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
 
@@ -41,7 +41,7 @@ describe('Sign in with keycloak', () => {
       }
     })
 
-    cy.title().should('include', 'Neo4j Browser')
+    cy.title().should('include', 'ONgDB Browser')
     cy.wait(3000)
     cy.contains('You are connected').should('exist')
     cy.executeCommand(

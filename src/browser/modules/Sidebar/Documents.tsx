@@ -51,7 +51,7 @@ export const shouldLinkToNewRefs = (v: string): boolean => {
 const getReferences = (version: string, v: string) => {
   const newRefs = [
     {
-      name: 'Neo4j Browser Manual',
+      name: 'ONgDB Browser Manual',
       url: 'https://neo4j.com/docs/browser-manual/current/'
     },
     {

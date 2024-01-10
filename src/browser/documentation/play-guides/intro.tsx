@@ -28,11 +28,11 @@ const slides = [
   <Slide key="s1">
     <div className="col-sm-3">
       <h3>Introduction</h3>
-      <p className="lead">Neo4j Browser User Interface </p>
+      <p className="lead">ONgDB Browser User Interface </p>
     </div>
     <div className="col-sm-6">
       <p>
-        Neo4j Browser is a command driven client, like a web-based shell
+        ONgDB Browser is a command driven client, like a web-based shell
         environment. It is perfect for running ad-hoc graph queries, with just
         enough ability to prototype a Neo4j-based application.
       </p>
@@ -157,7 +157,7 @@ const slides = [
     <div className="col-sm-5">
       When Neo4j is installed, it is initiated with two databases - a{' '}
       <code>system</code> database and a default <code>neo4j</code> database.
-      Launching Neo4j Browser will automatically point us to the{' '}
+      Launching ONgDB Browser will automatically point us to the{' '}
       <code className="nobreak">neo4j default</code> database, shown by the
       neo4j$ prompt in the editor.
     </div>
@@ -181,7 +181,7 @@ const slides = [
       </p>
       <p>
         Favorites are global and independent of project or database which means
-        that you can access your Favorites from Neo4j Browser with different
+        that you can access your Favorites from ONgDB Browser with different
         databases, hosting platforms, and data sets.
       </p>
     </div>
@@ -221,7 +221,7 @@ const slides = [
       <h3>Next steps</h3>
       <ul className="undecorated">
         <li>
-          <a help-topic="commands">Help commands</a> - Useful Neo4j Browser
+          <a help-topic="commands">Help commands</a> - Useful ONgDB Browser
           commands
         </li>
         <li>

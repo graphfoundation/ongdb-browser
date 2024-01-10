@@ -163,7 +163,7 @@ export class BrowserSync extends Component<any, BrowserSyncState> {
         </DrawerToppedHeader>
       )
     } else {
-      headerContent = <DrawerHeader>Neo4j Browser Sync</DrawerHeader>
+      headerContent = <DrawerHeader>ONgDB Browser Sync</DrawerHeader>
     }
 
     if (this.state.clearLocalRequested === true) {
@@ -222,7 +222,7 @@ export class BrowserSync extends Component<any, BrowserSyncState> {
           <DrawerSection>
             <DrawerSubHeader>Sign In or Register</DrawerSubHeader>
             <DrawerSectionBody>
-              Neo4j Browser Sync is a companion service for Neo4j Browser.
+              ONgDB Browser Sync is a companion service for ONgDB Browser.
               Connect through a simple social sign-in to get started.
               <br />
               <br />

@@ -81,7 +81,7 @@ const Main = React.memo(function Main(props: MainProps) {
       {showUdcConsentBanner && (
         <UdcConsentBanner>
           <span>
-            To help make Neo4j Browser better we collect information on product
+            To help make ONgDB Browser better we collect information on product
             usage. Review your{' '}
             <UnderlineClickable onClick={openSettingsDrawer}>
               settings

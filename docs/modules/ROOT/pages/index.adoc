@@ -1,7 +1,7 @@
-:description: Neo4j Browser.
+:description: ONgDB Browser.
 
 [[browser]]
-= Neo4j Browser
+= ONgDB Browser
 //https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#keyboard-button-and-menu-macros
 :experimental:
 :sectnums:
@@ -21,15 +21,15 @@ License: Creative Commons 4.0
 endif::[]
 
 [.lead]
-*Neo4j Browser*
+*ONgDB Browser*
 
-Neo4j Browser is a developer-focused tool that allows you to execute Cypher queries and visualize the results.
-It is the default developer interface for both Enterprise and Community editions of Neo4j.
-It comes out-of-the-box with all of Neo4j’s graph database offerings, including Neo4j Server (Community and Enterprise editions), Neo4j AuraDB (Neo4j's Database as a Service), and Neo4j Desktop (all OS versions).
+ONgDB Browser is a developer-focused tool that allows you to execute Cypher queries and visualize the results.
+It is the default developer interface for both Enterprise and Community editions of ONgDB.
+It comes out-of-the-box with all of ONgDB’s graph database offerings, including ONgDB Server (Community and Enterprise editions), Neo4j AuraDB (Neo4j's Database as a Service), and Neo4j Desktop (all OS versions).
 
-Neo4j Browser is suitable for running ad-hoc graph queries, with the appropriate ability to prototype a Neo4j-based application.
+ONgDB Browser is suitable for running ad-hoc graph queries, with the appropriate ability to prototype a Neo4j-based application.
 
-Neo4j Browser is a tool for developers to interact with the graph, with the main focus on:
+ONgDB Browser is a tool for developers to interact with the graph, with the main focus on:
 
 * Writing and running graph queries with Cypher.
 * Exportable, tabular results of any query result.
@@ -38,12 +38,12 @@ Neo4j Browser is a tool for developers to interact with the graph, with the main
 [.lead]
 *Contents of this manual*
 
-The following areas of Neo4j Browser are covered in this manual:
+The following areas of ONgDB Browser are covered in this manual:
 
-* xref:about-browser.adoc[About Neo4j Browser] -- The purpose of Neo4j Browser and its high-level capabilities.
-* xref:deployment-modes/index.adoc[Deployment modes] -- The different deployment modes for running Neo4j Browser.
-* xref:visual-tour.adoc[Visual tour] -- A visual overview of the UI of Neo4j Browser.
-* xref:operations/index.adoc[Browser operations] -- How to administer and use Neo4j Browser.
+* xref:about-browser.adoc[About ONgDB Browser] -- The purpose of ONgDB Browser and its high-level capabilities.
+* xref:deployment-modes/index.adoc[Deployment modes] -- The different deployment modes for running ONgDB Browser.
+* xref:visual-tour.adoc[Visual tour] -- A visual overview of the UI of ONgDB Browser.
+* xref:operations/index.adoc[Browser operations] -- How to administer and use ONgDB Browser.
 
 [.lead]
 _Who should read this?_

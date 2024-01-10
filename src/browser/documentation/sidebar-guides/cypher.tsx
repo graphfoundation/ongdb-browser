@@ -190,7 +190,7 @@ WHERE ee.name = 'Emil' RETURN ee, friends`}
     <h3>References</h3>
     <ul className="undecorated">
       <li>
-        <a help-topic="commands">Help commands</a> - Useful Neo4j Browser
+        <a help-topic="commands">Help commands</a> - Useful ONgDB Browser
         commands
       </li>
       <li>

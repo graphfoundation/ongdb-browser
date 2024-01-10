@@ -29,7 +29,7 @@ const testData = [
 testData.forEach(testData => {
   describe(testData.title, () => {
     before(function () {
-      cy.visit(Cypress.config('url')).title().should('include', 'Neo4j Browser')
+      cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
       cy.wait(3000)
       cy.executeCommand(
         `:config userCypherThread: ${testData.useWebWorker ? 'true' : 'false'}`

@@ -4,7 +4,7 @@
 [[initial-command]]
 = Initial command
 
-When you first open Neo4j Browser and connect to a Neo4j DBMS, it automatically executes the command:
+When you first open ONgDB Browser and connect to a Neo4j DBMS, it automatically executes the command:
 
 [source, browser command, role="noheader"]
 ----

@@ -155,7 +155,7 @@ export function setupSentry(): void {
   if (process.env.NODE_ENV === 'production') {
     Sentry.init({
       dsn: 'https://1ea9f7ebd51441cc95906afb2d31d841@o110884.ingest.sentry.io/1232865',
-      release: `neo4j-browser@${version}`,
+      release: `ongdb-browser@${version}`,
       integrations: [
         new Integrations.BrowserTracing(),
         new CaptureConsole({ levels: ['error'] })

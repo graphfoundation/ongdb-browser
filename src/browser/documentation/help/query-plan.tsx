@@ -35,7 +35,7 @@ const content = (
       </p>
       <p>
         When you use the <a help-topic="explain">EXPLAIN</a> or{' '}
-        <a help-topic="profile">PROFILE</a> commands, Neo4j Browser displays a
+        <a help-topic="profile">PROFILE</a> commands, ONgDB Browser displays a
         diagram of the Query Plan.
       </p>
       <p>

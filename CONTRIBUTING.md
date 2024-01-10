@@ -1,4 +1,4 @@
-# Contributing to Neo4j Browser
+# Contributing to ONgDB Browser
 
 ## Need to raise an issue?
 
@@ -10,7 +10,7 @@ There are plenty of public channels available, too.
 
 For getting started or questions about how to use a particular feature, create a post on the [community forum](https://community.neo4j.com/), drop a line to the [mailing list](https://groups.google.com/forum/#!forum/neo4j) or ask a question in [Slack](https://neo4j.com/slack).
 
-If you think you might have hit a bug (it happens occasionally!) or you have specific feature request then use [Github Issues](https://github.com/neo4j/neo4j-browser/issues). Check whether someone else may have already raised something similar, as it is incredibly helpful to have related information all together. 
+If you think you might have hit a bug (it happens occasionally!) or you have specific feature request then use [Github Issues](https://github.com/graphfoundation/ongdb-browser/issues). Check whether someone else may have already raised something similar, as it is incredibly helpful to have related information all together. 
 
 ## Want to contribute?
 

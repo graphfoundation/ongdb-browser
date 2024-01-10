@@ -21,10 +21,8 @@
 /* global Cypress, cy, before */
 
 describe('Help command', () => {
-  before(function() {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+  before(function () {
+    cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('can `:help` command', () => {
@@ -37,7 +35,7 @@ describe('Help command', () => {
     // Make sure first loads
     frame
       .should('have.length', 1)
-      .should('contain', 'Neo4j Browser is a command shell')
+      .should('contain', 'ONgDB Browser is a command shell')
 
     // Click a help topic
     frame.contains('help commands').click()
@@ -56,7 +54,7 @@ describe('Help command', () => {
     // Make sure we're back
     frame
       .should('have.length', 1)
-      .should('contain', 'Neo4j Browser is a command shell')
+      .should('contain', 'ONgDB Browser is a command shell')
 
     // Click forward
     cy.getNextInFrameStackBtn().click()
@@ -84,7 +82,7 @@ describe('Help command', () => {
     // And we should be back
     frame
       .should('have.length', 1)
-      .should('contain', 'Neo4j Browser is a command shell')
+      .should('contain', 'ONgDB Browser is a command shell')
 
     // Click something else
     frame.contains('play concepts').click()

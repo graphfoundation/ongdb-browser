@@ -35,7 +35,7 @@ const content = (
             <ul>
               <li>
                 <a help-topic="help">:help</a> - for general help about using
-                Neo4j Browser
+                ONgDB Browser
               </li>
               <li>
                 <a help-topic="cypher">:help commands</a> - to see available

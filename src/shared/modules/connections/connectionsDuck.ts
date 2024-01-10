@@ -525,7 +525,7 @@ export const startupConnectEpic = (action$: any, store: any) => {
           )
           store.dispatch(setActiveConnection(discovery.CONNECTION_ID))
           authLog(
-            'Neo4j Browser successfully connected to Neo4j Server with stored credentials'
+            'ONgDB Browser successfully connected to Neo4j Server with stored credentials'
           )
           return { type: STARTUP_CONNECTION_SUCCESS }
         } catch {}
@@ -707,7 +707,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
                   } catch (e) {
                     authLog(`Failed to refresh token: ${e}`)
                     authLog(
-                      'This could be due to the refresh token not being available, which happens if Neo4j Browser accessed via stored credentials rather than redoing the SSO flow. ' +
+                      'This could be due to the refresh token not being available, which happens if ONgDB Browser accessed via stored credentials rather than redoing the SSO flow. ' +
                         'If you have a short lived access token, it may be beneficial to set `browser.retain_connection_credentials=false` in neo4j.conf to make sure the refresh token is always available.'
                     )
                     // if refreshing the token failed, don't retry

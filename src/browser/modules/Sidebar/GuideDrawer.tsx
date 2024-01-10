@@ -83,7 +83,7 @@ export const GuideDrawer = ({
             {currentGuide.title}
           </>
         ) : (
-          'Neo4j Browser Guides '
+          'ONgDB Browser Guides '
         )}
       </StyledGuideDrawerHeader>
       <StyledDrawerSeparator />

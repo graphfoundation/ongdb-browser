@@ -1,5 +1,5 @@
 * xref:index.adoc[]
-* xref:about-browser.adoc[About Neo4j Browser]
+* xref:about-browser.adoc[About ONgDB Browser]
 
 * xref:deployment-modes/index.adoc[Deployment modes]
 ** xref:deployment-modes/neo4j-server.adoc[]

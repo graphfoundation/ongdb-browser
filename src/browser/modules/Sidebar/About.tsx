@@ -43,7 +43,7 @@ function asChangeLogUrl(serverVersion: string): string | undefined {
   const releaseTag = tokenisedServerVersion.join('')
   const urlServerVersion =
     serverVersion && tokenisedServerVersion.splice(0, 2).join('.')
-  return `https://github.com/neo4j/neo4j/wiki/Neo4j-${urlServerVersion}-changelog#${releaseTag}`
+  return `https://github.com/graphfoundation/ongdb/wiki/ONgDB-${urlServerVersion}-Changelog#${releaseTag}`
 }
 
 interface AboutProps {

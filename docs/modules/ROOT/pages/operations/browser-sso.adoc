@@ -1,10 +1,10 @@
-:description: Single Sign-On (SSO) for Neo4j Browser.
+:description: Single Sign-On (SSO) for ONgDB Browser.
 
 [role=enterprise-edition]
 [[browser-sso]]
 = Browser Single Sign-On
 
-Neo4j Browser provides support for Single Sign-On (SSO) providers.
+ONgDB Browser provides support for Single Sign-On (SSO) providers.
 This is an Enterprise feature and requires specific configuration and a (self-hosted) Neo4j Server v4.4 and later.
 Additionally, you need a compatible SSO provider (local or external) already configured.
 For more information on the configuration, see link:https://neo4j.com/docs/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-parameters[Operations Manual -> OIDC configuration settings^].

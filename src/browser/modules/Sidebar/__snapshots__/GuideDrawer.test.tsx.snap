@@ -55,7 +55,7 @@ exports[`GuideDrawer renders list view including Remote Guides list 1`] = `
     <h4
       class="sc-cTAqQK dxVXPf"
     >
-      Neo4j Browser Guides 
+      ONgDB Browser Guides 
     </h4>
     <div
       class="sc-khQegj jfEAI"
@@ -98,7 +98,7 @@ exports[`GuideDrawer renders list view including Remote Guides list 1`] = `
             class="sc-cHzqoD kDRAfT"
           >
              
-            Navigating Neo4j Browser
+            Navigating ONgDB Browser
              
           </div>
         </li>
@@ -235,7 +235,7 @@ exports[`GuideDrawer renders list view without Remote Guides 1`] = `
     <h4
       class="sc-cTAqQK dxVXPf"
     >
-      Neo4j Browser Guides 
+      ONgDB Browser Guides 
     </h4>
     <div
       class="sc-khQegj jfEAI"
@@ -278,7 +278,7 @@ exports[`GuideDrawer renders list view without Remote Guides 1`] = `
             class="sc-cHzqoD kDRAfT"
           >
              
-            Navigating Neo4j Browser
+            Navigating ONgDB Browser
              
           </div>
         </li>

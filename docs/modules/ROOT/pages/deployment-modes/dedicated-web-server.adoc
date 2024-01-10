@@ -6,14 +6,14 @@
 
 The ONgDB Browser is a client-side single-page application (SPA), which uses an HTTP server for its static content.
 It is possible to host a dedicated web server to serve ONgDB Browser as a web application.
-Download ONgDB Browser from link:https://search.maven.org/artifact/org.neo4j.client/ongdb-browser[Maven^].
+Download ONgDB Browser from link:https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser[Maven^].
 
 Here are some use cases of why this deployment mode could be useful.
 
 ONgDB Browser local hosted::
-This case is valid if you have access to a Neo4j instance and do not want to install ONgDB Desktop or do not want to use a hosted ONgDB Browser web application.
+This case is valid if you have access to a ONgDB instance and do not want to install ONgDB Desktop or do not want to use a hosted ONgDB Browser web application.
 It is a simple solution, start a local hosted ONgDB Browser web application on your machine with a simple one-line command.
-It is also easy to run a specific version of ONgDB Browser, download the preferred version from link:https://search.maven.org/artifact/org.neo4j.client/ongdb-browser[Maven^].
+It is also easy to run a specific version of ONgDB Browser, download the preferred version from link:https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser[Maven^].
 
 ONgDB Browser deployed web application::
 If you want to have specific network configurations within your network and host ONgDB Browser for quick access within your organization, you can host ONgDB Browser with an HTTP web server.
@@ -21,7 +21,7 @@ This allows for full control of configuring the HTTP web server as needed.
 For example you way want to add a layer of access control to access the ONgDB Browser web application and configure the HTTP web server connection to use TLS.
 
 Extend or improve the source code::
-ONgDB Browser is open source (GNU General Public License v3.0), and the source code can be found at link:https://github.com/neo4j/ongdb-browser[_https://github.com/neo4j/ongdb-browser_^].
+ONgDB Browser is open source (GNU General Public License v3.0), and the source code can be found at link:https://github.com/graphfoundation/ongdb-browser[_https://github.com/graphfoundation/ongdb-browser_^].
 If you want to extend or contribute to the project, you can alter the code.
 This allows you to run a modified version of ONgDB Browser.
 
@@ -43,7 +43,7 @@ A simple HTTP server that is bundled with Python 3. Do not use in production env
 +
 [source, shell]
 ----
-python -m http.server --directory neo4j-browser/ 8080
+python -m http.server --directory ongdb-browser/ 8080
 ----
 +
 For more information, see link:https://docs.python.org/3/library/http.server.html[_https://docs.python.org/3/library/http.server.html_^].
@@ -53,7 +53,7 @@ A simple, zero-configuration command-line HTTP server.
 +
 [source, shell]
 ----
-npx http-server -p 8080 neo4j-browser/
+npx http-server -p 8080 ongdb-browser/
 ----
 +
 For more information, see link:https://www.npmjs.com/package/http-server[_https://www.npmjs.com/package/http-server_^].
@@ -63,7 +63,7 @@ A simple HTTP server is ideal for serving a static site, single page application
 +
 [source, shell]
 ----
-npx serve -l 8080 neo4j-browser/
+npx serve -l 8080 ongdb-browser/
 ----
 +
 For more information, see link:https://www.npmjs.com/package/serve[_https://www.npmjs.com/package/serve_^].
@@ -84,10 +84,10 @@ For more information, see link:https://www.iis.net/[_https://www.iis.net/_^].
 ====
 
 
-[[pre-built-neo4j-browser]]
+[[pre-built-ongdb-browser]]
 == Pre-built ONgDB Browser
 
-You can download ONgDB Browser from Maven (link:https://search.maven.org/artifact/org.neo4j.client/neo4j-browser[_https://search.maven.org/artifact/org.neo4j.client/neo4j-browser_^]) and serve the web application with an HTTP server.
+You can download ONgDB Browser from Maven (link:https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser[_https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser_^]) and serve the web application with an HTTP server.
 
 
 .Get pre-built ONgDB Browser and run an HTTP web server
@@ -97,16 +97,16 @@ You can download ONgDB Browser from Maven (link:https://search.maven.org/artifac
 +
 [source, shell, subs="attributes+"]
 ----
-wget https://repo1.maven.org/maven2/org/neo4j/client/neo4j-browser/{neo4j-browser-version}/neo4j-browser-{neo4j-browser-version}.jar
+wget https://repo1.maven.org/maven2/org.graphfoundation.ongdb.client/ongdb-browser/{neo4j-browser-version}/ongdb-browser-{neo4j-browser-version}.jar
 ----
 +
-Alternatively, manually go to link:https://search.maven.org/artifact/org.neo4j.client/neo4j-browser[_https://search.maven.org/artifact/org.neo4j.client/neo4j-browser_^] and download ONgDB Browser.
+Alternatively, manually go to link:https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser[_https://search.maven.org/artifact/org.graphfoundation.ongdb.client/ongdb-browser_^] and download ONgDB Browser.
 +
 . **Unzip the .jar file.**
 +
 [source, shell, subs="attributes+"]
 ----
-unzip neo4j-browser-{neo4j-browser-version}.jar
+unzip ongdb-browser-{neo4j-browser-version}.jar
 ----
 +
 . **Host ONgDB Browser with an HTTP server.**
@@ -144,12 +144,12 @@ For details on how to set up a connection to ONgDB in ONgDB Browser, see xref:op
 ====
 
 
-[[build-neo4j-browser]]
+[[build-ongdb-browser]]
 == Build ONgDB Browser
 
 You can build the source code and host ONgDB Browser.
 
-The source code can be found at link:https://github.com/neo4j/neo4j-browser[https://github.com/neo4j/neo4j-browser^].
+The source code can be found at link:https://github.com/graphfoundation/ongdb-browser[https://github.com/graphfoundation/ongdb-browser^].
 
 .Build ONgDB Browser and run an HTTP web server
 ====
@@ -161,14 +161,14 @@ The command gets only the `master` branch to save bandwidth and file space.
 +
 [source, shell]
 ----
-git clone --single-branch --branch=master https://github.com/neo4j/neo4j-browser/
+git clone --single-branch --branch=master https://github.com/graphfoundation/ongdb-browser/
 ----
 +
 Change the current working directory to the root of the Git repository.
 +
 [source, shell]
 ----
-cd neo4j-browser
+cd ongdb-browser
 ----
 +
 . **Build with Node.js.**

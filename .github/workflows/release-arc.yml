@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: neo4j/neo4j-browser
+          repository: graphfoundation/ongdb-browser
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:

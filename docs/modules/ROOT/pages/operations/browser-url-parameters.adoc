@@ -1,10 +1,10 @@
-:description: Neo4j Browser supports some URL parameters to be defined in the URL query component.
+:description: ONgDB Browser supports some URL parameters to be defined in the URL query component.
 
 
 [[browser-url-parameters]]
 = Browser URL parameters
 
-Neo4j Browser supports some URL parameters defined in the query component.
+ONgDB Browser supports some URL parameters defined in the query component.
 The query component is preceded by a question mark (`?`) and contains a query string that is a sequence of key–value pairs separated by an ampersand (`&`).
 
 
@@ -53,7 +53,7 @@ http://localhost:7474/browser?preselectAuthMethod=[NATIVE]|[SSO]|[NO_AUTH]
 
 == Pre-populate the editor
 
-Pre-populate the editor with a command when Neo4j Browser starts.
+Pre-populate the editor with a command when ONgDB Browser starts.
 Supported browser commands are:
 
 * `guide`

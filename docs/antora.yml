@@ -1,5 +1,5 @@
 name: browser-manual
-title: Neo4j Browser
+title: ONgDB Browser
 version: '5'
 start_page: ROOT:index.adoc
 nav:

@@ -10,7 +10,7 @@ You can customize your graph query result either in place or by using Graph Styl
 [[graph-style]]
 == Style your graph visualization in place
 
-Neo4j Browser also provides functionality for styling with color and size, based on node labels and relationship types.
+ONgDB Browser also provides functionality for styling with color and size, based on node labels and relationship types.
 
 .Label and type overview
 [caption="Label and type overview"]
@@ -63,7 +63,7 @@ image:browser-style5.png[]
 [[grass]]
 == Style your graph visualization using a GraSS file
 
-Alternatively, follow the steps to customize your styles by importing a graph stylesheet (GraSS) file for Neo4j Browser to reference.
+Alternatively, follow the steps to customize your styles by importing a graph stylesheet (GraSS) file for ONgDB Browser to reference.
 
 . Run the command `:style` and download your current graph style by using the *Export GraSS* option.
 +
@@ -135,9 +135,9 @@ Same applies to relationships.
 ====
 +
 . Edit the downloaded file locally using your editor of choice.
-. Drag and drop the saved file to Neo4j Browser's window.
+. Drag and drop the saved file to ONgDB Browser's window.
 
 [TIP]
 ====
-The link:https://github.com/neo4j/neo4j-browser/blob/master/src/shared/services/grassUtils.ts[GraSS parser^] is open source.
+The link:https://github.com/graphfoundation/ongdb-browser/blob/master/src/shared/services/grassUtils.ts[GraSS parser^] is open source.
 ====

@@ -4,7 +4,7 @@
 [[result-frames]]
 = Result frames
 
-There are a variety of ways to view data in Neo4j Browser.
+There are a variety of ways to view data in ONgDB Browser.
 All queries that you run in the Cypher editor populate a reusable result frame.
 Query results are rendered as:
 

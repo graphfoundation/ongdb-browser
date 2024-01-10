@@ -30,7 +30,7 @@ const builtInGuides: {
   identifier: BuiltInGuideIdentifier
   description: string
 }[] = [
-  { identifier: 'intro', description: 'Navigating Neo4j Browser' },
+  { identifier: 'intro', description: 'Navigating ONgDB Browser' },
   { identifier: 'concepts', description: 'Property graph model concepts' },
   {
     identifier: 'cypher',

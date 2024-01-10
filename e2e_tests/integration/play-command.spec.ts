@@ -23,10 +23,8 @@
 const nextSlideBtn = () => cy.get('[data-testid="nextSlide"]')
 
 describe('Play command', () => {
-  before(function() {
-    cy.visit(Cypress.config('url'))
-      .title()
-      .should('include', 'Neo4j Browser')
+  before(function () {
+    cy.visit(Cypress.config('url')).title().should('include', 'ONgDB Browser')
     cy.wait(3000)
   })
   it('can stack `:play` commands', () => {
@@ -112,17 +110,13 @@ describe('Play command', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(':play not-found-guide-anywhere')
 
-    cy.getFrames()
-      .should('have.length', 1)
-      .should('contain', 'No guide')
+    cy.getFrames().should('have.length', 1).should('contain', 'No guide')
   })
   it('can link to a specific slide', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(':play concepts#slide-3')
 
     // Assert
-    cy.getFrames()
-      .should('have.length', 1)
-      .should('contain', 'labels') // slide #3 is about labels
+    cy.getFrames().should('have.length', 1).should('contain', 'labels') // slide #3 is about labels
   })
 })
