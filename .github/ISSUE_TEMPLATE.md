@@ -1,7 +1,5 @@
 <!---
 BEFORE YOU SUBMIT please search open/closed issues since someone might have asked the same thing before!
-
-For feature requests see: https://feedback.neo4j.com/browser
 -->
 
 ### Description
@@ -33,8 +31,8 @@ What needs to be done to address this issue? Ideally, provide a pull request wit
 | node.js        | 
 | npm            |
 | yarn           |
-| Neo4j Browser  |
-| Neo4j          |
+| ONgDB Browser  |
+| ONgDB          |
 
 ### Additional Information
 

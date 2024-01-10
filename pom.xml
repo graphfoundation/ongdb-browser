@@ -21,14 +21,7 @@
   </properties>
   <developers>
     <developer>
-      <id>neo4j</id>
-      <name>The Neo4j Team</name>
-      <url>http://neo4j.org/</url>
-      <organization>Neo4j, Inc</organization>
-      <organizationUrl>http://www.neotechnology.com/</organizationUrl>
-    </developer>
-    <developer>
-      <id>neo4j</id>
+      <id>ongdb</id>
       <name>The ONgDB Team</name>
       <url>http://graphfoundation.org/</url>
       <organization>GraphFoundation, Inc</organization>
