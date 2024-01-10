@@ -374,6 +374,6 @@ You can save a `:params` command as a favorite to quickly populate parameters ag
 
 //Depending on how the favorite have been saved you can.
 //Save the favorites to persist in the cloud with Browser Sync.
-//Save the favorites to persist on the disk if you are using Neo4j Desktop.
+//Save the favorites to persist on the disk if you are using ONgDB Desktop.
 //Save the favorites to persist in the browsers local storage.
 //The localStorage and sessionStorage properties allow to save key/value pairs in a web browser.

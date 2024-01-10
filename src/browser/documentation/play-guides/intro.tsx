@@ -199,7 +199,7 @@ const slides = [
     </div>
     <div className="col-sm-5">
       Queries and commands can also be saved as <b>Project files</b>. Project
-      folder can be reached through Neo4j Desktop and your hard disk.
+      folder can be reached through ONgDB Desktop and your hard disk.
     </div>
     <div className="col-sm-4">
       <video autoPlay loop muted playsInline>

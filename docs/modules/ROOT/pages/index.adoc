@@ -25,7 +25,7 @@ endif::[]
 
 ONgDB Browser is a developer-focused tool that allows you to execute Cypher queries and visualize the results.
 It is the default developer interface for both Enterprise and Community editions of ONgDB.
-It comes out-of-the-box with all of ONgDB’s graph database offerings, including ONgDB Server (Community and Enterprise editions), Neo4j AuraDB (Neo4j's Database as a Service), and Neo4j Desktop (all OS versions).
+It comes out-of-the-box with all of ONgDB’s graph database offerings, including ONgDB Server (Community and Enterprise editions), ONgDB CloudDB (Neo4j's Database as a Service), and ONgDB Desktop (all OS versions).
 
 ONgDB Browser is suitable for running ad-hoc graph queries, with the appropriate ability to prototype a Neo4j-based application.
 

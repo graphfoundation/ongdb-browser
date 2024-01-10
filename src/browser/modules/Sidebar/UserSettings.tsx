@@ -234,7 +234,7 @@ function getTelemetryVisualSetting({
       {
         allowUserStats: {
           displayName: 'Product usage',
-          tooltip: `Aura Console has configured your database to ${
+          tooltip: `ONgDB Cloud Console has configured your database to ${
             telemetrySettings.allowUserStats ? '' : 'not '
           } send product analytics data.`,
           type: 'info'

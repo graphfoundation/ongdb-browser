@@ -6,15 +6,15 @@
 
 There are several different scenarios of how to run ONgDB Browser:
 
-* Neo4j Server -- Neo4j includes an HTTP server that can host the `BROWSER` module (ONgDB Browser).
-* Neo4j Desktop -- ONgDB Browser comes out-of-the-box when you install Neo4j Desktop on your system.
+* ONgDB Server -- ONgDB includes an HTTP server that can host the `BROWSER` module (ONgDB Browser).
+* ONgDB Desktop -- ONgDB Browser comes out-of-the-box when you install ONgDB Desktop on your system.
 * Web application -- ONgDB Browser is available as a web application, (link:https://browser.graphapp.io/[Go to Web application^]).
-* Neo4j Sandbox -- Try out Neo4j and ONgDB Browser. (link:https://neo4j.com/sandbox/[Go to Neo4j Sandbox^]).
-* Neo4j Aura -- ONgDB Browser is available from the Neo4j Aura console. (link:https://console.neo4j.io[Go to Neo4j Aura^]).
+* ONgDB Sandbox -- Try out ONgDB and ONgDB Browser. (link:https://ongdb.com/sandbox/[Go to ONgDB Sandbox^]).
+* ONgDB Cloud -- ONgDB Browser is available from the ONgDB Cloud console. (link:https://cloud.ongdb.com[Go to ONgDB Cloud^]).
 * Dedicated web server -- Host ONgDB Browser as a standalone HTTP web application.
 
 
-ONgDB Browser is open source (GNU General Public License v3.0) and the source code can be found at link:https://github.com/graphfoundation/ongdb-browser[_https://github.com/neo4j/neo4j-browser_^].
+ONgDB Browser is open source (GNU General Public License v3.0) and the source code can be found at link:https://github.com/graphfoundation/ongdb-browser[_https://github.com/graphfoundation/ongdb-browser_^].
 
 **The following web browsers are supported:**
 

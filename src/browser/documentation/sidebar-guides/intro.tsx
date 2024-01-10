@@ -186,7 +186,7 @@ const slides = [
       the project they refer to.
     </p>
     <p></p>
-    <p>The Project Files drawer is Neo4j Desktop specific.</p>
+    <p>The Project Files drawer is ONgDB Desktop specific.</p>
     <br />
     <video autoPlay loop muted playsInline>
       <source src="./assets/images/ProjectFiles.mp4" type="video/mp4" />

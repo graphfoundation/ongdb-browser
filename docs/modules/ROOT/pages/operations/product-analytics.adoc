@@ -13,7 +13,7 @@ ONgDB Browser is integrated directly with Segment, giving it the potential to se
 No personal information is collected.
 ====
 
-== Neo4j Server Browser module
+== ONgDB Server Browser module
 
 A message informs users that they are allowing product analytics to be collected and that they may opt-out of this if they wish.
 
@@ -29,13 +29,13 @@ The Neo4j DBMS configuration setting link:https://neo4j.com/docs/operations-manu
 image:product_analytics_consent_browser_settings.png[]
 
 
-== Neo4j Desktop and Neo4j Aura
+== ONgDB Desktop and ONgDB Cloud
 
-Running ONgDB Browser in Neo4j Desktop or Neo4j Aura, the product analytics settings inherit the consent settings managed by those environments.
+Running ONgDB Browser in ONgDB Desktop or ONgDB Cloud, the product analytics settings inherit the consent settings managed by those environments.
 
-.Neo4j Desktop
+.ONgDB Desktop
 image:product_analytics_consent_browser_running_in_desktop.png[]
 
-.Neo4j Aura
+.ONgDB Cloud
 image:product_analytics_consent_browser_running_in_aura.png[]
 

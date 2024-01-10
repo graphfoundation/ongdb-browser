@@ -111,7 +111,7 @@ If you are developing on your local machine with a single instance:
 * Default connection URL to Neo4j is `+bolt://localhost:7687+`.
 
 
-.ONgDB Browser - Neo4j Desktop application
+.ONgDB Browser - ONgDB Desktop application
 [options="header", cols="<,<,<"]
 |===
 | Cluster configured
@@ -168,21 +168,21 @@ ONgDB Browser is available as a web application at link:https://browser.graphapp
 
 .ONgDB Browser - Sandbox
 
-In link:https://neo4j.com/sandbox/[Neo4j sandbox], you can launch a ONgDB Browser web application by clicking *Open with Browser*.
+In link:https://ongdb.com/sandbox/[ONgDB Sandbox], you can launch a ONgDB Browser web application by clicking *Open with Browser*.
 It automatically connects with a connection URL similar to:
 
 `bolt+s://ba99a8c2d1c755f0c0cc2a95d0a627ea.neo4jsandbox.com:7687`
 
-.ONgDB Browser - Neo4j Aura
+.ONgDB Browser - ONgDB Cloud
 
-In the https://console.neo4j.io[Neo4j Aura console], ONgDB Browser can be accessed as a web application within the user interface.
-The ONgDB Browser web application connects to your Neo4j instance without having to enter any connection URL.
+In the https://cloud.ongdb.com[ONgDB Cloud console], ONgDB Browser can be accessed as a web application within the user interface.
+The ONgDB Browser web application connects to your ONgDB instance without having to enter any connection URL.
 
 The connection URL is similar to:
 
-`neo4j+s://358a0e8a.databases.neo4j.io`
+`neo4j+s://358a0e8a.databases.ongdb.com`
 
-Each database has a `dbid` that can be inferred from the Aura Console.
+Each database has a `dbid` that can be inferred from the ONgDB Cloud Console.
 
-The URL `+https://<dbid>.databases.neo4j.io/browser/+` can also be used to access ONgDB Browser for that specific `dbid` on Neo4j Aura.
+The URL `+https://<dbid>.databases.ongdb.com/browser/+` can also be used to access ONgDB Browser for that specific `dbid` on ONgDB Cloud.
 

@@ -1,10 +1,10 @@
-:description: Neo4j Sandbox includes ONgDB Browser.
+:description: ONgDB Sandbox includes ONgDB Browser.
 
 
 [[sandbox]]
-= Neo4j Sandbox
+= ONgDB Sandbox
 
-link:https://neo4j.com/sandbox/[Neo4j Sandbox^] is a free, cloud-based instance of Neo4j, where you can learn about Neo4j, test your ideas, or play around with the pre-built data examples.
+link:https://ongdb.com/sandbox/[ONgDB Sandbox^] is a free, cloud-based instance of Neo4j, where you can learn about Neo4j, test your ideas, or play around with the pre-built data examples.
 
 When you launch a project, it opens ONgDB Browser as a web application.
 The ONgDB Browser web application connects to your Neo4j instance that the sandbox created for you, without having to enter any connection URI.

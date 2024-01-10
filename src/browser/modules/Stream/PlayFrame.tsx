@@ -55,7 +55,7 @@ const AuraPromotion = () => {
   return (
     <PromotionContainer>
       <AuraPromoLink
-        href="https://neo4j.com/cloud/aura/pricing/?utm_medium=browser&utm_source=ce&utm_campaign=wl_v1"
+        href="https://ongdb.com/pricing/?utm_medium=browser&utm_source=ce&utm_campaign=wl_v1"
         rel="noreferrer"
         target="_blank"
       >

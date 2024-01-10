@@ -213,7 +213,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
             <>
               ONgDB Browser requires a{' '}
               <span style={{ fontWeight: 500 }}>WebSocket connection</span> to
-              the bolt connector port on the Neo4j Server.{' '}
+              the bolt connector port on the ONgDB Server.{' '}
             </>
           }
         />
@@ -262,7 +262,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
                         </StyledLink>
                       </ListItem>
                       <ListItem>
-                        Disable the bolt encryption on your Neo4j Server
+                        Disable the bolt encryption on your ONgDB Server
                       </ListItem>
                     </ul>
                   </div>
@@ -292,14 +292,14 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
             )}
           {unreachableAuraInstance && (
             <Alert
-              title="Unreachable Aura instance"
+              title="Unreachable ONgDB Cloud instance"
               type="warning"
               icon
               style={textStyle}
             >
               Log into the{' '}
               <StyledLink
-                href="https://console.neo4j.io"
+                href="https://cloud.ongdb.com"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -332,7 +332,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
           )}
           {shouldWork && (
             <Alert
-              title="Neo4j Server Reached"
+              title="ONgDB Server Reached"
               type="success"
               icon
               style={textStyle}
@@ -382,7 +382,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
                   >
                     Found a server at
                     <pre style={{ display: 'inline' }}> {debugUrl} </pre>
-                    but it does not seem to be a Neo4j Server.
+                    but it does not seem to be a ONgDB Server.
                   </Alert>
                 )}
               </div>

@@ -525,7 +525,7 @@ export const startupConnectEpic = (action$: any, store: any) => {
           )
           store.dispatch(setActiveConnection(discovery.CONNECTION_ID))
           authLog(
-            'ONgDB Browser successfully connected to Neo4j Server with stored credentials'
+            'ONgDB Browser successfully connected to ONgDB Server with stored credentials'
           )
           return { type: STARTUP_CONNECTION_SUCCESS }
         } catch {}

@@ -5,13 +5,13 @@
 = Browser Single Sign-On
 
 ONgDB Browser provides support for Single Sign-On (SSO) providers.
-This is an Enterprise feature and requires specific configuration and a (self-hosted) Neo4j Server v4.4 and later.
+This is an Enterprise feature and requires specific configuration and a (self-hosted) ONgDB Server v4.4 and later.
 Additionally, you need a compatible SSO provider (local or external) already configured.
 For more information on the configuration, see link:https://neo4j.com/docs/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-parameters[Operations Manual -> OIDC configuration settings^].
 
 [NOTE]
 ====
-For deployments other than with self-hosted Neo4j Server v4.4+, SSO can be configured with a separate OAuth plugin which requires engagement from Professional Services.
+For deployments other than with self-hosted ONgDB Server v4.4+, SSO can be configured with a separate OAuth plugin which requires engagement from Professional Services.
 See link:https://neo4j.com/professional-services/[^] for more information about Professional Services.
 ====
 

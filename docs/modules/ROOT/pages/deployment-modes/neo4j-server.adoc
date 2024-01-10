@@ -1,8 +1,8 @@
-:description: The browser module for Neo4j Server.
+:description: The browser module for ONgDB Server.
 
 
 [[bundled-neo4j]]
-= Neo4j Server
+= ONgDB Server
 
 Neo4j is the world’s leading graph database.
 The architecture is designed for optimal management, storage, and traversal of nodes and relationships.
@@ -39,9 +39,9 @@ Point your web browser to link:http://localhost:7474/browser[_http://localhost:7
 
 [NOTE]
 ====
-New versions of ONgDB Browser are released independently of Neo4j Server.
-The Browser version bundled with Neo4j Server is the latest at the time of the Neo4j Server release.
+New versions of ONgDB Browser are released independently of ONgDB Server.
+The Browser version bundled with ONgDB Server is the latest at the time of the ONgDB Server release.
 Consequently, when used with a Neo4j server, the Browser version may not be the latest one, and new Browser functionality may not be immediately available.
-If you cannot wait for the next release of Neo4j Server and access to the latest version of Browser, refer to the other deployment options below.
+If you cannot wait for the next release of ONgDB Server and access to the latest version of Browser, refer to the other deployment options below.
 Additionally, you can always find the latest version of ONgDB Browser at link:https://browser.neo4j.io/[_https://browser.neo4j.io/_^].
 ====

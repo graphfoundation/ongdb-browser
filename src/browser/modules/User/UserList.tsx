@@ -214,7 +214,7 @@ export class UserList extends Component<any, UserListState> {
         <div>
           <p>
             User management is currently only available through cypher commands
-            on Neo4j Aura Enterprise.
+            on ONgDB Cloud.
           </p>
           <p>
             Read more on user and role management with cypher on{' '}

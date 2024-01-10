@@ -30,7 +30,7 @@ image:download-csv-json.png[Export table, width=50%]
 
 [NOTE]
 ====
-The *Save as project file* is available only in Neo4j Desktop.
+The *Save as project file* is available only in ONgDB Desktop.
 For more information, see xref:visual-tour.adoc#saved-files[Project files].
 ====
 

@@ -83,7 +83,7 @@ image:text.png[]
 [[code-result-frame]]
 == Code result frame
 
-The *Code* result view displays the submitted request, the Neo4j Server version and address, and the response.
+The *Code* result view displays the submitted request, the ONgDB Server version and address, and the response.
 It also reports the query time, including the actual query execution time, latency, and deserialization costs.
 
 image:code.png[]
