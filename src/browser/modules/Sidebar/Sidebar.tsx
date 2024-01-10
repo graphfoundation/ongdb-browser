@@ -22,7 +22,6 @@ import { connect } from 'react-redux'
 
 import {
   AboutIcon,
-  CloudSyncIcon,
   DatabaseIcon,
   DocumentsIcon,
   FavoritesIcon,
@@ -32,7 +31,6 @@ import {
 } from 'browser-components/icons/LegacyIcons'
 
 import DatabaseDrawer from '../DBMSInfo/DBMSInfo'
-import BrowserSync from '../Sync/BrowserSync'
 import AboutDrawer from './About'
 import DocumentsDrawer from './Documents'
 import GuideDrawer from './GuideDrawer'
