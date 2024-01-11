@@ -28,11 +28,11 @@ const slides = [
   <Slide key="first">
     <div className="col-sm-3">
       <h3>Cypher</h3>
-      <p className="lead">Neo4j's graph query language</p>
+      <p className="lead">ONgDB's graph query language</p>
     </div>
     <div className="col-sm-9">
       <p>
-        Neo4j's Cypher language is purpose built for working with graph data.
+        ONgDB's Geequel language is purpose built for working with graph data.
       </p>
       <ul className="big">
         <li>uses patterns to describe graph data</li>

@@ -172,23 +172,23 @@ export default [
   },
   {
     name: ':get',
-    description: " - send HTTP GET to Neo4j's REST interface"
+    description: " - send HTTP GET to ONgDB's REST interface"
   },
   {
     name: ':post',
-    description: " - send HTTP POST to Neo4j's REST interface"
+    description: " - send HTTP POST to ONgDB's REST interface"
   },
   {
     name: ':put',
-    description: " - send HTTP PUT to Neo4j's REST interface"
+    description: " - send HTTP PUT to ONgDB's REST interface"
   },
   {
     name: ':delete',
-    description: " - send HTTP DELETE to Neo4j's REST interface"
+    description: " - send HTTP DELETE to ONgDB's REST interface"
   },
   {
     name: ':head',
-    description: " - send HTTP HEAD to Neo4j's REST interface"
+    description: " - send HTTP HEAD to ONgDB's REST interface"
   },
   {
     name: ':style'

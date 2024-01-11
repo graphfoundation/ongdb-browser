@@ -27,7 +27,7 @@ const description = (
   <>
     <p>
       ONgDB Browser is a command shell. Use the editor bar up above ↑ to enter
-      Cypher queries or client-side commands. Each command will produce a
+      Geequel queries or client-side commands. Each command will produce a
       "frame" like this one in the result stream.
     </p>
     <p>

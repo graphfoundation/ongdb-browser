@@ -47,7 +47,7 @@ image:favorites1.png[]
 
 ==== Save a query as a favorite
 
-You can save Cypher queries and commands as favorites by "starring" them.
+You can save Geequel queries and commands as favorites by "starring" them.
 Use the *Add empty favorite* option to open an empty script in the Cypher editor, then write the query that you want to bookmark.
 Clicking the *Save as Favorite* icon to the right of the editor adds the query to your *Favorites* list in the left-side menu.
 All favorites are stored in your local browser storage and are centric to the user/browser who has recorded those favorites.
@@ -224,7 +224,7 @@ image:settings.png[width=40%]
 [[editor]]
 == Cypher editor
 
-The Cypher editor is the primary interface for entering and running Cypher queries and commands.
+The Cypher editor is the primary interface for entering and running Geequel queries and commands.
 
 image:screen_editor.png[]
 
@@ -237,7 +237,7 @@ For example, plugins are not included and are not possible to implement.
 
 Some of the Cypher editor features include:
 
-* Cypher queries to work with graph data.
+* Geequel queries to work with graph data.
 * The editor can be instantiated several times, which allows you to edit the query inside the result frame and re-run it.
 * Single-line editing for brief queries or commands.
 * Multi-line editing for long queries or commands.

@@ -24,7 +24,7 @@ const category = 'restApiCommands'
 const content = (
   <>
     <p>
-      Use <code>:POST</code> to send HTTP POST to Neo4j's REST interface.
+      Use <code>:POST</code> to send HTTP POST to ONgDB's REST interface.
     </p>
     <table className="table-condensed table-help">
       <tbody>

@@ -30,10 +30,10 @@ const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
   [
     {
       neo4jVersion: '3.5.12',
-      chapter: 'cypher-manual',
+      chapter: 'geequel-manual',
       page: '/schema/constraints/'
     },
-    'https://docs.graphfoundation.org/cypher-manual/3.5/schema/constraints/'
+    'https://docs.graphfoundation.org/geequel-manual/3.5/schema/constraints/'
   ],
   [
     { neo4jVersion: '4.0.0-beta03mr03', chapter: 'driver-manual', page: '' },
@@ -82,22 +82,22 @@ const movedPages: [
   [
     { neo4jVersion: '3.5.0', page: '/administration/' },
     {
-      text: 'Cypher Schema',
-      url: 'https://docs.graphfoundation.org/cypher-manual/3.5/schema/'
+      text: 'Geequel Schema',
+      url: 'https://docs.graphfoundation.org/geequel-manual/3.5/schema/'
     }
   ],
   [
     { neo4jVersion: '4.0.0', page: '/administration/' },
     {
       text: 'link to manual',
-      url: 'https://docs.graphfoundation.org/cypher-manual/4.0/administration/'
+      url: 'https://docs.graphfoundation.org/geequel-manual/4.0/administration/'
     }
   ],
   [
     { neo4jVersion: null, page: '/administration/' },
     {
-      text: 'Cypher Manual',
-      url: 'https://docs.graphfoundation.org/cypher-manual/current/'
+      text: 'Geequel Manual',
+      url: 'https://docs.graphfoundation.org/geequel-manual/current/'
     }
   ],
   [
@@ -107,7 +107,7 @@ const movedPages: [
     },
     {
       text: 'Indexes',
-      url: 'https://docs.graphfoundation.org/cypher-manual/4.3/indexes-for-search-performance/'
+      url: 'https://docs.graphfoundation.org/geequel-manual/4.3/indexes-for-search-performance/'
     }
   ]
 ]

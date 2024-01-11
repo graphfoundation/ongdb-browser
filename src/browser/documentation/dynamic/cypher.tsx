@@ -28,8 +28,8 @@ const filter = ['cypher']
 const description = (
   <>
     <p>
-      {`Cypher is Neo4j's graph query language. Working with a graph is all
-      about understanding patterns of data, which are central to Cypher queries.`}
+      {`Geequel is ONgDB's graph query language. Working with a graph is all
+      about understanding patterns of data, which are central to Geequel queries.`}
     </p>
     <p>
       Use
@@ -42,7 +42,7 @@ const description = (
         <p className="title">Documentation</p>
         <p className="content">
           <ManualLink chapter="cypher-manual" page="/">
-            Cypher introduction
+            Geequel introduction
           </ManualLink>
         </p>
       </div>

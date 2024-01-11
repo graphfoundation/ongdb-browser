@@ -308,7 +308,7 @@ export class UserAdd extends Component<any, UserAddState> {
           <p>
             Read more on user and role management with cypher on{' '}
             <a
-              href="https://docs.graphfoundation.org/cypher-manual/current/administration/security/users-and-roles"
+              href="https://docs.graphfoundation.org/geequel-manual/current/administration/security/users-and-roles"
               target="_blank"
               rel="noreferrer"
             >

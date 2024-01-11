@@ -26,7 +26,7 @@ const content = (
   <>
     <p>
       The editor bar has convenience commands for sending any HTTP verb help to
-      Neo4j's REST API. For PUT and POST, include a JSON payload.
+      ONgDB's REST API. For PUT and POST, include a JSON payload.
     </p>
     <table className="table-condensed table-help">
       <tbody>

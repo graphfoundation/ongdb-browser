@@ -26,10 +26,10 @@ const identifier = 'cypher'
 const slides = [
   <BuiltInGuideSidebarSlide key="s1">
     <p className="lead">
-      <em>{`Neo4j's graph query language`}</em>
+      <em>{`ONgDB's graph query language`}</em>
     </p>
     <p>
-      {`Neo4j's Cypher language is purpose-built for working with graph data.`}
+      {`ONgDB's Geequel language is purpose-built for working with graph data.`}
     </p>
     <ul className="big">
       <li>Uses patterns to describe graph data.</li>

@@ -14,7 +14,7 @@ image:home-screen.png[]
 [[uri-scheme]]
 == Connection URI schemes
 
-ONgDB Browser requires a connection to a ONgDB DBMS via the link:https://7687.org/[Bolt Protocol^] using the link:{neo4j-docs-base-uri}/javascript-manual/current/[ONgDB JavaScript Driver^] to execute Cypher queries.
+ONgDB Browser requires a connection to a ONgDB DBMS via the link:https://7687.org/[Bolt Protocol^] using the link:{neo4j-docs-base-uri}/javascript-manual/current/[ONgDB JavaScript Driver^] to execute Geequel queries.
 
 ONgDB Browser supports the following connection URI schemes:
 

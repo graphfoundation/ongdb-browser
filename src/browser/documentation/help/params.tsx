@@ -46,7 +46,7 @@ const content = (
       <code>:param x {'=>'} 1.0</code>.
     </p>
     <p>
-      If you need more fine-grained control or advanced Cypher queries, you can
+      If you need more fine-grained control or advanced Geequel queries, you can
       use the explicit syntax: <code>{'x => { ... RETURN 1 as foo }'}</code>
       <br />
       Explicit returns yield a list of records, matching that of your Cypher

@@ -12,7 +12,7 @@
 * xref:operations/result-frames.adoc[] -- Explaining available result frames.
 * xref:operations/export-results.adoc[] -- How to export results.
 * xref:operations/browser-styling.adoc[] -- Customize your graph query result.
-* xref:operations/query-parameters.adoc[] -- Using parameters for Cypher queries.
+* xref:operations/query-parameters.adoc[] -- Using parameters for Geequel queries.
 * xref:operations/browser-url-parameters.adoc[] -- Available URL parameters.
 * xref:operations/rest-requests.adoc[] -- HTTP REST commands.
 * xref:operations/browser-rbac-count.adoc[] -- Manual refresh of counts due to RBAC.

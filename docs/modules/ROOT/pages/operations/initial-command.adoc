@@ -11,7 +11,7 @@ When you first open ONgDB Browser and connect to a ONgDB DBMS, it automatically 
 :play start
 ----
 
-The `:play start` browser command outputs an entry page containing interactive guides that you can use to learn some ONgDB concepts, try ONgDB with live data (MovieGraph), and write some basic Cypher queries.
+The `:play start` browser command outputs an entry page containing interactive guides that you can use to learn some ONgDB concepts, try ONgDB with live data (MovieGraph), and write some basic Geequel queries.
 
 Besides, you can also navigate to the *Help & Learn* drawer in the sidebar, where you will find more information about useful commands, a lot of built-in guides, and links to documentation.
 
@@ -19,7 +19,7 @@ If you want to change the initially executed command, navigate to the *Browser S
 
 [TIP]
 ====
-For more information on how to enter and run Cypher queries and commands, see xref:visual-tour.adoc#editor[Cypher editor]. +
-For more information about Cypher, see link:https://docs.graphfoundation.org/cypher-manual/{neo4j-version}/[Cypher Manual^] and link:https://docs.graphfoundation.org/cypher-refcard/{neo4j-version}/[ONgDB Cypher Refcard^].
+For more information on how to enter and run Geequel queries and commands, see xref:visual-tour.adoc#editor[Cypher editor]. +
+For more information about Geequel, see link:https://docs.graphfoundation.org/geequel-manual/{neo4j-version}/[Geequel Manual^] and link:https://docs.graphfoundation.org/cypher-refcard/{neo4j-version}/[ONgDB Geequel Refcard^].
 ====
 

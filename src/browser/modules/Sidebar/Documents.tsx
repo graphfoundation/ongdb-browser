@@ -56,7 +56,7 @@ const getReferences = (version: string, v: string) => {
     },
     {
       name: 'Cypher Introduction',
-      url: ` https://docs.graphfoundation.org/cypher-manual/${v}/introduction/ `
+      url: ` https://docs.graphfoundation.org/geequel-manual/${v}/introduction/ `
     }
   ]
   const oldRefs = [

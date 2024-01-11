@@ -45,7 +45,7 @@ describe('Help command', () => {
     // Make sure it loads in same frame
     frame
       .should('have.length', 1)
-      .should('contain', 'In addition to composing and running Cypher queries')
+      .should('contain', 'In addition to composing and running Geequel queries')
 
     // Click back in stack
     cy.getPrevInFrameStackBtn().click()
@@ -61,7 +61,7 @@ describe('Help command', () => {
     frame = cy.getFrames()
     frame
       .should('have.length', 1)
-      .should('contain', 'In addition to composing and running Cypher queries')
+      .should('contain', 'In addition to composing and running Geequel queries')
 
     // Click new topic
     frame.contains('help auto').click()

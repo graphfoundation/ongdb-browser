@@ -83,7 +83,7 @@ const content = (
         is not actually executed; so it's not possible to show actual number of
         rows for each pipe. In this case, the Query Plan diagram shows{' '}
         <em>estimated rows</em> instead. These numbers are predicted based on
-        Neo4j's built-in statistics. The Cypher cost-based planner uses
+        ONgDB's built-in statistics. The Cypher cost-based planner uses
         estimated rows to determine the optimal query plan.
       </p>
     </div>

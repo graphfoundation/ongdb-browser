@@ -37,7 +37,7 @@ const oldPages: { [key: string]: { oldPage: string; oldContent: string } } = {
   },
   '/administration/': {
     oldPage: 'schema/',
-    oldContent: 'Cypher Schema'
+    oldContent: 'Geequel Schema'
   }
 }
 
@@ -52,7 +52,7 @@ const newPages: { [key: string]: { newPage: string; newContent: string } } = {
   },
   '/administration/': {
     newPage: '',
-    newContent: 'Cypher Manual'
+    newContent: 'Geequel Manual'
   }
 }
 
