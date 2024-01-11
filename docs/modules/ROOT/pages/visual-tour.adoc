@@ -132,7 +132,7 @@ image:guides.png[width=60%]
 | Basic property-graph concepts to get you going.
 
 | `:guide cypher`
-| Cypher basics - create, match, patterns.
+| Geequel basics - create, match, patterns.
 
 | `:guide movie-graph`
 | The Movie Graph, a mini graph model of connections between actors and movies.

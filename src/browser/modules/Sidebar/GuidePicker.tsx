@@ -34,11 +34,11 @@ const builtInGuides: {
   { identifier: 'concepts', description: 'Property graph model concepts' },
   {
     identifier: 'cypher',
-    description: 'Cypher basics - create, match, delete'
+    description: 'Geequel basics - create, match, delete'
   },
   {
     identifier: 'movie-graph',
-    description: 'Queries and recommendations with Cypher - movie use case}'
+    description: 'Queries and recommendations with Geequel - movie use case}'
   },
   {
     identifier: 'northwind-graph',

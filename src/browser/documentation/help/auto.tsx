@@ -20,7 +20,7 @@
 import React from 'react'
 
 const title = 'Auto-committing transactions'
-const subtitle = 'Execute a Cypher query within an auto-committing transaction'
+const subtitle = 'Execute a Geequel query within an auto-committing transaction'
 const category = 'browserUiCommands'
 const content = (
   <>
@@ -40,7 +40,7 @@ const content = (
           <th>Related:</th>
           <td>
             <a help-topic="load csv">:help load csv</a>
-            <a help-topic="cypher">:help cypher</a>
+            <a help-topic="cypher">:help geequel</a>
             <a help-topic="commands">:help commands</a>
           </td>
         </tr>

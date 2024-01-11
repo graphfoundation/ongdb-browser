@@ -321,13 +321,13 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
         </DrawerExternalLink>
       </li>
       <li>
-        <ManualLink chapter="cypher-manual" page="/">
+        <ManualLink chapter="geequel-manual" page="/">
           ONgDB Geequel Manual
         </ManualLink>
       </li>
       <li>
-        <ManualLink chapter="cypher-refcard" page="/">
-          Cypher Refcard
+        <ManualLink chapter="geequel-refcard" page="/">
+          Geequel Refcard
         </ManualLink>
       </li>
       <li>

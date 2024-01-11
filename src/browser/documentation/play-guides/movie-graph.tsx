@@ -56,7 +56,7 @@ const slides = [
       <br />
       <h3>Create</h3>
       <p>
-        To the right is a giant code block containing a single Cypher query
+        To the right is a giant code block containing a single Geequel query
         statement composed of multiple CREATE clauses. This will create the
         movie graph.
       </p>
@@ -71,7 +71,7 @@ const slides = [
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="create">CREATE</a>
       </p>
     </div>
@@ -815,7 +815,7 @@ RETURN tom, m, coActors, m2, cruise`}
           graph
         </li>
         <li>
-          <a help-topic="cypher">Cypher</a> - Learn Cypher syntax
+          <a help-topic="cypher">Geequel</a> - Learn Geequel syntax
         </li>
         <li>
           <a
@@ -841,7 +841,7 @@ RETURN tom, m, coActors, m2, cruise`}
           </a>
         </li>
         <li>
-          <ManualLink chapter="cypher-manual" page="/">
+          <ManualLink chapter="geequel-manual" page="/">
             ONgDB Geequel Manual
           </ManualLink>
         </li>

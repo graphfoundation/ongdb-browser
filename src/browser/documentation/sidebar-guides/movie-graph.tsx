@@ -850,13 +850,13 @@ RETURN tom, m, coActors, m2, cruise`}
     <h3>Documentation</h3>
     <ul className="undecorated">
       <li>
-        <ManualLink chapter="cypher-manual" page="/">
+        <ManualLink chapter="geequel-manual" page="/">
           ONgDB Geequel Manual
         </ManualLink>
       </li>
       <li>
-        <ManualLink chapter="cypher-refcard" page="/">
-          Cypher Refcard
+        <ManualLink chapter="geequel-refcard" page="/">
+          Geequel Refcard
         </ManualLink>
       </li>
       <li>

@@ -116,7 +116,7 @@ test.each(movedPages)(
   'Render correct url for moved page %o',
   (props, expected) => {
     render(
-      <ManualLink chapter="cypher-manual" {...props}>
+      <ManualLink chapter="geequel-manual" {...props}>
         link to manual
       </ManualLink>
     )

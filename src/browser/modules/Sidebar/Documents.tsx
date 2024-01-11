@@ -77,8 +77,8 @@ const getReferences = (version: string, v: string) => {
     },
     ...(shouldLinkToNewRefs(version) ? newRefs : oldRefs),
     {
-      name: 'Cypher Refcard',
-      url: `https://docs.graphfoundation.org/cypher-refcard/${v}/`
+      name: 'Geequel Refcard',
+      url: `https://docs.graphfoundation.org/geequel-refcard/${v}/`
     }
   ]
 

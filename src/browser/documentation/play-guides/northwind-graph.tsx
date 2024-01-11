@@ -58,7 +58,7 @@ const slides = [
       <p>
         The load statements to the right require public internet access.
         <code>LOAD CSV</code> will retrieve a CSV file from a valid URL,
-        applying a Cypher statement to each row using a named map (here we're
+        applying a Geequel statement to each row using a named map (here we're
         using the name `row`).
       </p>
       <p>
@@ -69,7 +69,7 @@ const slides = [
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>
@@ -138,7 +138,7 @@ SET n = row`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="match">MATCH</a>
       </p>
     </div>
@@ -192,7 +192,7 @@ CREATE (s)-[:SUPPLIES]->(p)`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="match">MATCH</a>
       </p>
     </div>
@@ -228,7 +228,7 @@ RETURN DISTINCT s.companyName as ProduceSuppliers`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>
@@ -291,7 +291,7 @@ CREATE (c)-[:PURCHASED]->(o)`}
       </p>
       <hr />
       <p>
-        <small>:help</small> <a help-topic="cypher">cypher</a>{' '}
+        <small>:help</small> <a help-topic="cypher">geequel</a>{' '}
         <a help-topic="load-csv">LOAD CSV</a>
       </p>
     </div>
@@ -333,7 +333,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
           <a play-topic="movie-graph">Movie Graph</a> - actors & movies
         </li>
         <li>
-          <a play-topic="cypher">Cypher</a> - query language fundamentals
+          <a play-topic="cypher">Geequel</a> - query language fundamentals
         </li>
       </ul>
     </div>
@@ -359,7 +359,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
           </a>
         </li>
         <li>
-          <ManualLink chapter="cypher-manual" page="/">
+          <ManualLink chapter="geequel-manual" page="/">
             ONgDB Geequel Manual
           </ManualLink>
         </li>

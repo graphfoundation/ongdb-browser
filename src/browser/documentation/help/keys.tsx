@@ -229,7 +229,7 @@ const content = (
           commands
         </li>
         <li>
-          <a play-topic="cypher">Play Cypher</a> - Learn Cypher basics
+          <a play-topic="cypher">Play Geequel</a> - Learn Geequel basics
         </li>
       </ul>
     </div>

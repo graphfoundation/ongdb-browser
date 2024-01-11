@@ -61,7 +61,7 @@ const isPageOld = (
   page: string,
   neo4jVersion: string | null
 ) =>
-  chapter === 'cypher-manual' &&
+  chapter === 'geequel-manual' &&
   oldPages[page] &&
   neo4jVersion &&
   semver.satisfies(neo4jVersion, '<4.0.0-alpha.1')
@@ -71,7 +71,7 @@ const isPageNew = (
   page: string,
   neo4jVersion: string | null
 ) =>
-  chapter === 'cypher-manual' &&
+  chapter === 'geequel-manual' &&
   newPages[page] &&
   ((neo4jVersion && semver.satisfies(neo4jVersion, '>=4.3')) ||
     neo4jVersion === null) // if no version is available, we treat it like the newest version.

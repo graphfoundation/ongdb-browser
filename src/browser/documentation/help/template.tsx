@@ -40,7 +40,7 @@ const content = (
       <div className="link">
         <p className="title">Reference</p>
         <p className="content">
-          <ManualLink chapter="cypher-manual" page="/">
+          <ManualLink chapter="geequel-manual" page="/">
             Geequel introduction
           </ManualLink>
         </p>
@@ -81,13 +81,13 @@ const content = (
 <expressions>`}
         </pre>
         <figcaption>
-          Basic form of a Cypher read statement. (Not executable)
+          Basic form of a Geequel read statement. (Not executable)
         </figcaption>
       </figure>
       <figure className="runnable">
         <pre>ANOTHER EXAMPLE</pre>
         <figcaption>
-          Basic form of a Cypher read statement. (executable)
+          Basic form of a Geequel read statement. (executable)
         </figcaption>
       </figure>
     </section>

@@ -60,7 +60,7 @@ const content = (
       <p>
         Each Operator is displayed as a rectangle with its name in the top-left
         corner. See the{' '}
-        <ManualLink chapter="cypher-manual" page="/execution-plans/">
+        <ManualLink chapter="geequel-manual" page="/execution-plans/">
           operators manual page
         </ManualLink>{' '}
         for a description of what each operator does.
@@ -156,7 +156,7 @@ const content = (
           <tr>
             <th>Reference:</th>
             <td>
-              <ManualLink chapter="cypher-manual" page="/execution-plans/">
+              <ManualLink chapter="geequel-manual" page="/execution-plans/">
                 Execution Plans
               </ManualLink>{' '}
               manual page

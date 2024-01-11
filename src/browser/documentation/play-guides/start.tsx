@@ -49,8 +49,8 @@ const content = (
         </button>
       </div>
       <div className="teaser teaser-3">
-        <h3>Cypher basics</h3>
-        <p className="lead">Intro to Graphs with Cypher </p>
+        <h3>Geequel basics</h3>
+        <p className="lead">Intro to Graphs with Geequel </p>
 
         <ul className="topic-bullets">
           <li>What is a graph database?</li>

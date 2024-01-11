@@ -22,12 +22,12 @@ import React from 'react'
 import Slide from '../../modules/Carousel/Slide'
 import ManualLink from 'browser-components/ManualLink'
 
-const title = 'Cypher'
+const title = 'Geequel'
 const category = 'guides'
 const slides = [
   <Slide key="first">
     <div className="col-sm-3">
-      <h3>Cypher</h3>
+      <h3>Geequel</h3>
       <p className="lead">ONgDB's graph query language</p>
     </div>
     <div className="col-sm-9">
@@ -47,7 +47,7 @@ const slides = [
       <p className="lead">Create a node</p>
     </div>
     <div className="col-sm-9">
-      <p>Let's use Cypher to generate a small social graph.</p>
+      <p>Let's use Geequel to generate a small social graph.</p>
       <figure>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Property 'mode' does not exist on type 'DetailedHT... Remove this comment to see the full error message */}
         <pre mode="cypher" className="pre-scrollable code runnable">
@@ -224,7 +224,7 @@ RETURN DISTINCT surfer`}
   </Slide>,
   <Slide key="eighth">
     <div className="col-sm-3">
-      <h3>Live Cypher warnings</h3>
+      <h3>Live Geequel warnings</h3>
       <p className="lead">Identify query problems in real time</p>
     </div>
     <div className="col-sm-5">
@@ -244,7 +244,7 @@ RETURN DISTINCT surfer`}
     <div className="col-sm-4">
       <h3>Next steps</h3>
       <p>
-        Start your application using Cypher to create and query graph data. Use
+        Start your application using Geequel to create and query graph data. Use
         the REST API to monitor the database. In special cases, consider a
         plugin.
       </p>
@@ -252,7 +252,7 @@ RETURN DISTINCT surfer`}
     <div className="col-sm-4">
       <ul>
         <li>
-          <a help-topic="cypher">Help Cypher</a> - Try more Cypher syntax
+          <a help-topic="cypher">Help Geequel</a> - Try more Geequel syntax
         </li>
         <li>
           <a play-topic="start">Play start</a> - Back to getting started
@@ -263,15 +263,15 @@ RETURN DISTINCT surfer`}
       <h3>Documentation</h3>
       <ul className="undecorated">
         <li>
-          <ManualLink chapter="cypher-refcard" page="/">
-            Cypher Refcard
+          <ManualLink chapter="geequel-refcard" page="/">
+            Geequel Refcard
           </ManualLink>
         </li>
         <li>
-          <ManualLink chapter="cypher-manual" page="/">
-            The Cypher chapter
+          <ManualLink chapter="geequel-manual" page="/">
+            The Geequel chapter
           </ManualLink>{' '}
-          of the Neo4j Developer Manual
+          of the ONgDB Developer Manual
         </li>
       </ul>
     </div>

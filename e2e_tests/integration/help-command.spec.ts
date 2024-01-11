@@ -71,7 +71,7 @@ describe('Help command', () => {
       .should('have.length', 1)
       .should(
         'contain',
-        'Execute a Cypher query within an auto-committing transaction'
+        'Execute a Geequel query within an auto-committing transaction'
       )
 
     // Then click back twice

@@ -39,13 +39,13 @@ const content = (
       <div className="link">
         <p className="title">Reference</p>
         <p className="content">
-          <ManualLink chapter="cypher-manual" page="/clauses/load-csv/">
+          <ManualLink chapter="geequel-manual" page="/clauses/load-csv/">
             LOAD CSV
           </ManualLink>{' '}
           manual page
           <br />
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/query-tuning/using/#query-using-periodic-commit-hint"
           >
             USING PERIODIC COMMIT

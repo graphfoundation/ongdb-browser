@@ -35,7 +35,7 @@ const content = (
         <p className="title">Reference</p>
         <p className="content">
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/administration/indexes-for-search-performance/"
           >
             Indexes for search performance

@@ -36,7 +36,7 @@ const content = (
         <p className="title">Reference</p>
         <p className="content">
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/administration/security/subgraph/#administration-security-subgraph-show"
             minVersion="4.0.0"
           >

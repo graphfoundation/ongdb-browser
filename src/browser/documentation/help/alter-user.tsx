@@ -36,7 +36,7 @@ const content = (
         <p className="title">Reference</p>
         <p className="content">
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/administration/security/users-and-roles/#administration-security-users-alter"
             minVersion="4.0.0"
           >
@@ -51,7 +51,7 @@ const content = (
           <a help-topic="show-users">:help SHOW USERS</a>{' '}
           <a help-topic="create-user">:help CREATE USER</a>{' '}
           <a help-topic="drop-user">:help DROP USER</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
     </div>

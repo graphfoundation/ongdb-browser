@@ -21,7 +21,7 @@ import React from 'react'
 
 import { BuiltInGuideSidebarSlide } from '../../modules/Carousel/Slide'
 
-const title = 'Cypher Guide'
+const title = 'Geequel Guide'
 const identifier = 'cypher'
 const slides = [
   <BuiltInGuideSidebarSlide key="s1">

@@ -35,13 +35,13 @@ const content = (
       <div className="link">
         <p className="title">Reference</p>
         <p className="content">
-          <ManualLink chapter="cypher-manual" page="/clauses/merge/">
+          <ManualLink chapter="geequel-manual" page="/clauses/merge/">
             MERGE
           </ManualLink>{' '}
           manual page
           <br />
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/clauses/merge/#query-merge-on-create-on-match"
           >
             ON CREATE and ON MATCH

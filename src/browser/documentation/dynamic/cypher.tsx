@@ -21,7 +21,7 @@ import React from 'react'
 
 import ManualLink from 'browser-components/ManualLink'
 
-const title = 'Cypher'
+const title = 'Geequel'
 const subtitle = 'A graph query language'
 const category = 'browserUiCommands'
 const filter = ['cypher']
@@ -41,7 +41,7 @@ const description = (
       <div className="link">
         <p className="title">Documentation</p>
         <p className="content">
-          <ManualLink chapter="cypher-manual" page="/">
+          <ManualLink chapter="geequel-manual" page="/">
             Geequel introduction
           </ManualLink>
         </p>
@@ -68,9 +68,9 @@ const description = (
         </p>
       </div>
       <div className="link">
-        <p className="title">Cypher basics guide</p>
+        <p className="title">Geequel basics guide</p>
         <p className="content">
-          <a play-topic="cypher">Play Cypher</a>
+          <a play-topic="cypher">Play Geequel</a>
         </p>
       </div>
     </div>
@@ -82,7 +82,7 @@ WHERE <conditions>
 RETURN <expressions>`}
         </pre>
         <figcaption>
-          Basic form of a Cypher read statement. (Not executable)
+          Basic form of a Geequel read statement. (Not executable)
         </figcaption>
       </figure>
     </section>
@@ -107,15 +107,15 @@ const footer = (
       <h3>Documentation</h3>
       <ul className="undecorated">
         <li>
-          <ManualLink chapter="cypher-refcard" page="/">
-            Cypher Refcard
+          <ManualLink chapter="geequel-refcard" page="/">
+            Geequel Refcard
           </ManualLink>
         </li>
         <li>
-          <ManualLink chapter="cypher-manual" page="/">
-            The Cypher chapter
+          <ManualLink chapter="geequel-manual" page="/">
+            The Geequel chapter
           </ManualLink>{' '}
-          of the Neo4j Developer Manual
+          of the ONgDB Developer Manual
         </li>
       </ul>
     </div>

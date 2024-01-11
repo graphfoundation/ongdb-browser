@@ -140,7 +140,7 @@ Alternatively, you can run the `:param` command separately from the `MATCH` quer
 
 == Cypher result
 
-It is possible to save the result from a Cypher query to a parameter.
+It is possible to save the result from a Geequel query to a parameter.
 
 The syntax is:
 

@@ -34,11 +34,11 @@ const slides = [
       <p>
         ONgDB Browser is a command driven client, like a web-based shell
         environment. It is perfect for running ad-hoc graph queries, with just
-        enough ability to prototype a Neo4j-based application.
+        enough ability to prototype a ONgDB-based application.
       </p>
       <ul className="big">
         <li>
-          Developer focused, for writing and running graph queries with Cypher
+          Developer focused, for writing and running graph queries with Geequel
         </li>
         <li>Exportable tabular results of any query result</li>
         <li>
@@ -55,7 +55,7 @@ const slides = [
     </div>
     <div className="col-sm-5">
       <p>
-        Editor pane is used to edit and run for Cypher statements and Browser
+        Editor pane is used to edit and run for Geequel statements and Browser
         commands. Browser commands begin with <code>:</code>, for example{' '}
         <code>:help</code>
       </p>
@@ -103,7 +103,7 @@ const slides = [
   <Slide key="s3">
     <div className="col-sm-3">
       <h3>Result frame</h3>
-      <p className="lead">Most recently executed command or Cypher query.</p>
+      <p className="lead">Most recently executed command or Geequel query.</p>
     </div>
     <div className="col-sm-5">
       <p>
@@ -155,7 +155,7 @@ const slides = [
       <p className="lead">Database metadata</p>
     </div>
     <div className="col-sm-5">
-      When Neo4j is installed, it is initiated with two databases - a{' '}
+      When ONgDB is installed, it is initiated with two databases - a{' '}
       <code>system</code> database and a default <code>neo4j</code> database.
       Launching ONgDB Browser will automatically point us to the{' '}
       <code className="nobreak">neo4j default</code> database, shown by the
@@ -195,7 +195,7 @@ const slides = [
   <Slide key="s7">
     <div className="col-sm-3">
       <h3>Sidebar: Project files</h3>
-      <p className="lead">Save cypher files to share with your colleagues</p>
+      <p className="lead">Save geequel files to share with your colleagues</p>
     </div>
     <div className="col-sm-5">
       Queries and commands can also be saved as <b>Project files</b>. Project
@@ -233,7 +233,7 @@ const slides = [
       <h3>Jump into code</h3>
       <ul className="undecorated">
         <li>
-          <a play-topic="cypher">Play Cypher</a> - Learn Cypher basics
+          <a play-topic="cypher">Play Geequel</a> - Learn Geequel basics
         </li>
       </ul>
     </div>

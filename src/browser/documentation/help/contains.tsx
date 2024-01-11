@@ -35,7 +35,7 @@ const content = (
         <p className="title">Reference</p>
         <p className="content">
           <ManualLink
-            chapter="cypher-manual"
+            chapter="geequel-manual"
             page="/clauses/where/#query-where-string"
           >
             WHERE
