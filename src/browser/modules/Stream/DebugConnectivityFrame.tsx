@@ -254,11 +254,11 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
                       <ListItem>
                         Use the centrally hosted Browser available at{' '}
                         <StyledLink
-                          href="https://browser.neo4j.io"
+                          href="https://browser.ongdb.com"
                           target="_blank"
                           rel="noreferrer"
                         >
-                          browser.neo4j.io
+                          browser.ongdb.com
                         </StyledLink>
                       </ListItem>
                       <ListItem>
@@ -312,7 +312,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
           )}
           {onlyReachableViaHTTP && (
             <Alert
-              title="Neo4j reachable via HTTP only"
+              title="ONgDB reachable via HTTP only"
               type="danger"
               icon
               style={textStyle}
@@ -320,7 +320,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
               Browser was able to reach{' '}
               <pre style={{ display: 'inline' }}>{debugUrl}</pre> with a HTTP
               request, but failed to do so via WebSocket. Browser requires a
-              WebSocket connection to Neo4j, please check your network
+              WebSocket connection to ONgDB, please check your network
               configuration to make sure a websocket connection on this port is
               possible.
             </Alert>
@@ -337,7 +337,7 @@ const DebugConnectivityFrame = (props: DebugConnectivityFrameProps) => {
               icon
               style={textStyle}
             >
-              Neo4j Driver successfully completed bolt handshake with Neo4j
+              ONgDB Driver successfully completed bolt handshake with ONgDB
               Server at <pre>{debugUrl}</pre>
             </Alert>
           )}

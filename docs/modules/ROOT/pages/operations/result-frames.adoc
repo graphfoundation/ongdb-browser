@@ -33,7 +33,7 @@ image:graph-result-frame.png[]
 [NOTE]
 ====
 A yellow squiggly line anywhere in your query indicates a warning.
-This is most commonly caused by a query attempting to match a pattern not present in the graph, but can be caused by a number of things (see link:https://neo4j.com/docs/status-codes/current/notifications/all-notifications/[List of all notification codes]).
+This is most commonly caused by a query attempting to match a pattern not present in the graph, but can be caused by a number of things (see link:https://docs.graphfoundation.org/status-codes/current/notifications/all-notifications/[List of all notification codes]).
 Hover over the underlined segment to see the explanation.
 ====
 

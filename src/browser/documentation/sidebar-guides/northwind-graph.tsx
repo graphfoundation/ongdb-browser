@@ -322,7 +322,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
       </li>
       <li>
         <ManualLink chapter="cypher-manual" page="/">
-          Neo4j Cypher Manual
+          ONgDB Geequel Manual
         </ManualLink>
       </li>
       <li>

@@ -1,7 +1,7 @@
-:description: Establish a connection to Neo4j database.
+:description: Establish a connection to ONgDB database.
 
 [[dbms-connection]]
-= Connect to a Neo4j DBMS
+= Connect to a ONgDB DBMS
 
 ONgDB Browser is the easiest way to access a ONgDB database.
 To establish a connection, you enter the DBMS URL, the name of the database you want to connect, and the user credentials.
@@ -14,7 +14,7 @@ image:home-screen.png[]
 [[uri-scheme]]
 == Connection URI schemes
 
-ONgDB Browser requires a connection to a Neo4j DBMS via the link:https://7687.org/[Bolt Protocol^] using the link:{neo4j-docs-base-uri}/javascript-manual/current/[Neo4j JavaScript Driver^] to execute Cypher queries.
+ONgDB Browser requires a connection to a ONgDB DBMS via the link:https://7687.org/[Bolt Protocol^] using the link:{neo4j-docs-base-uri}/javascript-manual/current/[ONgDB JavaScript Driver^] to execute Cypher queries.
 
 ONgDB Browser supports the following connection URI schemes:
 
@@ -34,23 +34,23 @@ A difference in the behavior in `neo4j://` and `bolt://` is seen only if address
 [TIP]
 ====
 For more information on the different connection scenarios, see <<connection-scenarios>>.
-For more information on how to configure connectors (Bolt, HTTP, and HTTPS) for Neo4j and the default ports, see link:https://neo4j.com/docs/operations-manual/{neo4j-version}/configuration/connectors/#connectors[Operations Manual -> Configure connectors^] and link:https://neo4j.com/docs/operations-manual/current/configuration/ports/[Operations Manual -> Ports^].
+For more information on how to configure connectors (Bolt, HTTP, and HTTPS) for ONgDB and the default ports, see link:https://docs.graphfoundation.org/operations-manual/{neo4j-version}/configuration/connectors/#connectors[Operations Manual -> Configure connectors^] and link:https://docs.graphfoundation.org/operations-manual/current/configuration/ports/[Operations Manual -> Ports^].
 ====
 
 [NOTE]
 ====
 URI schemes ending `+ssc` are not supported by ONgDB Browser since the browser’s OS handles certificate trust.
-If it is necessary to connect to a Neo4j instance using a self-signed certificate from ONgDB Browser, first visit a web page that uses the self-signed certificate in order to prompt the browser to request that certificate trust be granted.
+If it is necessary to connect to a ONgDB instance using a self-signed certificate from ONgDB Browser, first visit a web page that uses the self-signed certificate in order to prompt the browser to request that certificate trust be granted.
 Once that trust has been granted, you can connect with URI schemes ending `+s`.
 Alternatevely, you can trust self-signed certificate by installing them on your OS.
-For more information, see link:https://neo4j.com/docs/operations-manual/current/security/ssl-framework/#ssl-bolt-config[Operations Manual -> SSL Framework, Configure SSL over Bolt].
+For more information, see link:https://docs.graphfoundation.org/operations-manual/current/security/ssl-framework/#ssl-bolt-config[Operations Manual -> SSL Framework, Configure SSL over Bolt].
 ====
 
 
 [[manage-connection]]
 == Manage connection commands
 
-The `:server` command lets you manage the connection to Neo4j, such as connecting, disconnecting, and viewing metadata for the current connection.
+The `:server` command lets you manage the connection to ONgDB, such as connecting, disconnecting, and viewing metadata for the current connection.
 
 Usage::	`:server <action>`
 
@@ -60,7 +60,7 @@ This is your current connection information.
 * `:server change-password` -- Opens the frame *Password change*, where you can change your current password.
 
 Auth::
-* `:server connect` -- Opens the frame *Connect to Neo4j*.
+* `:server connect` -- Opens the frame *Connect to ONgDB*.
 If connected to the server, the frame shows the current user and the connection URL.
 Otherwise, enter the name of the database you want to connect, the DBMS URL, and the user credentials.
 * `:server disconnect` -- Opens the frame *Disconnected*, which shows that the current user is disconnected from the server.
@@ -108,7 +108,7 @@ User::
 If you are developing on your local machine with a single instance:
 
 * Default URL to ONgDB Browser is `+http://localhost:7474/browser+` (use your web browser).
-* Default connection URL to Neo4j is `+bolt://localhost:7687+`.
+* Default connection URL to ONgDB is `+bolt://localhost:7687+`.
 
 
 .ONgDB Browser - ONgDB Desktop application

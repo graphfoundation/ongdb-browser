@@ -48,8 +48,8 @@ CALL dbms.queryJmx("abc.metrics:name=abc.foo.store.size.total")
 When a query is malformed, or the specific metric is filtered out an empty array is returned but no error.
 So to debug a jmx query make sure to read the docs on the exact syntax and check the metrics.filter setting.
 
-See docs for reference on what metrics exist & how to correctly query jmx: https://neo4j.com/docs/operations-manual/current/monitoring/metrics/reference/
-See docs for what metrics are filtered out by default and other for relevant settings: https://neo4j.com/docs/operations-manual/current/configuration/configuration-settings/#config_metrics.namespaces.enabled
+See docs for reference on what metrics exist & how to correctly query jmx: https://docs.graphfoundation.org/operations-manual/current/monitoring/metrics/reference/
+See docs for what metrics are filtered out by default and other for relevant settings: https://docs.graphfoundation.org/operations-manual/current/configuration/configuration-settings/#config_metrics.namespaces.enabled
 */
 type SysInfoMetrics = {
   group: string

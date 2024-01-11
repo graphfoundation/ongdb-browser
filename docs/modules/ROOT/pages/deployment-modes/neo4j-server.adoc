@@ -4,36 +4,36 @@
 [[bundled-neo4j]]
 = ONgDB Server
 
-Neo4j is the world’s leading graph database.
+ONgDB is the world’s leading graph database.
 The architecture is designed for optimal management, storage, and traversal of nodes and relationships.
-There are two editions of Neo4j to choose from, the Community Edition and the Enterprise Edition.
+There are two editions of ONgDB to choose from, the Community Edition and the Enterprise Edition.
 The Enterprise Edition includes all that Community Edition has to offer, plus extra enterprise requirements such as backups, clustering, and failover capabilities.
 
-Neo4j includes a web server that can host different HTTP modules.
-If you are using the default configuration, the web server will be started and host the `BROWSER` module (ONgDB Browser) at port `7474` when you start Neo4j.
-The `BROWSER` module is avaialable in Community Edition and Enterprise Edition.
+ONgDB includes a web server that can host different HTTP modules.
+If you are using the default configuration, the web server will be started and host the `BROWSER` module (ONgDB Browser) at port `7474` when you start ONgDB.
+The `BROWSER` module is available in Community Edition and Enterprise Edition.
 
 [NOTE]
 ====
-If you do not want to host ONgDB Browser when you start Neo4j, remove `BROWSER` from the comma-separated list of the configuration setting https://neo4j.com/docs/operations-manual/current/configuration/configuration-settings/#config_dbms.http_enabled_modules[dbms.http_enabled_modules^].
+If you do not want to host ONgDB Browser when you start ONgDB, remove `BROWSER` from the comma-separated list of the configuration setting https://docs.graphfoundation.org/operations-manual/current/configuration/configuration-settings/#config_dbms.http_enabled_modules[dbms.http_enabled_modules^].
 ====
 
-.Start Neo4j
+.Start ONgDB
 ====
 Prerequisites for this example:
 
-* Install the Neo4j linux tarball.
+* Install the ONgDB linux tarball.
 * Current working directory is _<neo4j-home>_.
 * Using the default configuration.
 
-Start Neo4j with the command:
+Start ONgDB with the command:
 
 [source, shell]
 ----
 bin/neo4j start
 ----
 
-Neo4j starts a web server with the `BROWSER` module (ONgDB Browser) on port `7474`. +
+ONgDB starts a web server with the `BROWSER` module (ONgDB Browser) on port `7474`. +
 Point your web browser to link:http://localhost:7474/browser[_http://localhost:7474/browser_^].
 ====
 
@@ -41,7 +41,7 @@ Point your web browser to link:http://localhost:7474/browser[_http://localhost:7
 ====
 New versions of ONgDB Browser are released independently of ONgDB Server.
 The Browser version bundled with ONgDB Server is the latest at the time of the ONgDB Server release.
-Consequently, when used with a Neo4j server, the Browser version may not be the latest one, and new Browser functionality may not be immediately available.
+Consequently, when used with a ONgDB server, the Browser version may not be the latest one, and new Browser functionality may not be immediately available.
 If you cannot wait for the next release of ONgDB Server and access to the latest version of Browser, refer to the other deployment options below.
-Additionally, you can always find the latest version of ONgDB Browser at link:https://browser.neo4j.io/[_https://browser.neo4j.io/_^].
+Additionally, you can always find the latest version of ONgDB Browser at link:https://browser.ongdb.com/[_https://browser.ongdb.com/_^].
 ====

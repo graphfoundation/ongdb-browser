@@ -98,7 +98,7 @@ export function DBMSInfo(props: any): JSX.Element {
             <p>
               Automatic updates of node and relationship counts have been
               disabled for performance reasons, likely due to{' '}
-              <DrawerExternalLink href="https://neo4j.com/docs/cypher-manual/current/access-control/limitations/#access-control-limitations-db-operations">
+              <DrawerExternalLink href="https://docs.graphfoundation.org/cypher-manual/current/access-control/limitations/#access-control-limitations-db-operations">
                 RBAC configuration.
               </DrawerExternalLink>
             </p>

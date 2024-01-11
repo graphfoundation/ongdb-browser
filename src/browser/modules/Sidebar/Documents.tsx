@@ -52,39 +52,39 @@ const getReferences = (version: string, v: string) => {
   const newRefs = [
     {
       name: 'ONgDB Browser Manual',
-      url: 'https://neo4j.com/docs/browser-manual/current/'
+      url: 'https://docs.graphfoundation.org/browser-manual/current/'
     },
     {
       name: 'Cypher Introduction',
-      url: ` https://neo4j.com/docs/cypher-manual/${v}/introduction/ `
+      url: ` https://docs.graphfoundation.org/cypher-manual/${v}/introduction/ `
     }
   ]
   const oldRefs = [
     {
       name: 'Developer Manual',
-      url: `https://neo4j.com/docs/developer-manual/${v}/`
+      url: `https://docs.graphfoundation.org/developer-manual/${v}/`
     },
     {
       name: 'Cypher Introduction',
-      url: `https://neo4j.com/docs/developer-manual/${v}/cypher/`
+      url: `https://docs.graphfoundation.org/developer-manual/${v}/cypher/`
     }
   ]
 
   const docs = [
     {
-      name: 'Getting Started with Neo4j',
-      url: 'https://neo4j.com/docs/getting-started/'
+      name: 'Getting Started with ONgDB',
+      url: 'https://docs.graphfoundation.org/getting-started/'
     },
     ...(shouldLinkToNewRefs(version) ? newRefs : oldRefs),
     {
       name: 'Cypher Refcard',
-      url: `https://neo4j.com/docs/cypher-refcard/${v}/`
+      url: `https://docs.graphfoundation.org/cypher-refcard/${v}/`
     }
   ]
 
   const graphAcademy = [
     {
-      name: 'Neo4j Fundamentals',
+      name: 'ONgDB Fundamentals',
       url: 'https://graphacademy.neo4j.com/courses/neo4j-fundamentals/'
     },
     {
@@ -108,7 +108,7 @@ const getReferences = (version: string, v: string) => {
   const other = [
     {
       name: 'Operations Manual',
-      url: `https://neo4j.com/docs/operations-manual/${v}/`
+      url: `https://docs.graphfoundation.org/operations-manual/${v}/`
     },
     {
       name: 'Developer Site',

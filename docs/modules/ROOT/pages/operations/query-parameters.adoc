@@ -25,7 +25,7 @@ Parameters may consist of letters and numbers and any combination of these but c
 
 [TIP]
 ====
-For more details on the Cypher parameters, see link:https://neo4j.com/docs/cypher-manual/{neo4j-version}/syntax/parameters/[Cypher Manual v.{neo4j-version} - Parameters^].
+For more details on the Cypher parameters, see link:https://docs.graphfoundation.org/cypher-manual/{neo4j-version}/syntax/parameters/[Cypher Manual v.{neo4j-version} - Parameters^].
 ====
 
 
@@ -37,7 +37,7 @@ Using parameters rather than hard-coded values allows for the reuse of the query
 
 The `+:param name => 'Example'+` command defines a parameter named `name`, which will be sent along with your queries. +
 The right hand side of `=>` is sent to the server and evaluated as Cypher with an implicit `RETURN` in front.
-This gives better type safety since some types (especially numbers) in JavaScript are hard to match with Neo4j:s type system.
+This gives better type safety since some types (especially numbers) in JavaScript are hard to match with ONgDB's type system.
 To see the list of all currently set query parameters and their values, use the `:params` command.
 For more information on how to use the commands, see `:help param` and `:help params`.
 

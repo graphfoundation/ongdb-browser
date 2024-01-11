@@ -25,7 +25,7 @@ import { ManualLink, ManualLinkProps } from 'browser-components/ManualLink'
 const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
   [
     { neo4jVersion: null, chapter: 'graph-algorithms', page: '/' },
-    'https://neo4j.com/docs/graph-algorithms/current/'
+    'https://docs.graphfoundation.org/graph-algorithms/current/'
   ],
   [
     {
@@ -33,11 +33,11 @@ const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
       chapter: 'cypher-manual',
       page: '/schema/constraints/'
     },
-    'https://neo4j.com/docs/cypher-manual/3.5/schema/constraints/'
+    'https://docs.graphfoundation.org/cypher-manual/3.5/schema/constraints/'
   ],
   [
     { neo4jVersion: '4.0.0-beta03mr03', chapter: 'driver-manual', page: '' },
-    'https://neo4j.com/docs/driver-manual/4.0-preview/'
+    'https://docs.graphfoundation.org/driver-manual/4.0-preview/'
   ],
   [
     {
@@ -46,7 +46,7 @@ const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
       page: '',
       minVersion: '4.0.0'
     },
-    'https://neo4j.com/docs/driver-manual/4.0/'
+    'https://docs.graphfoundation.org/driver-manual/4.0/'
   ],
   [
     {
@@ -55,7 +55,7 @@ const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
       page: '',
       minVersion: '3.5.0'
     },
-    'https://neo4j.com/docs/driver-manual/4.0-preview/'
+    'https://docs.graphfoundation.org/driver-manual/4.0-preview/'
   ],
   [
     {
@@ -64,7 +64,7 @@ const tests: [Omit<ManualLinkProps, 'children'>, string][] = [
       neo4jVersion: null,
       minVersion: '3.5.0'
     },
-    'https://neo4j.com/docs/driver-manual/3.5/'
+    'https://docs.graphfoundation.org/driver-manual/3.5/'
   ]
 ]
 
@@ -83,21 +83,21 @@ const movedPages: [
     { neo4jVersion: '3.5.0', page: '/administration/' },
     {
       text: 'Cypher Schema',
-      url: 'https://neo4j.com/docs/cypher-manual/3.5/schema/'
+      url: 'https://docs.graphfoundation.org/cypher-manual/3.5/schema/'
     }
   ],
   [
     { neo4jVersion: '4.0.0', page: '/administration/' },
     {
       text: 'link to manual',
-      url: 'https://neo4j.com/docs/cypher-manual/4.0/administration/'
+      url: 'https://docs.graphfoundation.org/cypher-manual/4.0/administration/'
     }
   ],
   [
     { neo4jVersion: null, page: '/administration/' },
     {
       text: 'Cypher Manual',
-      url: 'https://neo4j.com/docs/cypher-manual/current/'
+      url: 'https://docs.graphfoundation.org/cypher-manual/current/'
     }
   ],
   [
@@ -107,7 +107,7 @@ const movedPages: [
     },
     {
       text: 'Indexes',
-      url: 'https://neo4j.com/docs/cypher-manual/4.3/indexes-for-search-performance/'
+      url: 'https://docs.graphfoundation.org/cypher-manual/4.3/indexes-for-search-performance/'
     }
   ]
 ]

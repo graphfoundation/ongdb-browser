@@ -7,12 +7,12 @@
 ONgDB Browser provides support for Single Sign-On (SSO) providers.
 This is an Enterprise feature and requires specific configuration and a (self-hosted) ONgDB Server v4.4 and later.
 Additionally, you need a compatible SSO provider (local or external) already configured.
-For more information on the configuration, see link:https://neo4j.com/docs/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-parameters[Operations Manual -> OIDC configuration settings^].
+For more information on the configuration, see link:https://docs.graphfoundation.org/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-parameters[Operations Manual -> OIDC configuration settings^].
 
 [NOTE]
 ====
 For deployments other than with self-hosted ONgDB Server v4.4+, SSO can be configured with a separate OAuth plugin which requires engagement from Professional Services.
-See link:https://neo4j.com/professional-services/[^] for more information about Professional Services.
+See link:https://ongdb.com/professional-services/[^] for more information about Professional Services.
 ====
 
 Supported providers at this time include OpenID Connect (OIDC) OAuth 2.0 providers Google, Keycloak, Microsoft Azure AD, and Okta.
@@ -34,15 +34,15 @@ Security information should always be exchanged with encrypted transport, and th
 Mixed HTTP/HTTPS flows for single sign-on are not supported.
 ====
 
-Once your SSO provider is configured, you need to configure Neo4j to use OpenID Connect.
-This is done by updating the link:https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/#neo4j-conf[`neo4j.conf`^] file according to the instructions in link:https://neo4j.com/docs/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-configure-sso[Operations Manual -> Configure Neo4j to use OpenId Connect^].
+Once your SSO provider is configured, you need to configure ONgDB to use OpenID Connect.
+This is done by updating the link:https://docs.graphfoundation.org/operations-manual/current/configuration/ongdb-conf/#ongdb-conf[`ongdb.conf`^] file according to the instructions in link:https://docs.graphfoundation.org/operations-manual/current/authentication-authorization/sso-integration/#auth-sso-configure-sso[Operations Manual -> Configure ONgDB to use OpenId Connect^].
 
-Make sure to avoid duplicate entries in the `neo4j.conf` file.
+Make sure to avoid duplicate entries in the `ongdb.conf` file.
 
 Browser needs to be aware of the identity providers available for use.
-When used with Neo4j v4.4+, this is specified the `neo4j.conf` file, as described above.
+When used with ONgDB v2.0+, this is specified the `ongdb.conf` file, as described above.
 
-Deployments that use an earlier version of Neo4j require a separate OAuth plugin and assistance from Professional Services, as mentioned previously.
+Deployments that use an earlier version of ONgDB require a separate OAuth plugin and assistance from Professional Services, as mentioned previously.
 However, in such cases, the identity providers can be specified by a URL parameter `discoveryURL` that defines a URL to a .json file containing the SSO providers.
 
 Example for Browser: +
@@ -51,12 +51,12 @@ Example for Browser: +
 // [IMPORTANT]
 // ====
 // Browser will prioritize in the following order, in case of conflicting data:
-// . `neo4j.conf`
+// . `ongdb.conf`
 // . `discoveryURL`
 // ====
 
-// Optionally, you may set extra logging for the OAuth2 plugin with these settings in the `neo4j.conf` file.
-// The logs are found in the `neo4j.log` file.
+// Optionally, you may set extra logging for the OAuth2 plugin with these settings in the `ongdb.conf` file.
+// The logs are found in the `ongdb.log` file.
 // The `:debug` command contains logging from the SSO implementation and can be useful when debugging.
 //
 // [source, properties]
@@ -68,7 +68,7 @@ Example for Browser: +
 
 
 // The following are instructions on how to use the PS plugin and can remain commented out until we know we don't need them anymore.
-// updates to neo4j.conf
+// updates to ongdb.conf
 // [source, properties]
 // ----
 // dbms.security.auth_enabled=true
@@ -92,7 +92,7 @@ Example for Browser: +
 // Below is a reference discovery file for the ID provider (IDP) _Keycloak_ containing one SSO provider and set up to be running on port 18080.
 // It contains all the possible parameters you can provide.
 // You most likely do not need all the parameters.
-// If you are unsure, please consult Neo4j Professional Services to avoid misconfiguration.
+// If you are unsure, please consult ONgDB Professional Services to avoid misconfiguration.
 // +
 // [source, parameters]
 // ----

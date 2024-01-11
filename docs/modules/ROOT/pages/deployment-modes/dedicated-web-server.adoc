@@ -205,5 +205,5 @@ Point your web browser to link:http://localhost:8080[_http://localhost:8080_^].
 For details on how to set up a connection to ONgDB in ONgDB Browser, see xref:operations/dbms-connection.adoc[].
 ====
 
-//https://neo4j.com/docs/bloom-user-guide/current/bloom-installation/#_bloom_web_app_hosted_in_a_separate_web_server
+//https://docs.graphfoundation.org/bloom-user-guide/current/bloom-installation/#_bloom_web_app_hosted_in_a_separate_web_server
 

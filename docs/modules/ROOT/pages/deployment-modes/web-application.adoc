@@ -4,5 +4,5 @@
 [[web-application]]
 = Web application
 
-ONgDB Browser is available as a web application at link:https://browser.neo4j.io/[_https://browser.neo4j.io/_^].
-To setup up a connection to Neo4j with this web application (ONgDB Browser), you need a remote Neo4j instance that is configured with TLS.
+ONgDB Browser is available as a web application at link:https://browser.ongdb.com/[_https://browser.ongdb.com/_^].
+To setup up a connection to ONgDB with this web application (ONgDB Browser), you need a remote ONgDB instance that is configured with TLS.

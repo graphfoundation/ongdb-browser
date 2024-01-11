@@ -42,8 +42,10 @@ const content = (
                 commands
               </li>
               <li>
-                <a href="https://neo4j.com/docs/">Neo4j Documentation</a> - for
-                detailed information about Neo4j
+                <a href="https://docs.graphfoundation.org/">
+                  ONgDB Documentation
+                </a>{' '}
+                - for detailed information about ONgDB
               </li>
             </ul>
           </td>

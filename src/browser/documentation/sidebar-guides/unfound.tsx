@@ -29,7 +29,7 @@ const slides = [
     <h5>Try:</h5>
     <ul className="undecorated">
       <li>
-        <a data-exec="help">:help</a> - for general help about using Neo4j
+        <a data-exec="help">:help</a> - for general help about using ONgDB
         Browser
       </li>
       <li>
@@ -37,8 +37,8 @@ const slides = [
         guides
       </li>
       <li>
-        <a href="https://neo4j.com/docs/">Neo4j Documentation</a> - for detailed
-        information about Neo4j
+        <a href="https://docs.graphfoundation.org/">ONgDB Documentation</a> -
+        for detailed information about ONgDB
       </li>
     </ul>
   </BuiltInGuideSidebarSlide>

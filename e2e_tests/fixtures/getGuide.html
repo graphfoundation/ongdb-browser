@@ -3,9 +3,9 @@
     .nodes-image {
         margin:-100;
     }
-    */	
+    */
     @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
-    
+
     .imageblock .content img, .image img {max-width: 100%;}
     .deck h3, .deck h4 {display: block !important;margin-bottom:8px;margin-top:5px;}
     .listingblock {margin:8px;}
@@ -28,11 +28,11 @@
             <h3>What is Cypher?</h3>
             <p class="lead">Information</p>
                 <!dl>
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
                 </dl>
             </div>
           <div class="col-sm-9">
@@ -47,17 +47,17 @@
     }
     </style>
     <title>Movies Guide</title>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>What is Cypher?</h3>
         <br/>
         <div>
           <div class="paragraph">
-    <p>Cypher is a graph query language that is used to query the Neo4j Database. Just like you use SQL to query a MySQL database,
-    you would use Cypher to query the Neo4j Database.</p>
+    <p>Cypher is a graph query language that is used to query the ONgDB Database. Just like you use SQL to query a MySQL database,
+    you would use Cypher to query the ONgDB Database.</p>
     </div>
     <div class="paragraph">
     <p>A simple Cypher query can look something like this</p>
@@ -125,9 +125,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Nodes and Relationships</h3>
@@ -207,9 +207,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Labels</h3>
@@ -252,9 +252,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Properties</h3>
@@ -303,9 +303,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Create a Node</h3>
@@ -346,16 +346,16 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Finding Nodes with <strong>Match</strong> and <strong>Where</strong> Clause</h3>
         <br/>
         <div>
           <div class="paragraph">
-    <p><code>Match</code> clause is used to find nodes that match a particular pattern. This is the primary way of getting data from a Neo4j database.</p>
+    <p><code>Match</code> clause is used to find nodes that match a particular pattern. This is the primary way of getting data from a ONgDB database.</p>
     </div>
     <div class="paragraph">
     <p>In most cases, a <code>Match</code> is used along with certain conditions to narrow down the result.</p>
@@ -383,7 +383,7 @@
     <p>Both of the above queries will return the same results.</p>
     </div>
     <div class="paragraph">
-    <p>You can read more about Where clause and list of all filters here - <a href="https://neo4j.com/docs/cypher-manual/current/clauses/where/" class="bare">https://neo4j.com/docs/cypher-manual/current/clauses/where/</a></p>
+    <p>You can read more about Where clause and list of all filters here - <a href="https://docs.graphfoundation.org/cypher-manual/current/clauses/where/" class="bare">https://docs.graphfoundation.org/cypher-manual/current/clauses/where/</a></p>
     </div>
     <div class="paragraph">
     <p><strong>Try</strong></p>
@@ -422,9 +422,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Merge Clause</h3>
@@ -482,9 +482,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Create a Relationship</h3>
@@ -497,7 +497,7 @@
     <div class="content">
     <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person), (m:Movie)
     WHERE p.name = "Tom Hanks" AND m.title = "Cloud Atlas"
-    
+
     CREATE (p)-[w:WATCHED]-&gt;(m)
     RETURN type(w)<!--/code--></pre>
     </div>
@@ -518,7 +518,7 @@
     <div class="content">
     <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (p:Person), (m:Movie)
     WHERE p.name = "&lt;Your Name&gt;" AND m.title = "Cloud Atlas"
-    
+
     CREATE (p)-[w:WATCHED]-&gt;(m)
     RETURN type(w)<!--/code--></pre>
     </div>
@@ -531,16 +531,16 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Relationship Types</h3>
         <br/>
         <div>
           <div class="paragraph">
-    <p>In Neo4j, there can be 2 kinds of relationships - <strong>incoming</strong> and <strong>outgoing</strong>.</p>
+    <p>In ONgDB, there can be 2 kinds of relationships - <strong>incoming</strong> and <strong>outgoing</strong>.</p>
     </div>
     <div class="imageblock">
     <div class="content">
@@ -604,9 +604,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Advanced Cypher queries</h3>
@@ -664,9 +664,9 @@
         </div>
       </div>
     </slide>
-    
-    
-    
+
+
+
     <slide class="row-fluid">
       <div class="col-sm-12">
         <h3>Great Job!</h3>
@@ -684,10 +684,10 @@
     <div class="olist arabic">
     <ol class="arabic">
     <li>
-    <p><a href="https://neo4j.com/docs/cypher-manual/">Cypher Manual</a> - detailed manual on Cypher syntax</p>
+    <p><a href="https://docs.graphfoundation.org/cypher-manual/">Cypher Manual</a> - detailed manual on Cypher syntax</p>
     </li>
     <li>
-    <p><a href="https://graphacademy.neo4j.com/">Online Training - Introduction to Neo4j</a> - If you are new to Neo4j and like to learn through an online class, this is the best place to get started.</p>
+    <p><a href="https://graphacademy.neo4j.com/">Online Training - Introduction to ONgDB</a> - If you are new to ONgDB and like to learn through an online class, this is the best place to get started.</p>
     </li>
     </ol>
     </div>

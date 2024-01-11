@@ -1,6 +1,6 @@
 site:
-  title: Neo4j Docs
-  url: https://neo4j.com/docs
+  title: ONgDB Docs
+  url: https://docs.graphfoundation.org
   start_page: browser-manual:ROOT:index.adoc
 
 content:
@@ -51,6 +51,6 @@ asciidoc:
     sectnumlevel: 3,
     experimental: ''
     copyright: 2023
-    common-license-page-uri: https://neo4j.com/docs/license/
-    docs-base-uri: https://neo4j.com/docs
-    neo4j-docs-base-uri: https://neo4j.com/docs
+    common-license-page-uri: https://docs.graphfoundation.org/license/
+    docs-base-uri: https://docs.graphfoundation.org
+    neo4j-docs-base-uri: https://docs.graphfoundation.org

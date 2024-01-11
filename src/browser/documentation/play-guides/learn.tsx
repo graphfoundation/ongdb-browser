@@ -190,7 +190,7 @@ const slides = [
         </li>
         <li>
           <ManualLink chapter="cypher-manual" page="/">
-            Neo4j Cypher Manual
+            ONgDB Geequel Manual
           </ManualLink>
         </li>
       </ul>

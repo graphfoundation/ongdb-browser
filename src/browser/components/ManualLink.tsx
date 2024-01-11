@@ -108,7 +108,7 @@ export function ManualLink({
     version = formatDocVersion(minVersion)
   }
 
-  const url = `https://neo4j.com/docs/${chapter}/${version}/${cleanPage}`
+  const url = `https://docs.graphfoundation.org/${chapter}/${version}/${cleanPage}`
 
   return <DrawerExternalLink href={url}>{content}</DrawerExternalLink>
 }

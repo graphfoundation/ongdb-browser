@@ -308,11 +308,11 @@ export class UserAdd extends Component<any, UserAddState> {
           <p>
             Read more on user and role management with cypher on{' '}
             <a
-              href="https://neo4j.com/docs/cypher-manual/current/administration/security/users-and-roles"
+              href="https://docs.graphfoundation.org/cypher-manual/current/administration/security/users-and-roles"
               target="_blank"
               rel="noreferrer"
             >
-              the Neo4j Cypher docs.
+              the ONgDB Geequel docs.
             </a>
           </p>
         </div>
