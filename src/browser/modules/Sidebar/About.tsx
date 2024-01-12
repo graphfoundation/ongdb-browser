@@ -62,12 +62,12 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
     <DrawerBody>
       <DrawerSection>
         <DrawerSubHeader>
-          Made originally by{' '}
+          Made by{' '}
           <DrawerExternalLink href="http://neo4j.com/">
             Neo4j, Inc
           </DrawerExternalLink>
           <br />
-          ensured to stay free and open source by the{' '}
+          and{' '}
           <DrawerExternalLink href="https://graphfoundation.org/">
             Graph Foundation, Inc.
           </DrawerExternalLink>
@@ -137,21 +137,21 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
         <DrawerSubHeader>Participate</DrawerSubHeader>
         <DrawerSectionBody>
           Discuss on{' '}
-          <DrawerExternalLink href="https://community.neo4j.com/">
-            Neo4j Community Forum
+          <DrawerExternalLink href="https://community.ongdb.com/">
+            ONgDB Community Forum
           </DrawerExternalLink>{' '}
           <br />
           Ask questions at{' '}
-          <DrawerExternalLink href="http://stackoverflow.com/questions/tagged/neo4j">
+          <DrawerExternalLink href="http://stackoverflow.com/questions/tagged/ongdb">
             Stack Overflow
           </DrawerExternalLink>
           <br />
           Visit a local{' '}
-          <DrawerExternalLink href="http://neo4j.meetup.com/">
+          <DrawerExternalLink href="http://ongdb.meetup.com/">
             Meetup Group
           </DrawerExternalLink>
           <br />
-          Contribute code to{' '}
+          Contribute to{' '}
           <DrawerExternalLink href="http://github.com/graphfoundation">
             ONgDB
           </DrawerExternalLink>{' '}
