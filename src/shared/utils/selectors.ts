@@ -71,7 +71,7 @@ export const getClusterRoleForCurrentDb = (state: GlobalState) => {
 export type TelemetrySettingSource =
   | 'AURA'
   | 'BROWSER_SETTING'
-  | 'NEO4J_CONF'
+  | 'ONGDB_CONF'
   | 'DESKTOP_SETTING'
   | 'SETTINGS_NOT_LOADED'
 
@@ -86,7 +86,7 @@ function usedTelemetrySettingSource(
     !shouldAllowOutgoingConnections(state) ||
     !getClientsAllowTelemetry(state)
   ) {
-    return 'NEO4J_CONF'
+    return 'ONGDB_CONF'
   }
 
   if (inDesktop(state)) {
@@ -134,7 +134,7 @@ export const getTelemetrySettings = (state: GlobalState): TelemetrySettings => {
       allowCrashReporting: getAllowCrashReports(state),
       allowUserStats: getAllowUserStats(state)
     },
-    NEO4J_CONF: {
+    ONGDB_CONF: {
       allowCrashReporting: confAllowsUdc,
       allowUserStats: confAllowsUdc
     }

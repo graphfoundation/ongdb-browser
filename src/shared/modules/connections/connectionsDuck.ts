@@ -708,7 +708,7 @@ export const connectionLostEpic = (action$: any, store: any) =>
                     authLog(`Failed to refresh token: ${e}`)
                     authLog(
                       'This could be due to the refresh token not being available, which happens if ONgDB Browser accessed via stored credentials rather than redoing the SSO flow. ' +
-                        'If you have a short lived access token, it may be beneficial to set `browser.retain_connection_credentials=false` in neo4j.conf to make sure the refresh token is always available.'
+                        'If you have a short lived access token, it may be beneficial to set `browser.retain_connection_credentials=false` in ongdb.conf to make sure the refresh token is always available.'
                     )
                     // if refreshing the token failed, don't retry
                     return resolve({ type: UnauthorizedDriverError })

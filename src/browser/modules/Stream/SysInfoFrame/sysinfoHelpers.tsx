@@ -30,8 +30,8 @@ JMX MBeans is a java extension that allows us to query the database for stats an
 It's used through the `dbms.queryJmx(<searchprefix>=<metric_name>)` where the searchprefix is '<userDefinedPrefix>.metrics:name'
  and the metric_name name has a few variations and depends on the following:
 - If it's a "global" or "database" metric (global meaning the entire dbms in this context)
-- What `metrics.prefix` is set to in neo4j.conf (default is neo4j)
-- If `metrics.namespaces.enabled` is true of false in neo4j.conf (this setting was introduced when multidb was added)
+- What `metrics.prefix` is set to in ongdb.conf (default is ongdb)
+- If `metrics.namespaces.enabled` is true of false in ongdb.conf (this setting was introduced when multidb was added)
 
 An example using the `store.size.total` metric with the following config:
 - which is a "database" metric,
@@ -270,7 +270,7 @@ export const responseHandler = (setState: (newState: any) => void) =>
       idAllocation,
       transactions,
       errorMessage: valuesMissing
-        ? 'Some metrics missing, check neo4j.conf'
+        ? 'Some metrics missing, check ongdb.conf'
         : null
     })
   }

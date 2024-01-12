@@ -219,13 +219,13 @@ function getTelemetryVisualSetting({
         }
       }
     ],
-    NEO4J_CONF: [
+    ONGDB_CONF: [
       {
         allowUserStats: {
           displayName: 'Product usage',
           tooltip: `Your database is ${
             telemetrySettings.allowUserStats ? '' : 'not '
-          }configured to send product analytics data in neo4j.conf.`,
+          }configured to send product analytics data in ongdb.conf.`,
           type: 'info'
         }
       }

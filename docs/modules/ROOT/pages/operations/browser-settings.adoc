@@ -209,9 +209,9 @@ Adjusting the settings first resets the configuration to the default configurati
 [[adjust-globally]]
 == Adjust settings globally
 
-To change the configuration settings for all users of ONgDB Browser, modify the _neo4j.conf_ file, or if using link:[ONgDB Desktop], navigate to the DBMS which settings you want to update, click the ellipsis dropdown menu, and select *Settings*.
+To change the configuration settings for all users of ONgDB Browser, modify the _ongdb.conf_ file, or if using link:[ONgDB Desktop], navigate to the DBMS which settings you want to update, click the ellipsis dropdown menu, and select *Settings*.
 
-For example, to change the `maxFrames` from its default of `50` to `10` and the theme to `outline`, add the following line to _neo4j.conf_:
+For example, to change the `maxFrames` from its default of `50` to `10` and the theme to `outline`, add the following line to _ongdb.conf_:
 
 
 [source, properties]
