@@ -68,24 +68,26 @@ const content = (
         <a
           target="_blank"
           rel="noreferrer"
-          href="http://neo4j.com/"
-          className="no-icon"
-        >
-          {' '}
-          Neo4j, Inc
-        </a>
-        &nbsp;<span>2002–{new Date().getFullYear()}</span>
-        &nbsp;| Modifications Copyright &copy;
-        <a
-          target="_blank"
-          rel="noreferrer"
           href="https://graphfoundation.org/"
           className="no-icon"
         >
           {' '}
-          Graph Foundation, Inc
+          Graph Foundation, Inc.
         </a>
         &nbsp;<span>2018–{new Date().getFullYear()}</span>
+      </p>
+      <p className="text-muted">
+        Copyright &copy;
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="http://neo4j.com/"
+          className="no-icon"
+        >
+          {' '}
+          Neo4j, Inc.
+        </a>
+        &nbsp;<span>2002–{new Date().getFullYear()}</span>
       </p>
     </footer>
   </>
