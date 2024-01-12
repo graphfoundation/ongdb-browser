@@ -17,25 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import React, { Dispatch, useEffect } from 'react'
+import React, { Dispatch } from 'react'
 import { connect } from 'react-redux'
 import { Action } from 'redux'
 import semver from 'semver'
 
-import {
-  CannyFeedbackIcon,
-  CannyNotificationsIcon
-} from 'browser-components/icons/LegacyIcons'
-
 import DocumentItems from './DocumentItems'
 import { formatDocVersion } from './docsUtils'
-import {
-  StyledFeedbackButton,
-  StyledFullSizeDrawerBody,
-  StyledHeaderContainer
-} from './styled'
+import { StyledFullSizeDrawerBody, StyledHeaderContainer } from './styled'
 import { Drawer, DrawerHeader } from 'browser-components/drawer/drawer-styled'
-import { CANNY_FEATURE_REQUEST_URL, cannyOptions } from 'browser-services/canny'
 import { GlobalState } from 'shared/globalState'
 import { getRawVersion } from 'shared/modules/dbMeta/dbMetaDuck'
 import {
@@ -139,14 +129,6 @@ type DocumentsProps = {
 }
 
 const Documents = (props: DocumentsProps) => {
-  useEffect(() => {
-    window.Canny && window.Canny('initChangelog', cannyOptions)
-
-    return () => {
-      window.Canny && window.Canny('closeChangelog')
-    }
-  }, [])
-
   const { docs, other, graphAcademy } = getReferences(
     props.version,
     props.urlVersion
@@ -155,25 +137,7 @@ const Documents = (props: DocumentsProps) => {
     <Drawer id="db-documents">
       <StyledHeaderContainer>
         <DrawerHeader>Help &amp; Learn</DrawerHeader>
-        {window.Canny && (
-          <a
-            data-canny-changelog
-            data-testid="documentDrawerCanny"
-            onClick={props.trackCannyChangelog}
-          >
-            <CannyNotificationsIcon />
-          </a>
-        )}
       </StyledHeaderContainer>
-      <StyledFeedbackButton
-        onClick={() => {
-          props.trackCannyFeatureRequest()
-          window.open(CANNY_FEATURE_REQUEST_URL, '_blank')
-        }}
-      >
-        <CannyFeedbackIcon />
-        &nbsp; Send Feedback
-      </StyledFeedbackButton>
       <StyledFullSizeDrawerBody>
         <DocumentItems header="Useful commands" items={useful} />
         <DocumentItems header="Documentation links" items={docs} />
