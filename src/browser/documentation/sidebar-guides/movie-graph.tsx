@@ -62,7 +62,7 @@ const slides = [
     </p>
     <p>
       Use the following code block to create the movie graph. It contains a
-      single Cypher query statement composed of multiple <code>CREATE</code>{' '}
+      single Geequel query statement composed of multiple <code>CREATE</code>{' '}
       clauses.
     </p>
     <p>
@@ -585,7 +585,7 @@ const slides = [
         </pre>
       </li>
       <li>
-        Run the Cypher code by clicking the <b>Run</b> button.
+        Run the Geequel code by clicking the <b>Run</b> button.
       </li>
       <li> Wait for the operation to finish.</li>
     </ol>

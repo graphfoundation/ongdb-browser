@@ -19,7 +19,7 @@ If you want to change the initially executed command, navigate to the *Browser S
 
 [TIP]
 ====
-For more information on how to enter and run Geequel queries and commands, see xref:visual-tour.adoc#editor[Cypher editor]. +
+For more information on how to enter and run Geequel queries and commands, see xref:visual-tour.adoc#editor[Geequel editor]. +
 For more information about Geequel, see link:https://docs.graphfoundation.org/geequel-manual/{neo4j-version}/[Geequel Manual^] and link:https://docs.graphfoundation.org/geequel-refcard/{neo4j-version}/[ONgDB Geequel Refcard^].
 ====
 

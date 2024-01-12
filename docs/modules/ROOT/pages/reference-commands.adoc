@@ -52,13 +52,13 @@ The editor in ONgDB Browser understands a few client-side commands, which begin 
 |===
 | Command | Description
 
-m| +:auto <Cypher query>+
+m| +:auto <Geequel query>+
 a|
-Send the Cypher query in an auto-commit transaction. +
+Send the Geequel query in an auto-commit transaction. +
 
 [NOTE]
 ====
-In general, auto-committing transactions is not recommended because of the lack of support for retrying the Cypher query on errors.
+In general, auto-committing transactions is not recommended because of the lack of support for retrying the Geequel query on errors.
 However, some query types need to be sent in auto-committing transactions, such as `CALL { ... } IN TRANSACTIONS`.
 ====
 
@@ -93,7 +93,7 @@ a| REST command, send an HTTP GET request.
 m| :guide
 a|
 Show the guide drawer.
-The guide drawer contains interactive ONgDB Browser guides for learning concepts and tools with Neo4j.
+The guide drawer contains interactive ONgDB Browser guides for learning concepts and tools with ONgDB.
 
 m| +:guide <guide-name>+
 a|
@@ -106,7 +106,7 @@ Show the guide drawer with a custom ONgDB Browser guide from the specified URL.
 
 [NOTE]
 ====
-There are also other ONgDB Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
+There are also other ONgDB Browser guides created by ONgDB staff and community members to help others learn ONgDB or how to use the tools in its ecosystem.
 You can check out the currently published list on the link:https://portal.graphgist.org/graph_guides[GraphGist Portal (Graph Guides section)^]. +
 For more information on how to create a custom Browser guide, see link:https://neo4j.com/developer/guide-create-neo4j-browser-guide/[creating a custom Browser guide^].
 ====
@@ -140,7 +140,7 @@ Play a custom ONgDB Browser guide from the specified URL.
 
 [NOTE]
 ====
-There are also other ONgDB Browser guides created by Neo4j staff and community members to help others learn Neo4j or how to use the tools in its ecosystem.
+There are also other ONgDB Browser guides created by ONgDB staff and community members to help others learn ONgDB or how to use the tools in its ecosystem.
 You can check out the currently published list on the link:https://portal.graphgist.org/graph_guides[GraphGist Portal (Graph Guides section)^]. +
 For more information on how to create a custom Browser guide, see link:https://neo4j.com/developer/guide-create-neo4j-browser-guide/[creating a custom Browser guide^].
 ====
@@ -187,10 +187,10 @@ m| :server change-password
 a| Change password.
 
 m| :server connect
-a| Manage a connection to Neo4j.
+a| Manage a connection to ONgDB.
 
 m| :server disconnect
-a| Disconnect the currently open connection to Neo4j.
+a| Disconnect the currently open connection to ONgDB.
 
 m| :server status
 a| Show metadata for the currently open connection.
@@ -207,7 +207,7 @@ Set the database to query by default (the default database is set to `neo4j`).
 
 [NOTE]
 ====
-You can also use Cypher, `+USE <database> ...+`, to specify a database.
+You can also use Geequel, `+USE <database> ...+`, to specify a database.
 ====
 
 //m| :snake

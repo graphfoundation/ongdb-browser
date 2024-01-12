@@ -116,7 +116,7 @@ export default [
       {
         name: 'movies',
         description:
-          '- queries and recommendations with Cypher - movie use case'
+          '- queries and recommendations with Geequel - movie use case'
       },
       {
         name: 'northwind',
@@ -126,7 +126,7 @@ export default [
   },
   {
     name: ':server',
-    description: ' - manage the connection to Neo4j',
+    description: ' - manage the connection to ONgDB',
     commands: [
       { name: 'status' },
       { name: 'change-password' },

@@ -132,13 +132,13 @@ When reached, old frames get retired.
 
 | `codeFontLigatures`
 | `true`
-| Allow font ligatures for the Cypher editor bar and Cypher snippets.
+| Allow font ligatures for the Geequel editor bar and Geequel snippets.
 | yes
 
 | `useBoltRouting`
 | `false`
 | Whether to use Bolt routing.
-The Bolt+routing feature on Neo4j drivers discovers a cluster member (drivers have a load-balancing feature).
+The Bolt+routing feature on ONgDB drivers discovers a cluster member (drivers have a load-balancing feature).
 | no
 
 | `editorLint`
@@ -153,7 +153,7 @@ The Bolt+routing feature on Neo4j drivers discovers a cluster member (drivers ha
 
 | `connectionTimeout`
 | `30000`
-| The timeout in ms when establishing a connection to Neo4j.
+| The timeout in ms when establishing a connection to ONgDB.
 | yes
 
 | `showPerformanceOverlay`
@@ -219,7 +219,7 @@ For example, to change the `maxFrames` from its default of `50` to `10` and the 
 browser.post_connect_cmd=config {maxFrames:10, theme: "outline"}
 ----
 
-This changes the `maxFrames` from its default of `50` to `10` and then restarts Neo4j.
+This changes the `maxFrames` from its default of `50` to `10` and then restarts ONgDB.
 
 
 .Global Browser settings

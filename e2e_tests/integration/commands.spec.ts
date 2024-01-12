@@ -28,7 +28,7 @@ const commands = [
   ':server status',
   ':server connect',
   ':help',
-  ':play cypher',
+  ':play geequel',
   ':play https://guides.neo4j.com/reco',
   ':sysinfo',
   ':schema',

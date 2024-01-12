@@ -136,7 +136,7 @@ type GuideDocs = {
 
 export type BuiltInGuideIdentifier =
   | 'concepts'
-  | 'cypher'
+  | 'geequel'
   | 'intro'
   | 'movie-graph'
   | 'movieGraph'
@@ -157,7 +157,7 @@ type PlayDocs = {
 
 type PlayChapter =
   | 'concepts'
-  | 'cypher'
+  | 'geequel'
   | 'iconography'
   | 'intro'
   | 'learn'
@@ -178,7 +178,7 @@ export function isPlayChapter(name: string): name is PlayChapter {
 
 type BoltDocs = { title: 'Bolt'; chapters: Record<BoltChapter, DocItem> }
 type BoltChapter = 'boltEncryption' | 'boltRouting'
-type CypherDocs = { title: 'Cypher'; chapters: Record<CypherChapter, DocItem> }
+type CypherDocs = { title: 'Geequel'; chapters: Record<CypherChapter, DocItem> }
 type CypherChapter =
   | 'alterUser'
   | 'contains'
@@ -273,7 +273,7 @@ const docs: AllDocumentation = {
     }
   },
   cypher: {
-    title: 'Cypher',
+    title: 'Geequel',
     chapters: {
       alterUser: helpAlterUser,
       contains: helpContains,
@@ -336,7 +336,7 @@ const docs: AllDocumentation = {
     title: 'Guides & Examples',
     chapters: {
       concepts: playConcepts,
-      cypher: playCypher,
+      geequel: playCypher,
       iconography: playIconography,
       intro: playIntro,
       learn: playLearn,
@@ -357,7 +357,7 @@ const docs: AllDocumentation = {
     title: 'Built-in Browser guides',
     chapters: {
       concepts: guideConcepts,
-      cypher: guideCypher,
+      geequel: guideCypher,
       intro: guideIntro,
       movies: guideMovieGraph,
       movieGraph: guideMovieGraph,

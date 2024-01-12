@@ -21,7 +21,7 @@ import React from 'react'
 
 import ManualLink from 'browser-components/ManualLink'
 
-const title = 'Cypher'
+const title = 'Geequel'
 const subtitle = 'A graph query language'
 const category = 'cypherQueries'
 const content = (

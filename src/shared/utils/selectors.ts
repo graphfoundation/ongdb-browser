@@ -51,7 +51,7 @@ export const getClusterRoleForCurrentDb = (state: GlobalState) => {
   if (gte(version, VERSION_FOR_CLUSTER_ROLE_IN_SHOW_DB)) {
     // In a cluster setup, there are many databases with the same name, often one per member
     // So our "cluster role" is the role we have on the database that lives
-    // at the adress we're connected to
+    // at the address we're connected to
     const dbName = getUseDb(state)
     const host = getConnectedHost(state)
     if (dbName && host) {

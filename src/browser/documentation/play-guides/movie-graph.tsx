@@ -835,7 +835,7 @@ RETURN tom, m, coActors, m2, cruise`}
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://neo4j.com/developer/"
+            href="https://ongdb.com/developer/"
           >
             Developer resources
           </a>

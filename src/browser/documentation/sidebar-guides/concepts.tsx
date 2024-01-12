@@ -193,7 +193,7 @@ const slides = [
     <h3>Next steps</h3>
     <ul className="undecorated">
       <li>
-        <a data-exec="guide cypher">Geequel Guide</a> - Learn Geequel basics
+        <a data-exec="guide geequel">Geequel Guide</a> - Learn Geequel basics
       </li>
     </ul>
   </BuiltInGuideSidebarSlide>

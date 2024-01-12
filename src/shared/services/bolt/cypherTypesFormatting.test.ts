@@ -22,7 +22,7 @@ import neo4j from 'neo4j-driver'
 import { stringModifier } from 'services/bolt/cypherTypesFormatting'
 
 describe('stringModifier', () => {
-  describe('Cypher Types Number modifier only modifies where needed', () => {
+  describe('Geequel Types Number modifier only modifies where needed', () => {
     const tests: [number, any][] = [
       [Number(123), '123.0'],
       [Number(123.1), undefined],

@@ -549,7 +549,7 @@ export const startupConnectEpic = (action$: any, store: any) => {
 
           if (discovered.attemptSSOLogin) {
             authLog(
-              'Attempting to establish SSO connection to Neo4j with assembled credentials.'
+              'Attempting to establish SSO connection to ONgDB with assembled credentials.'
             )
           }
           return new Promise(resolve => {
@@ -563,14 +563,14 @@ export const startupConnectEpic = (action$: any, store: any) => {
               .then(() => {
                 store.dispatch(setActiveConnection(discovery.CONNECTION_ID))
                 if (discovered.attemptSSOLogin) {
-                  authLog('SSO Connection to Neo4j successfully established.')
+                  authLog('SSO Connection to ONgDB successfully established.')
                 }
                 resolve({ type: STARTUP_CONNECTION_SUCCESS })
               })
               .catch(() => {
                 if (discovered.attemptSSOLogin) {
                   authLog(
-                    'SSO Connection to Neo4j failed, although the client side SSO flow succeeded. Server side logs (security.log or debug.log) may contain more information.'
+                    'SSO Connection to ONgDB failed, although the client side SSO flow succeeded. Server side logs (security.log or debug.log) may contain more information.'
                   )
                 }
                 store.dispatch(setActiveConnection(null))

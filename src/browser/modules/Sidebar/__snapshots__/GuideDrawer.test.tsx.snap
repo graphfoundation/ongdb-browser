@@ -122,13 +122,13 @@ exports[`GuideDrawer renders list view including Remote Guides list 1`] = `
         </li>
         <li
           class="sc-hZpJaK cQWycM"
-          data-testid="builtInGuidecypher"
+          data-testid="builtInGuidegeequel"
         >
           <span
             class="sc-iwjdpV iBEmuZ remove-play-icon"
           >
             :guide 
-            cypher
+            geequel
           </span>
           <div
             class="sc-cHzqoD kDRAfT"
@@ -213,7 +213,7 @@ exports[`GuideDrawer renders list view including Remote Guides list 1`] = `
       >
         <a
           class="sc-bBHxTw hCOgTk"
-          href="https://neo4j.com/graphgists/"
+          href="https://ongdb.com/graphgists/"
           rel="noreferrer"
           target="_blank"
         >
@@ -302,13 +302,13 @@ exports[`GuideDrawer renders list view without Remote Guides 1`] = `
         </li>
         <li
           class="sc-hZpJaK cQWycM"
-          data-testid="builtInGuidecypher"
+          data-testid="builtInGuidegeequel"
         >
           <span
             class="sc-iwjdpV iBEmuZ remove-play-icon"
           >
             :guide 
-            cypher
+            geequel
           </span>
           <div
             class="sc-cHzqoD kDRAfT"
@@ -360,7 +360,7 @@ exports[`GuideDrawer renders list view without Remote Guides 1`] = `
       >
         <a
           class="sc-bBHxTw hCOgTk"
-          href="https://neo4j.com/graphgists/"
+          href="https://ongdb.com/graphgists/"
           rel="noreferrer"
           target="_blank"
         >

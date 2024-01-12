@@ -27,11 +27,11 @@ ONgDB Browser is a developer-focused tool that allows you to execute Geequel que
 It is the default developer interface for both Enterprise and Community editions of ONgDB.
 It comes out-of-the-box with all of ONgDB’s graph database offerings, including ONgDB Server (Community and Enterprise editions), ONgDB Cloud (ONgDB's Database as a Service), and ONgDB Desktop (all OS versions).
 
-ONgDB Browser is suitable for running ad-hoc graph queries, with the appropriate ability to prototype a Neo4j-based application.
+ONgDB Browser is suitable for running ad-hoc graph queries, with the appropriate ability to prototype a ONgDB-based application.
 
 ONgDB Browser is a tool for developers to interact with the graph, with the main focus on:
 
-* Writing and running graph queries with Cypher.
+* Writing and running graph queries with Geequel.
 * Exportable, tabular results of any query result.
 * Used for graph visualization of query results containing nodes and relationships.
 
@@ -48,4 +48,4 @@ The following areas of ONgDB Browser are covered in this manual:
 [.lead]
 _Who should read this?_
 
-This manual is written for developers, database administrators, quality engineers, data scientists, and data architects, who may or may not be familiar with Neo4j.
+This manual is written for developers, database administrators, quality engineers, data scientists, and data architects, who may or may not be familiar with ONgDB.

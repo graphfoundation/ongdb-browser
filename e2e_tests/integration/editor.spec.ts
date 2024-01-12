@@ -22,7 +22,7 @@ import { selectAllAndDelete } from '../support/commands'
 
 /* global Cypress, cy, before */
 
-describe('Cypher Editor', () => {
+describe('Geequel Editor', () => {
   before(function () {
     cy.visit(Cypress.config('url'))
     cy.get('input[data-testid="boltaddress"]', { timeout: 40000 })

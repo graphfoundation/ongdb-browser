@@ -57,7 +57,7 @@ const content = (
           <li>How can I query a graph?</li>
         </ul>
         <div className="clearfix" />
-        <button exec-topic="guide cypher" className="btn btn-cta">
+        <button exec-topic="guide geequel" className="btn btn-cta">
           Start querying
         </button>
       </div>

@@ -4,11 +4,11 @@
 [[aura]]
 = ONgDB Cloud
 
-link:https://ongdb.com/[ONgDB Cloud^] is Neo4j’s fully managed cloud service.
+link:https://ongdb.com/[ONgDB Cloud^] is ONgDB’s fully managed cloud service.
 ONgDB Cloud is a fast, reliable, scalable and completely automated graph database as a cloud service.
 
 ONgDB Browser can be accessed as a web application within the user interface of link:https://cloud.ongdb.com/[ONgDB Cloud console^].
-The ONgDB Browser web application connects to your Neo4j instance without having to enter any connection URI.
+The ONgDB Browser web application connects to your ONgDB instance without having to enter any connection URI.
 
 image:browser-with-aura.png[]
 

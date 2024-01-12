@@ -63,7 +63,7 @@ const content = (
     </div>
     <div className="teaser teaser-2">
       <h3>Northwind Graph</h3>
-      <p className="lead">From RDBMS to Neo4j, using a classic data set.</p>
+      <p className="lead">From RDBMS to ONgDB, using a classic data set.</p>
       <div className="icon-holder">
         <div className="icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

@@ -46,7 +46,7 @@ The structure of the file has the following _File headers_:
 |---|---|---|---|---|---|
 |abc|def|ghi|jkl|mno|pqr|
 
-Of course you can find the dataset on Kaggle yourself, but I actually quickly imported it into a [google sheet version](https://secret.com) that you can access as well. This gsheet is shared and made public on the internet, and can then be [downloaded as a csv at any time from this URL](https://docs.google.com/spreadsheets/d/15c6eUbRMNDrPa0RTuzdrY46OAr2FzKH8tD0KZNoaG8c/export?format=csv&gid=1470339152). This URL is what we will use for importing this data into Neo4j.
+Of course you can find the dataset on Kaggle yourself, but I actually quickly imported it into a [google sheet version](https://secret.com) that you can access as well. This gsheet is shared and made public on the internet, and can then be [downloaded as a csv at any time from this URL](https://docs.google.com/spreadsheets/d/15c6eUbRMNDrPa0RTuzdrY46OAr2FzKH8tD0KZNoaG8c/export?format=csv&gid=1470339152). This URL is what we will use for importing this data into ONgDB.
 
 So let's see how we can do that.
     

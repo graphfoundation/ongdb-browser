@@ -40,7 +40,7 @@ export function BoltConnectionError(): BrowserError {
   return {
     type,
     code: type,
-    message: 'No connection found, did you connect to Neo4j?'
+    message: 'No connection found, did you connect to ONgDB?'
   }
 }
 

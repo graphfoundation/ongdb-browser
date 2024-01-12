@@ -33,7 +33,7 @@ const slides = [
     </p>
     <p>
       The <em>Northwind Graph</em> demonstrates how to migrate from a relational
-      database to Neo4j. The transformation is iterative and deliberate,
+      database to ONgDB. The transformation is iterative and deliberate,
       emphasizing the conceptual shift from relational tables to nodes and
       relationships.
     </p>
@@ -69,8 +69,8 @@ const slides = [
     <p>
       The load statements to the right require public internet access.
       <code>LOAD CSV</code> retrieves a CSV file from a valid URL by applying a
-      Cypher statement to each row using a named map. This example uses the name{' '}
-      <code>row</code>.
+      Geequel statement to each row using a named map. This example uses the
+      name <code>row</code>.
     </p>
     <hr />
     <ul className="undecorated">

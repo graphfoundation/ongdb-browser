@@ -69,7 +69,7 @@ Alternatively, follow the steps to customize your styles by importing a graph st
 +
 [NOTE]
 ====
-Neo4j supports both CSS and JSON format as a _.grass_ file contents.
+ONgDB supports both CSS and JSON format as a _.grass_ file contents.
 ====
 +
 .Sample of a _.grass_ file contents

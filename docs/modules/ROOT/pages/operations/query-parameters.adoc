@@ -1,4 +1,4 @@
-:description: Cypher query parameters.
+:description: Geequel query parameters.
 
 
 [[query-parameters]]
@@ -7,7 +7,7 @@
 //https://dzone.com/articles/neo4jcypher-getting-hang-query - a blog post by Mark Needham
 
 ONgDB Browser supports querying based on parameters.
-It allows the Cypher query planner to re-use your queries instead of parse and build new execution plans.
+It allows the Geequel query planner to re-use your queries instead of parse and build new execution plans.
 
 Parameters can be used for:
 
@@ -25,7 +25,7 @@ Parameters may consist of letters and numbers and any combination of these but c
 
 [TIP]
 ====
-For more details on the Cypher parameters, see link:https://docs.graphfoundation.org/geequel-manual/{neo4j-version}/syntax/parameters/[Geequel Manual v.{neo4j-version} - Parameters^].
+For more details on the Geequel parameters, see link:https://docs.graphfoundation.org/geequel-manual/{neo4j-version}/syntax/parameters/[Geequel Manual v.{neo4j-version} - Parameters^].
 ====
 
 
@@ -36,7 +36,7 @@ You can set a parameter to be sent with your queries by using the `:param` comma
 Using parameters rather than hard-coded values allows for the reuse of the query plan cache.
 
 The `+:param name => 'Example'+` command defines a parameter named `name`, which will be sent along with your queries. +
-The right hand side of `=>` is sent to the server and evaluated as Cypher with an implicit `RETURN` in front.
+The right hand side of `=>` is sent to the server and evaluated as Geequel with an implicit `RETURN` in front.
 This gives better type safety since some types (especially numbers) in JavaScript are hard to match with ONgDB's type system.
 To see the list of all currently set query parameters and their values, use the `:params` command.
 For more information on how to use the commands, see `:help param` and `:help params`.
@@ -113,7 +113,7 @@ $obj2 = [1, 2, 3, 4]
 =====
 
 
-.Cypher query example with a parameter
+.Geequel query example with a parameter
 =====
 
 [source, browser command, role=noheader]
@@ -138,7 +138,7 @@ Alternatively, you can run the `:param` command separately from the `MATCH` quer
 
 =====
 
-== Cypher result
+== Geequel result
 
 It is possible to save the result from a Geequel query to a parameter.
 
@@ -358,7 +358,7 @@ $f = false
 
 If you run a query using parameters without first declaring them all, Browser returns a `ParameterMissing` error and lists the missing parameter(s).
 You can click the provided template to populate the editor with the command for setting parameters and all you have to do is enter the value(s) for the missing parameter(s).
-Since the result frame is reusable, once you have set your parameter(s), you can run the same Cypher query again without having to re-enter it.
+Since the result frame is reusable, once you have set your parameter(s), you can run the same Geequel query again without having to re-enter it.
 
 image::param-assist.png[]
 

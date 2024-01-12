@@ -42,7 +42,7 @@ const slides = [
     <p className="lead">
       <em>Create a node</em>
     </p>
-    <p>{`Let's use Cypher to generate a small social graph.`}</p>
+    <p>{`Let's use Geequel to generate a small social graph.`}</p>
     <p>
       <b>NOTE:</b>
       {` This guide assumes that you use an empty graph. `}
@@ -70,7 +70,7 @@ const slides = [
         </ul>
       </li>
       <li>
-        Run the Cypher code by clicking the <b>Run</b> button.
+        Run the Geequel code by clicking the <b>Run</b> button.
       </li>
     </ol>
   </BuiltInGuideSidebarSlide>,
@@ -110,7 +110,7 @@ const slides = [
         </ul>
       </li>
       <li>
-        Run the Cypher code by clicking the <b>Run</b> button.
+        Run the Geequel code by clicking the <b>Run</b> button.
       </li>
       <br />
     </ol>
@@ -179,7 +179,7 @@ WHERE ee.name = 'Emil' RETURN ee, friends`}
     <ul className="undecorated">
       <li>
         <a data-exec="guide movie-graph">The Movie Graph</a> – Queries and
-        recommendations with Cypher - movie use case.
+        recommendations with Geequel - movie use case.
       </li>
       <li>
         <a data-exec="guide northwind-graph">The Northwind Graph</a> – Translate

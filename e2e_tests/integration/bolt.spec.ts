@@ -31,7 +31,7 @@ describe('Bolt connections', () => {
   it('show "no connection" error', () => {
     cy.executeCommand(':clear')
     cy.executeCommand('RETURN 1')
-    cy.resultContains('No connection found, did you connect to Neo4j')
+    cy.resultContains('No connection found, did you connect to ONgDB')
   })
   it('does not show the "Reconnect" banner when trying to connect', () => {
     cy.connect('neo4j', 'x', 'bolt://localhost:7685', false) // Non open port

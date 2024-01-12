@@ -31,11 +31,11 @@ const slides = [
     <p>
       ONgDB Browser is a command-driven client as a web-based shell environment.
       It is perfect for running ad-hoc graph queries, with just enough ability
-      to prototype a Neo4j-based application.
+      to prototype a ONgDB-based application.
     </p>
     <ul className="big">
       <li>Developer focused.</li>
-      <li>Used for writing and running Cypher graph queries.</li>
+      <li>Used for writing and running Geequel grph queries.</li>
       <li>Exportable tabular results of any query result.</li>
       <li>
         Graph visualization of query results containing nodes and relationships.
@@ -45,10 +45,10 @@ const slides = [
   <BuiltInGuideSidebarSlide key="s2">
     <h3>Browser Editor (a.k.a. Editor)</h3>
     <p className="lead">
-      <em>Edit and execute Cypher statements and Browser commands</em>
+      <em>Edit and execute Geequel statements and Browser commands</em>
     </p>
     <p>
-      The Editor is the primary interface for entering and running Cypher
+      The Editor is the primary interface for entering and running Geequel
       statements and Browser commands. Browser commands begin with{' '}
       <code>:</code>, for example, <code>:help</code>.
     </p>
@@ -94,7 +94,7 @@ const slides = [
   <BuiltInGuideSidebarSlide key="s3">
     <h3>Result frame</h3>
     <p className="lead">
-      <em>Most recently executed command or Cypher query</em>
+      <em>Most recently executed command or Geequel query</em>
     </p>
     <p>
       A result frame is created for each execution and added to the top of the
@@ -180,7 +180,7 @@ const slides = [
     </p>
     <p>
       Project files allows you to save queries, guides, and other scripts, as
-      Cypher files. Unlike favorites, which are saved in your local browser
+      Geequel files. Unlike favorites, which are saved in your local browser
       storage, project files are project-specific and are actual files stored in
       the project directory on your hard drive. All saved files are listed under
       the project they refer to.
@@ -200,7 +200,7 @@ const slides = [
         property graphs
       </li>
       <li>
-        <a data-exec="guide cypher">Geequel Guide</a> - Learn Geequel basics
+        <a data-exec="guide geequel">Geequel Guide</a> - Learn Geequel basics
       </li>
     </ul>
     <br />

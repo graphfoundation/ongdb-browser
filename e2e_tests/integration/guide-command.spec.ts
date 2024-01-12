@@ -42,7 +42,7 @@ describe('Guide command', () => {
     cy.executeCommand(':clear')
     // Open a guide from the sidebar
     cy.get('[data-testid=navigationGuides]').click()
-    cy.get('[data-testid="guidesDrawer"]').contains(':guide cypher').click()
+    cy.get('[data-testid="guidesDrawer"]').contains(':guide geequel').click()
 
     // Can progress slide
     cy.get('[data-testid=guideNextSlide]').click()
@@ -82,7 +82,7 @@ describe('Guide command', () => {
       'have.length',
       1
     )
-    cy.get('[data-testid="guidesDrawer"]').contains(':guide cypher')
+    cy.get('[data-testid="guidesDrawer"]').contains(':guide geequel')
 
     cy.get('[data-testid=navigationGuides]').click()
   })
@@ -96,7 +96,7 @@ describe('Guide command', () => {
     cy.executeCommand(':clear')
     cy.executeCommand(`:guide ${guideUrl}`, { timeout: 50000 })
     cy.get('[data-testid="guidesDrawer"]').should('contain', 'Movies Guide')
-    cy.get('[data-testid="guidesDrawer"]').should('contain', 'What is Cypher?')
+    cy.get('[data-testid="guidesDrawer"]').should('contain', 'What is Geequel?')
 
     // The item is added into Remote Guides
     cy.get('[data-testid="guidesBackButton"]').click()
@@ -105,7 +105,7 @@ describe('Guide command', () => {
     // Can display the remote guide after clicking the item
     cy.get('[data-testid="guidesDrawer"]').contains('Movies Guide').click()
     cy.get('[data-testid="guidesDrawer"]').should('contain', 'Movies Guide')
-    cy.get('[data-testid="guidesDrawer"]').should('contain', 'What is Cypher?')
+    cy.get('[data-testid="guidesDrawer"]').should('contain', 'What is Geequel?')
 
     // Same remote guide won't be added twice
     cy.executeCommand(`:guide ${guideUrl}`, { timeout: 3000 })
@@ -123,7 +123,7 @@ describe('Guide command', () => {
       cy.get('[data-testid="guidesDrawer"]').should('contain', 'Movies Guide')
       cy.get('[data-testid="guidesDrawer"]').should(
         'contain',
-        'What is Cypher?'
+        'What is Geequel?'
       )
 
       // Can click delete button to remote the guide

@@ -33,7 +33,7 @@ const builtInGuides: {
   { identifier: 'intro', description: 'Navigating ONgDB Browser' },
   { identifier: 'concepts', description: 'Property graph model concepts' },
   {
-    identifier: 'cypher',
+    identifier: 'geequel',
     description: 'Geequel basics - create, match, delete'
   },
   {
@@ -118,7 +118,7 @@ const GuidePicker = ({
       </>
     )}
     <LinkContainer>
-      <DrawerExternalLink href="https://neo4j.com/graphgists/">
+      <DrawerExternalLink href="https://ongdb.com/graphgists/">
         More guides
       </DrawerExternalLink>
     </LinkContainer>

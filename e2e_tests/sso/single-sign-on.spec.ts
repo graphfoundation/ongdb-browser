@@ -50,7 +50,7 @@ describe('Sign in with keycloak', () => {
     cy.waitForCommandResult()
     cy.resultContains('Ambrette Town')
     cy.executeCommand(':debug')
-    cy.contains('SSO Connection to Neo4j successfully established').should(
+    cy.contains('SSO Connection to ONgDB successfully established').should(
       'exist'
     )
 

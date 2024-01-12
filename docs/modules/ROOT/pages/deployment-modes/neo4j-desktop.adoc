@@ -4,14 +4,14 @@
 [[bundled-desktop]]
 = ONgDB Desktop
 
-ONgDB Desktop is a local development environment for working with Neo4j, whether using local database instances or databases located on remote servers.
-It is designed to help you as a new user to learn and experiment with Neo4j locally by including everything you need to get started.
+ONgDB Desktop is a local development environment for working with ONgDB, whether using local database instances or databases located on remote servers.
+It is designed to help you as a new user to learn and experiment with ONgDB locally by including everything you need to get started.
 
 ONgDB Browser comes out-of-the-box when you install ONgDB Desktop on your system.
 By default, ONgDB Browser is configured to start as a ONgDB Desktop application at port `7474`.
-You start the ONgDB Browser application from a project in ONgDB Desktop, provided that the Neo4j DBMS for that project is started.
+You start the ONgDB Browser application from a project in ONgDB Desktop, provided that the ONgDB DBMS for that project is started.
 
-. Download Neo4j desktop application.
+. Download ONgDB desktop application.
 . Install and start the ONgDB Desktop application using the provided instructions (shown when downloading).
 . Set up your first project and database following step 2 of the provided ONgDB Desktop instructions.
 +

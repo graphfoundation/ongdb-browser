@@ -130,7 +130,7 @@ export class BrowserSync extends Component<any, BrowserSyncState> {
         <Drawer id="sync-drawer">
           <DrawerHeader>Browser Sync is disabled</DrawerHeader>
           <DrawerBody>
-            Browser Sync is disabled due to Neo4j server configuration. Raise
+            Browser Sync is disabled due to ONgDB server configuration. Raise
             the issue with your administrator.
           </DrawerBody>
         </Drawer>

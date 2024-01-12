@@ -4,7 +4,7 @@
 [[operations]]
 = Browser operations
 
-* xref:operations/dbms-connection.adoc[] -- How to establish a connection to a Neo4j DBMS.
+* xref:operations/dbms-connection.adoc[] -- How to establish a connection to a ONgDB DBMS.
 * xref:operations/credentials-handling.adoc[] -- Explaining how credentials are cached for ONgDB Browser.
 * xref:operations/browser-sso.adoc[] -- Supported Single Sign-On providers. label:enterprise[]
 * xref:operations/browser-settings.adoc[] -- Available browser settings.
