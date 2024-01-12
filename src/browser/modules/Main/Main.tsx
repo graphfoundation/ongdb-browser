@@ -44,10 +44,7 @@ type MainProps = {
   isDatabaseUnavailable: boolean
   errorMessage?: string
   lastConnectionUpdate: number
-  showUdcConsentBanner: boolean
   useDb: string | null
-  dismissConsentBanner: () => void
-  incrementConsentBannerShownCount: () => void
   openSettingsDrawer: () => void
 }
 
@@ -57,35 +54,15 @@ const Main = React.memo(function Main(props: MainProps) {
     connectionState,
     isDatabaseUnavailable,
     errorMessage,
-    showUdcConsentBanner,
     useDb,
-    dismissConsentBanner,
-    incrementConsentBannerShownCount,
     openSettingsDrawer
   } = props
-
-  useEffect(() => {
-    showUdcConsentBanner && incrementConsentBannerShownCount()
-  }, [showUdcConsentBanner /* missing function from dep array but including it causes loop */])
 
   return (
     <StyledMain data-testid="main">
       <ErrorBoundary>
         <Editor />
       </ErrorBoundary>
-      {showUdcConsentBanner && (
-        <UdcConsentBanner>
-          <span>
-            To help make ONgDB Browser better we collect information on product
-            usage. Review your{' '}
-            <UnderlineClickable onClick={openSettingsDrawer}>
-              settings
-            </UnderlineClickable>{' '}
-            at any time.
-          </span>
-          <DismissBanner onClick={dismissConsentBanner} />
-        </UdcConsentBanner>
-      )}
       {useDb && isDatabaseUnavailable && (
         <ErrorBanner>
           {`Database '${useDb}' is unavailable. Run `}

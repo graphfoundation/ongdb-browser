@@ -85,7 +85,7 @@ export const allowUdcInAura = (
 ): 'ALLOW' | 'DENY' | 'UNSET' => {
   const ntId = state[NAME].auraNtId
   if (typeof ntId === 'string') {
-    // Set to empty empty string to disable
+    // Set to empty string to disable
     if (ntId === '') {
       return 'DENY'
     } else {

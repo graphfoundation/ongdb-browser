@@ -38,7 +38,6 @@ export type LocalStorageKey =
   | 'folders'
   | 'grass'
   | 'syncConsent'
-  | 'udc'
   | 'experimentalFeatures'
   | 'guides'
 const keys: LocalStorageKey[] = []

@@ -53,7 +53,7 @@ import { detectRuntimeEnv, isRunningE2ETest } from 'services/utils'
 import { GlobalState } from 'shared/globalState'
 import { APP_START } from 'shared/modules/app/appDuck'
 import { NEO4J_CLOUD_DOMAINS } from 'shared/modules/settings/settingsDuck'
-import { getUuid, updateUdcData } from 'shared/modules/udc/udcDuck'
+import { getUuid } from 'shared/modules/udc/udcDuck'
 import epics from 'shared/rootEpic'
 import reducers from 'shared/rootReducer'
 import { getTelemetrySettings } from 'shared/utils/selectors'
@@ -68,7 +68,6 @@ applyKeys(
   'folders',
   'grass',
   'syncConsent',
-  'udc',
   'experimentalFeatures',
   'guides'
 )
@@ -239,7 +238,6 @@ const auraNtId = searchParams.get('ntid') ?? undefined
 if (auraNtId) {
   removeSearchParamsInBrowserHistory(['ntid'])
 }
-store.dispatch(updateUdcData({ auraNtId }))
 
 // typePolicies allow apollo cache to use these fields as 'id'
 // for automated cache updates when updating a single existing entity

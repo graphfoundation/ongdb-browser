@@ -55,8 +55,6 @@ const mainBaseProps = {
   connectionState: 2,
   lastConnectionUpdate: 0,
   showUdcConsentBanner: false,
-  dismissConsentBanner: noOp,
-  incrementConsentBannerShownCount: noOp,
   openSettingsDrawer: noOp
 }
 

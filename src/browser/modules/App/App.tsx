@@ -91,7 +91,6 @@ import { getMetadata, getUserAuthStatus } from 'shared/modules/sync/syncDuck'
 import {
   METRICS_EVENT,
   getConsentBannerShownCount,
-  udcInit,
   updateUdcData
 } from 'shared/modules/udc/udcDuck'
 import { getTelemetrySettings } from 'shared/utils/selectors'
@@ -143,11 +142,6 @@ export function App(props: any) {
     return () => unsub && unsub()
   }, [props.telemetrySettings.allowUserStats, props.bus])
 
-  useEffect(() => {
-    const initAction = udcInit()
-    props.bus && props.bus.send(initAction.type, initAction)
-  }, [props.bus])
-
   const {
     browserSyncAuthStatus,
     browserSyncConfig,
@@ -155,7 +149,6 @@ export function App(props: any) {
     bus,
     codeFontLigatures,
     connectionState,
-    consentBannerShownCount,
     isDatabaseUnavailable,
     defaultConnectionData,
     drawer,
@@ -166,10 +159,8 @@ export function App(props: any) {
     loadExternalScripts,
     loadSync,
     openSettingsDrawer,
-    setConsentBannerShownCount,
     store,
     syncConsent,
-    telemetrySettings,
     titleString,
     useDb,
     updateDesktopUDCSettings
@@ -272,14 +263,6 @@ export function App(props: any) {
                       errorMessage={errorMessage}
                       useDb={useDb}
                       isDatabaseUnavailable={isDatabaseUnavailable}
-                      showUdcConsentBanner={
-                        telemetrySettings.source === 'BROWSER_SETTING' &&
-                        consentBannerShownCount <= 5
-                      }
-                      dismissConsentBanner={() => setConsentBannerShownCount(6)}
-                      incrementConsentBannerShownCount={() =>
-                        setConsentBannerShownCount(consentBannerShownCount + 1)
-                      }
                       openSettingsDrawer={openSettingsDrawer}
                     />
                   </StyledMainWrapper>
