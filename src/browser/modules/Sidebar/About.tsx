@@ -169,16 +169,11 @@ const About = ({ serverVersion, serverEdition }: AboutProps) => (
       <DrawerSection>
         <DrawerSubHeader>Thanks</DrawerSubHeader>
         <DrawerSectionBody>
-          {`ONgDB wouldn't be possible without a fantastic community. Thanks for all the feedback, discussions and contributions.`}
+          {`ONgDB wouldn't be possible without a fantastic community. Thank you for all the feedback, discussions and contributions.`}
         </DrawerSectionBody>
-        <DrawerFooter>
-          <DrawerSectionBody>
-            With &#9829; from the community.
-          </DrawerSectionBody>
-        </DrawerFooter>
       </DrawerSection>
     </DrawerBody>
-    <DrawerFooter>With &#9829; from Sweden.</DrawerFooter>
+    <DrawerFooter>With &#9829; from the community.</DrawerFooter>
   </Drawer>
 )
 
