@@ -49,7 +49,7 @@ const content = (
         <p className="content">
           <a help-topic="create-constraint">:help CREATE CONSTRAINT</a>{' '}
           <a help-topic="schema">:help Schema</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
     </div>

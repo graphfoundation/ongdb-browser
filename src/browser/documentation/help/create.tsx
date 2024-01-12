@@ -52,13 +52,13 @@ const content = (
         <p className="content">
           <a help-topic="set">:help SET</a>
           <a help-topic="merge">:help MERGE</a>
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
       <div className="link">
         <p className="title">Guide</p>
         <p className="content">
-          <a play-topic="cypher">Cypher</a>
+          <a play-topic="cypher">Geequel</a>
         </p>
       </div>
     </div>

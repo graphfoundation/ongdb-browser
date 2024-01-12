@@ -104,7 +104,7 @@ SET n = row`}
     </ul>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="load-csv">LOAD CSV</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -127,7 +127,7 @@ SET n = row`}
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="create-index">CREATE INDEX</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -157,7 +157,7 @@ CREATE (s)-[:SUPPLIES]->(p)`}
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="match">MATCH</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -190,7 +190,7 @@ RETURN DISTINCT s.companyName as ProduceSuppliers`}
     </ul>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="match">MATCH</a> <a help-topic="return">RETURN</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -224,7 +224,7 @@ SET n = row`}
     </ul>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="load-csv">LOAD CSV</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -241,7 +241,7 @@ SET n = row`}
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="create-index">CREATE INDEX</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -257,7 +257,7 @@ CREATE (n)-[:PURCHASED]->(o)`}
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="create">CREATE</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -289,7 +289,7 @@ SET details = row,
 details.quantity = toInteger(row.quantity)`}
     </pre>
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="match">MATCH</a> <a help-topic="load-csv">LOAD CSV</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -308,7 +308,7 @@ RETURN DISTINCT cust.contactName as CustomerName, SUM(o.quantity) AS TotalProduc
     </p>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="match">MATCH</a> <a help-topic="return">RETURN</a>
     </p>
   </BuiltInGuideSidebarSlide>,

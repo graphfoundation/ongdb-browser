@@ -44,7 +44,7 @@ const content = (
         <p className="content">
           <a help-topic="match">:help MATCH</a>{' '}
           <a help-topic="where">:help WHERE</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
     </div>

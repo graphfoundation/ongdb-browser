@@ -188,7 +188,7 @@ Most of the commands in the *Useful commands* tab work as an entry point to a he
 | `:help`
 | Help System
 
-| `:help cypher`
+| `:help geequel`
 | Provide a list of the most useful Cypher commands, with an overview and a quick way to find help.
 
 | `:help commands`

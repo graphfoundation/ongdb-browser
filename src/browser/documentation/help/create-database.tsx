@@ -49,7 +49,7 @@ const content = (
         <p className="content">
           <a help-topic="show-databases">:help SHOW DATABASES</a>{' '}
           <a help-topic="drop-database">:help DROP DATABASE</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
     </div>

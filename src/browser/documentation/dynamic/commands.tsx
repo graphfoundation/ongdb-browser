@@ -51,7 +51,7 @@ const footer = (
         <a help-topic="keys">Help keys</a> - Keyboard shortcuts
       </li>
       <li>
-        <a play-topic="cypher">Cypher</a> - Learn Geequel basics
+        <a play-topic="cypher">Geequel</a> - Learn Geequel basics
       </li>
       <li>
         <a play-topic="start">Play start</a> - Back to getting started

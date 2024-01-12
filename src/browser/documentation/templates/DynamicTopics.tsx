@@ -37,7 +37,7 @@ const categorize = (commands: any) => {
     boltProtocol: { title: 'Bolt Protocol' },
     cypherQueries: { title: 'Cypher Queries' },
     executionPlans: { title: 'Execution Plans' },
-    cypherHelp: { title: 'Cypher Help' },
+    cypherHelp: { title: 'Geequel help' },
     schemaClauses: { title: 'Schema Clauses' },
     administration: { title: 'Administration' },
     security: { title: 'Security' },

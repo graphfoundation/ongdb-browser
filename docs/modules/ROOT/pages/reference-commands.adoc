@@ -230,7 +230,7 @@ List of help commands available.
 * `:help create`
 * `:help create-index`
 * `:help create-unique`
-* `:help cypher`
+* `:help geequel`
 * `:help delete`
 * `:help detach-delete`
 * `:help ends-with`

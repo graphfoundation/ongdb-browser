@@ -123,7 +123,7 @@ const getReferences = (version: string, v: string) => {
 }
 const useful = [
   { name: 'Help by topic', command: ':help' },
-  { name: 'Cypher help', command: ':help cypher' },
+  { name: 'Geequel help', command: ':help geequel' },
   { name: 'Available commands', command: ':help commands' },
   { name: 'Keybindings', command: ':help keys' },
   { name: 'Command history', command: ':history' },

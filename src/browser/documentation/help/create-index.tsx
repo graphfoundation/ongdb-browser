@@ -48,7 +48,7 @@ const content = (
         <p className="title">Related</p>
         <p className="content">
           <a help-topic="drop-index">:help DROP INDEX</a>{' '}
-          <a help-topic="cypher">:help Cypher</a>
+          <a help-topic="cypher">:help Geequel</a>
         </p>
       </div>
     </div>

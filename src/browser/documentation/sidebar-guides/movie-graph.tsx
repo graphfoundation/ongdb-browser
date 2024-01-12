@@ -614,7 +614,7 @@ const slides = [
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="create-constraint">CREATE CONSTRAINT</a>
     </p>
   </BuiltInGuideSidebarSlide>,
@@ -631,7 +631,7 @@ const slides = [
     </pre>
     <hr />
     <p>
-      <a help-topic="help">:help</a> <a help-topic="cypher">cypher</a>{' '}
+      <a help-topic="help">:help</a> <a help-topic="cypher">geequel</a>{' '}
       <a help-topic="create-index">CREATE INDEX</a>
     </p>
   </BuiltInGuideSidebarSlide>,

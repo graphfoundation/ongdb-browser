@@ -70,7 +70,7 @@ const content = (
       <div className="link">
         <p className="title">Guide</p>
         <p className="content">
-          <a play-topic="cypher">Cypher</a>
+          <a play-topic="cypher">Geequel</a>
         </p>
       </div>
     </div>
