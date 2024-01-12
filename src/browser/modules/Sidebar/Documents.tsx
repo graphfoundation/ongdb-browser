@@ -55,7 +55,7 @@ const getReferences = (version: string, v: string) => {
       url: 'https://docs.graphfoundation.org/browser-manual/current/'
     },
     {
-      name: 'Cypher Introduction',
+      name: 'Geequel Introduction',
       url: ` https://docs.graphfoundation.org/geequel-manual/${v}/introduction/ `
     }
   ]
@@ -65,7 +65,7 @@ const getReferences = (version: string, v: string) => {
       url: `https://docs.graphfoundation.org/developer-manual/${v}/`
     },
     {
-      name: 'Cypher Introduction',
+      name: 'Geequel Introduction',
       url: `https://docs.graphfoundation.org/developer-manual/${v}/cypher/`
     }
   ]
