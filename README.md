@@ -109,7 +109,7 @@ It's important to not use the `clean` goal when running `mvn` as it will remove 
 yarn
 yarn build
 yarn prepare-jar
-mvn -o -Duser.name=graphfoundation install
+mvn -o install -Duser.name=graphfoundation
 ```
 
 ## Unaffiliated with Neo4j, Inc.
