@@ -21,7 +21,7 @@ import { Integer, QueryResult } from 'neo4j-driver'
 import semver from 'semver'
 
 import { guessSemverVersion } from '../features/featureDuck.utils'
-import { TrialStatus, VERSION_FOR_EDITOR_HISTORY_SETTING } from './dbMetaDuck'
+import { VERSION_FOR_EDITOR_HISTORY_SETTING } from './dbMetaDuck'
 
 type ServerInfo = {
   version: string | null
@@ -57,58 +57,6 @@ export function extractServerInfo(res: QueryResult): ServerInfo {
   }
 
   return serverInfo
-}
-
-export const extractTrialStatus = (res: QueryResult): TrialStatus => {
-  const resultObj = res.records.map(res => res.toObject())[0]
-
-  if (!resultObj) {
-    return { status: 'unknown' }
-  }
-
-  const status = resultObj.status as 'yes' | 'no' | 'eval' | 'expired'
-  if (status === 'yes') {
-    return { status: 'accepted' }
-  } else if (status === 'eval') {
-    const daysRemaining = resultObj.daysLeftOnTrial as Integer
-    const totalDays = resultObj.totalTrialDays as Integer
-    return {
-      status: 'eval',
-      daysRemaining: daysRemaining.toNumber(),
-      totalDays: totalDays.toNumber()
-    }
-  }
-  if (status === 'no') {
-    return { status: 'unaccepted' }
-  } else if (status === 'expired') {
-    const totalDays = resultObj.totalTrialDays as Integer
-    return { status: 'expired', totalDays: totalDays.toNumber() }
-  }
-  return { status: 'unknown' }
-}
-
-export const extractTrialStatusOld = (res: QueryResult): TrialStatus => {
-  const resultObj = res.records.map(res => res.toObject())[0]
-
-  if (!resultObj) {
-    return { status: 'unknown' }
-  }
-
-  //The last string type is a number as a string
-  const value = resultObj.value as 'yes' | 'no' | 'expired' | string
-  if (value) {
-    if (value === 'no') {
-      return { status: 'unaccepted' }
-    } else if (value === 'expired') {
-      return { status: 'expired', totalDays: 30 }
-    } else if (value === 'yes') {
-      return { status: 'accepted' }
-    } else {
-      return { status: 'eval', daysRemaining: parseInt(value), totalDays: 30 }
-    }
-  }
-
-  return { status: 'unknown' }
 }
 
 export const versionHasEditorHistorySetting = (version: string | null) => {

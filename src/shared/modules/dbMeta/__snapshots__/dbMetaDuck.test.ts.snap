@@ -34,9 +34,6 @@ Object {
     "retainConnectionCredentials": false,
     "retainEditorHistory": false,
   },
-  "trialStatus": Object {
-    "status": "unknown",
-  },
 }
 `;
 
@@ -102,9 +99,6 @@ Object {
     "remoteContentHostnameAllowlist": "guides.neo4j.com, localhost",
     "retainConnectionCredentials": false,
     "retainEditorHistory": false,
-  },
-  "trialStatus": Object {
-    "status": "unknown",
   },
 }
 `;

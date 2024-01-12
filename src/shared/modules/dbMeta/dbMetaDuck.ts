@@ -17,11 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {
-  extractTrialStatus,
-  extractTrialStatusOld,
-  versionHasEditorHistorySetting
-} from './utils'
+import { versionHasEditorHistorySetting } from './utils'
 import { isConfigValFalsy } from 'services/bolt/boltHelpers'
 import { GlobalState } from 'shared/globalState'
 import { APP_START } from 'shared/modules/app/appDuck'
@@ -34,7 +30,6 @@ import { FIRST_MULTI_DB_SUPPORT } from '../features/versionedFeatures'
 export const UPDATE_META = 'meta/UPDATE_META'
 export const PARSE_META = 'meta/PARSE_META'
 export const UPDATE_SERVER = 'meta/UPDATE_SERVER'
-export const UPDATE_TRIAL_STATUS = 'meta/UPDATE_TRIAL_STATUS'
 export const UPDATE_SETTINGS = 'meta/UPDATE_SETTINGS'
 export const CLEAR_META = 'meta/CLEAR'
 export const FORCE_FETCH = 'meta/FORCE_FETCH'
@@ -68,9 +63,6 @@ MATCH ()-[]->() RETURN { name:'relationships', data: count(*)} AS result
 
 export const serverInfoQuery =
   'CALL dbms.components() YIELD name, versions, edition'
-
-export const trialStatusQuery = 'CALL dbms.licenseAgreementDetails()'
-export const oldTrialStatusQuery = 'CALL dbms.acceptedLicenseAgreement()'
 
 export function fetchMetaData() {
   return {
@@ -106,22 +98,6 @@ export const updateServerInfo = (res: QueryResult) => {
   }
 }
 
-export const updateTrialStatus = (res: QueryResult) => {
-  const extracted = extractTrialStatus(res)
-  return {
-    type: UPDATE_TRIAL_STATUS,
-    trailStatus: extracted
-  }
-}
-
-export const updateTrialStatusOld = (res: QueryResult) => {
-  const extracted = extractTrialStatusOld(res)
-  return {
-    type: UPDATE_TRIAL_STATUS,
-    trailStatus: extracted
-  }
-}
-
 export const updateCountAutomaticRefresh = (countAutomaticRefresh: {
   enabled?: boolean
   loading?: boolean
@@ -153,27 +129,6 @@ export type ClientSettings = {
   metricsPrefix: string
 }
 
-export type TrialStatus =
-  | {
-      status: 'accepted'
-    }
-  | { status: 'unknown' }
-  | {
-      status: 'expired'
-      totalDays: number
-    }
-  | {
-      status: 'eval'
-      daysRemaining: number | null
-      totalDays: number
-    }
-  | {
-      status: 'unaccepted'
-    }
-
-const initialTrialStatus: TrialStatus = {
-  status: 'unknown'
-}
 /**
  * Initial client settings, used before the actual settings is loaded. Not to be
  * confused with the default values for the setting, since not always the same.
@@ -212,8 +167,7 @@ export const initialState = {
   countAutomaticRefresh: {
     enabled: true,
     loading: false
-  },
-  trialStatus: initialTrialStatus
+  }
 }
 
 export type Database = {
@@ -308,9 +262,6 @@ export const getStoreId = (state: any) =>
   state[NAME] && state[NAME].server ? state[NAME].server.storeId : null
 export const isServerConfigDone = (state: GlobalState): boolean =>
   state[NAME].serverConfigDone
-
-export const getTrialStatus = (state: GlobalState): TrialStatus =>
-  state[NAME].trialStatus
 
 export const getAvailableSettings = (state: any): ClientSettings =>
   (state[NAME] || initialState).settings
@@ -421,8 +372,6 @@ const dbMetaReducer = (
       return { ...state, settings: { ...action.settings } }
     case CLEAR_META:
       return { ...initialState }
-    case UPDATE_TRIAL_STATUS:
-      return { ...state, trialStatus: action.trailStatus }
     default:
       return state
   }
