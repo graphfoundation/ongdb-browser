@@ -88,7 +88,7 @@ const getReferences = (version: string, v: string) => {
       url: 'https://graphacademy.neo4j.com/courses/neo4j-fundamentals/'
     },
     {
-      name: 'Cypher Fundamentals',
+      name: 'Geequel Fundamentals',
       url: 'https://graphacademy.neo4j.com/courses/cypher-fundamentals/'
     },
     {
